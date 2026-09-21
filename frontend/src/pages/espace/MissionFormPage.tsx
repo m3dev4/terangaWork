@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-[#1b4b6b]';
-import { useMutation as useReactMutation, useQuery as useReactQuery } from '@tanstack/react-query';
+import { useQueryClient, useMutation as useReactMutation, useQuery as useReactQuery } from '@tanstack/react-query';
 import { ArrowLeft, CalendarDays, Check, Code2, Loader2, Plus, WalletCards, X } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom';
 import {

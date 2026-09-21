@@ -2,46 +2,24 @@
 
 import * as React from "react";
 import { cn } from "cn";
-import { Button } from "./ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "./ui/dialog";
-import useMediaQuery from "../hooks/useMediaQuery";
-import {
-  Drawer,
-  DrawerContent,
-  DrawerDescription,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "./ui/drawer";
 
-interface modalProps {
-  children: React.ReactNode;
-  onClose?: () => void;
-  title: string;
-  trigger: React.ReactNode;
-  open?: boolean;
-  setOpen?: (open: boolean) => void;
-}
 
-export function Modal({ title, onClose, children, trigger, open, setOpen }: modalProps) {
-  const isDesktop = useMediaQuery({ query: "(min-width: 768px)" });
 
   if (isDesktop) {
     return (
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogTrigger render={trigger} />
-        <DialogContent className="sm:max-w-106.25">
+        <DialogTrigger
+          render={<Button variant="outline">Edit Profile</Button>}
+        />
+        <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>{title}</DialogTitle>
+            <DialogTitle>Edit profile</DialogTitle>
+            <DialogDescription>
+              Make changes to your profile here. Click save when you&apos;re
+              done.
+            </DialogDescription>
           </DialogHeader>
-          {children}
+          <ProfileForm />
         </DialogContent>
       </Dialog>
     );
@@ -49,18 +27,32 @@ export function Modal({ title, onClose, children, trigger, open, setOpen }: moda
 
   return (
     <Drawer open={open} onOpenChange={setOpen}>
-      <DrawerTrigger render={trigger} />
+      <DrawerTrigger render={<Button variant="outline">Edit Profile</Button>} />
       <DrawerContent>
         <DrawerHeader className="text-left">
-          <DrawerTitle>{title}</DrawerTitle>
+          <DrawerTitle>Edit profile</DrawerTitle>
+          <DrawerDescription>
+            Make changes to your profile here. Click save when you&apos;re done.
+          </DrawerDescription>
         </DrawerHeader>
-        {children}
+        <ProfileForm className="p-4" />
       </DrawerContent>
     </Drawer>
   );
 }
 
 function ProfileForm({ className }: React.ComponentProps<"form">) {
-  return <form className={cn("grid items-start gap-6", className)}>
-  </form>;
+  return (
+    <form className={cn("grid items-start gap-6", className)}>
+      <div className="grid gap-3">
+        <Label htmlFor="email">Email</Label>
+        <Input type="email" id="email" defaultValue="shadcn@example.com" />
+      </div>
+      <div className="grid gap-3">
+        <Label htmlFor="username">Username</Label>
+        <Input id="username" defaultValue="@shadcn" />
+      </div>
+      <Button type="submit">Save changes</Button>
+    </form>
+  );
 }

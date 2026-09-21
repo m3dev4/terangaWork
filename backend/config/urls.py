@@ -30,6 +30,7 @@ urlpatterns = [
     path("api/", include("announcer.urls")),
     path("api/", include("mission.urls")),
     path("api/", include("proposition.urls")),
+    path("api/matching/", include("matching.urls")),
 ]
 
 if settings.DEBUG:

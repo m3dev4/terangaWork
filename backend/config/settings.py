@@ -69,6 +69,7 @@ INSTALLED_APPS = [
     "announcer",
     "mission",
     "proposition",
+    "matching",
 ]
 
 MIDDLEWARE = [
@@ -106,16 +107,27 @@ WSGI_APPLICATION = "config.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/6.1/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.mysql",
-        "NAME": config("MYSQL_DATABASE_NAME"),
-        "USER": config("MYSQL_DATABASE_USER"),
-        "PASSWORD": config("MYSQL_DATABASE_PASSWORD"),
-        "HOST": config("DB_HOST"),
-        "PORT": config("MYSQL_DATABASE_PORT", default="3306"),
+USE_SQLITE = config("USE_SQLITE", default=True, cast=bool)
+
+if USE_SQLITE:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
     }
-}
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.mysql",
+            "NAME": config("MYSQL_DATABASE_NAME"),
+            "USER": config("MYSQL_DATABASE_USER"),
+            "PASSWORD": config("MYSQL_DATABASE_PASSWORD"),
+            "HOST": config("DB_HOST"),
+            "PORT": config("MYSQL_DATABASE_PORT", default="3306"),
+        }
+    }
+
 
 
 # Password validation
@@ -216,3 +228,10 @@ CLOUDINARY_API_SECRET = config(
     "CLOUDINARY_API_SECRET",
     default=config("CLOUDINARY_API_Key_SECRET", default=""),
 )
+
+# Microservice FastAPI Matching Intelligent
+FASTAPI_MATCHING_URL = config("FASTAPI_MATCHING_URL", default="http://localhost:8000")
+FASTAPI_INTERNAL_API_KEY = config(
+    "FASTAPI_INTERNAL_API_KEY", default="dev-secret-internal-key"
+)
+
