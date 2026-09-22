@@ -17,6 +17,7 @@ import {
   X,
   PieChart as PieIcon,
   TrendingUp,
+  ShieldCheck,
 } from 'lucide-react';
 import { getPropositions, type Proposition } from '../../../api/propositionsApi';
 import {
@@ -229,9 +230,27 @@ const ProjectWorkspacePage: React.FC = () => {
         {/* Project Title & Selector */}
         <div className="space-y-1">
           <div className="flex items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-[#eaf7ef] px-2.5 py-0.5 text-[9.5px] font-semibold text-[#29935a]">
-              <span className="h-1.5 w-1.5 rounded-full bg-[#29935a] animate-pulse" /> En cours de développement
-            </span>
+            {/* Badge statut dynamique */}
+            {(!activeProject.mission_status || activeProject.mission_status === 'IN_PROGRESS') && (
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-[#eaf7ef] px-2.5 py-0.5 text-[9.5px] font-semibold text-[#29935a]">
+                <span className="h-1.5 w-1.5 rounded-full bg-[#29935a] animate-pulse" /> En cours de développement
+              </span>
+            )}
+            {activeProject.mission_status === 'DELIVERED' && (
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-blue-50 px-2.5 py-0.5 text-[9.5px] font-semibold text-blue-700 border border-blue-200">
+                <span className="h-1.5 w-1.5 rounded-full bg-blue-500 animate-pulse" /> Livrée — En attente de validation
+              </span>
+            )}
+            {activeProject.mission_status === 'COMPLETED' && (
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-100 px-2.5 py-0.5 text-[9.5px] font-bold text-emerald-800 border border-emerald-300">
+                <CheckCircle2 className="h-3 w-3" /> Mission Terminée
+              </span>
+            )}
+            {activeProject.mission_status === 'CLOSED' && (
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-neutral-100 px-2.5 py-0.5 text-[9.5px] font-semibold text-neutral-500">
+                Mission Clôturée
+              </span>
+            )}
             {acceptedProjects.length > 1 && (
               <select
                 value={activeProject.id}
@@ -250,6 +269,18 @@ const ProjectWorkspacePage: React.FC = () => {
             {activeProject.mission_title}
           </h1>
         </div>
+
+        {/* Action: Go to Payment & Delivery Validation — Annonceur only */}
+        {user?.role === 'annonceur' && (
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => window.location.href = '/espace/paiements-effectues'}
+              className="inline-flex items-center gap-1.5 rounded-lg bg-[#1b4b6b] px-3.5 py-1.5 text-[11px] font-bold text-white hover:bg-[#143952] transition-colors cursor-pointer shadow-xs"
+            >
+              <ShieldCheck className="h-4 w-4 text-[#f2994a]" /> Validation Livraison & Paiement
+            </button>
+          </div>
+        )}
 
         {/* Participants avatars (Annonceur & Freelance) */}
         <div className="flex items-center gap-4 border-t sm:border-t-0 pt-3 sm:pt-0 border-neutral-100">
@@ -407,29 +438,52 @@ const ProjectWorkspacePage: React.FC = () => {
                 <span className="text-[9px] font-semibold text-neutral-400">4 phases</span>
               </div>
 
-              <div className="space-y-2.5">
-                {[
-                  { label: 'Cadrage & Spécifications', status: 'Terminé', done: true },
-                  { label: 'Développement & Intégration', status: 'En cours', active: true },
-                  { label: 'Recette & Tests utilisateurs', status: 'À venir', pending: true },
-                  { label: 'Livraison finale & Déploiement', status: 'À venir', pending: true },
-                ].map((m, i) => (
-                  <div key={i} className="flex items-center justify-between text-[11px]">
-                    <span className="font-medium text-neutral-700">{m.label}</span>
-                    <span
-                      className={`text-[9px] font-bold px-2 py-0.5 rounded-full ${
-                        m.done
-                          ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                          : m.active
-                          ? 'bg-blue-50 text-blue-700 border border-blue-200 animate-pulse'
-                          : 'bg-neutral-100 text-neutral-400'
-                      }`}
-                    >
-                      {m.status}
-                    </span>
+              {(() => {
+                const s = activeProject.mission_status || 'IN_PROGRESS';
+                const isCompleted = s === 'COMPLETED' || s === 'CLOSED';
+                const isDelivered = s === 'DELIVERED';
+                const steps = [
+                  {
+                    label: 'Cadrage & Spécifications',
+                    done: true,
+                  },
+                  {
+                    label: 'Développement & Intégration',
+                    done: isCompleted || isDelivered,
+                    active: s === 'IN_PROGRESS',
+                  },
+                  {
+                    label: 'Recette & Tests utilisateurs',
+                    done: isCompleted,
+                    active: isDelivered,
+                  },
+                  {
+                    label: 'Livraison finale & Déploiement',
+                    done: isCompleted,
+                    active: false,
+                  },
+                ];
+                return (
+                  <div className="space-y-2.5">
+                    {steps.map((m, i) => (
+                      <div key={i} className="flex items-center justify-between text-[11px]">
+                        <span className="font-medium text-neutral-700">{m.label}</span>
+                        <span
+                          className={`text-[9px] font-bold px-2 py-0.5 rounded-full ${
+                            m.done
+                              ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                              : m.active
+                              ? 'bg-blue-50 text-blue-700 border border-blue-200 animate-pulse'
+                              : 'bg-neutral-100 text-neutral-400'
+                          }`}
+                        >
+                          {m.done ? 'Terminé' : m.active ? 'En cours' : 'À venir'}
+                        </span>
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
+                );
+              })()}
             </div>
 
             {/* Time / Task Allocation */}
@@ -440,27 +494,36 @@ const ProjectWorkspacePage: React.FC = () => {
                 </h4>
               </div>
 
-              <div className="flex items-center gap-4">
-                {/* Visual Donut representation */}
-                <div className="relative h-16 w-16 shrink-0 rounded-full border-4 border-[#1b4b6b] border-t-[#f2994a] border-r-emerald-500 flex items-center justify-center">
-                  <span className="text-[9px] font-bold text-neutral-700">100%</span>
-                </div>
-
-                <div className="space-y-1.5 text-[10px] text-neutral-600 flex-1">
-                  <div className="flex items-center justify-between">
-                    <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-[#1b4b6b]" /> Dev Backend / Frontend</span>
-                    <span className="font-bold">50%</span>
+              {(() => {
+                const s = activeProject.mission_status || 'IN_PROGRESS';
+                const isCompleted = s === 'COMPLETED' || s === 'CLOSED';
+                const ringClass = isCompleted
+                  ? 'border-emerald-500'
+                  : 'border-[#1b4b6b] border-t-[#f2994a] border-r-emerald-500';
+                return (
+                  <div className="flex items-center gap-4">
+                    <div className={`relative h-16 w-16 shrink-0 rounded-full border-4 ${ringClass} flex items-center justify-center`}>
+                      <span className="text-[9px] font-bold text-neutral-700">
+                        {isCompleted ? '✓' : '100%'}
+                      </span>
+                    </div>
+                    <div className="space-y-1.5 text-[10px] text-neutral-600 flex-1">
+                      <div className="flex items-center justify-between">
+                        <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-[#1b4b6b]" /> Dev Backend / Frontend</span>
+                        <span className={`font-bold ${isCompleted ? 'text-emerald-600' : ''}`}>{isCompleted ? '✓ Terminé' : '50%'}</span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-[#f2994a]" /> Design & UI</span>
+                        <span className={`font-bold ${isCompleted ? 'text-emerald-600' : ''}`}>{isCompleted ? '✓ Terminé' : '30%'}</span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-emerald-500" /> Tests & Recette</span>
+                        <span className={`font-bold ${isCompleted ? 'text-emerald-600' : ''}`}>{isCompleted ? '✓ Terminé' : '20%'}</span>
+                      </div>
+                    </div>
                   </div>
-                  <div className="flex items-center justify-between">
-                    <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-[#f2994a]" /> Design & UI</span>
-                    <span className="font-bold">30%</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-emerald-500" /> Tests & Recette</span>
-                    <span className="font-bold">20%</span>
-                  </div>
-                </div>
-              </div>
+                );
+              })()}
             </div>
 
           </div>

@@ -32,8 +32,9 @@ const FreelanceMissionsPage: React.FC = () => {
   const matchingData = matchingMutation.data;
   const isMatchingActive = Boolean(matchingData && matchingData.resultats.length > 0);
 
-  // Filter regular missions
+  // Filter regular missions — only OPEN missions are visible to freelancers
   const regularMissions = (missionsQuery.data || []).filter((mission) =>
+    (!mission.status || mission.status === 'OPEN') &&
     `${mission.title} ${mission.description}`.toLowerCase().includes(deferredSearch.toLowerCase())
   );
 
@@ -374,4 +375,4 @@ const FreelanceMissionsPage: React.FC = () => {
   );
 };
 
-export default FreelanceMissionsPage;
+export default FreelanceMissionsPage;

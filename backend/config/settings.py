@@ -42,7 +42,7 @@ SECRET_KEY = config("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config("DEBUG", default=True, cast=bool)
 
-ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="localhost,127.0.0.1,testserver").split(
+ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="localhost,127.0.0.1,testserver,monoecious-mikaela-semiallegoric.ngrok-free.dev").split(
     ","
 )
 
@@ -70,7 +70,17 @@ INSTALLED_APPS = [
     "mission",
     "proposition",
     "matching",
+    "paiement",
 ]
+
+# PayDunya Configuration
+PAYDUNYA_MASTER_KEY = config("PAYDUNYA_MASTER_KEY", default="")
+PAYDUNYA_PRIVATE_KEY = config("PAYDUNYA_PRIVATE_KEY", default="")
+PAYDUNYA_TOKEN = config("PAYDUNYA_TOKEN", default="")
+PAYDUNYA_MODE = config("PAYDUNYA_MODE", default="test")
+PAYDUNYA_COMMISSION_RATE = config("PAYDUNYA_COMMISSION_RATE", default=0.10, cast=float)
+PAYDUNYA_CALLBACK_BASE_URL = config("PAYDUNYA_CALLBACK_BASE_URL", default="https://monoecious-mikaela-semiallegoric.ngrok-free.dev/api/webhooks/paydunya/")
+
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",

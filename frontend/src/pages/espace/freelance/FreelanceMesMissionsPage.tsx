@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   Briefcase,
   CalendarDays,
@@ -12,9 +12,18 @@ import {
   Search,
   WalletCards,
   XCircle,
+  Truck,
+  Smartphone,
+  Receipt,
+  AlertCircle,
 } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { getPropositions, type Proposition } from '../../../api/propositionsApi';
+import { marquerMissionLivree } from '../../../api/paiementApi';
+import {
+  ConfirmNumeroModal,
+  HistoriquePaiementModal,
+} from '../../../components/PaiementModals';
 
 const formatBudget = (value: number) =>
   `${new Intl.NumberFormat('fr-FR').format(value)} FCFA`;
@@ -31,11 +40,25 @@ const formatDate = (value: string | null | undefined) =>
 const FreelanceMesMissionsPage: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const queryClient = useQueryClient();
+
   const isCandidaturesRoute = location.pathname.includes('candidatures');
   const [activeTab, setActiveTab] = useState<'dev' | 'all'>(
     isCandidaturesRoute ? 'all' : 'dev'
   );
   const [search, setSearch] = useState('');
+
+  // Modal states
+  const [confirmNumeroTarget, setConfirmNumeroTarget] = useState<{
+    propId: number;
+    operateur: string;
+  } | null>(null);
+  const [historiqueTarget, setHistoriqueTarget] = useState<{
+    missionId: number;
+    title: string;
+  } | null>(null);
+
+  const [deliveryError, setDeliveryError] = useState<string | null>(null);
 
   React.useEffect(() => {
     if (location.pathname.includes('candidatures')) {
@@ -50,21 +73,52 @@ const FreelanceMesMissionsPage: React.FC = () => {
     queryFn: () => getPropositions(),
   });
 
+  // Delivery mutation
+  const deliverMutation = useMutation({
+    mutationFn: (missionId: number) => marquerMissionLivree(missionId),
+    onSuccess: () => {
+      setDeliveryError(null);
+      queryClient.invalidateQueries({ queryKey: ['propositions-freelance-espace'] });
+    },
+    onError: (err: any) => {
+      const msg = err.response?.data?.error || 'Erreur lors du marquage de livraison.';
+      setDeliveryError(msg);
+    },
+  });
+
   // Filter propositions based on tab and search
   const inDevPropositions = propositions.filter(
     (p: Proposition) => p.proposition_status === 'ACCEPTED'
   );
 
   const displayedPropositions = (
-    activeTab === 'dev'
-      ? inDevPropositions
-      : propositions
+    activeTab === 'dev' ? inDevPropositions : propositions
   ).filter((p: Proposition) =>
     p.mission_title?.toLowerCase().includes(search.toLowerCase())
   );
 
   return (
     <div className="mx-auto max-w-[1080px] pb-12">
+      {/* Modals */}
+      {confirmNumeroTarget && (
+        <ConfirmNumeroModal
+          propositionId={confirmNumeroTarget.propId}
+          operateur={confirmNumeroTarget.operateur}
+          onClose={() => setConfirmNumeroTarget(null)}
+          onConfirmed={() =>
+            queryClient.invalidateQueries({ queryKey: ['propositions-freelance-espace'] })
+          }
+        />
+      )}
+
+      {historiqueTarget && (
+        <HistoriquePaiementModal
+          missionId={historiqueTarget.missionId}
+          missionTitle={historiqueTarget.title}
+          onClose={() => setHistoriqueTarget(null)}
+        />
+      )}
+
       {/* Header */}
       <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between border-b border-[#EFECE6] pb-4">
         <div>
@@ -75,7 +129,7 @@ const FreelanceMesMissionsPage: React.FC = () => {
             Mes Missions & Projets
           </h1>
           <p className="mt-1 text-[11px] text-neutral-500">
-            Suivez l'avancement de vos missions en phase de développement et vos candidatures.
+            Suivez l'avancement de vos missions, livrez votre travail et gérez vos paiements.
           </p>
         </div>
 
@@ -92,6 +146,13 @@ const FreelanceMesMissionsPage: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {deliveryError && (
+        <div className="mb-4 flex items-center gap-2 rounded-md border border-red-200 bg-red-50 p-3 text-[11px] text-red-700">
+          <AlertCircle className="h-4 w-4 shrink-0" />
+          <span>{deliveryError}</span>
+        </div>
+      )}
 
       {/* Navigation Tabs */}
       <div className="mb-6 flex border-b border-[#e7e3dc] gap-4">
@@ -165,6 +226,7 @@ const FreelanceMesMissionsPage: React.FC = () => {
           {displayedPropositions.map((prop: Proposition) => {
             const isAccepted = prop.proposition_status === 'ACCEPTED';
             const isRejected = prop.proposition_status === 'REJECTED';
+            const missionStatus = prop.mission_status || 'IN_PROGRESS';
 
             return (
               <div
@@ -175,9 +237,23 @@ const FreelanceMesMissionsPage: React.FC = () => {
                 <div className="mb-3 flex items-start justify-between gap-2 border-b border-[#f3f0eb] pb-3">
                   <div>
                     {isAccepted && (
-                      <span className="mb-1 inline-flex items-center gap-1 rounded-full bg-[#eaf7ef] px-2.5 py-0.5 text-[9.5px] font-semibold text-[#29935a]">
-                        <CheckCircle2 className="h-3 w-3" /> En phase de développement
-                      </span>
+                      <div className="flex flex-wrap items-center gap-1.5 mb-1">
+                        {missionStatus === 'IN_PROGRESS' && (
+                          <span className="inline-flex items-center gap-1 rounded-full bg-[#eaf7ef] px-2.5 py-0.5 text-[9.5px] font-semibold text-[#29935a]">
+                            <CheckCircle2 className="h-3 w-3" /> En développement
+                          </span>
+                        )}
+                        {missionStatus === 'DELIVERED' && (
+                          <span className="inline-flex items-center gap-1 rounded-full bg-blue-50 px-2.5 py-0.5 text-[9.5px] font-semibold text-blue-700 border border-blue-200">
+                            <Truck className="h-3 w-3" /> Livrée - En attente validation client
+                          </span>
+                        )}
+                        {missionStatus === 'COMPLETED' && (
+                          <span className="inline-flex items-center gap-1 rounded-full bg-emerald-100 px-2.5 py-0.5 text-[9.5px] font-bold text-emerald-800 border border-emerald-300">
+                            <CheckCircle2 className="h-3 w-3" /> Mission Terminée
+                          </span>
+                        )}
+                      </div>
                     )}
                     {isRejected && (
                       <span className="mb-1 inline-flex items-center gap-1 rounded-full bg-red-50 px-2.5 py-0.5 text-[9.5px] font-semibold text-red-600">
@@ -196,7 +272,7 @@ const FreelanceMesMissionsPage: React.FC = () => {
                   </div>
 
                   <span className="text-[11px] font-bold text-[#1b4b6b] shrink-0">
-                    {formatBudget(prop.mission_budget)}
+                    {formatBudget(prop.mission_budget || 0)}
                   </span>
                 </div>
 
@@ -216,7 +292,7 @@ const FreelanceMesMissionsPage: React.FC = () => {
                       <WalletCards className="h-3.5 w-3.5 text-neutral-400" /> Mode de paiement:
                     </span>
                     <span className="font-semibold text-neutral-800 uppercase">
-                      Mobile Money
+                      PayDunya Mobile Money
                     </span>
                   </div>
                 </div>
@@ -230,6 +306,53 @@ const FreelanceMesMissionsPage: React.FC = () => {
                     "{prop.lettre_motivation}"
                   </p>
                 </div>
+
+                {/* Dedicated Action Buttons for Payment & Delivery */}
+                {isAccepted && (
+                  <div className="mb-4 flex flex-wrap gap-2">
+                    {/* 1. Phone Confirmation Button */}
+                    <button
+                      onClick={() =>
+                        setConfirmNumeroTarget({
+                          propId: prop.id,
+                          operateur: 'WAVE', // default / retrieved
+                        })
+                      }
+                      className="inline-flex items-center gap-1.5 rounded-md border border-[#1b4b6b]/30 bg-[#f0f4f8] px-3 py-1.5 text-[10.5px] font-semibold text-[#1b4b6b] hover:bg-[#1b4b6b] hover:text-white transition-colors cursor-pointer"
+                    >
+                      <Smartphone className="h-3.5 w-3.5" /> Numéro Mobile Money
+                    </button>
+
+                    {/* 2. Mark as Delivered Button */}
+                    {missionStatus === 'IN_PROGRESS' && (
+                      <button
+                        onClick={() => deliverMutation.mutate(prop.mission)}
+                        disabled={deliverMutation.isPending}
+                        className="inline-flex items-center gap-1.5 rounded-md bg-[#29935a] px-3 py-1.5 text-[10.5px] font-bold text-white hover:bg-[#1f7344] transition-colors disabled:opacity-50 cursor-pointer"
+                      >
+                        {deliverMutation.isPending ? (
+                          <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                        ) : (
+                          <Truck className="h-3.5 w-3.5" />
+                        )}
+                        Marquer comme livrée
+                      </button>
+                    )}
+
+                    {/* 3. History Button */}
+                    <button
+                      onClick={() =>
+                        setHistoriqueTarget({
+                          missionId: prop.mission,
+                          title: prop.mission_title || 'Mission',
+                        })
+                      }
+                      className="inline-flex items-center gap-1.5 rounded-md border border-[#e7e3dc] bg-white px-3 py-1.5 text-[10.5px] font-semibold text-neutral-700 hover:bg-neutral-50 transition-colors cursor-pointer"
+                    >
+                      <Receipt className="h-3.5 w-3.5 text-neutral-500" /> Suivi Paiement
+                    </button>
+                  </div>
+                )}
 
                 {/* Actions */}
                 <div className="mt-auto pt-3 border-t border-[#f3f0eb] flex flex-wrap items-center justify-between gap-2">

@@ -1,14 +1,21 @@
+import time
+import jwt
+from decouple import config
 from django.db import IntegrityError
-from rest_framework import viewsets
+from rest_framework import status, viewsets
+from rest_framework.decorators import action
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import BasePermission, IsAuthenticated
+from rest_framework.response import Response
 
 from User.models import UserRole
 from freelance.models import Freelancee
-
 from mission.models import MissionStatus
-from .models import Proposition, PropositionStatus
-from .serializer import PropositionSerializer
+from paiement.models import NumeroPaiement
+from paiement.serializer import NumeroPaiementSerializer
+
+from .models import ProjectMeeting, Proposition, PropositionStatus
+from .serializer import ProjectMeetingSerializer, PropositionSerializer
 
 
 class IsFreelance(BasePermission):
@@ -68,18 +75,71 @@ class PropositionViewSet(viewsets.ModelViewSet):
         instance = serializer.save()
         if instance.proposition_status == PropositionStatus.ACCEPTED:
             mission = instance.mission
+            # Passer la mission en IN_PROGRESS
             mission.status = MissionStatus.IN_PROGRESS
             mission.save()
+            # Rejeter automatiquement toutes les autres propositions en attente
+            Proposition.objects.filter(
+                mission=mission,
+                proposition_status=PropositionStatus.PENDING,
+            ).exclude(pk=instance.pk).update(
+                proposition_status=PropositionStatus.REJECTED
+            )
 
+    @action(detail=True, methods=["post"], url_path="confirmer-numero-paiement")
+    def confirmer_numero_paiement(self, request, pk=None):
+        """
+        POST /api/propositions/<id>/confirmer-numero-paiement/
+        Réservé au freelance assigné, uniquement si la proposition est acceptée.
+        """
+        proposition = self.get_object()
+        user = request.user
 
-import time
-import jwt
-from decouple import config
-from rest_framework.decorators import action
-from rest_framework.response import Response
+        if proposition.freelance.user != user:
+            return Response(
+                {"error": "Seul le freelance concerné par cette proposition peut confirmer le numéro de paiement."},
+                status=status.HTTP_403_FORBIDDEN,
+            )
 
-from .models import ProjectMeeting
-from .serializer import ProjectMeetingSerializer
+        if proposition.proposition_status != PropositionStatus.ACCEPTED:
+            return Response(
+                {"error": "Le numéro de paiement ne peut être confirmé que pour une proposition acceptée."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        operateur = proposition.mission.operateurMobileMoney
+        freelance = proposition.freelance
+
+        existing_numero = NumeroPaiement.objects.filter(
+            freelance=freelance, operateur=operateur
+        ).first()
+
+        new_numero = str(request.data.get("numero") or "").strip()
+
+        if existing_numero:
+            if new_numero:
+                existing_numero.numero = new_numero
+            existing_numero.save()
+            num_obj = existing_numero
+        else:
+            if not new_numero:
+                return Response(
+                    {"error": f"Le numéro de paiement est obligatoire pour l'opérateur {operateur}."},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+            num_obj = NumeroPaiement.objects.create(
+                freelance=freelance,
+                operateur=operateur,
+                numero=new_numero,
+            )
+
+        return Response(
+            {
+                "message": "Numéro de paiement confirmé avec succès.",
+                "numero_paiement": NumeroPaiementSerializer(num_obj).data,
+            },
+            status=status.HTTP_200_OK,
+        )
 
 
 def generate_livekit_token(room_name: str, identity: str, name: str = ""):
@@ -151,6 +211,3 @@ class ProjectMeetingViewSet(viewsets.ModelViewSet):
                 "title": meeting.title,
             }
         )
-
-
-

@@ -10,6 +10,7 @@ class OperateurMobileMoneyType(models.TextChoices):
 class MissionStatus(models.TextChoices):
     OPEN = ("OPEN", "Ouverte")
     IN_PROGRESS = ("IN_PROGRESS", "En cours de développement")
+    DELIVERED = ("DELIVERED", "Livrée")
     COMPLETED = ("COMPLETED", "Terminée")
     CLOSED = ("CLOSED", "Fermée")
 

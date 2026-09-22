@@ -283,12 +283,18 @@ function CandidateModal({
             </div>
           </div>
         ) : (
-          <div className="border-t border-[#f0ede8] bg-white px-6 py-4 text-center text-[11px] text-neutral-400">
-            Candidature{" "}
-            <span className={`font-semibold ${statusMeta.text}`}>
-              {statusMeta.label.toLowerCase()}
-            </span>{" "}
-            — aucune action possible.
+          <div className="border-t border-[#f0ede8] bg-white px-6 py-4 flex items-center justify-between text-[11px]">
+            <span className="text-neutral-500">
+              Candidature <span className={`font-semibold ${statusMeta.text}`}>{statusMeta.label.toLowerCase()}</span>
+            </span>
+            {proposition.proposition_status === "ACCEPTED" && (
+              <a
+                href="/espace/paiements-effectues"
+                className="inline-flex items-center gap-1.5 rounded-md bg-[#1b4b6b] px-3 py-1.5 text-[10.5px] font-bold text-white hover:bg-[#143b55] transition-colors"
+              >
+                Suivi livraison & paiement PayDunya →
+              </a>
+            )}
           </div>
         )}
       </div>

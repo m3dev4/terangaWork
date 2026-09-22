@@ -87,12 +87,7 @@ const router = createBrowserRouter([
       },
       {
         path: 'paiements-recus',
-        element: (
-          <PlaceholderPage
-            title="Paiements reçus"
-            description="Historique de vos paiements et revenus perçus sur JeFly."
-          />
-        ),
+        element: <FreelanceMesMissionsPage />,
       },
       // Annonceur routes
       {
@@ -117,12 +112,7 @@ const router = createBrowserRouter([
       },
       {
         path: 'paiements-effectues',
-        element: (
-          <PlaceholderPage
-            title="Paiements effectués"
-            description="Suivez vos paiements sécurisés et factures de prestations."
-          />
-        ),
+        element: <AnnonceurEspacePage />,
       },
       // Shared routes
       {

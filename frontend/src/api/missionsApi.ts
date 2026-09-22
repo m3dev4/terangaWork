@@ -26,6 +26,7 @@ export interface Mission {
   technologies?: number[];
   technologies_detail?: TechnologieOption[];
   annonceur: number;
+  status?: 'OPEN' | 'IN_PROGRESS' | 'DELIVERED' | 'COMPLETED' | 'CLOSED';
   created_at: string;
   updated_at: string;
 }

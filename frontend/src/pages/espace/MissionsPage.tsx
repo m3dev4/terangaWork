@@ -54,7 +54,23 @@ const MissionsPage: React.FC = () => {
           <article key={mission.id} className="relative rounded-lg border border-[#ebe8e2] bg-white px-4 py-4 shadow-[0_4px_18px_rgba(31,42,48,0.025)] transition hover:border-[#d7d1c8] sm:px-5">
             <div className="flex items-start justify-between gap-3">
               <div className="min-w-0">
-                <div className="mb-1.5 flex flex-wrap items-center gap-2"><h2 className="truncate font-heading text-[13px] font-semibold text-[#24282b]">{mission.title}</h2><span className="inline-flex items-center gap-1 rounded-full bg-[#eaf7ef] px-2 py-0.5 text-[9px] font-semibold text-[#29935a]"><CheckCircle2 className="h-2.5 w-2.5" /> ACTIVE</span></div>
+                <div className="mb-1.5 flex flex-wrap items-center gap-2"><h2 className="truncate font-heading text-[13px] font-semibold text-[#24282b]">{mission.title}</h2>
+                  {(!mission.status || mission.status === 'OPEN') && (
+                    <span className="inline-flex items-center gap-1 rounded-full bg-[#eaf7ef] px-2 py-0.5 text-[9px] font-semibold text-[#29935a]"><CheckCircle2 className="h-2.5 w-2.5" /> ACTIVE</span>
+                  )}
+                  {mission.status === 'IN_PROGRESS' && (
+                    <span className="inline-flex items-center gap-1 rounded-full bg-blue-50 px-2 py-0.5 text-[9px] font-semibold text-blue-700 border border-blue-200">EN COURS</span>
+                  )}
+                  {mission.status === 'DELIVERED' && (
+                    <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 px-2 py-0.5 text-[9px] font-semibold text-amber-700 border border-amber-200">LIVRÉE</span>
+                  )}
+                  {mission.status === 'COMPLETED' && (
+                    <span className="inline-flex items-center gap-1 rounded-full bg-emerald-100 px-2 py-0.5 text-[9px] font-bold text-emerald-800 border border-emerald-300">TERMINÉE</span>
+                  )}
+                  {mission.status === 'CLOSED' && (
+                    <span className="inline-flex items-center gap-1 rounded-full bg-neutral-100 px-2 py-0.5 text-[9px] font-semibold text-neutral-500">FERMÉE</span>
+                  )}
+                </div>
                 <p className="line-clamp-1 text-[11px] text-neutral-500">{mission.description}</p>
                 {mission.technologies_detail && mission.technologies_detail.length > 0 && (
                   <div className="mt-2 flex flex-wrap gap-1.5">
