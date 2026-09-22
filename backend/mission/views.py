@@ -89,6 +89,10 @@ class MissionViewSet(viewsets.ModelViewSet):
 
         mission.status = MissionStatus.DELIVERED
         mission.save()
+        
+        # Notifier l'annonceur que la mission a été livrée
+        from notification.services import notifier_mission_livree
+        notifier_mission_livree(mission, mission.annonceur.user)
 
         return Response(
             {
@@ -124,6 +128,16 @@ class MissionViewSet(viewsets.ModelViewSet):
 
         mission.status = MissionStatus.COMPLETED
         mission.save()
+        
+        # Notifier l'annonceur et le freelance que la mission est complétée
+        from notification.services import notifier_mission_completee
+        accepted_prop = mission.propositions.filter(
+            proposition_status=PropositionStatus.ACCEPTED
+        ).first()
+        
+        notifier_mission_completee(mission, mission.annonceur.user)
+        if accepted_prop:
+            notifier_mission_completee(mission, accepted_prop.freelance.user)
 
         return Response(
             {

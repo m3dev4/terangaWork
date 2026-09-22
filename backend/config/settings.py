@@ -50,6 +50,7 @@ ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="localhost,127.0.0.1,testserver,
 # Application definition
 
 INSTALLED_APPS = [
+    "daphne",  # Django Channels ASGI server - DOIT être en premier
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -61,6 +62,7 @@ INSTALLED_APPS = [
     "rest_framework_simplejwt",
     "corsheaders",
     "drf_spectacular",
+    "channels",  # WebSocket support
     # apps
     "User",
     "Service",
@@ -71,6 +73,8 @@ INSTALLED_APPS = [
     "proposition",
     "matching",
     "paiement",
+    "message",  # Messaging
+    "notification",  # Notifications
 ]
 
 # PayDunya Configuration
@@ -112,6 +116,15 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "config.wsgi.application"
+ASGI_APPLICATION = "config.asgi.application"
+
+# Django Channels - In-memory channel layer (pas besoin de Redis)
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    }
+}
+
 
 
 # Database
@@ -204,6 +217,18 @@ CORS_ALLOWED_ORIGINS = config(
     "CORS_ALLOWED_ORIGINS", default="http://localhost:5173,http://127.0.0.1:5173"
 ).split(",")
 CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_HEADERS = [
+    "accept",
+    "accept-encoding",
+    "authorization",
+    "content-type",
+    "dnt",
+    "origin",
+    "user-agent",
+    "x-csrftoken",
+    "x-requested-with",
+]
+
 
 # drf-spectacular (Swagger / OpenAPI)
 SPECTACULAR_SETTINGS = {

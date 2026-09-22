@@ -78,11 +78,25 @@ class PropositionViewSet(viewsets.ModelViewSet):
             # Passer la mission en IN_PROGRESS
             mission.status = MissionStatus.IN_PROGRESS
             mission.save()
+            
+            # Notifier le freelance que sa proposition est acceptée
+            from notification.services import notifier_proposition_acceptee, notifier_proposition_rejetee, notifier_mission_demarree
+            notifier_proposition_acceptee(instance)
+            
+            # Notifier aussi le freelance du démarrage de la mission
+            notifier_mission_demarree(mission, instance.freelancee.user)
+            
             # Rejeter automatiquement toutes les autres propositions en attente
-            Proposition.objects.filter(
+            rejected_propositions = Proposition.objects.filter(
                 mission=mission,
                 proposition_status=PropositionStatus.PENDING,
-            ).exclude(pk=instance.pk).update(
+            ).exclude(pk=instance.pk)
+            
+            # Notifier chaque freelance rejeté
+            for prop in rejected_propositions:
+                notifier_proposition_rejetee(prop)
+            
+            rejected_propositions.update(
                 proposition_status=PropositionStatus.REJECTED
             )
 

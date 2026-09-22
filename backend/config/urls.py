@@ -32,6 +32,8 @@ urlpatterns = [
     path("api/", include("proposition.urls")),
     path("api/", include("paiement.urls")),
     path("api/matching/", include("matching.urls")),
+    path("api/", include("message.urls")),  # Messagerie
+    path("api/", include("notification.urls")),  # Notifications
 ]
 
 if settings.DEBUG:

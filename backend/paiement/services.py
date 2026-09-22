@@ -26,25 +26,6 @@ class InvalidMissionStatusError(Exception):
     pass
 
 
-def notify_freelance_payout_success(paiement: Paiement):
-    """Notifie le freelance que l'argent a été effectivement versé sur son compte Mobile Money."""
-    freelance_user = paiement.proposition.freelance.user
-    logger.info(
-        f"NOTIFICATION FREELANCE [Succès Décaissement]: {freelance_user.email} - "
-        f"Montant net de {paiement.montant_net} FCFA versé pour la mission '{paiement.proposition.mission.title}'."
-    )
-
-
-def alert_admin_payout_failed(paiement: Paiement):
-    """Alerte l'annonceur et l'admin qu'une intervention manuelle est nécessaire suite à un échec de décaissement."""
-    annonceur_user = paiement.proposition.mission.annonceur.user
-    logger.error(
-        f"ALERTE ADMIN & ANNONCEUR [Échec Décaissement]: Mission #{paiement.proposition.mission.id} - "
-        f"Annonceur {annonceur_user.email}. La collecte de {paiement.montant_brut} FCFA a réussi, "
-        f"mais le décaissement de {paiement.montant_net} FCFA au freelance a échoué (Ref: {paiement.reference_decaissement})."
-    )
-
-
 def initiate_collection(mission, user, paydunya_client=None) -> dict:
     """
     Étape 1: Initier la collecte PayDunya.
@@ -155,6 +136,10 @@ def process_collection_webhook(token: str, payload: dict, paydunya_client=None) 
         paiement.statut_collecte = StatutCollecte.REUSSI
         paiement.date_collecte = timezone.now()
         paiement.save()
+        
+        # Notifier le succès du paiement
+        from notification.services import notifier_paiement_reussi
+        notifier_paiement_reussi(paiement)
 
         # Déclenchement automatique de l'étape 3 (décaissement)
         # TODO: Réactiver quand les clés PayDunya Payout seront validées
@@ -164,6 +149,10 @@ def process_collection_webhook(token: str, payload: dict, paydunya_client=None) 
     elif confirmed_status in ["failed", "cancelled"]:
         paiement.statut_collecte = StatutCollecte.ECHOUE
         paiement.save()
+        
+        # Notifier l'échec du paiement
+        from notification.services import notifier_paiement_echoue
+        notifier_paiement_echoue(paiement)
 
     return paiement
 
@@ -241,14 +230,23 @@ def process_disbursement_webhook(disburse_token: str, payload: dict, paydunya_cl
         paiement.date_decaissement = timezone.now()
         paiement.save()
 
-        # Notification au freelance uniquement maintenant
-        notify_freelance_payout_success(paiement)
+        # Log pour l'admin
+        freelance_user = paiement.proposition.freelance.user
+        logger.info(
+            f"SUCCÈS DÉCAISSEMENT: {freelance_user.email} - "
+            f"Montant net de {paiement.montant_net} FCFA versé pour la mission '{paiement.proposition.mission.title}'."
+        )
 
     elif confirmed_status == "failed":
         paiement.statut_decaissement = StatutDecaissement.ECHOUE
         paiement.save()
 
-        # Alerte à l'annonceur et à l'admin pour intervention manuelle
-        alert_admin_payout_failed(paiement)
+        # Alerte pour intervention manuelle
+        annonceur_user = paiement.proposition.mission.annonceur.user
+        logger.error(
+            f"ALERTE ADMIN & ANNONCEUR [Échec Décaissement]: Mission #{paiement.proposition.mission.id} - "
+            f"Annonceur {annonceur_user.email}. La collecte de {paiement.montant_brut} FCFA a réussi, "
+            f"mais le décaissement de {paiement.montant_net} FCFA au freelance a échoué (Ref: {paiement.reference_decaissement})."
+        )
 
     return paiement
