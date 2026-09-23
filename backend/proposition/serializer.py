@@ -6,7 +6,9 @@ from .models import Proposition
 
 class FreelanceInfoSerializer(serializers.Serializer):
     """Minimal freelance info embedded in a proposition for announcers."""
-    id = serializers.IntegerField(source="freelance.id")
+    id = serializers.IntegerField(source="freelance.user.id")
+    user_id = serializers.IntegerField(source="freelance.user.id")
+    freelance_id = serializers.IntegerField(source="freelance.id")
     first_name = serializers.CharField(source="freelance.user.first_name")
     last_name = serializers.CharField(source="freelance.user.last_name")
     profile_picture = serializers.ImageField(

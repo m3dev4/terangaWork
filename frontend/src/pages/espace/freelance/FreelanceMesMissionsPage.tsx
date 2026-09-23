@@ -365,7 +365,13 @@ const FreelanceMesMissionsPage: React.FC = () => {
                         <Briefcase className="h-3.5 w-3.5" /> Espace Projet
                       </button>
                       <button
-                        onClick={() => navigate('/espace/messages')}
+                        onClick={() =>
+                          navigate(
+                            `/espace/messages?mission=${prop.mission}&title=${encodeURIComponent(
+                              prop.mission_title || ''
+                            )}`
+                          )
+                        }
                         className="inline-flex items-center gap-1.5 rounded-md border border-[#1b4b6b] bg-white px-3 py-1.5 text-[10.5px] font-semibold text-[#1b4b6b] hover:bg-[#f0f4f8] transition-colors cursor-pointer"
                       >
                         <MessageSquare className="h-3.5 w-3.5" /> Messagerie

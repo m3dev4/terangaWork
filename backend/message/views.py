@@ -60,17 +60,34 @@ class MessageViewSet(viewsets.ModelViewSet):
                     lectures__utilisateur=user
                 ).count()
                 
+                # Vérifier si la mission est active
+                is_linked = message.mission.status in ['OPEN', 'IN_PROGRESS', 'DELIVERED']
+
+                profile_pic = None
+                if autre_user.profile_picture:
+                    try:
+                        profile_pic = request.build_absolute_uri(autre_user.profile_picture.url)
+                    except Exception:
+                        profile_pic = str(autre_user.profile_picture)
+
+                user_dict = {
+                    'id': autre_user.id,
+                    'email': autre_user.email,
+                    'first_name': autre_user.first_name,
+                    'last_name': autre_user.last_name,
+                    'profile_picture': profile_pic,
+                }
+
+                mission_title = getattr(message.mission, 'title', getattr(message.mission, 'titre', f"Mission #{message.mission.id}"))
+
                 missions_dict[mission_id] = {
                     'mission_id': message.mission.id,
-                    'mission_titre': message.mission.titre,
-                    'autre_utilisateur': {
-                        'id': autre_user.id,
-                        'username': autre_user.username,
-                        'first_name': autre_user.first_name,
-                        'last_name': autre_user.last_name,
-                        'profile_picture': autre_user.profile_picture,
-                    },
-                    'dernier_message': MessageSerializer(message).data,
+                    'mission_titre': mission_title,
+                    'mission_status': message.mission.status,
+                    'is_linked': is_linked,
+                    'autre_utilisateur': user_dict,
+                    'autre_utlisateur': user_dict,
+                    'dernier_message': MessageSerializer(message, context={'request': request}).data,
                     'nb_non_lus': nb_non_lus,
                     'date_dernier_message': message.date_envoi
                 }
@@ -106,11 +123,13 @@ class MessageViewSet(viewsets.ModelViewSet):
             )
         
         # Vérifier les permissions
-        is_annonceur = mission.annonceur_id == user.id
+        is_annonceur = (
+            hasattr(mission, 'annonceur') and 
+            (mission.annonceur.user_id == user.id or mission.annonceur.user == user)
+        )
         is_freelance = Proposition.objects.filter(
             mission=mission,
-            freelancee=user,
-            statut='ACCEPTEE'
+            freelance__user=user
         ).exists()
         
         if not (is_annonceur or is_freelance):
@@ -139,9 +158,11 @@ class MessageViewSet(viewsets.ModelViewSet):
             context={'request': request}
         )
         
+        mission_title = getattr(mission, 'title', getattr(mission, 'titre', f"Mission #{mission.id}"))
+
         return Response({
             'mission_id': mission_id,
-            'mission_titre': mission.titre,
+            'mission_titre': mission_title,
             'total': messages.count(),
             'page': page,
             'page_size': page_size,

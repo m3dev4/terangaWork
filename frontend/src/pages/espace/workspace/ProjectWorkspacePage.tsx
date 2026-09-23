@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useNavigate } from 'react-router-dom';
 import {
   Calendar as CalendarIcon,
   ChevronLeft,
@@ -41,6 +42,7 @@ const MONTHS_FR = [
 const DAYS_FR = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
 
 const ProjectWorkspacePage: React.FC = () => {
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
 
   // Active LiveKit Call Modal State
@@ -313,6 +315,28 @@ const ProjectWorkspacePage: React.FC = () => {
               </p>
             </div>
           </div>
+
+          <div className="h-6 w-px bg-neutral-200" />
+
+          {/* Quick Chat Button */}
+          <button
+            type="button"
+            onClick={() => {
+              const query = new URLSearchParams({
+                mission: String(activeProject.mission),
+                title: activeProject.mission_title || 'Projet',
+                user_id: String(freelance?.id ?? 0),
+                first_name: freelance?.first_name ?? '',
+                last_name: freelance?.last_name ?? '',
+                profile_picture: freelance?.profile_picture ?? '',
+              }).toString();
+              navigate(`/espace/messages?${query}`);
+            }}
+            className="inline-flex items-center gap-1.5 rounded-lg border border-[#1b4b6b] bg-[#f0f4f8] px-3 py-1.5 text-[10.5px] font-semibold text-[#1b4b6b] hover:bg-[#1b4b6b] hover:text-white transition-colors cursor-pointer"
+            title="Ouvrir la messagerie pour ce projet"
+          >
+            <MessageSquare className="h-3.5 w-3.5" /> Discuter
+          </button>
         </div>
       </div>
 

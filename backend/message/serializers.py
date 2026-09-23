@@ -7,7 +7,7 @@ class UserMinimalSerializer(serializers.ModelSerializer):
     """Serializer minimal pour afficher les infos utilisateur dans les messages"""
     class Meta:
         model = User
-        fields = ['id', 'username', 'first_name', 'last_name', 'profile_picture']
+        fields = ['id', 'email', 'first_name', 'last_name', 'profile_picture']
         read_only_fields = fields
 
 
@@ -15,7 +15,13 @@ class MessageSerializer(serializers.ModelSerializer):
     """Serializer pour les messages (texte et vocal)"""
     expediteur_info = UserMinimalSerializer(source='expediteur', read_only=True)
     destinataire_info = UserMinimalSerializer(source='destinataire', read_only=True)
+    content = serializers.CharField(source='contenu', required=False, allow_blank=True)
     est_lu = serializers.SerializerMethodField()
+    destinataire = serializers.PrimaryKeyRelatedField(
+        queryset=User.objects.all(),
+        required=False,
+        allow_null=True
+    )
     
     class Meta:
         model = Message
@@ -28,11 +34,35 @@ class MessageSerializer(serializers.ModelSerializer):
             'mission',
             'type',
             'contenu',
+            'content',
             'audio_url',
             'date_envoi',
             'est_lu',
         ]
         read_only_fields = ['id', 'expediteur', 'date_envoi']
+
+    def to_internal_value(self, data):
+        dest_val = data.get('destinataire')
+        if dest_val:
+            try:
+                # Si le destinataire passé n'est pas un User ID valide
+                if not User.objects.filter(pk=dest_val).exists():
+                    data = data.copy()
+                    from freelance.models import Freelancee
+                    from announcer.models import Announcer
+                    
+                    freelance = Freelancee.objects.filter(pk=dest_val).first()
+                    if freelance:
+                        data['destinataire'] = freelance.user.id
+                    else:
+                        announcer = Announcer.objects.filter(pk=dest_val).first()
+                        if announcer:
+                            data['destinataire'] = announcer.user.id
+                        else:
+                            data['destinataire'] = None
+            except Exception:
+                pass
+        return super().to_internal_value(data)
     
     def get_est_lu(self, obj):
         """Vérifie si le message a été lu par le destinataire"""
@@ -65,10 +95,31 @@ class MessageSerializer(serializers.ModelSerializer):
         return data
     
     def create(self, validated_data):
-        """Création d'un message avec l'expéditeur automatique"""
+        """Création d'un message avec l'expéditeur et le destinataire automatiques"""
         request = self.context.get('request')
         if request and request.user.is_authenticated:
-            validated_data['expediteur'] = request.user
+            user = request.user
+            validated_data['expediteur'] = user
+            
+            # Résolution automatique du destinataire User si non fourni
+            if not validated_data.get('destinataire'):
+                mission = validated_data.get('mission')
+                if mission:
+                    is_annonceur = (
+                        hasattr(mission, 'annonceur') and 
+                        (mission.annonceur.user_id == user.id or mission.annonceur.user == user)
+                    )
+                    if is_annonceur:
+                        from proposition.models import Proposition
+                        prop = Proposition.objects.filter(mission=mission, proposition_status='ACCEPTED').first()
+                        if not prop:
+                            prop = Proposition.objects.filter(mission=mission).order_by('-created_at').first()
+                        if prop and hasattr(prop, 'freelance') and prop.freelance:
+                            validated_data['destinataire'] = prop.freelance.user
+                    else:
+                        if hasattr(mission, 'annonceur') and mission.annonceur:
+                            validated_data['destinataire'] = mission.annonceur.user
+        
         return super().create(validated_data)
 
 

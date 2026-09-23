@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 import {
   Briefcase,
   CalendarDays,
@@ -8,6 +9,7 @@ import {
   ChevronRight,
   Loader2,
   MapPin,
+  MessageSquare,
   ThumbsDown,
   ThumbsUp,
   User,
@@ -253,13 +255,31 @@ function CandidateModal({
         </div>
 
         {/* footer */}
-        {proposition.proposition_status === "PENDING" ? (
-          <div className="border-t border-[#f0ede8] bg-white px-6 py-4">
-            <div className="flex gap-3">
+        <div className="border-t border-[#f0ede8] bg-white px-6 py-4 flex items-center justify-between gap-2">
+          <button
+            type="button"
+            onClick={() => {
+              const query = new URLSearchParams({
+                mission: String(proposition.mission),
+                title: missionTitle,
+                user_id: String(fi?.id ?? 0),
+                first_name: fi?.first_name ?? '',
+                last_name: fi?.last_name ?? '',
+                profile_picture: fi?.profile_picture ?? '',
+              }).toString();
+              navigate(`/espace/messages?${query}`);
+            }}
+            className="inline-flex items-center gap-1.5 rounded-lg border border-[#1b4b6b] bg-white px-3 py-2 text-[11px] font-semibold text-[#1b4b6b] hover:bg-[#f0f4f8] transition-colors cursor-pointer"
+          >
+            <MessageSquare className="h-3.5 w-3.5" /> Envoyer un message
+          </button>
+
+          {proposition.proposition_status === "PENDING" ? (
+            <div className="flex gap-2 flex-1 justify-end">
               <button
                 disabled={mutation.isPending}
                 onClick={() => mutation.mutate({ id: proposition.id, status: "REJECTED" })}
-                className="flex flex-1 items-center justify-center gap-2 rounded-lg border border-[#e7e3dc] px-4 py-2.5 text-[11px] font-semibold text-neutral-600 transition-colors hover:border-red-300 hover:bg-red-50 hover:text-red-600 disabled:opacity-50"
+                className="flex items-center justify-center gap-2 rounded-lg border border-[#e7e3dc] px-3 py-2 text-[11px] font-semibold text-neutral-600 transition-colors hover:border-red-300 hover:bg-red-50 hover:text-red-600 disabled:opacity-50"
               >
                 {mutation.isPending ? (
                   <Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -271,32 +291,22 @@ function CandidateModal({
               <button
                 disabled={mutation.isPending}
                 onClick={() => mutation.mutate({ id: proposition.id, status: "ACCEPTED" })}
-                className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-[#1b4b6b] px-4 py-2.5 text-[11px] font-semibold text-white transition-colors hover:bg-[#143b55] disabled:opacity-50"
+                className="flex items-center justify-center gap-2 rounded-lg bg-[#1b4b6b] px-4 py-2 text-[11px] font-semibold text-white transition-colors hover:bg-[#143b55] disabled:opacity-50"
               >
                 {mutation.isPending ? (
                   <Loader2 className="h-3.5 w-3.5 animate-spin" />
                 ) : (
                   <ThumbsUp className="h-3.5 w-3.5" />
                 )}
-                Accepter la candidature
+                Accepter candidature
               </button>
             </div>
-          </div>
-        ) : (
-          <div className="border-t border-[#f0ede8] bg-white px-6 py-4 flex items-center justify-between text-[11px]">
-            <span className="text-neutral-500">
+          ) : (
+            <span className="text-neutral-500 text-[11px]">
               Candidature <span className={`font-semibold ${statusMeta.text}`}>{statusMeta.label.toLowerCase()}</span>
             </span>
-            {proposition.proposition_status === "ACCEPTED" && (
-              <a
-                href="/espace/paiements-effectues"
-                className="inline-flex items-center gap-1.5 rounded-md bg-[#1b4b6b] px-3 py-1.5 text-[10.5px] font-bold text-white hover:bg-[#143b55] transition-colors"
-              >
-                Suivi livraison & paiement PayDunya →
-              </a>
-            )}
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );
@@ -312,6 +322,7 @@ function CandidateCard({
   missionTitle: string;
   matchingResult?: MatchingCandidatResult;
 }) {
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const fi = proposition.freelance_info;
   const statusMeta = STATUS_META[proposition.proposition_status];
@@ -368,12 +379,32 @@ function CandidateCard({
         {/* date + cta */}
         <div className="flex shrink-0 flex-col items-end gap-2">
           <span className="text-[9px] text-neutral-400">{formatDate(proposition.date_livraison)}</span>
-          <button
-            onClick={() => setOpen(true)}
-            className="inline-flex items-center gap-1 rounded-md bg-[#1b4b6b] px-3 py-1.5 text-[10px] font-semibold text-white transition-colors hover:bg-[#143b55]"
-          >
-            Voir la candidature <ChevronRight className="h-3 w-3" />
-          </button>
+          <div className="flex items-center gap-1.5">
+            <button
+              type="button"
+              onClick={() => {
+                const query = new URLSearchParams({
+                  mission: String(proposition.mission),
+                  title: missionTitle,
+                  user_id: String(fi?.id ?? 0),
+                  first_name: fi?.first_name ?? '',
+                  last_name: fi?.last_name ?? '',
+                  profile_picture: fi?.profile_picture ?? '',
+                }).toString();
+                navigate(`/espace/messages?${query}`);
+              }}
+              className="inline-flex items-center gap-1 rounded-md border border-[#1b4b6b] bg-white px-2.5 py-1.5 text-[10px] font-semibold text-[#1b4b6b] hover:bg-[#f0f4f8] transition-colors cursor-pointer"
+              title="Envoyer un message"
+            >
+              <MessageSquare className="h-3 w-3" /> Contacter
+            </button>
+            <button
+              onClick={() => setOpen(true)}
+              className="inline-flex items-center gap-1 rounded-md bg-[#1b4b6b] px-3 py-1.5 text-[10px] font-semibold text-white transition-colors hover:bg-[#143b55] cursor-pointer"
+            >
+              Candidature <ChevronRight className="h-3 w-3" />
+            </button>
+          </div>
         </div>
       </div>
 

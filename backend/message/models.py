@@ -30,11 +30,10 @@ class Message(models.Model):
     )
     type = models.CharField(max_length=10, choices=TYPE_CHOICES, default='TEXTE')
     contenu = models.TextField(blank=True, help_text="Contenu du message texte")
-    audio_url = models.URLField(
-        max_length=500,
+    audio_url = models.TextField(
         blank=True,
         null=True,
-        help_text="URL Cloudinary du fichier audio pour messages vocaux"
+        help_text="URL du fichier audio pour messages vocaux"
     )
     date_envoi = models.DateTimeField(auto_now_add=True)
     
