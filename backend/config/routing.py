@@ -19,10 +19,7 @@ websocket_urlpatterns = [
 
 # Configuration du protocole router
 application = ProtocolTypeRouter({
-    # Route WebSocket avec validation des origines et authentification
-    'websocket': AllowedHostsOriginValidator(
-        AuthMiddlewareStack(
-            URLRouter(websocket_urlpatterns)
-        )
+    'websocket': AuthMiddlewareStack(
+        URLRouter(websocket_urlpatterns)
     ),
 })

@@ -1,6 +1,6 @@
 import React, { useDeferredValue, useState } from 'react';
 import { useQuery, useMutation } from '@tanstack/react-query';
-import { ArrowRight, Clock3, Search, SlidersHorizontal, WalletCards, Sparkles, Brain, CheckCircle2, AlertCircle, Info, RefreshCw } from 'lucide-react';
+import { ArrowRight, Clock3, Search, SlidersHorizontal, WalletCards, Sparkles, Brain, CheckCircle2, AlertCircle, Info, RefreshCw, Loader2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { getMissions, type Mission } from '../../api/missionsApi';
 import { getMissionsRecommandees, type MatchingMissionResult } from '../../api/matchingApi';
@@ -356,21 +356,29 @@ const FreelanceMissionsPage: React.FC = () => {
 
       {/* Floating Action Button (FAB) for Intelligent Matching */}
       <div className="fixed bottom-6 right-6 z-40">
-        <button
-          type="button"
-          onClick={() => matchingMutation.mutate()}
-          disabled={matchingMutation.isPending}
-          className="group relative flex items-center gap-2.5 rounded-full bg-gradient-to-r from-indigo-600 via-purple-600 to-blue-600 px-5 py-3.5 text-xs font-bold text-white shadow-xl shadow-indigo-500/30 transition-all hover:scale-105 hover:shadow-2xl hover:shadow-indigo-500/40 active:scale-95 disabled:opacity-75 cursor-pointer"
-        >
-          <span className="relative flex h-3 w-3">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-amber-300 opacity-75"></span>
-            <span className="relative inline-flex h-3 w-3 rounded-full bg-amber-400"></span>
-          </span>
-          <Brain className={`h-4 w-4 ${matchingMutation.isPending ? 'animate-spin' : 'animate-bounce'}`} />
-          <span>{matchingMutation.isPending ? 'Matching en cours…' : 'Matching Intelligent'}</span>
-          <Sparkles className="h-4 w-4 text-amber-300" />
-        </button>
-      </div>
+  <button
+    type="button"
+    onClick={() => matchingMutation.mutate()}
+    disabled={matchingMutation.isPending}
+    className="group relative flex items-center gap-2.5 rounded-2xl bg-[#111118] px-5 py-3.5 text-xs font-semibold text-white shadow-lg shadow-[#111118]/20 transition-colors hover:bg-[#111118]/90 disabled:opacity-70 cursor-pointer"
+  >
+    {!matchingMutation.isPending && (
+      <span className="absolute -top-1 -right-1 h-2.5 w-2.5 rounded-full bg-[#D95C38]">
+        <span className="absolute inset-0 rounded-full bg-[#D95C38] animate-ping opacity-60" />
+      </span>
+    )}
+
+    {matchingMutation.isPending ? (
+      <Loader2 className="h-4 w-4 animate-spin text-[#E7B84B]" />
+    ) : (
+      <Brain className="h-4 w-4 text-[#E7B84B]" />
+    )}
+
+    <span>
+      {matchingMutation.isPending ? 'Recherche des meilleurs profils…' : 'Lancer le matching'}
+    </span>
+  </button>
+</div>
     </div>
   );
 };

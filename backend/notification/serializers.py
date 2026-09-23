@@ -6,8 +6,13 @@ class NotificationSerializer(serializers.ModelSerializer):
     """Serializer pour les notifications"""
     
     # Info additionnelles pour les objets liés
-    mission_titre = serializers.CharField(source='mission.titre', read_only=True, allow_null=True)
+    mission_titre = serializers.SerializerMethodField()
     proposition_id = serializers.UUIDField(source='proposition.id', read_only=True, allow_null=True)
+
+    def get_mission_titre(self, obj):
+        if obj.mission:
+            return getattr(obj.mission, 'title', getattr(obj.mission, 'titre', None))
+        return None
     
     class Meta:
         model = Notification

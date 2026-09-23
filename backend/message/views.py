@@ -221,14 +221,30 @@ class MessageViewSet(viewsets.ModelViewSet):
     def create(self, request):
         """
         Créer un nouveau message via REST API.
-        Note: Préférer l'envoi via WebSocket pour le temps réel.
+        Envoie en temps réel via WebSocket aux abonnés du canal et au destinataire.
         """
         serializer = self.get_serializer(data=request.data, context={'request': request})
         serializer.is_valid(raise_exception=True)
         message = serializer.save()
         
-        # Notifier le destinataire
+        # Notifier le destinataire (envoie WebSocket sur notifications.{destinataire_id})
         from notification.services import notifier_nouveau_message
         notifier_nouveau_message(message)
+        
+        # Broadcaster sur le canal WebSocket chat.{mission_id}
+        try:
+            from channels.layers import get_channel_layer
+            from asgiref.sync import async_to_sync
+            channel_layer = get_channel_layer()
+            if channel_layer:
+                async_to_sync(channel_layer.group_send)(
+                    f"chat.{message.mission_id}",
+                    {
+                        'type': 'chat_message',
+                        'message': serializer.data
+                    }
+                )
+        except Exception as e:
+            print(f"⚠️ Erreur WebSocket broadcast message REST: {e}")
         
         return Response(serializer.data, status=status.HTTP_201_CREATED)

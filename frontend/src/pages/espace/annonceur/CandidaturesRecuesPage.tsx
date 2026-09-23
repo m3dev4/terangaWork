@@ -14,16 +14,22 @@ import {
   ThumbsUp,
   User,
   X,
-  Sparkles,
   Brain,
-  Info,
   AlertCircle,
-  RefreshCw,
 } from "lucide-react";
 import { getMissions } from "../../../api/missionsApi";
-import { getPropositions, type Proposition } from "../../../api/propositionsApi";
+import {
+  getPropositions,
+  type Proposition,
+} from "../../../api/propositionsApi";
 import { instance } from "../../../api/axios";
-import { getCandidatsRecommandes, type MatchingCandidatResult } from "../../../api/matchingApi";
+import {
+  getCandidatsRecommandes,
+  type MatchingCandidatResult,
+} from "../../../api/matchingApi";
+
+// ── Palette commune au dashboard (annonceur / freelance) ────────────────────
+// Encre #111118 · Terracotta #D95C38 · Jaune #E7B84B · Crème #F3EBDD
 
 // ── helpers ────────────────────────────────────────────────────────────────
 const formatDate = (v: string | null) =>
@@ -38,21 +44,21 @@ const formatDate = (v: string | null) =>
 const STATUS_META = {
   PENDING: {
     label: "En attente",
-    bg: "bg-amber-50",
-    text: "text-amber-700",
-    border: "border-amber-200",
+    bg: "bg-[#E7B84B]/20",
+    text: "text-[#c9922e]",
+    border: "border-[#E7B84B]/40",
   },
   ACCEPTED: {
     label: "Acceptée",
-    bg: "bg-[#eaf7ef]",
-    text: "text-[#29935a]",
-    border: "border-[#c3e9d4]",
+    bg: "bg-[#F3EBDD]",
+    text: "text-[#111118]/70",
+    border: "border-[#111118]/10",
   },
   REJECTED: {
     label: "Refusée",
-    bg: "bg-red-50",
-    text: "text-red-600",
-    border: "border-red-200",
+    bg: "bg-[#D95C38]/10",
+    text: "text-[#c14f2f]",
+    border: "border-[#D95C38]/25",
   },
 } as const;
 
@@ -70,6 +76,30 @@ const updatePropositionStatus = async ({
   return res.data;
 };
 
+// ── Score de matching (badge discret, cohérent avec la marque) ─────────────
+function MatchScoreBadge({
+  score,
+  size = "sm",
+}: {
+  score: number;
+  size?: "sm" | "md";
+}) {
+  const pct = Math.round(score * 100);
+  const isSmall = size === "sm";
+  return (
+    <span
+      className={`inline-flex items-center gap-1 rounded-full bg-[#111118] font-bold text-white ${
+        isSmall ? "px-2 py-0.5 text-[9px]" : "px-2.5 py-1 text-[10px]"
+      }`}
+    >
+      <span
+        className={`rounded-full bg-[#E7B84B] ${isSmall ? "h-1.5 w-1.5" : "h-2 w-2"}`}
+      />
+      {pct}% pertinence
+    </span>
+  );
+}
+
 // ── Candidate Detail Modal ─────────────────────────────────────────────────
 function CandidateModal({
   proposition,
@@ -82,6 +112,7 @@ function CandidateModal({
   matchingResult?: MatchingCandidatResult;
   onClose: () => void;
 }) {
+  const navigate = useNavigate();
   const qc = useQueryClient();
   const fi = proposition.freelance_info;
   const statusMeta = STATUS_META[proposition.proposition_status];
@@ -96,25 +127,24 @@ function CandidateModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-[#111118]/50 p-4 backdrop-blur-sm"
       onClick={onClose}
     >
       <div
-        className="relative flex max-h-[90vh] w-full max-w-lg flex-col overflow-hidden rounded-2xl bg-white shadow-2xl"
+        className="relative flex max-h-[90vh] w-full max-w-lg flex-col overflow-hidden rounded-[28px] bg-white shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* close */}
         <button
           onClick={onClose}
-          className="absolute right-4 top-4 rounded-md p-1 text-neutral-400 hover:bg-neutral-100 hover:text-neutral-700"
+          className="absolute right-4 top-4 rounded-lg p-1 text-[#111118]/35 hover:bg-[#F3EBDD] hover:text-[#111118]"
         >
           <X className="h-4 w-4" />
         </button>
 
         {/* header */}
-        <div className="border-b border-[#f0ede8] px-6 py-5">
+        <div className="border-b border-[#111118]/6 px-6 py-5">
           <div className="flex items-start gap-4">
-            <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-full bg-neutral-100 ring-2 ring-white">
+            <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-2xl bg-[#F3EBDD] ring-2 ring-white">
               {fi?.profile_picture ? (
                 <img
                   src={fi.profile_picture}
@@ -122,14 +152,14 @@ function CandidateModal({
                   className="h-full w-full object-cover"
                 />
               ) : (
-                <div className="flex h-full w-full items-center justify-center bg-[#eaf0f5]">
-                  <User className="h-6 w-6 text-[#1b4b6b]" />
+                <div className="flex h-full w-full items-center justify-center">
+                  <User className="h-6 w-6 text-[#D95C38]" />
                 </div>
               )}
             </div>
             <div className="min-w-0 flex-1">
               <div className="flex flex-wrap items-center gap-2">
-                <h2 className="font-heading text-base font-semibold text-[#20252a]">
+                <h2 className="font-heading text-base font-semibold text-[#111118]">
                   {fi?.first_name} {fi?.last_name}
                 </h2>
                 <span
@@ -138,14 +168,14 @@ function CandidateModal({
                   {statusMeta.label}
                 </span>
                 {matchingResult && (
-                  <span className="inline-flex items-center gap-1 rounded-full bg-gradient-to-r from-indigo-600 to-purple-600 px-2 py-0.5 text-[9px] font-bold text-white shadow-xs">
-                    <Sparkles className="h-3 w-3" /> {Math.round(matchingResult.score * 100)}% Pertinence
-                  </span>
+                  <MatchScoreBadge score={matchingResult.score} />
                 )}
               </div>
-              <p className="mt-0.5 text-[11px] text-neutral-500">{fi?.title}</p>
+              <p className="mt-0.5 text-[11px] text-[#111118]/50">
+                {fi?.title}
+              </p>
               {fi?.ville && (
-                <p className="mt-1 flex items-center gap-1 text-[10px] text-neutral-400">
+                <p className="mt-1 flex items-center gap-1 text-[10px] text-[#111118]/40">
                   <MapPin className="h-3 w-3" /> {fi.ville}
                 </p>
               )}
@@ -155,33 +185,34 @@ function CandidateModal({
 
         {/* scrollable body */}
         <div className="flex-1 space-y-5 overflow-y-auto px-6 py-5">
-          {/* AI Matching Analysis Block if available */}
+          {/* Analyse de matching */}
           {matchingResult && (
-            <div className="rounded-xl border border-indigo-100 bg-gradient-to-br from-indigo-50/70 to-purple-50/70 p-4">
-              <div className="flex items-center justify-between mb-2">
-                <div className="flex items-center gap-1.5 font-heading text-xs font-bold text-indigo-950">
-                  <Brain className="h-4 w-4 text-indigo-600" />
-                  Score de Matching Intelligent: {Math.round(matchingResult.score * 100)}%
+            <div className="rounded-2xl border border-[#111118]/8 bg-[#F3EBDD]/50 p-4">
+              <div className="mb-2 flex items-center justify-between">
+                <div className="flex items-center gap-1.5 font-heading text-xs font-bold text-[#111118]">
+                  <Brain className="h-4 w-4 text-[#D95C38]" />
+                  Score de matching : {Math.round(matchingResult.score * 100)}%
                 </div>
               </div>
 
-              {/* Breakdown Grid */}
-              <div className="grid grid-cols-3 gap-2 mb-3 text-center">
-                <div className="rounded-lg bg-white/80 p-2 shadow-2xs border border-indigo-100/50">
-                  <p className="text-[9px] text-neutral-500">Tech (45%)</p>
-                  <p className="text-[11px] font-bold text-indigo-700">
+              <div className="mb-3 grid grid-cols-3 gap-2 text-center">
+                <div className="rounded-xl bg-white p-2 border border-[#111118]/6">
+                  <p className="text-[9px] text-[#111118]/45">Tech (45%)</p>
+                  <p className="text-[11px] font-bold text-[#111118]">
                     {Math.round(matchingResult.score_technologies * 100)}%
                   </p>
                 </div>
-                <div className="rounded-lg bg-white/80 p-2 shadow-2xs border border-indigo-100/50">
-                  <p className="text-[9px] text-neutral-500">Service (45%)</p>
-                  <p className="text-[11px] font-bold text-indigo-700">
+                <div className="rounded-xl bg-white p-2 border border-[#111118]/6">
+                  <p className="text-[9px] text-[#111118]/45">Service (45%)</p>
+                  <p className="text-[11px] font-bold text-[#111118]">
                     {Math.round(matchingResult.score_service * 100)}%
                   </p>
                 </div>
-                <div className="rounded-lg bg-white/80 p-2 shadow-2xs border border-indigo-100/50">
-                  <p className="text-[9px] text-neutral-500">Expérience (10%)</p>
-                  <p className="text-[11px] font-bold text-indigo-700">
+                <div className="rounded-xl bg-white p-2 border border-[#111118]/6">
+                  <p className="text-[9px] text-[#111118]/45">
+                    Expérience (10%)
+                  </p>
+                  <p className="text-[11px] font-bold text-[#111118]">
                     {matchingResult.score_experience !== null
                       ? `${Math.round(matchingResult.score_experience * 100)}%`
                       : "N/A"}
@@ -190,9 +221,9 @@ function CandidateModal({
               </div>
 
               {matchingResult.justification_ia && (
-                <div className="rounded-lg bg-white/90 p-3 text-[11px] leading-relaxed text-indigo-950 border border-indigo-100 shadow-2xs">
-                  <p className="font-semibold text-indigo-900 mb-1 flex items-center gap-1">
-                    <Sparkles className="h-3 w-3 text-amber-500" /> Remarque IA :
+                <div className="rounded-xl bg-white p-3 text-[11px] leading-relaxed text-[#111118]/75 border border-[#111118]/6">
+                  <p className="mb-1 font-semibold text-[#111118]">
+                    Remarque :
                   </p>
                   {matchingResult.justification_ia}
                 </div>
@@ -201,22 +232,22 @@ function CandidateModal({
           )}
 
           {/* mission context */}
-          <div className="flex items-center gap-2 rounded-lg bg-[#f7f5f1] px-3 py-2.5">
-            <Briefcase className="h-3.5 w-3.5 text-[#1b4b6b]" />
-            <span className="text-[10px] font-medium text-neutral-500">Mission :</span>
-            <span className="truncate text-[10px] font-semibold text-[#20252a]">
+          <div className="flex items-center gap-2 rounded-xl bg-[#F3EBDD]/60 px-3 py-2.5">
+            <Briefcase className="h-3.5 w-3.5 text-[#D95C38]" />
+            <span className="text-[10px] font-medium text-[#111118]/50">
+              Mission :
+            </span>
+            <span className="truncate text-[10px] font-semibold text-[#111118]">
               {missionTitle}
             </span>
           </div>
 
           {/* date livraison */}
           <div className="flex items-center gap-2">
-            <CalendarDays className="h-3.5 w-3.5 text-[#f2994a]" />
+            <CalendarDays className="h-3.5 w-3.5 text-[#D95C38]" />
             <div>
-              <p className="text-[9px] uppercase tracking-wide text-neutral-400">
-                Livraison proposée
-              </p>
-              <p className="text-[11px] font-semibold text-neutral-800">
+              <p className="text-[9px] text-[#111118]/40">Livraison proposée</p>
+              <p className="text-[11px] font-semibold text-[#111118]">
                 {formatDate(proposition.date_livraison)}
               </p>
             </div>
@@ -224,11 +255,11 @@ function CandidateModal({
 
           {/* lettre */}
           <div>
-            <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.12em] text-neutral-400">
+            <p className="mb-2 text-[10px] font-semibold text-[#111118]/40">
               Message de motivation
             </p>
-            <div className="rounded-lg border border-[#ece9e2] bg-[#faf9f7] px-4 py-3">
-              <p className="whitespace-pre-line text-[12px] leading-7 text-neutral-700">
+            <div className="rounded-xl border border-[#111118]/8 bg-[#F3EBDD]/40 px-4 py-3">
+              <p className="whitespace-pre-line text-[12px] leading-7 text-[#111118]/75">
                 {proposition.lettre_motivation}
               </p>
             </div>
@@ -237,14 +268,14 @@ function CandidateModal({
           {/* technologies */}
           {fi?.technologies && fi.technologies.length > 0 && (
             <div>
-              <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.12em] text-neutral-400">
-                Services &amp; Technologies
+              <p className="mb-2 text-[10px] font-semibold text-[#111118]/40">
+                Services &amp; technologies
               </p>
               <div className="flex flex-wrap gap-1.5">
                 {fi.technologies.map((t) => (
                   <span
                     key={t.id}
-                    className="rounded-md bg-[#f0eee8] px-2.5 py-1 text-[10px] font-medium text-neutral-600"
+                    className="rounded-lg bg-[#F3EBDD] px-2.5 py-1 text-[10px] font-medium text-[#111118]/70"
                   >
                     {t.name}
                   </span>
@@ -255,7 +286,7 @@ function CandidateModal({
         </div>
 
         {/* footer */}
-        <div className="border-t border-[#f0ede8] bg-white px-6 py-4 flex items-center justify-between gap-2">
+        <div className="flex items-center justify-between gap-2 border-t border-[#111118]/6 bg-white px-6 py-4">
           <button
             type="button"
             onClick={() => {
@@ -263,23 +294,25 @@ function CandidateModal({
                 mission: String(proposition.mission),
                 title: missionTitle,
                 user_id: String(fi?.id ?? 0),
-                first_name: fi?.first_name ?? '',
-                last_name: fi?.last_name ?? '',
-                profile_picture: fi?.profile_picture ?? '',
+                first_name: fi?.first_name ?? "",
+                last_name: fi?.last_name ?? "",
+                profile_picture: fi?.profile_picture ?? "",
               }).toString();
               navigate(`/espace/messages?${query}`);
             }}
-            className="inline-flex items-center gap-1.5 rounded-lg border border-[#1b4b6b] bg-white px-3 py-2 text-[11px] font-semibold text-[#1b4b6b] hover:bg-[#f0f4f8] transition-colors cursor-pointer"
+            className="inline-flex items-center gap-1.5 rounded-xl border border-[#111118]/15 bg-white px-3 py-2 text-[11px] font-semibold text-[#111118] hover:bg-[#F3EBDD]/60 transition-colors cursor-pointer"
           >
             <MessageSquare className="h-3.5 w-3.5" /> Envoyer un message
           </button>
 
           {proposition.proposition_status === "PENDING" ? (
-            <div className="flex gap-2 flex-1 justify-end">
+            <div className="flex flex-1 justify-end gap-2">
               <button
                 disabled={mutation.isPending}
-                onClick={() => mutation.mutate({ id: proposition.id, status: "REJECTED" })}
-                className="flex items-center justify-center gap-2 rounded-lg border border-[#e7e3dc] px-3 py-2 text-[11px] font-semibold text-neutral-600 transition-colors hover:border-red-300 hover:bg-red-50 hover:text-red-600 disabled:opacity-50"
+                onClick={() =>
+                  mutation.mutate({ id: proposition.id, status: "REJECTED" })
+                }
+                className="flex items-center justify-center gap-2 rounded-xl border border-[#111118]/12 px-3 py-2 text-[11px] font-semibold text-[#111118]/70 transition-colors hover:border-[#D95C38]/40 hover:bg-[#D95C38]/10 hover:text-[#c14f2f] disabled:opacity-50"
               >
                 {mutation.isPending ? (
                   <Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -290,8 +323,10 @@ function CandidateModal({
               </button>
               <button
                 disabled={mutation.isPending}
-                onClick={() => mutation.mutate({ id: proposition.id, status: "ACCEPTED" })}
-                className="flex items-center justify-center gap-2 rounded-lg bg-[#1b4b6b] px-4 py-2 text-[11px] font-semibold text-white transition-colors hover:bg-[#143b55] disabled:opacity-50"
+                onClick={() =>
+                  mutation.mutate({ id: proposition.id, status: "ACCEPTED" })
+                }
+                className="flex items-center justify-center gap-2 rounded-xl bg-[#111118] px-4 py-2 text-[11px] font-semibold text-white transition-colors hover:bg-[#111118]/85 disabled:opacity-50"
               >
                 {mutation.isPending ? (
                   <Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -302,8 +337,11 @@ function CandidateModal({
               </button>
             </div>
           ) : (
-            <span className="text-neutral-500 text-[11px]">
-              Candidature <span className={`font-semibold ${statusMeta.text}`}>{statusMeta.label.toLowerCase()}</span>
+            <span className="text-[11px] text-[#111118]/50">
+              Candidature{" "}
+              <span className={`font-semibold ${statusMeta.text}`}>
+                {statusMeta.label.toLowerCase()}
+              </span>
             </span>
           )}
         </div>
@@ -329,14 +367,24 @@ function CandidateCard({
 
   return (
     <>
-      <div className={`flex items-center gap-4 rounded-xl border ${matchingResult ? 'border-indigo-100 bg-indigo-50/30' : 'border-[#ece9e2] bg-white'} p-4 shadow-[0_2px_8px_rgba(31,42,48,0.04)] transition-all hover:border-[#c5d8e5] hover:shadow-[0_4px_16px_rgba(27,75,107,0.08)]`}>
+      <div
+        className={`flex items-center gap-4 rounded-2xl border p-4 transition-all ${
+          matchingResult
+            ? "border-[#E7B84B]/40 bg-[#F3EBDD]/40"
+            : "border-[#111118]/8 bg-white"
+        } hover:border-[#111118]/15`}
+      >
         {/* avatar */}
-        <div className="h-10 w-10 shrink-0 overflow-hidden rounded-full bg-[#eaf0f5] ring-1 ring-white">
+        <div className="h-10 w-10 shrink-0 overflow-hidden rounded-xl bg-[#F3EBDD] ring-1 ring-white">
           {fi?.profile_picture ? (
-            <img src={fi.profile_picture} alt={fi.first_name} className="h-full w-full object-cover" />
+            <img
+              src={fi.profile_picture}
+              alt={fi.first_name}
+              className="h-full w-full object-cover"
+            />
           ) : (
             <div className="flex h-full w-full items-center justify-center">
-              <User className="h-5 w-5 text-[#1b4b6b]" />
+              <User className="h-5 w-5 text-[#D95C38]" />
             </div>
           )}
         </div>
@@ -344,7 +392,7 @@ function CandidateCard({
         {/* info */}
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2">
-            <span className="font-heading text-[12px] font-semibold text-[#20252a]">
+            <span className="font-heading text-[12px] font-semibold text-[#111118]">
               {fi?.first_name} {fi?.last_name}
             </span>
             <span
@@ -352,23 +400,24 @@ function CandidateCard({
             >
               {statusMeta.label}
             </span>
-            {matchingResult && (
-              <span className="inline-flex items-center gap-1 rounded-full bg-gradient-to-r from-indigo-600 to-purple-600 px-2 py-0.5 text-[9px] font-bold text-white shadow-xs">
-                <Sparkles className="h-2.5 w-2.5" /> {Math.round(matchingResult.score * 100)}% Pertinence
-              </span>
-            )}
+            {matchingResult && <MatchScoreBadge score={matchingResult.score} />}
           </div>
-          <p className="mt-0.5 truncate text-[10px] text-neutral-500">{fi?.title}</p>
+          <p className="mt-0.5 truncate text-[10px] text-[#111118]/50">
+            {fi?.title}
+          </p>
 
           {fi?.technologies && fi.technologies.length > 0 && (
             <div className="mt-1.5 flex flex-wrap gap-1">
               {fi.technologies.slice(0, 4).map((t) => (
-                <span key={t.id} className="rounded bg-[#f3f0eb] px-1.5 py-0.5 text-[9px] font-medium text-neutral-600">
+                <span
+                  key={t.id}
+                  className="rounded bg-[#F3EBDD] px-1.5 py-0.5 text-[9px] font-medium text-[#111118]/60"
+                >
                   {t.name}
                 </span>
               ))}
               {fi.technologies.length > 4 && (
-                <span className="rounded bg-[#f3f0eb] px-1.5 py-0.5 text-[9px] font-medium text-neutral-400">
+                <span className="rounded bg-[#F3EBDD] px-1.5 py-0.5 text-[9px] font-medium text-[#111118]/40">
                   +{fi.technologies.length - 4}
                 </span>
               )}
@@ -378,7 +427,9 @@ function CandidateCard({
 
         {/* date + cta */}
         <div className="flex shrink-0 flex-col items-end gap-2">
-          <span className="text-[9px] text-neutral-400">{formatDate(proposition.date_livraison)}</span>
+          <span className="text-[9px] text-[#111118]/35">
+            {formatDate(proposition.date_livraison)}
+          </span>
           <div className="flex items-center gap-1.5">
             <button
               type="button"
@@ -387,20 +438,20 @@ function CandidateCard({
                   mission: String(proposition.mission),
                   title: missionTitle,
                   user_id: String(fi?.id ?? 0),
-                  first_name: fi?.first_name ?? '',
-                  last_name: fi?.last_name ?? '',
-                  profile_picture: fi?.profile_picture ?? '',
+                  first_name: fi?.first_name ?? "",
+                  last_name: fi?.last_name ?? "",
+                  profile_picture: fi?.profile_picture ?? "",
                 }).toString();
                 navigate(`/espace/messages?${query}`);
               }}
-              className="inline-flex items-center gap-1 rounded-md border border-[#1b4b6b] bg-white px-2.5 py-1.5 text-[10px] font-semibold text-[#1b4b6b] hover:bg-[#f0f4f8] transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1 rounded-lg border border-[#111118]/15 bg-white px-2.5 py-1.5 text-[10px] font-semibold text-[#111118] hover:bg-[#F3EBDD]/60 transition-colors cursor-pointer"
               title="Envoyer un message"
             >
               <MessageSquare className="h-3 w-3" /> Contacter
             </button>
             <button
               onClick={() => setOpen(true)}
-              className="inline-flex items-center gap-1 rounded-md bg-[#1b4b6b] px-3 py-1.5 text-[10px] font-semibold text-white transition-colors hover:bg-[#143b55] cursor-pointer"
+              className="inline-flex items-center gap-1 rounded-lg bg-[#111118] px-3 py-1.5 text-[10px] font-semibold text-white transition-colors hover:bg-[#111118]/85 cursor-pointer"
             >
               Candidature <ChevronRight className="h-3 w-3" />
             </button>
@@ -431,7 +482,9 @@ function MissionGroup({
   propositions: Proposition[];
 }) {
   const [expanded, setExpanded] = useState(true);
-  const [matchingResults, setMatchingResults] = useState<MatchingCandidatResult[] | null>(null);
+  const [matchingResults, setMatchingResults] = useState<
+    MatchingCandidatResult[] | null
+  >(null);
 
   const matchingMutation = useMutation({
     mutationFn: () => getCandidatsRecommandes(missionId),
@@ -440,9 +493,10 @@ function MissionGroup({
     },
   });
 
-  const pending = propositions.filter((p) => p.proposition_status === "PENDING").length;
+  const pending = propositions.filter(
+    (p) => p.proposition_status === "PENDING"
+  ).length;
 
-  // Order propositions by matching score if available
   const orderedPropositions = React.useMemo(() => {
     if (!matchingResults) return propositions;
     const scoreMap = new Map(matchingResults.map((r) => [r.proposition_id, r]));
@@ -454,45 +508,51 @@ function MissionGroup({
   }, [propositions, matchingResults]);
 
   return (
-    <div className="overflow-hidden rounded-xl border border-[#ebe8e2] bg-[#faf9f7]">
-      <div className="flex w-full items-center justify-between gap-3 px-5 py-4 border-b border-[#ece9e2]">
+    <div className="overflow-hidden rounded-[24px] border border-[#111118]/8 bg-[#F3EBDD]/30">
+      <div className="flex w-full items-center justify-between gap-3 border-b border-[#111118]/6 px-5 py-4">
         <button
           type="button"
           onClick={() => setExpanded(!expanded)}
-          className="flex flex-1 min-w-0 items-center gap-3 text-left hover:opacity-80 transition"
+          className="flex min-w-0 flex-1 items-center gap-3 text-left transition hover:opacity-80"
         >
-          <Briefcase className="h-4 w-4 shrink-0 text-[#1b4b6b]" />
-          <span className="truncate font-heading text-[13px] font-semibold text-[#20252a]">
+          <Briefcase className="h-4 w-4 shrink-0 text-[#D95C38]" />
+          <span className="truncate font-heading text-[13px] font-semibold text-[#111118]">
             {missionTitle}
           </span>
-          <span className="shrink-0 rounded-full bg-[#1b4b6b]/10 px-2 py-0.5 text-[10px] font-semibold text-[#1b4b6b]">
-            {propositions.length} candidature{propositions.length > 1 ? "s" : ""}
+          <span className="shrink-0 rounded-full bg-white px-2 py-0.5 text-[10px] font-semibold text-[#111118]/70 border border-[#111118]/10">
+            {propositions.length} candidature
+            {propositions.length > 1 ? "s" : ""}
           </span>
           {pending > 0 && (
-            <span className="shrink-0 rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-semibold text-amber-700">
+            <span className="shrink-0 rounded-full bg-[#E7B84B]/25 px-2 py-0.5 text-[10px] font-semibold text-[#c9922e]">
               {pending} en attente
             </span>
           )}
         </button>
 
-        <div className="flex items-center gap-2 shrink-0">
+        <div className="flex shrink-0 items-center gap-2">
           <button
             type="button"
             onClick={() => matchingMutation.mutate()}
             disabled={matchingMutation.isPending}
-            className="inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-indigo-600 to-purple-600 px-3 py-1.5 text-[10px] font-bold text-white shadow-sm hover:from-indigo-700 hover:to-purple-700 transition disabled:opacity-50 cursor-pointer"
+            className="relative inline-flex items-center gap-1.5 rounded-xl bg-[#111118] px-3 py-1.5 text-[10px] font-semibold text-white transition-colors hover:bg-[#111118]/85 disabled:opacity-60 cursor-pointer"
           >
-            {matchingMutation.isPending ? (
-              <Loader2 className="h-3 w-3 animate-spin" />
-            ) : (
-              <Brain className="h-3 w-3" />
+            {!matchingMutation.isPending && !matchingResults && (
+              <span className="absolute -top-1 -right-1 h-2 w-2 rounded-full bg-[#D95C38]">
+                <span className="absolute inset-0 rounded-full bg-[#D95C38] animate-ping opacity-60" />
+              </span>
             )}
-            {matchingResults ? "Re-calculer Matching IA" : "Matching Intelligent"}
+            {matchingMutation.isPending ? (
+              <Loader2 className="h-3 w-3 animate-spin text-[#E7B84B]" />
+            ) : (
+              <Brain className="h-3 w-3 text-[#E7B84B]" />
+            )}
+            {matchingResults ? "Recalculer le matching" : "Lancer le matching"}
           </button>
           <button
             type="button"
             onClick={() => setExpanded(!expanded)}
-            className="p-1 text-neutral-400 hover:text-neutral-600"
+            className="p-1 text-[#111118]/35 hover:text-[#111118]/70"
           >
             {expanded ? (
               <ChevronDown className="h-4 w-4 shrink-0" />
@@ -504,7 +564,7 @@ function MissionGroup({
       </div>
 
       {matchingMutation.isError && (
-        <div className="bg-red-50 px-4 py-2 text-[10px] text-red-600 border-b border-red-100 flex items-center gap-1.5">
+        <div className="flex items-center gap-1.5 border-b border-[#D95C38]/20 bg-[#D95C38]/10 px-4 py-2 text-[10px] text-[#c14f2f]">
           <AlertCircle className="h-3.5 w-3.5" />
           <span>Le service de matching est indisponible pour le moment.</span>
         </div>
@@ -513,7 +573,9 @@ function MissionGroup({
       {expanded && (
         <div className="space-y-2.5 bg-white p-4">
           {orderedPropositions.map((p) => {
-            const matchRes = matchingResults?.find((r) => r.proposition_id === p.id);
+            const matchRes = matchingResults?.find(
+              (r) => r.proposition_id === p.id
+            );
             return (
               <CandidateCard
                 key={p.id}
@@ -531,8 +593,14 @@ function MissionGroup({
 
 // ── Page ────────────────────────────────────────────────────────────────────
 const CandidaturesRecuesPage: React.FC = () => {
-  const missionsQuery = useQuery({ queryKey: ["missions"], queryFn: getMissions });
-  const propositionsQuery = useQuery({ queryKey: ["propositions"], queryFn: () => getPropositions() });
+  const missionsQuery = useQuery({
+    queryKey: ["missions"],
+    queryFn: getMissions,
+  });
+  const propositionsQuery = useQuery({
+    queryKey: ["propositions"],
+    queryFn: () => getPropositions(),
+  });
 
   const missions = missionsQuery.data ?? [];
   const propositions = propositionsQuery.data ?? [];
@@ -547,21 +615,27 @@ const CandidaturesRecuesPage: React.FC = () => {
   }, [propositions]);
 
   const isLoading = missionsQuery.isLoading || propositionsQuery.isLoading;
-  const totalPending = propositions.filter((p) => p.proposition_status === "PENDING").length;
+  const totalPending = propositions.filter(
+    (p) => p.proposition_status === "PENDING"
+  ).length;
 
   return (
     <div className="relative mx-auto max-w-3xl pb-20">
-      {/* page header */}
-      <div className="mb-6">
-        <h1 className="font-heading text-xl font-semibold text-[#20252a]">Candidatures reçues</h1>
-        <p className="mt-1 text-[11px] text-neutral-500">
-          Consultez et évaluez les profils des freelances ayant postulé à vos annonces avec le Matching Intelligent.
+      {/* ── En-tête ── */}
+      <div className="relative overflow-hidden rounded-[28px] bg-[#111118] text-white p-6 sm:p-7 mb-6">
+        <h1 className="font-heading text-xl font-semibold text-white">
+          Candidatures reçues
+        </h1>
+        <p className="mt-1 text-[11px] text-white/50 max-w-md">
+          Consultez et évaluez les profils des freelances ayant postulé à vos
+          annonces, avec l'appui du matching.
         </p>
         {totalPending > 0 && (
-          <div className="mt-3 inline-flex items-center gap-2 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-[11px] text-amber-700">
-            <CheckCircle2 className="h-3.5 w-3.5" />
+          <div className="mt-3 inline-flex items-center gap-2 rounded-xl bg-white/10 border border-white/10 px-3 py-2 text-[11px] text-white/80">
+            <CheckCircle2 className="h-3.5 w-3.5 text-[#E7B84B]" />
             <span>
-              <strong>{totalPending}</strong> candidature{totalPending > 1 ? "s" : ""} en attente de votre décision
+              <strong className="text-white">{totalPending}</strong> candidature
+              {totalPending > 1 ? "s" : ""} en attente de votre décision
             </span>
           </div>
         )}
@@ -569,21 +643,22 @@ const CandidaturesRecuesPage: React.FC = () => {
 
       {/* loading */}
       {isLoading && (
-        <div className="flex items-center justify-center gap-2 py-16 text-[11px] text-neutral-400">
-          <Loader2 className="h-4 w-4 animate-spin" /> Chargement des candidatures…
+        <div className="flex items-center justify-center gap-2 py-16 text-[11px] text-[#111118]/40">
+          <Loader2 className="h-4 w-4 animate-spin text-[#D95C38]" /> Chargement
+          des candidatures…
         </div>
       )}
 
       {/* empty */}
       {!isLoading && propositions.length === 0 && (
-        <div className="rounded-xl border border-dashed border-[#ddd9d1] bg-white p-12 text-center">
-          <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-[#f3f0eb]">
-            <Briefcase className="h-5 w-5 text-neutral-400" />
+        <div className="rounded-[28px] border border-dashed border-[#111118]/15 bg-white p-12 text-center">
+          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#F3EBDD]">
+            <Briefcase className="h-5 w-5 text-[#D95C38]" />
           </div>
-          <p className="text-[12px] font-medium text-neutral-500">
+          <p className="text-[12px] font-medium text-[#111118]/60">
             Aucune candidature reçue pour le moment.
           </p>
-          <p className="mt-1 text-[11px] text-neutral-400">
+          <p className="mt-1 text-[11px] text-[#111118]/40">
             Les freelances qui postuleront à vos missions apparaîtront ici.
           </p>
         </div>
@@ -610,4 +685,3 @@ const CandidaturesRecuesPage: React.FC = () => {
 };
 
 export default CandidaturesRecuesPage;
-

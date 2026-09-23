@@ -98,6 +98,12 @@ def notifier(
     return notification
 
 
+def _get_mission_title(mission):
+    if not mission:
+        return ""
+    return getattr(mission, 'title', getattr(mission, 'titre', ''))
+
+
 def notifier_nouveau_message(message_obj):
     """
     Notifie le destinataire d'un nouveau message.
@@ -108,10 +114,18 @@ def notifier_nouveau_message(message_obj):
     Returns:
         Notification créée
     """
+    exp_name = ""
+    if hasattr(message_obj.expediteur, 'get_full_name'):
+        exp_name = message_obj.expediteur.get_full_name()
+    if not exp_name:
+        exp_name = f"{getattr(message_obj.expediteur, 'first_name', '')} {getattr(message_obj.expediteur, 'last_name', '')}".strip()
+    if not exp_name:
+        exp_name = getattr(message_obj.expediteur, 'email', 'un utilisateur')
+
     return notifier(
         utilisateur=message_obj.destinataire,
         type_notif='NOUVEAU_MESSAGE',
-        titre=f'Nouveau message de {message_obj.expediteur.get_full_name() or message_obj.expediteur.username}',
+        titre=f'Nouveau message de {exp_name}',
         message=message_obj.contenu[:100] if message_obj.type == 'TEXTE' else 'Message vocal',
         mission=message_obj.mission,
         message_obj=message_obj
@@ -128,11 +142,12 @@ def notifier_proposition_acceptee(proposition):
     Returns:
         Notification créée
     """
+    ann_name = getattr(proposition.mission.annonceur, 'get_full_name', lambda: str(proposition.mission.annonceur))()
     return notifier(
         utilisateur=proposition.freelancee,
         type_notif='PROPOSITION_ACCEPTEE',
         titre='Proposition acceptée ! 🎉',
-        message=f'Félicitations ! Votre proposition pour "{proposition.mission.titre}" a été acceptée par {proposition.mission.annonceur.get_full_name()}.',
+        message=f'Félicitations ! Votre proposition pour "{_get_mission_title(proposition.mission)}" a été acceptée par {ann_name}.',
         mission=proposition.mission,
         proposition=proposition
     )
@@ -152,7 +167,7 @@ def notifier_proposition_rejetee(proposition):
         utilisateur=proposition.freelancee,
         type_notif='PROPOSITION_REJETEE',
         titre='Proposition non retenue',
-        message=f'Votre proposition pour "{proposition.mission.titre}" n\'a pas été retenue cette fois-ci.',
+        message=f'Votre proposition pour "{_get_mission_title(proposition.mission)}" n\'a pas été retenue cette fois-ci.',
         mission=proposition.mission,
         proposition=proposition
     )
@@ -173,7 +188,7 @@ def notifier_mission_demarree(mission, utilisateur_a_notifier):
         utilisateur=utilisateur_a_notifier,
         type_notif='MISSION_DEMARREE',
         titre='Mission démarrée',
-        message=f'La mission "{mission.titre}" a officiellement démarré.',
+        message=f'La mission "{_get_mission_title(mission)}" a officiellement démarré.',
         mission=mission
     )
 
@@ -193,7 +208,7 @@ def notifier_mission_livree(mission, utilisateur_a_notifier):
         utilisateur=utilisateur_a_notifier,
         type_notif='MISSION_LIVREE',
         titre='Mission livrée',
-        message=f'Le freelance a marqué la mission "{mission.titre}" comme livrée. Veuillez vérifier le travail.',
+        message=f'Le freelance a marqué la mission "{_get_mission_title(mission)}" comme livrée. Veuillez vérifier le travail.',
         mission=mission
     )
 
@@ -213,7 +228,7 @@ def notifier_mission_completee(mission, utilisateur_a_notifier):
         utilisateur=utilisateur_a_notifier,
         type_notif='MISSION_COMPLETEE',
         titre='Mission complétée ! ✅',
-        message=f'La mission "{mission.titre}" est maintenant terminée et validée.',
+        message=f'La mission "{_get_mission_title(mission)}" est maintenant terminée et validée.',
         mission=mission
     )
 
@@ -233,7 +248,7 @@ def notifier_mission_annulee(mission, utilisateur_a_notifier):
         utilisateur=utilisateur_a_notifier,
         type_notif='MISSION_ANNULEE',
         titre='Mission annulée',
-        message=f'La mission "{mission.titre}" a été annulée.',
+        message=f'La mission "{_get_mission_title(mission)}" a été annulée.',
         mission=mission
     )
 
@@ -253,7 +268,7 @@ def notifier_mission_litige(mission, utilisateur_a_notifier):
         utilisateur=utilisateur_a_notifier,
         type_notif='MISSION_LITIGE',
         titre='Litige ouvert ⚠️',
-        message=f'Un litige a été ouvert sur la mission "{mission.titre}". Notre équipe va examiner la situation.',
+        message=f'Un litige a été ouvert sur la mission "{_get_mission_title(mission)}". Notre équipe va examiner la situation.',
         mission=mission
     )
 
@@ -275,7 +290,7 @@ def notifier_paiement_reussi(paiement):
         utilisateur=mission.annonceur,
         type_notif='PAIEMENT_REUSSI',
         titre='Paiement effectué ✓',
-        message=f'Votre paiement de {paiement.montant} FCFA pour "{mission.titre}" a été traité avec succès.',
+        message=f'Votre paiement de {paiement.montant} FCFA pour "{_get_mission_title(mission)}" a été traité avec succès.',
         mission=mission,
         paiement=paiement
     )
@@ -287,7 +302,7 @@ def notifier_paiement_reussi(paiement):
             utilisateur=proposition_acceptee.freelancee,
             type_notif='PAIEMENT_REUSSI',
             titre='Paiement reçu ✓',
-            message=f'Le paiement pour la mission "{mission.titre}" a été effectué. Le décaissement sera traité prochainement.',
+            message=f'Le paiement pour la mission "{_get_mission_title(mission)}" a été effectué. Le décaissement sera traité prochainement.',
             mission=mission,
             paiement=paiement
         )
@@ -312,7 +327,7 @@ def notifier_paiement_echoue(paiement):
         utilisateur=mission.annonceur,
         type_notif='PAIEMENT_ECHOUE',
         titre='Échec du paiement ❌',
-        message=f'Le paiement pour "{mission.titre}" a échoué. Veuillez réessayer ou contacter le support.',
+        message=f'Le paiement pour "{_get_mission_title(mission)}" a échoué. Veuillez réessayer ou contacter le support.',
         mission=mission,
         paiement=paiement
     )

@@ -6,6 +6,7 @@ import MessageList from "./MessageList";
 import MessageInput from "./MessageInput";
 import { useMessage } from "../../hooks/useMessage";
 import { useSendMessage } from "../../hooks/useSendMessage";
+import { useWebSocket } from "../../hooks/useWebSocket";
 import { mark_read } from "../../api/message";
 import { useQueryClient } from "@tanstack/react-query";
 
@@ -16,10 +17,22 @@ interface ChatPanelProps {
 
 const ChatPanel: React.FC<ChatPanelProps> = ({ conversation, currentUser }) => {
   const queryClient = useQueryClient();
+  const { subscribe, unsubscribe } = useWebSocket();
   const { data: messages = [], isLoading } = useMessage(
     conversation.mission_id
   );
   const sendMessageMutation = useSendMessage();
+
+  // Subscribe to channel chat.{mission_id} while viewing this conversation
+  React.useEffect(() => {
+    if (conversation?.mission_id) {
+      const channel = `chat.${conversation.mission_id}`;
+      subscribe(channel);
+      return () => {
+        unsubscribe(channel);
+      };
+    }
+  }, [conversation?.mission_id, subscribe, unsubscribe]);
 
   // Mark messages as read when conversation opens
   React.useEffect(() => {

@@ -153,6 +153,10 @@ class ChatConsumer(AsyncWebsocketConsumer):
                     'message': message
                 }
             )
+            
+            # Notifier le destinataire
+            if 'id' in message:
+                await self.notify_destinataire(message['id'])
         except Exception as e:
             await self.send_error(f"Erreur création message: {str(e)}")
     
@@ -206,6 +210,17 @@ class ChatConsumer(AsyncWebsocketConsumer):
             return User.objects.get(id=user_id)
         except User.DoesNotExist:
             return None
+    
+    @database_sync_to_async
+    def notify_destinataire(self, message_id):
+        """Notifier le destinataire du message"""
+        try:
+            from .models import Message
+            from notification.services import notifier_nouveau_message
+            message_obj = Message.objects.get(id=message_id)
+            notifier_nouveau_message(message_obj)
+        except Exception as e:
+            print(f"⚠️ Erreur notification destinataire: {e}")
     
     @database_sync_to_async
     def check_mission_access(self, mission_id):
