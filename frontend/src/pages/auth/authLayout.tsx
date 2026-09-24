@@ -1,5 +1,5 @@
 import { Outlet, Link } from "react-router-dom";
-import { illustAuthJefly, LogoJefly } from "../../assets/images";
+import { terangaWorkIllust, TWLogo } from "../../assets/images";
 
 const AuthLayout = () => {
   return (
@@ -13,9 +13,9 @@ const AuthLayout = () => {
             className="inline-block transition-opacity hover:opacity-85"
           >
             <img
-              src={LogoJefly}
-              alt="Jëfly"
-              className="h-8 w-auto object-contain"
+              src={TWLogo}
+              alt="TerangaWork logo"
+              className="h-20 w-auto object-contain"
             />
           </Link>
         </div>
@@ -28,18 +28,18 @@ const AuthLayout = () => {
         {/* Footer */}
         <div className="w-full max-w-md mx-auto pt-4 text-center sm:text-left">
           <p className="text-[11px] text-neutral-400">
-            © {new Date().getFullYear()} Jëfly. Tous droits réservés.
+            © {new Date().getFullYear()} TerangaWork. Tous droits réservés.
           </p>
         </div>
       </section>
 
       {/* Right Illustration Section (Hidden on mobile & tablet) */}
-      <section className="hidden lg:flex w-1/2 bg-[#F6F8FA] h-screen sticky top-0 items-center justify-center p-8 xl:p-12 border-l border-[#EFECE6] overflow-hidden select-none">
-        <div className="relative flex items-center justify-center max-w-lg w-full">
+      <section className="hidden lg:flex w-1/2 bg-[#F6F8FA] h-screen fixed right-0 top-0 items-center justify-center p-8 xl:p-12 border-l border-[#EFECE6] overflow-hidden select-none">
+        <div className="relative flex items-center justify-center w-full">
           <img
-            src={illustAuthJefly}
-            alt="Jëfly Illustration"
-            className="w-full max-h-[75vh] object-contain drop-shadow-sm transition-transform duration-500 hover:scale-[1.01]"
+            src={terangaWorkIllust}
+            alt="TerangaWork Illustration"
+            className="w-full object-cover drop-shadow-sm transition-transform duration-500 hover:scale-[1.01]"
           />
         </div>
       </section>

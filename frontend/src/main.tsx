@@ -28,6 +28,10 @@ import ProjectWorkspacePage from "./pages/espace/workspace/ProjectWorkspacePage.
 import ProfilePage from "./pages/espace/ProfilePage.tsx";
 import SettingsPage from "./pages/espace/SettingsPage.tsx";
 import MessageriePage from "./pages/espace/Messagerie.tsx";
+import AdminDashboardPage from "./pages/espace/admin/AdminDashboardPage.tsx";
+import AdminServicesPage from "./pages/espace/admin/AdminServicesPage.tsx";
+import AdminTechnologiesPage from "./pages/espace/admin/AdminTechnologiesPage.tsx";
+import AdminSignalementsPage from "./pages/espace/admin/AdminSignalementsPage.tsx";
 
 const router = createBrowserRouter([
   {
@@ -126,6 +130,23 @@ const router = createBrowserRouter([
       {
         path: "parametres",
         element: <SettingsPage />,
+      },
+      // Admin routes
+      {
+        path: "admin",
+        element: <AdminDashboardPage />,
+      },
+      {
+        path: "admin/services",
+        element: <AdminServicesPage />,
+      },
+      {
+        path: "admin/technologies",
+        element: <AdminTechnologiesPage />,
+      },
+      {
+        path: "admin/signalements",
+        element: <AdminSignalementsPage />,
       },
     ],
   },

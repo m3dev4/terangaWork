@@ -9,7 +9,7 @@ import Sidebar, {
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import getCurrentUser from '../../utils/getUser';
 import { LogOut, User as UserIcon } from 'lucide-react';
-import { LogoJefly } from '../../assets/images';
+import { TWLogo } from '../../assets/images';
 import { NotificationDropdown } from '../../components/notification/NotificationDropdown';
 import { useWebSocket, useWebSocketQuerySync } from '../../hooks/useWebSocket';
 
@@ -77,7 +77,7 @@ const EspaceLayout: React.FC = () => {
           {/* Left: Breadcrumb */}
           <div className="flex items-center gap-2">
             {collapsed && (
-              <img src={LogoJefly} alt="Jëfly" className="h-4.5 w-auto object-contain mr-1 sm:hidden" />
+              <img src={TWLogo} alt="Jëfly" className="h-4.5 w-auto object-contain mr-1 sm:hidden" />
             )}
             <div className="flex items-center gap-1.5 text-[11px]">
               <span className="text-neutral-400 font-normal">{breadcrumb.section}</span>

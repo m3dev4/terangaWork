@@ -7,7 +7,7 @@ const Login = () => {
       <AuthTitleDesc
         title="Connectez-"
         span="vous"
-        description="Heureux de vous revoir sur Jëfly"
+        description="Heureux de vous revoir sur TerangaWork"
       />
       <LoginComponent />
     </div>

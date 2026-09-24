@@ -55,17 +55,21 @@ def call_fastapi_matching(payload: dict) -> dict:
     }
 
     try:
-        with httpx.Client(timeout=15.0) as client:
+        with httpx.Client(timeout=45.0) as client:
             response = client.post(endpoint, json=payload, headers=headers)
 
         if response.status_code != 200:
             logger.error(
                 f"Le microservice FastAPI a répondu avec l'erreur HTTP {response.status_code}: {response.text}"
             )
-            raise MatchingServiceUnavailableError("Le service de matching a renvoyé une erreur.")
+            raise MatchingServiceUnavailableError(
+                f"Le service de matching a renvoyé HTTP {response.status_code}."
+            )
 
         return response.json()
 
+    except MatchingServiceUnavailableError:
+        raise
     except (httpx.RequestError, httpx.TimeoutException) as e:
         logger.error(f"Échec de connexion vers le microservice FastAPI ({endpoint}): {e}")
         raise MatchingServiceUnavailableError("Impossible de contacter le service de matching.")
@@ -213,7 +217,7 @@ def process_missions_recommandees(freelance: Freelancee) -> dict:
         "technologies": technologies,
         "service": service,
         "candidats": candidats_payload,
-        "top_n": 8,
+        "top_n": 4,
     }
 
     fastapi_res = call_fastapi_matching(payload)

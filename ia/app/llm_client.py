@@ -90,11 +90,10 @@ async def run_stage_2_llm(
             }
         ],
         "temperature": 0.2,
-        "response_format": {"type": "json_object"},
     }
 
     try:
-        async with httpx.AsyncClient(timeout=settings.OPENROUTER_TIMEOUT) as client:
+        async with httpx.AsyncClient(timeout=30.0) as client:
             response = await client.post(
                 settings.OPENROUTER_BASE_URL,
                 headers=headers,
@@ -108,8 +107,9 @@ async def run_stage_2_llm(
             return stage_1_results, False
 
         data = response.json()
+        print(data)
         raw_content = data["choices"][0]["message"]["content"]
-        
+        print(raw_content)
         # Nettoyage d'éventuelles balises markdown ```json ... ```
         cleaned_content = raw_content.strip()
         if cleaned_content.startswith("```"):

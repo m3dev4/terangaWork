@@ -94,3 +94,35 @@ class session(models.Model):
 
     def __str__(self):
         return f"Session for User: {self.user.email} - Token: {self.token}"
+
+
+class SignalementStatus(models.TextChoices):
+    PENDING = "PENDING", "En attente"
+    RESOLVED = "RESOLVED", "Résolu"
+    DISMISSED = "DISMISSED", "Rejeté"
+
+
+class SignalementCategory(models.TextChoices):
+    SPAM = "SPAM", "Spam / Publicité"
+    FRAUD = "FRAUD", "Comportement suspect ou Fraude"
+    INAPPROPRIATE = "INAPPROPRIATE", "Contenu inapproprié"
+    NON_RESPECT = "NON_RESPECT", "Non respect des règles / Délais"
+    AUTRE = "AUTRE", "Autre motif"
+
+
+class Signalement(models.Model):
+    reporter = models.ForeignKey(User, on_delete=models.CASCADE, related_name="reports_made")
+    reported_user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name="reports_received")
+    mission = models.ForeignKey("mission.Mission", on_delete=models.SET_NULL, null=True, blank=True, related_name="signalements")
+    category = models.CharField(max_length=50, choices=SignalementCategory.choices, default=SignalementCategory.AUTRE)
+    reason = models.TextField()
+    status = models.CharField(max_length=20, choices=SignalementStatus.choices, default=SignalementStatus.PENDING)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return f"Signalement #{self.id} - {self.category} ({self.status})"
+

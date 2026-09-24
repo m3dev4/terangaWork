@@ -40,8 +40,17 @@ export default function ProtectedRoute({
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
+  const isAdmin = user.role === 'admin' || (user as any).is_staff || (user as any).is_superuser;
   const isOnboardingPath = location.pathname.startsWith('/onboarding');
   const isEspacePath = location.pathname.startsWith('/espace');
+
+  // Admin users never undergo onboarding
+  if (isAdmin) {
+    if (isOnboardingPath) {
+      return <Navigate to="/espace/admin" replace />;
+    }
+    return <>{children}</>;
+  }
 
   // If user completed onboarding and tries to visit /onboarding -> redirect to /espace
   if ((allowedStage === 'onboarding' || isOnboardingPath) && user.onboarding_completed) {

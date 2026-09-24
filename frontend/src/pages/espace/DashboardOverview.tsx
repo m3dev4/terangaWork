@@ -5,6 +5,8 @@ import { FreelanceBentoDashboard } from "../../components/dashboard/FreelanceBen
 import { AnnonceurBentoDashboard } from "../../components/dashboard/AnnonceurBentoDashboard";
 import { Loader2 } from "lucide-react";
 
+import { AdminDashboardPage } from "./admin/AdminDashboardPage";
+
 export const DashboardOverview: React.FC = () => {
   const { data: user, isLoading } = useQuery({
     queryKey: ["currentUser"],
@@ -21,7 +23,12 @@ export const DashboardOverview: React.FC = () => {
     );
   }
 
+  const isAdmin = user?.role === "admin" || (user as any)?.is_staff || (user as any)?.is_superuser;
   const isFreelance = user?.role === "freelance";
+
+  if (isAdmin) {
+    return <AdminDashboardPage />;
+  }
 
   return (
     <div>

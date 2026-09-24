@@ -1,7 +1,20 @@
-import React, { useEffect, useState } from 'react';
-import { useQueryClient, useMutation as useReactMutation, useQuery as useReactQuery } from '@tanstack/react-query';
-import { ArrowLeft, CalendarDays, Check, Code2, Loader2, Plus, WalletCards, X } from 'lucide-react';
-import { useNavigate, useParams } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import {
+  useQueryClient,
+  useMutation as useReactMutation,
+  useQuery as useReactQuery,
+} from "@tanstack/react-query";
+import {
+  ArrowLeft,
+  CalendarDays,
+  Check,
+  Code2,
+  Loader2,
+  Plus,
+  WalletCards,
+  X,
+} from "lucide-react";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   createMission,
   getMission,
@@ -9,22 +22,22 @@ import {
   type MissionPayload,
   type PaymentOperator,
   updateMission,
-} from '../../api/missionsApi';
-import { fetchTechnologies } from '../../api/freelanceApi';
-import { getErrorMessage } from '../../utils/errorMessage';
+} from "../../api/missionsApi";
+import { fetchTechnologies } from "../../api/freelanceApi";
+import { getErrorMessage } from "../../utils/errorMessage";
 
 const initialForm: MissionPayload = {
-  title: '',
-  description: '',
-  date_deadline: '',
-  operateurMobileMoney: 'WAVE',
+  title: "",
+  description: "",
+  date_deadline: "",
+  operateurMobileMoney: "WAVE",
   budget: 0,
   service: 0,
   technologies: [],
 };
 
 const inputClass =
-  'w-full rounded-md border border-[#e8e5df] bg-white px-3 py-2.5 text-[12px] text-[#252525] outline-none transition focus:border-[#1b4b6b] focus:ring-2 focus:ring-[#1b4b6b]/10';
+  "w-full rounded-md border border-[#e8e5df] bg-white px-3 py-2.5 text-[12px] text-[#252525] outline-none transition focus:border-[#1b4b6b] focus:ring-2 focus:ring-[#1b4b6b]/10";
 
 const MissionFormPage: React.FC = () => {
   const navigate = useNavigate();
@@ -32,20 +45,20 @@ const MissionFormPage: React.FC = () => {
   const queryClient = useQueryClient();
   const [form, setForm] = useState<MissionPayload>(initialForm);
   const [selectedTechs, setSelectedTechs] = useState<number[]>([]);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   const servicesQuery = useReactQuery({
-    queryKey: ['mission-services'],
+    queryKey: ["mission-services"],
     queryFn: getMissionServices,
   });
 
   const techsQuery = useReactQuery({
-    queryKey: ['technologiesList'],
+    queryKey: ["technologiesList"],
     queryFn: fetchTechnologies,
   });
 
   const missionQuery = useReactQuery({
-    queryKey: ['mission', missionId],
+    queryKey: ["mission", missionId],
     queryFn: () => getMission(Number(missionId)),
     enabled: Boolean(missionId),
   });
@@ -55,7 +68,7 @@ const MissionFormPage: React.FC = () => {
       setForm({
         title: missionQuery.data.title,
         description: missionQuery.data.description,
-        date_deadline: missionQuery.data.date_deadline || '',
+        date_deadline: missionQuery.data.date_deadline || "",
         operateurMobileMoney: missionQuery.data.operateurMobileMoney,
         budget: missionQuery.data.budget,
         service: missionQuery.data.service,
@@ -73,17 +86,22 @@ const MissionFormPage: React.FC = () => {
         ? updateMission({ id: Number(missionId), payload })
         : createMission(payload),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['missions'] });
-      navigate('/espace/mes-annonces');
+      queryClient.invalidateQueries({ queryKey: ["missions"] });
+      navigate("/espace/mes-annonces");
     },
     onError: (mutationError) => {
-      setError(getErrorMessage(mutationError, "Impossible de publier l'annonce."));
+      setError(
+        getErrorMessage(mutationError, "Impossible de publier l'annonce.")
+      );
     },
   });
 
-  const updateField = <K extends keyof MissionPayload>(field: K, value: MissionPayload[K]) => {
+  const updateField = <K extends keyof MissionPayload>(
+    field: K,
+    value: MissionPayload[K]
+  ) => {
     setForm((current) => ({ ...current, [field]: value }));
-    setError('');
+    setError("");
   };
 
   const toggleTech = (techId: number) => {
@@ -96,8 +114,14 @@ const MissionFormPage: React.FC = () => {
 
   const submit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (!form.title.trim() || !form.description.trim() || !form.date_deadline || !form.budget || !form.service) {
-      setError('Complétez tous les champs obligatoires avant de publier.');
+    if (
+      !form.title.trim() ||
+      !form.description.trim() ||
+      !form.date_deadline ||
+      !form.budget ||
+      !form.service
+    ) {
+      setError("Complétez tous les champs obligatoires avant de publier.");
       return;
     }
     createMutation.mutate({
@@ -112,7 +136,7 @@ const MissionFormPage: React.FC = () => {
     <div className="mx-auto max-w-[760px] pb-8">
       <button
         type="button"
-        onClick={() => navigate('/espace/mes-annonces')}
+        onClick={() => navigate("/espace/mes-annonces")}
         className="mb-4 inline-flex items-center gap-2 text-[11px] font-medium text-neutral-500 hover:text-[#1b4b6b]"
       >
         <ArrowLeft className="h-3.5 w-3.5" /> Retour à mes annonces
@@ -130,7 +154,8 @@ const MissionFormPage: React.FC = () => {
             Détails de l'annonce
           </h1>
           <p className="mt-1 text-[11px] text-neutral-400">
-            Présentez clairement votre besoin et les technologies requises pour attirer les bons profils.
+            Présentez clairement votre besoin et les technologies requises pour
+            attirer les bons profils.
           </p>
         </div>
 
@@ -142,7 +167,7 @@ const MissionFormPage: React.FC = () => {
             <input
               className={inputClass}
               value={form.title}
-              onChange={(event) => updateField('title', event.target.value)}
+              onChange={(event) => updateField("title", event.target.value)}
               placeholder="Ex : Développeur Full-Stack pour refonte de site"
               maxLength={100}
             />
@@ -160,7 +185,9 @@ const MissionFormPage: React.FC = () => {
             <textarea
               className={`${inputClass} min-h-[125px] resize-y`}
               value={form.description}
-              onChange={(event) => updateField('description', event.target.value)}
+              onChange={(event) =>
+                updateField("description", event.target.value)
+              }
               placeholder="Décrivez votre projet en détail..."
               maxLength={1000}
             />
@@ -176,8 +203,10 @@ const MissionFormPage: React.FC = () => {
                   className={`${inputClass} pr-16`}
                   type="number"
                   min="1"
-                  value={form.budget || ''}
-                  onChange={(event) => updateField('budget', Number(event.target.value))}
+                  value={form.budget || ""}
+                  onChange={(event) =>
+                    updateField("budget", Number(event.target.value))
+                  }
                   placeholder="0"
                 />
                 <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-medium text-neutral-400">
@@ -194,7 +223,9 @@ const MissionFormPage: React.FC = () => {
                   className={`${inputClass} pr-9`}
                   type="date"
                   value={form.date_deadline}
-                  onChange={(event) => updateField('date_deadline', event.target.value)}
+                  onChange={(event) =>
+                    updateField("date_deadline", event.target.value)
+                  }
                 />
                 <CalendarDays className="pointer-events-none absolute right-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-neutral-400" />
               </div>
@@ -207,24 +238,30 @@ const MissionFormPage: React.FC = () => {
               <span className="text-[11px] font-semibold text-neutral-700">
                 Service requis <span className="text-[#f2994a]">*</span>
               </span>
-              <span className="text-[10px] text-neutral-400">Un service par annonce</span>
+              <span className="text-[10px] text-neutral-400">
+                Un service par annonce
+              </span>
             </div>
             {servicesQuery.isLoading ? (
-              <div className="text-[11px] text-neutral-400">Chargement des services...</div>
+              <div className="text-[11px] text-neutral-400">
+                Chargement des services...
+              </div>
             ) : (
               <div className="flex flex-wrap gap-2">
                 {servicesQuery.data?.map((service) => (
                   <button
                     key={service.id}
                     type="button"
-                    onClick={() => updateField('service', service.id)}
+                    onClick={() => updateField("service", service.id)}
                     className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-[10px] font-medium transition cursor-pointer ${
                       form.service === service.id
-                        ? 'border-[#1b4b6b] bg-[#1b4b6b] text-white'
-                        : 'border-[#e7e3dc] bg-white text-neutral-600 hover:border-[#1b4b6b]'
+                        ? "border-[#1b4b6b] bg-[#1b4b6b] text-white"
+                        : "border-[#e7e3dc] bg-white text-neutral-600 hover:border-[#1b4b6b]"
                     }`}
                   >
-                    {form.service === service.id && <Check className="h-3 w-3" />}
+                    {form.service === service.id && (
+                      <Check className="h-3 w-3" />
+                    )}
                     {service.name}
                   </button>
                 ))}
@@ -243,7 +280,9 @@ const MissionFormPage: React.FC = () => {
               </span>
             </div>
             {techsQuery.isLoading ? (
-              <div className="text-[11px] text-neutral-400">Chargement des technologies...</div>
+              <div className="text-[11px] text-neutral-400">
+                Chargement des technologies...
+              </div>
             ) : (
               <div className="flex flex-wrap gap-2">
                 {techsQuery.data?.map((tech) => {
@@ -255,17 +294,25 @@ const MissionFormPage: React.FC = () => {
                       onClick={() => toggleTech(tech.id)}
                       className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-[10px] font-semibold transition cursor-pointer ${
                         isSelected
-                          ? 'border-[#1b4b6b] bg-[#1b4b6b] text-white shadow-xs'
-                          : 'border-[#e7e3dc] bg-white text-neutral-700 hover:border-neutral-400'
+                          ? "border-[#1b4b6b] bg-[#1b4b6b] text-white shadow-xs"
+                          : "border-[#e7e3dc] bg-white text-neutral-700 hover:border-neutral-400"
                       }`}
                     >
                       {tech.imgUrl ? (
-                        <img src={tech.imgUrl} alt={tech.name} className="h-3 w-3 object-contain" />
+                        <img
+                          src={tech.imgUrl}
+                          alt={tech.name}
+                          className="h-3 w-3 object-contain"
+                        />
                       ) : (
                         <Code2 className="h-3 w-3 text-[#f2994a]" />
                       )}
                       {tech.name}
-                      {isSelected ? <X className="h-3 w-3 ml-0.5 text-white/80" /> : <Plus className="h-3 w-3 ml-0.5 text-neutral-400" />}
+                      {isSelected ? (
+                        <X className="h-3 w-3 ml-0.5 text-white/80" />
+                      ) : (
+                        <Plus className="h-3 w-3 ml-0.5 text-neutral-400" />
+                      )}
                     </button>
                   );
                 })}
@@ -280,24 +327,33 @@ const MissionFormPage: React.FC = () => {
             <div className="grid gap-3 sm:grid-cols-2">
               {(
                 [
-                  ['WAVE', 'Wave', 'bg-[#e8f7fb]'],
-                  ['OM', 'Orange Money', 'bg-[#fff0e9]'],
+                  ["WAVE", "Wave", "bg-[#e8f7fb]"],
+                  ["OM", "Orange Money", "bg-[#fff0e9]"],
                 ] as const
               ).map(([value, label, color]) => (
                 <button
                   key={value}
                   type="button"
-                  onClick={() => updateField('operateurMobileMoney', value as PaymentOperator)}
+                  onClick={() =>
+                    updateField(
+                      "operateurMobileMoney",
+                      value as PaymentOperator
+                    )
+                  }
                   className={`relative flex items-center gap-3 rounded-md border p-3 text-left transition cursor-pointer ${
                     form.operateurMobileMoney === value
-                      ? 'border-[#1b4b6b] ring-1 ring-[#1b4b6b]'
-                      : 'border-[#e7e3dc] hover:border-[#c9c2b9]'
+                      ? "border-[#1b4b6b] ring-1 ring-[#1b4b6b]"
+                      : "border-[#e7e3dc] hover:border-[#c9c2b9]"
                   }`}
                 >
-                  <span className={`flex h-8 w-8 items-center justify-center rounded-full ${color}`}>
+                  <span
+                    className={`flex h-8 w-8 items-center justify-center rounded-full ${color}`}
+                  >
                     <WalletCards className="h-4 w-4 text-[#1b4b6b]" />
                   </span>
-                  <span className="text-[11px] font-semibold text-neutral-800">{label}</span>
+                  <span className="text-[11px] font-semibold text-neutral-800">
+                    {label}
+                  </span>
                   {form.operateurMobileMoney === value && (
                     <Check className="absolute right-3 h-3.5 w-3.5 text-[#1b4b6b]" />
                   )}
@@ -308,7 +364,7 @@ const MissionFormPage: React.FC = () => {
 
           {(error || servicesQuery.isError) && (
             <p className="rounded-md bg-red-50 px-3 py-2 text-[11px] text-red-600">
-              {error || 'Impossible de charger les services.'}
+              {error || "Impossible de charger les services."}
             </p>
           )}
         </div>
@@ -316,7 +372,7 @@ const MissionFormPage: React.FC = () => {
         <div className="flex flex-col-reverse items-stretch justify-between gap-3 border-t border-[#f0ede8] bg-[#fcfbf9] px-5 py-4 sm:flex-row sm:items-center sm:px-7">
           <button
             type="button"
-            onClick={() => navigate('/espace/mes-annonces')}
+            onClick={() => navigate("/espace/mes-annonces")}
             className="text-[11px] font-medium text-neutral-500 hover:text-neutral-800 cursor-pointer"
           >
             Annuler
@@ -325,8 +381,10 @@ const MissionFormPage: React.FC = () => {
             disabled={createMutation.isPending}
             className="inline-flex items-center justify-center gap-2 rounded-md bg-[#f2994a] px-5 py-2.5 text-[11px] font-semibold text-white shadow-sm transition hover:bg-[#df853a] disabled:cursor-not-allowed disabled:opacity-60 cursor-pointer"
           >
-            {createMutation.isPending && <Loader2 className="h-3.5 w-3.5 animate-spin" />} Publier
-            l'annonce
+            {createMutation.isPending && (
+              <Loader2 className="h-3.5 w-3.5 animate-spin" />
+            )}{" "}
+            Publier l'annonce
           </button>
         </div>
       </form>
