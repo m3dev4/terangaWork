@@ -1,5 +1,6 @@
 import React from 'react';
 import { Phone, Video, MoreVertical } from 'lucide-react';
+import { getMediaUrl } from "../../utils/getMediaUrl";
 import type { UserMinimal } from '../../api/message';
 
 interface ChatHeaderProps {
@@ -17,7 +18,7 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({ user, missionTitle }) => {
         <div className="w-9 h-9 rounded-full overflow-hidden shrink-0 ring-2 ring-white/20">
           {user.profile_picture ? (
             <img
-              src={user.profile_picture}
+              src={getMediaUrl(user.profile_picture)}
               alt={`${user.first_name} ${user.last_name}`}
               className="w-full h-full object-cover"
             />

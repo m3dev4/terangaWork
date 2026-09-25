@@ -1,3 +1,7 @@
+import logging
+import threading
+import requests
+from django.conf import settings
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.exceptions import PermissionDenied
@@ -18,6 +22,40 @@ from paiement.services import (
 from .models import Mission, MissionStatus
 from .serializer import MissionSerializer
 
+logger = logging.getLogger(__name__)
+
+
+def send_n8n_moderation_webhook(mission: Mission):
+    """
+    Envoie les informations de la mission créée au Webhook n8n Cloud pour modération.
+    """
+    webhook_url = getattr(
+        settings,
+        "N8N_MODERATION_WEBHOOK_URL",
+        "https://m3dev4.app.n8n.cloud/webhook-test/terangawork/moderation",
+    )
+    if not webhook_url:
+        return
+
+    payload = {
+        "mission_id": mission.id,
+        "titre": mission.title,
+        "description": mission.description,
+    }
+
+    def _call_webhook():
+        try:
+            resp = requests.post(webhook_url, json=payload, timeout=15)
+            logger.info(
+                f"Webhook n8n modération appelé pour mission #{mission.id} - Statut HTTP {resp.status_code}"
+            )
+        except Exception as e:
+            logger.error(
+                f"Erreur lors de l'appel du webhook n8n modération pour mission #{mission.id}: {e}"
+            )
+
+    threading.Thread(target=_call_webhook, daemon=True).start()
+
 
 class IsAnnonceur(BasePermission):
     """Réserve les mutations de missions aux annonceurs."""
@@ -29,7 +67,7 @@ class IsAnnonceur(BasePermission):
 
 
 class MissionViewSet(viewsets.ModelViewSet):
-    """Permet à un annonceur de gérer uniquement ses propres missions."""
+    """Permet à un annonceur de gérer ses missions avec flux de modération n8n."""
 
     serializer_class = MissionSerializer
     permission_classes = [IsAuthenticated]
@@ -41,11 +79,14 @@ class MissionViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         queryset = Mission.objects.select_related("service", "annonceur").prefetch_related("technologies")
-        if self.request.user.role == UserRole.FREELANCE:
+        user = self.request.user
+        if not user or not user.is_authenticated:
+            return queryset.filter(status=MissionStatus.OPEN)
+        if user.is_staff or getattr(user, "is_superuser", False) or getattr(user, "role", None) == "admin":
             return queryset
-        if self.request.user.role != UserRole.ANNONCEUR:
-            return Mission.objects.none()
-        return queryset.filter(annonceur__user=self.request.user)
+        if getattr(user, "role", None) == UserRole.ANNONCEUR or hasattr(user, "announcer"):
+            return queryset.filter(annonceur__user=user)
+        return queryset.filter(status=MissionStatus.OPEN)
 
     def perform_create(self, serializer):
         if self.request.user.role != UserRole.ANNONCEUR:
@@ -57,7 +98,11 @@ class MissionViewSet(viewsets.ModelViewSet):
             raise PermissionDenied(
                 "Vous devez créer votre profil annonceur auparavant."
             )
-        serializer.save(annonceur=annonceur)
+        mission = serializer.save(
+            annonceur=annonceur,
+            status=MissionStatus.PENDING_MODERATION,
+        )
+        send_n8n_moderation_webhook(mission)
 
     @action(detail=True, methods=["post"], url_path="marquer-livree")
     def marquer_livree(self, request, pk=None):

@@ -22,9 +22,9 @@ interface AnnonceurBentoDashboardProps {
   user: AuthUser | undefined;
 }
 
-export const AnnonceurBentoDashboard: React.FC<AnnonceurBentoDashboardProps> = ({
-  user,
-}) => {
+export const AnnonceurBentoDashboard: React.FC<
+  AnnonceurBentoDashboardProps
+> = ({ user }) => {
   const { data: missions = [], isLoading: isMissionsLoading } = useQuery<
     Mission[]
   >({
@@ -366,8 +366,8 @@ export const AnnonceurBentoDashboard: React.FC<AnnonceurBentoDashboardProps> = (
                         {prop.mission_title || `Mission #${prop.mission}`}
                       </p>
                       <p className="text-xs text-[#111118]/55">
-                        {prop.freelance_info?.first_name || "Freelance"} ·{" "}
-                        {formatMoney(prop.montant_propose)}
+                        {prop.freelance_info?.first_name || "Freelance"}{" "}
+                        {prop.freelance_info?.last_name || "Freelance"} ·{" "}
                       </p>
                     </div>
                     <NavLink

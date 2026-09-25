@@ -78,3 +78,25 @@ export const updateMission = async ({
 export const deleteMission = async (id: number): Promise<void> => {
   await instance.delete(`missions/${id}/`);
 };
+
+export const generateMissionDescription = async (title: string): Promise<string> => {
+  const response = await instance.post<{ detail: string; description: string }>(
+    'missions/generate-description/',
+    { title }
+  );
+  return response.data.description;
+};
+
+export const moderateMission = async ({
+  missionId,
+  decision,
+}: {
+  missionId: number;
+  decision: 'approuver' | 'supprimer';
+}): Promise<{ detail: string; status: string }> => {
+  const response = await instance.patch<{ detail: string; status: string }>(
+    `missions/${missionId}/moderation/`,
+    { decision }
+  );
+  return response.data;
+};

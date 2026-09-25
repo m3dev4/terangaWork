@@ -11,12 +11,14 @@ import {
   Code2,
   Loader2,
   Plus,
+  Sparkles,
   WalletCards,
   X,
 } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   createMission,
+  generateMissionDescription,
   getMission,
   getMissionServices,
   type MissionPayload,
@@ -92,6 +94,21 @@ const MissionFormPage: React.FC = () => {
     onError: (mutationError) => {
       setError(
         getErrorMessage(mutationError, "Impossible de publier l'annonce.")
+      );
+    },
+  });
+
+  const generateDescriptionMutation = useReactMutation({
+    mutationFn: (title: string) => generateMissionDescription(title),
+    onSuccess: (generatedDescription) => {
+      updateField("description", generatedDescription);
+    },
+    onError: (mutationError) => {
+      setError(
+        getErrorMessage(
+          mutationError,
+          "La génération de la description a échoué."
+        )
       );
     },
   });
@@ -174,21 +191,56 @@ const MissionFormPage: React.FC = () => {
           </label>
 
           <label className="block">
-            <div className="mb-1.5 flex items-center justify-between">
+            <div className="mb-1.5 flex flex-wrap items-center justify-between gap-2">
               <span className="text-[11px] font-semibold text-neutral-700">
                 Description <span className="text-[#f2994a]">*</span>
               </span>
-              <span className="text-[10px] text-neutral-400">
-                {form.description.length} / 1000 caractères
-              </span>
+              <div className="flex items-center gap-3">
+                <button
+                  type="button"
+                  disabled={
+                    generateDescriptionMutation.isPending || !form.title.trim()
+                  }
+                  onClick={() => {
+                    if (!form.title.trim()) {
+                      setError(
+                        "Veuillez saisir un titre d'annonce avant de générer la description."
+                      );
+                      return;
+                    }
+                    setError("");
+                    generateDescriptionMutation.mutate(form.title.trim());
+                  }}
+                  className="inline-flex items-center gap-1.5 rounded-full bg-[#111118] px-3 py-1 text-[10px] font-semibold text-[#E7B84B] transition hover:bg-[#111118]/85 disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer shadow-xs"
+                  title={
+                    !form.title.trim()
+                      ? "Saisissez un titre pour générer une description par l'IA"
+                      : "Générer la description automatiquement via l'IA"
+                  }
+                >
+                  {generateDescriptionMutation.isPending ? (
+                    <Loader2 className="h-3 w-3 animate-spin text-[#E7B84B]" />
+                  ) : (
+                    <Sparkles className="h-3 w-3 text-[#E7B84B]" />
+                  )}
+                  <span>
+                    {generateDescriptionMutation.isPending
+                      ? "Génération en cours..."
+                      : "Générer avec l'IA"}
+                  </span>
+                </button>
+                <span className="text-[10px] text-neutral-400">
+                  {form.description.length} / 1000 caractères
+                </span>
+              </div>
             </div>
             <textarea
-              className={`${inputClass} min-h-[125px] resize-y`}
+              className={`${inputClass} min-h-[140px] resize-y`}
               value={form.description}
               onChange={(event) =>
                 updateField("description", event.target.value)
               }
-              placeholder="Décrivez votre projet en détail..."
+              placeholder="Décrivez votre projet en détail... Ou saisissez un titre et cliquez sur 'Générer avec l'IA'."
               maxLength={1000}
             />
           </label>

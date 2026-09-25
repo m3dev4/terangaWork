@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { getMediaUrl } from "../../../utils/getMediaUrl";
 import {
   Briefcase,
   CalendarDays,
@@ -275,7 +276,7 @@ const AnnonceurEspacePage: React.FC = () => {
                   <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-[#111118]/10 bg-white">
                     {freelance?.profile_picture ? (
                       <img
-                        src={freelance.profile_picture}
+                        src={getMediaUrl(freelance.profile_picture)}
                         alt={fullName}
                         className="h-full w-full object-cover"
                       />

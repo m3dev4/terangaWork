@@ -1,5 +1,6 @@
 import React from 'react';
 import type { Message } from '../../api/message';
+import { getMediaUrl } from "../../utils/getMediaUrl";
 import { formatMessageTime } from './utils';
 import { Check, CheckCheck } from 'lucide-react';
 
@@ -32,7 +33,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
         <div className="w-7 h-7 rounded-full overflow-hidden">
           {senderInfo.profile_picture ? (
             <img
-              src={senderInfo.profile_picture}
+              src={getMediaUrl(senderInfo.profile_picture)}
               alt={`${senderInfo.first_name}`}
               className="w-full h-full object-cover"
             />

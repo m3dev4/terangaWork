@@ -8,11 +8,13 @@ class OperateurMobileMoneyType(models.TextChoices):
 
 
 class MissionStatus(models.TextChoices):
+    PENDING_MODERATION = ("PENDING_MODERATION", "En attente de modération")
     OPEN = ("OPEN", "Ouverte")
     IN_PROGRESS = ("IN_PROGRESS", "En cours de développement")
     DELIVERED = ("DELIVERED", "Livrée")
     COMPLETED = ("COMPLETED", "Terminée")
     CLOSED = ("CLOSED", "Fermée")
+    REJECTED = ("REJECTED", "Rejetée")
 
 
 class Mission(models.Model):
@@ -29,9 +31,9 @@ class Mission(models.Model):
     )
     annonceur = models.ForeignKey("announcer.Announcer", on_delete=models.CASCADE)
     status = models.CharField(
-        max_length=20,
+        max_length=30,
         choices=MissionStatus.choices,
-        default=MissionStatus.OPEN,
+        default=MissionStatus.PENDING_MODERATION,
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

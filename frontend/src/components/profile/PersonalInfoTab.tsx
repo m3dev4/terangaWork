@@ -7,6 +7,7 @@ import {
   Loader2,
   AlertCircle,
 } from "lucide-react";
+import { getMediaUrl } from "../../utils/getMediaUrl";
 import ChangePasswordModal from "./ChangePasswordModal";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { updateProfile, uploadProfilePhoto } from "../../api/userApi";
@@ -52,7 +53,7 @@ export const PersonalInfoTab: React.FC<PersonalInfoTabProps> = ({ user }) => {
       setFirstName(user.first_name || "");
       setEmail(user.email || "");
       setPhone(user.number_phone || "");
-      setAvatarPreview(user.profile_picture || null);
+      setAvatarPreview(user.profile_picture ? getMediaUrl(user.profile_picture) : null);
     }
   }, [user]);
 

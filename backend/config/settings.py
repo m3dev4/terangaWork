@@ -42,9 +42,14 @@ SECRET_KEY = config("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config("DEBUG", default=True, cast=bool)
 
-ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="localhost,127.0.0.1,testserver,monoecious-mikaela-semiallegoric.ngrok-free.dev").split(
-    ","
-)
+ALLOWED_HOSTS = [
+    host.strip()
+    for host in config(
+        "ALLOWED_HOSTS",
+        default="localhost,127.0.0.1,testserver,.ngrok-free.app,.ngrok.io,*",
+    ).split(",")
+    if host.strip()
+]
 
 
 # Application definition
@@ -84,6 +89,10 @@ PAYDUNYA_TOKEN = config("PAYDUNYA_TOKEN", default="")
 PAYDUNYA_MODE = config("PAYDUNYA_MODE", default="test")
 PAYDUNYA_COMMISSION_RATE = config("PAYDUNYA_COMMISSION_RATE", default=0.10, cast=float)
 PAYDUNYA_CALLBACK_BASE_URL = config("PAYDUNYA_CALLBACK_BASE_URL", default="https://monoecious-mikaela-semiallegoric.ngrok-free.dev/api/webhooks/paydunya/")
+
+
+N8N_DESCRIPTION_WEBHOOK_URL="https://m3dev4.app.n8n.cloud/webhook-test/generate-description"
+N8N_MODERATION_WEBHOOK_URL="https://m3dev4.app.n8n.cloud/webhook-test/terangawork/moderation"
 
 
 MIDDLEWARE = [

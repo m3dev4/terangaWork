@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
+import { getMediaUrl } from "../../../utils/getMediaUrl";
 import {
   Briefcase,
   CalendarDays,
@@ -147,7 +148,7 @@ function CandidateModal({
             <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-2xl bg-[#F3EBDD] ring-2 ring-white">
               {fi?.profile_picture ? (
                 <img
-                  src={fi.profile_picture}
+                  src={getMediaUrl(fi.profile_picture)}
                   alt={fi.first_name}
                   className="h-full w-full object-cover"
                 />
@@ -378,7 +379,7 @@ function CandidateCard({
         <div className="h-10 w-10 shrink-0 overflow-hidden rounded-xl bg-[#F3EBDD] ring-1 ring-white">
           {fi?.profile_picture ? (
             <img
-              src={fi.profile_picture}
+              src={getMediaUrl(fi.profile_picture)}
               alt={fi.first_name}
               className="h-full w-full object-cover"
             />

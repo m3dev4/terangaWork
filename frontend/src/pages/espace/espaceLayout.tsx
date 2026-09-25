@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
+import { getMediaUrl } from "../../utils/getMediaUrl";
 import Sidebar, {
   FREELANCE_SIDEBAR_SECTIONS,
   ANNONCEUR_SIDEBAR_SECTIONS,
@@ -100,7 +101,7 @@ const EspaceLayout: React.FC = () => {
               <div className="w-6 h-6 rounded-full bg-neutral-100 border border-neutral-200 flex items-center justify-center overflow-hidden shrink-0">
                 {user?.profile_picture ? (
                   <img
-                    src={user.profile_picture}
+                    src={getMediaUrl(user.profile_picture)}
                     alt={user.first_name}
                     className="w-full h-full object-cover"
                   />

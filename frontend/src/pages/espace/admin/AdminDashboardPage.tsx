@@ -1,6 +1,8 @@
 import React from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { instance } from "../../../api/axios";
+import { getMissions, moderateMission, type Mission } from "../../../api/missionsApi";
+import { toast } from "../../../components/ui/toast";
 import {
   Users,
   Briefcase,
@@ -15,6 +17,8 @@ import {
   Clock,
   XCircle,
   Sparkles,
+  Check,
+  Trash2,
 } from "lucide-react";
 
 // ── Palette commune au dashboard (annonceur / freelance / admin) ───────────
@@ -30,11 +34,13 @@ interface AdminStats {
   };
   missions: {
     total: number;
+    pending_moderation?: number;
     open: number;
     in_progress: number;
     delivered: number;
     completed: number;
     closed: number;
+    rejected?: number;
     status_breakdown: Array<{
       status: string;
       label: string;
@@ -69,6 +75,8 @@ interface AdminStats {
 }
 
 export const AdminDashboardPage: React.FC = () => {
+  const queryClient = useQueryClient();
+
   const {
     data: stats,
     isLoading,
@@ -83,6 +91,37 @@ export const AdminDashboardPage: React.FC = () => {
     },
     refetchInterval: 30000,
   });
+
+  const missionsQuery = useQuery<Mission[]>({
+    queryKey: ["adminMissionsList"],
+    queryFn: getMissions,
+    refetchInterval: 10000,
+  });
+
+  const moderateMutation = useMutation({
+    mutationFn: moderateMission,
+    onSuccess: (data, variables) => {
+      queryClient.invalidateQueries({ queryKey: ["adminMissionsList"] });
+      queryClient.invalidateQueries({ queryKey: ["adminDashboardStats"] });
+      queryClient.invalidateQueries({ queryKey: ["missions"] });
+      toast.add({
+        title: variables.decision === "approuver" ? "Mission Approuvée" : "Mission Supprimée",
+        description: data.detail || `La mission #${variables.missionId} a été traitée.`,
+        type: variables.decision === "approuver" ? "success" : "warning",
+      });
+    },
+    onError: (err: any) => {
+      toast.add({
+        title: "Erreur de modération",
+        description: err?.response?.data?.detail || "Impossible de modérer cette mission.",
+        type: "error",
+      });
+    },
+  });
+
+  const pendingMissions = (missionsQuery.data || []).filter(
+    (m) => m.status === "PENDING_MODERATION"
+  );
 
   const formatFCFA = (val: number) => {
     return new Intl.NumberFormat("fr-FR", {
@@ -161,6 +200,104 @@ export const AdminDashboardPage: React.FC = () => {
           />
           <span>Actualiser</span>
         </button>
+      </div>
+
+      {/* ── Section Modération Manuelle des Missions (Bento Grid) ── */}
+      <div className="rounded-[24px] border border-[#111118]/8 bg-white p-5 hover:shadow-md transition space-y-4 shadow-xs">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#111118]/6 pb-4">
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-[#111118] text-[#E7B84B]">
+              <Clock className="h-5 w-5 animate-pulse text-[#E7B84B]" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <h3 className="text-sm font-bold text-[#111118]">
+                  Modération Manuelle des Missions
+                </h3>
+                {pendingMissions.length > 0 ? (
+                  <span className="rounded-full bg-[#E7B84B]/20 border border-[#E7B84B]/50 px-2.5 py-0.5 text-[9.5px] font-bold text-[#a87921]">
+                    {pendingMissions.length} mission(s) en attente
+                  </span>
+                ) : (
+                  <span className="rounded-full bg-emerald-100 text-emerald-800 px-2.5 py-0.5 text-[9.5px] font-semibold">
+                    Toutes les missions sont modérées
+                  </span>
+                )}
+              </div>
+              <p className="text-[11px] text-[#111118]/40 mt-0.5">
+                Validez les nouvelles offres pour les publier aux freelances ou supprimez-les directement d'un simple clic.
+              </p>
+            </div>
+          </div>
+          <span className="inline-flex items-center gap-1 rounded-full bg-[#111118] px-3 py-1 text-[10px] font-semibold text-[#E7B84B] shrink-0">
+            <Sparkles className="w-3 h-3 text-[#E7B84B]" />
+            Modération Admin Directe
+          </span>
+        </div>
+
+        {pendingMissions.length === 0 ? (
+          <div className="py-6 text-center text-xs text-[#111118]/40 bg-[#F3EBDD]/20 rounded-2xl border border-dashed border-[#111118]/10">
+            Aucune mission en attente de modération pour le moment.
+          </div>
+        ) : (
+          <div className="grid gap-3 md:grid-cols-2">
+            {pendingMissions.map((m) => (
+              <div
+                key={m.id}
+                className="flex flex-col justify-between rounded-2xl border border-[#E7B84B]/40 bg-[#F3EBDD]/30 p-4 transition hover:border-[#111118]/20"
+              >
+                <div>
+                  <div className="flex items-center justify-between mb-1.5">
+                    <span className="rounded-full bg-[#111118] px-2 py-0.5 text-[9px] font-bold text-[#E7B84B]">
+                      En attente de validation
+                    </span>
+                    <span className="text-[10px] text-[#111118]/40 font-mono">
+                      #{m.id}
+                    </span>
+                  </div>
+                  <h4 className="font-heading text-xs font-bold text-[#111118] line-clamp-1">
+                    {m.title}
+                  </h4>
+                  <p className="text-[10.5px] text-[#111118]/60 line-clamp-2 mt-1 leading-relaxed">
+                    {m.description}
+                  </p>
+                  <div className="mt-2 flex items-center gap-3 text-[10px] text-[#111118]/50">
+                    <span>Budget : <strong>{new Intl.NumberFormat("fr-FR").format(m.budget)} FCFA</strong></span>
+                  </div>
+                </div>
+
+                <div className="mt-3 pt-3 border-t border-[#111118]/8 flex items-center justify-end gap-2">
+                  <button
+                    type="button"
+                    disabled={moderateMutation.isPending}
+                    onClick={() =>
+                      moderateMutation.mutate({
+                        missionId: m.id,
+                        decision: "supprimer",
+                      })
+                    }
+                    className="inline-flex items-center gap-1 rounded-xl bg-red-500/10 border border-red-500/30 px-3 py-1.5 text-[10px] font-semibold text-red-700 hover:bg-red-500/20 transition cursor-pointer disabled:opacity-50"
+                  >
+                    <Trash2 className="h-3 w-3" /> Supprimer
+                  </button>
+                  <button
+                    type="button"
+                    disabled={moderateMutation.isPending}
+                    onClick={() =>
+                      moderateMutation.mutate({
+                        missionId: m.id,
+                        decision: "approuver",
+                      })
+                    }
+                    className="inline-flex items-center gap-1 rounded-xl bg-[#111118] px-3.5 py-1.5 text-[10px] font-bold text-white hover:bg-[#111118]/85 transition cursor-pointer disabled:opacity-50 shadow-xs"
+                  >
+                    <CheckCircle2 className="h-3 w-3 text-[#E7B84B]" /> Approuver & Publier
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* ── Grille bento ── */}

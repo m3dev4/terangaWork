@@ -15,12 +15,13 @@ export interface Proposition {
   lettre_motivation: string;
   date_livraison: string; // ISO date string
   mission: number;
+  montant_propose?: number;
   mission_title?: string;
   mission_budget?: number;
   mission_status?: string;
   freelance: number;
   freelance_info: FreelanceInfo;
-  proposition_status: 'PENDING' | 'ACCEPTED' | 'REJECTED';
+  proposition_status: 'PENDING' | 'ACCEPTED' | 'REJECTED' | 'DELIVERED';
   created_at: string;
   updated_at: string;
 }

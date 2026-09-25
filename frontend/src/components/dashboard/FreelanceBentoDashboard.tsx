@@ -2,6 +2,7 @@ import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getPropositions, type Proposition } from "../../api/propositionsApi";
 import { useConversions } from "../../hooks/useConversations";
+import { getMediaUrl } from "../../utils/getMediaUrl";
 import { VerticalNotificationSlider } from "./VerticalNotificationSlider";
 import {
   Briefcase,
@@ -283,7 +284,7 @@ export const FreelanceBentoDashboard: React.FC<FreelanceBentoDashboardProps> = (
                           {prop.mission_title || `Mission #${prop.mission}`}
                         </p>
                         <p className="text-xs text-[#111118]/55">
-                          {formatMoney(prop.montant_propose)} · Délai{" "}
+                          {formatMoney(prop.montant_propose || 0)} · Délai{" "}
                           {prop.delai_execution_jours} j
                         </p>
                       </div>
@@ -356,7 +357,7 @@ export const FreelanceBentoDashboard: React.FC<FreelanceBentoDashboardProps> = (
                       <div className="w-11 h-11 rounded-full bg-[#111118]/10 overflow-hidden shrink-0">
                         {conv.autre_utilisateur?.profile_picture ? (
                           <img
-                            src={conv.autre_utilisateur.profile_picture}
+                            src={getMediaUrl(conv.autre_utilisateur.profile_picture)}
                             alt="Avatar"
                             className="w-full h-full object-cover"
                           />
@@ -396,7 +397,7 @@ export const FreelanceBentoDashboard: React.FC<FreelanceBentoDashboardProps> = (
             <div className="w-14 h-14 rounded-2xl overflow-hidden bg-[#F3EBDD] flex items-center justify-center text-[#111118] text-xl font-bold shrink-0">
               {user?.profile_picture ? (
                 <img
-                  src={user.profile_picture}
+                  src={getMediaUrl(user.profile_picture)}
                   alt={user.first_name}
                   className="w-full h-full object-cover"
                 />

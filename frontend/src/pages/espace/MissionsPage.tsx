@@ -146,6 +146,11 @@ const MissionsPage: React.FC = () => {
                   <h2 className="truncate font-heading text-[13px] font-semibold text-[#111118]">
                     {mission.title}
                   </h2>
+                  {mission.status === "PENDING_MODERATION" && (
+                    <span className="inline-flex items-center gap-1 rounded-full bg-[#E7B84B]/20 border border-[#E7B84B]/40 px-2 py-0.5 text-[9px] font-semibold text-[#a87921]">
+                      En modération
+                    </span>
+                  )}
                   {(!mission.status || mission.status === "OPEN") && (
                     <span className="inline-flex items-center gap-1 rounded-full bg-[#F3EBDD] px-2 py-0.5 text-[9px] font-semibold text-[#111118]/70">
                       <CheckCircle2 className="h-2.5 w-2.5 text-[#D95C38]" />{" "}

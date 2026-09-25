@@ -1,5 +1,6 @@
 import React from 'react';
 import type { Conversation } from '../../api/message';
+import { getMediaUrl } from "../../utils/getMediaUrl";
 import { formatRelativeTime } from './utils';
 
 interface ConversationItemProps {
@@ -39,7 +40,7 @@ const ConversationItem: React.FC<ConversationItemProps> = ({
         `}>
           {user.profile_picture ? (
             <img
-              src={user.profile_picture}
+              src={getMediaUrl(user.profile_picture)}
               alt={`${user.first_name} ${user.last_name}`}
               className="w-full h-full object-cover"
             />
