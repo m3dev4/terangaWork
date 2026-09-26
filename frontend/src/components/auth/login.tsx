@@ -1,18 +1,20 @@
-import { useForm } from 'react-hook-form';
-import { Label } from '../ui/label';
-import { Input } from '../ui/input';
-import { Loader2, Lock, Mail } from 'lucide-react';
-import { Button } from '../ui/button';
-import { Google } from '../../assets/icons';
-import { Link } from 'react-router-dom';
-import type { Login } from '../../interfaces/authInterface';
-import { useLogin } from '../../hooks/useAuth';
+import { useForm } from "react-hook-form";
+import { Label } from "../ui/label";
+import { Input } from "../ui/input";
+import { Eye, EyeOff, Loader2, Lock, Mail } from "lucide-react";
+import { Button } from "../ui/button";
+import { Google } from "../../assets/icons";
+import { Link } from "react-router-dom";
+import type { Login } from "../../interfaces/authInterface";
+import { useLogin } from "../../hooks/useAuth";
+import { useState } from "react";
 
 const LoginComponent = () => {
   const loginMutation = useLogin();
   const { register, handleSubmit } = useForm<Login>({
-    defaultValues: { email: '', password: '' },
+    defaultValues: { email: "", password: "" },
   });
+  const [showPassword, setShowPassword] = useState(false);
 
   return (
     <div className="flex flex-col items-start justify-start w-full mt-4">
@@ -29,15 +31,13 @@ const LoginComponent = () => {
             Adresse Email
           </Label>
           <div className="relative">
-            <Mail
-              className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400 pointer-events-none"
-            />
+            <Mail className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400 pointer-events-none" />
             <Input
               id="email"
-              className="w-full bg-neutral-50 border border-neutral-200 focus:border-[#1b4b6b] focus:bg-white text-xs sm:text-sm pl-9 pr-3 py-2.5 rounded-lg transition-colors placeholder:text-neutral-400"
+              className="w-full bg-neutral-50 border border-neutral-200 focus:border-primary-jefly focus:bg-white text-xs sm:text-sm pl-9 pr-3 py-2.5 rounded-lg transition-colors placeholder:text-neutral-400"
               placeholder="exemple@test.com"
               type="email"
-              {...register('email', { required: "L'email est obligatoire." })}
+              {...register("email", { required: "L'email est obligatoire." })}
             />
           </div>
         </div>
@@ -52,24 +52,33 @@ const LoginComponent = () => {
             </Label>
             <Link
               to="/password-recovery"
-              className="text-xs text-[#1b4b6b] hover:text-[#133852] font-medium hover:underline transition-colors"
+              className="text-xs text-[#111118] hover:text-[#133852] font-medium hover:underline transition-colors"
             >
               Mot de passe oublié ?
             </Link>
           </div>
           <div className="relative">
-            <Lock
-              className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400 pointer-events-none"
-            />
+            <Lock className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400 pointer-events-none" />
             <Input
               id="password"
-              className="w-full bg-neutral-50 border border-neutral-200 focus:border-[#1b4b6b] focus:bg-white text-xs sm:text-sm pl-9 pr-3 py-2.5 rounded-lg transition-colors placeholder:text-neutral-400"
+              className="w-full bg-neutral-50 border border-neutral-200 focus:border-primary-terangawork focus:bg-white text-xs sm:text-sm pl-9 pr-3 py-2.5 rounded-lg transition-colors placeholder:text-neutral-400"
               placeholder="••••••••••••"
-              type="password"
-              {...register('password', {
-                required: 'Le mot de passe est obligatoire.',
+              type={showPassword ? "text" : "password"}
+              {...register("password", {
+                required: "Le mot de passe est obligatoire.",
               })}
             />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-600 transition cursor-pointer"
+            >
+              {showPassword ? (
+                <EyeOff className="w-4 h-4" />
+              ) : (
+                <Eye className="w-4 h-4" />
+              )}
+            </button>
           </div>
         </div>
 
@@ -77,12 +86,12 @@ const LoginComponent = () => {
           <Button
             type="submit"
             disabled={loginMutation.isPending}
-            className="w-full h-11 bg-[#f2994a] hover:bg-[#e0893a] text-white font-semibold rounded-lg shadow-xs transition-colors cursor-pointer text-xs sm:text-sm"
+            className="w-full h-11 bg-secondary-terangawork hover:bg-[#e0893a] text-white font-semibold rounded-lg shadow-xs transition-colors cursor-pointer text-xs sm:text-sm"
           >
             {loginMutation.isPending ? (
               <Loader2 className="w-4 h-4 animate-spin text-white" />
             ) : (
-              'Se connecter'
+              "Se connecter"
             )}
           </Button>
         </div>
@@ -105,10 +114,10 @@ const LoginComponent = () => {
 
         <div className="pt-2 text-center">
           <p className="text-xs sm:text-sm text-neutral-500">
-            Vous n'avez pas de compte ?{' '}
+            Vous n'avez pas de compte ?{" "}
             <Link
               to="/register"
-              className="text-[#1b4b6b] font-semibold hover:underline transition-colors"
+              className="text-primary-terangawork font-semibold hover:underline transition-colors"
             >
               S'inscrire
             </Link>

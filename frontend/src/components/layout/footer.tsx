@@ -1,24 +1,6 @@
 import React from "react";
-import { LogoJefly } from "../../assets/images";
-
-const FOOTER_COLUMNS = [
-  {
-    title: "Freelances",
-    links: ["Trouver une mission", "Créer un profil", "Comment ça marche"],
-  },
-  {
-    title: "Annonceurs",
-    links: ["Publier une mission", "Trouver un freelance", "Tarifs"],
-  },
-  {
-    title: "Plateforme",
-    links: ["À propos", "Blog", "Confiance et sécurité"],
-  },
-  {
-    title: "Légale",
-    links: ["Mentions légales", "Conditions d'utilisation", "Politique de confidentialité"],
-  },
-];
+import { TWLogo } from "../../assets/images";
+import { FOOTER_COLUMNS } from "../../constants/layout";
 
 const Footer = () => {
   return (
@@ -26,7 +8,11 @@ const Footer = () => {
       <div className="grid w-full max-w-7xl grid-cols-2 gap-x-8 gap-y-12 pb-16 sm:grid-cols-3 lg:grid-cols-5 lg:gap-12">
         {/* Logo + description + réseaux sociaux */}
         <div className="col-span-2 flex flex-col gap-6 sm:col-span-3 lg:col-span-1">
-          <img className="h-12 w-auto object-contain self-start" src={LogoJefly} alt="Jëfly" />
+          <img
+            className="h-12 w-auto object-contain self-start"
+            src={TWLogo}
+            alt="Jëfly"
+          />
           <p className="max-w-xs font-sans text-sm leading-6 tracking-tight text-gray-400">
             Le matching intelligent au service du freelancing en Afrique.
           </p>

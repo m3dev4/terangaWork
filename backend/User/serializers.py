@@ -622,6 +622,8 @@ class ProfileSerializer(serializers.ModelSerializer):
             "onboarding_step",
             "profile_picture",
             "role",
+            "is_staff",
+            "is_superuser",
         ]
         read_only_fields = fields
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import { LogoJefly } from '../assets/images';
+import { TWLogo } from '../assets/images';
 import {
   Home,
   Search,
@@ -103,16 +103,15 @@ export const ADMIN_SIDEBAR_SECTIONS: SidebarSectionConfig[] = [
   {
     title: 'Principal',
     items: [
-      { id: 'dashboard', label: 'Tableau de bord', url: '/espace', icon: Home },
-      { id: 'utilisateurs', label: 'Utilisateurs', url: '/espace/admin/utilisateurs', icon: Users },
-      { id: 'missions', label: 'Missions', url: '/espace/admin/missions', icon: Briefcase },
-      { id: 'catalogue', label: 'Catalogue', url: '/espace/admin/catalogue', icon: ListChecks },
+      { id: 'dashboard', label: 'Tableau de bord', url: '/espace/admin', icon: Home },
+      { id: 'services', label: 'Services', url: '/espace/admin/services', icon: Laptop },
+      { id: 'technologies', label: 'Technologies', url: '/espace/admin/technologies', icon: Briefcase },
     ],
   },
   {
     title: 'Modération',
     items: [
-      { id: 'moderation', label: 'Modération', url: '/espace/admin/moderation', icon: ShieldCheck },
+      { id: 'signalements', label: 'Modération & Signalements', url: '/espace/admin/signalements', icon: ShieldCheck },
     ],
   },
   {
@@ -167,7 +166,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         <div className={`flex items-center mb-4 ${collapsed ? 'justify-center' : 'px-1.5'}`}>
           <NavLink to="/" className="flex items-center">
             <img
-              src={LogoJefly}
+              src={TWLogo}
               alt="Jëfly"
               className={`w-auto object-contain transition-all duration-200 ${
                 collapsed ? 'h-5' : 'h-6'

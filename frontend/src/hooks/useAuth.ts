@@ -117,7 +117,9 @@ export const useLogin = () => {
         description: data.message || 'Bienvenue sur Jëfly.',
         type: 'success',
       });
-      if (data.user?.onboarding_completed) {
+      if (data.user?.role === 'admin' || (data.user as any)?.is_staff || (data.user as any)?.is_superuser) {
+        navigate('/espace/admin');
+      } else if (data.user?.onboarding_completed) {
         navigate('/espace');
       } else {
         navigate('/onboarding');

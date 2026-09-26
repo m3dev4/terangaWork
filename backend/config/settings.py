@@ -42,14 +42,20 @@ SECRET_KEY = config("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config("DEBUG", default=True, cast=bool)
 
-ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="localhost,127.0.0.1,testserver").split(
-    ","
-)
+ALLOWED_HOSTS = [
+    host.strip()
+    for host in config(
+        "ALLOWED_HOSTS",
+        default="localhost,127.0.0.1,testserver,.ngrok-free.app,.ngrok.io,*",
+    ).split(",")
+    if host.strip()
+]
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    "daphne",  # Django Channels ASGI server - DOIT être en premier
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -61,6 +67,7 @@ INSTALLED_APPS = [
     "rest_framework_simplejwt",
     "corsheaders",
     "drf_spectacular",
+    "channels",  # WebSocket support
     # apps
     "User",
     "Service",
@@ -69,7 +76,26 @@ INSTALLED_APPS = [
     "announcer",
     "mission",
     "proposition",
+    "matching",
+    "paiement",
+    "message",  # Messaging
+    "notification",  # Notifications
 ]
+
+# PayDunya Configuration
+PAYDUNYA_MASTER_KEY = config("PAYDUNYA_MASTER_KEY", default="")
+PAYDUNYA_PRIVATE_KEY = config("PAYDUNYA_PRIVATE_KEY", default="")
+PAYDUNYA_TOKEN = config("PAYDUNYA_TOKEN", default="")
+PAYDUNYA_MODE = config("PAYDUNYA_MODE", default="test")
+PAYDUNYA_COMMISSION_RATE = config("PAYDUNYA_COMMISSION_RATE", default=0.10, cast=float)
+PAYDUNYA_CALLBACK_BASE_URL = config("PAYDUNYA_CALLBACK_BASE_URL", default="https://822e-196-207-231-9.ngrok-free.app/api/webhooks/paydunya/")
+PAYDUNYA_RETURN_BASE_URL = config("PAYDUNYA_RETURN_BASE_URL", default="http://localhost:5173/espace/projets")
+PAYDUNYA_SIMULATE_DISBURSEMENT = config("PAYDUNYA_SIMULATE_DISBURSEMENT", default=True, cast=bool)
+
+
+N8N_DESCRIPTION_WEBHOOK_URL="https://m3dev4.app.n8n.cloud/webhook-test/generate-description"
+N8N_MODERATION_WEBHOOK_URL="https://m3dev4.app.n8n.cloud/webhook-test/terangawork/moderation"
+
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -101,21 +127,41 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "config.wsgi.application"
+ASGI_APPLICATION = "config.asgi.application"
+
+# Django Channels - In-memory channel layer (pas besoin de Redis)
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    }
+}
+
 
 
 # Database
 # https://docs.djangoproject.com/en/6.1/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.mysql",
-        "NAME": config("MYSQL_DATABASE_NAME"),
-        "USER": config("MYSQL_DATABASE_USER"),
-        "PASSWORD": config("MYSQL_DATABASE_PASSWORD"),
-        "HOST": config("DB_HOST"),
-        "PORT": config("MYSQL_DATABASE_PORT", default="3306"),
+USE_SQLITE = config("USE_SQLITE", default=True, cast=bool)
+
+if USE_SQLITE:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
     }
-}
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.mysql",
+            "NAME": config("MYSQL_DATABASE_NAME"),
+            "USER": config("MYSQL_DATABASE_USER"),
+            "PASSWORD": config("MYSQL_DATABASE_PASSWORD"),
+            "HOST": config("DB_HOST"),
+            "PORT": config("MYSQL_DATABASE_PORT", default="3306"),
+        }
+    }
+
 
 
 # Password validation
@@ -182,6 +228,18 @@ CORS_ALLOWED_ORIGINS = config(
     "CORS_ALLOWED_ORIGINS", default="http://localhost:5173,http://127.0.0.1:5173"
 ).split(",")
 CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_HEADERS = [
+    "accept",
+    "accept-encoding",
+    "authorization",
+    "content-type",
+    "dnt",
+    "origin",
+    "user-agent",
+    "x-csrftoken",
+    "x-requested-with",
+]
+
 
 # drf-spectacular (Swagger / OpenAPI)
 SPECTACULAR_SETTINGS = {
@@ -216,3 +274,10 @@ CLOUDINARY_API_SECRET = config(
     "CLOUDINARY_API_SECRET",
     default=config("CLOUDINARY_API_Key_SECRET", default=""),
 )
+
+# Microservice FastAPI Matching Intelligent
+FASTAPI_MATCHING_URL = config("FASTAPI_MATCHING_URL", default="http://localhost:8000")
+FASTAPI_INTERNAL_API_KEY = config(
+    "FASTAPI_INTERNAL_API_KEY", default="dev-secret-internal-key"
+)
+

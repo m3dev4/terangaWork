@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import { LogoJefly } from "../../assets/images";
+import { TWLogo } from "../../assets/images";
 import StepOnboarding from "./stepOnboarding";
 import {
   FREELANCE_ONBOARDING_STEPS,
@@ -26,6 +26,7 @@ import { StepRealisations } from "./steps/StepRealisations";
 import { StepTypeAnnonceur } from "./steps/StepTypeAnnonceur";
 import { StepInfosEntreprise } from "./steps/StepInfosEntreprise";
 import { StepFinalisation } from "./steps/StepFinalisation";
+import { Button } from "../ui/button";
 
 export interface OnboardingStepConfig {
   key: string;
@@ -96,7 +97,6 @@ const OnboardingForm: React.FC = () => {
     return idx >= 0 ? idx : 0;
   }, [steps, currentStepKey]);
 
-  // Navigation handlers
   const handleStepSubmit = async (data: Record<string, any> | FormData) => {
     try {
       const res = await submitStep.mutateAsync({
@@ -170,15 +170,14 @@ const OnboardingForm: React.FC = () => {
 
   if (isStatusLoading) {
     return (
-      <div className="flex h-screen w-full items-center justify-center bg-[#FAF9F6]">
-        <Loader2 className="w-10 h-10 animate-spin text-[#1b4b6b]" />
+      <div className="flex h-screen w-full items-center justify-center bg-[#F3EBDD]/40">
+        <Loader2 className="w-10 h-10 animate-spin text-[#D95C38]" />
       </div>
     );
   }
 
   const completedData = statusData?.completed_data || {};
 
-  // Render current step form
   const renderStepContent = () => {
     const isPending =
       submitStep.isPending || skipStep.isPending || backStep.isPending;
@@ -347,38 +346,35 @@ const OnboardingForm: React.FC = () => {
       default:
         return (
           <div className="text-center">
-            <h2 className="text-xl font-semibold mb-2">
+            <h2 className="text-xl font-semibold mb-2 text-[#111118]">
               Étape en cours de chargement...
             </h2>
-            <button
+            <Button
               onClick={() => setCurrentStepKey("identite")}
-              className="text-sm text-[#f2994a] underline"
+              className="text-sm text-[#D95C38] underline"
             >
               Revenir au début
-            </button>
+            </Button>
           </div>
         );
     }
   };
 
   return (
-    <div className="flex h-screen max-h-screen w-full bg-[#FAF9F6] overflow-hidden">
-      {/* Sidebar Onboarding Steps */}
-      <aside className="w-80 lg:w-84 shrink-0 h-full max-h-screen bg-[#FAF9F6] border-r border-[#EFECE6] px-6 py-6 lg:py-8 flex flex-col justify-start overflow-hidden select-none">
-        {/* Logo & Header */}
-        <div className="flex flex-col items-start mb-4">
-          <img src={LogoJefly} alt="Jëfly" className="h-7 w-auto mb-3" />
-          <h2 className="font-heading font-semibold text-xl lg:text-2xl text-neutral-900 tracking-tight">
+    <div className="flex h-screen max-h-screen w-full bg-white overflow-hidden">
+      <aside className="w-80 lg:w-84 shrink-0 h-full max-h-screen bg-[#F3EBDD]/50 border-r border-[#111118]/8 px-6 py-6 lg:py-8 flex flex-col justify-start overflow-hidden select-none">
+        <div className="flex flex-col items-start mb-6">
+          <img src={TWLogo} alt="TerangaWork" className="h-15 w-auto mb-4" />
+          <h2 className="font-heading font-semibold text-xl lg:text-2xl text-[#111118] tracking-tight">
             Configurons votre profil{" "}
-            {activeRole
-              ? activeRole === "freelance"
-                ? "freelance"
-                : "annonceur"
-              : ""}
+            {activeRole && (
+              <span className="text-[#D95C38]">
+                {activeRole === "freelance" ? "freelance" : "annonceur"}
+              </span>
+            )}
           </h2>
         </div>
 
-        {/* Steps List */}
         <div className="flex flex-col w-full flex-1 justify-between max-h-135">
           {steps.map((step, index) => (
             <StepOnboarding
@@ -393,7 +389,7 @@ const OnboardingForm: React.FC = () => {
         </div>
       </aside>
 
-      {/* Main Form Content Area */}
+      {/* ── Zone de formulaire ── */}
       <main className="flex-1 h-full overflow-y-auto bg-white p-6 sm:p-10 lg:p-12 flex flex-col justify-center items-center">
         <div className="w-full max-w-xl">{renderStepContent()}</div>
       </main>

@@ -1,11 +1,11 @@
-import { useRef, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import OptCode from '../optCode';
-import { Button } from '../ui/button';
-import { ArrowLeftIcon, Loader2 } from 'lucide-react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import type { VerifyEmail } from '../../interfaces/authInterface';
-import { useVerifyEmail } from '../../hooks/useAuth';
+import { useRef, useState } from "react";
+import { useForm } from "react-hook-form";
+import OptCode from "../optCode";
+import { Button } from "../ui/button";
+import { ArrowLeftIcon, Loader2 } from "lucide-react";
+import { useLocation, useNavigate } from "react-router-dom";
+import type { VerifyEmail } from "../../interfaces/authInterface";
+import { useVerifyEmail } from "../../hooks/useAuth";
 
 const VerifyMailComponent = () => {
   const inputRef = useRef<(HTMLInputElement | null)[]>([]);
@@ -13,24 +13,24 @@ const VerifyMailComponent = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const stateEmail = (location.state as { email?: string } | null)?.email;
-  const [otp, setOtp] = useState<string[]>(Array(6).fill(''));
+  const [otp, setOtp] = useState<string[]>(Array(6).fill(""));
   const { register, setValue, handleSubmit, watch } = useForm<VerifyEmail>({
     defaultValues: {
-      email: stateEmail ?? sessionStorage.getItem('verification_email') ?? '',
-      code: '',
+      email: stateEmail ?? sessionStorage.getItem("verification_email") ?? "",
+      code: "",
     },
   });
-  const email = watch('email');
+  const email = watch("email");
 
   const handleCodeChange = (
     event: React.ChangeEvent<HTMLInputElement>,
     index: number
   ) => {
-    const digit = event.target.value.replace(/\D/g, '').slice(-1);
+    const digit = event.target.value.replace(/\D/g, "").slice(-1);
     const nextOtp = [...otp];
     nextOtp[index] = digit;
     setOtp(nextOtp);
-    setValue('code', nextOtp.join(''), { shouldValidate: true });
+    setValue("code", nextOtp.join(""), { shouldValidate: true });
 
     if (digit && index < 5) {
       inputRef.current[index + 1]?.focus();
@@ -41,7 +41,7 @@ const VerifyMailComponent = () => {
     event: React.KeyboardEvent<HTMLInputElement>,
     index: number
   ) => {
-    if (event.key === 'Backspace' && !otp[index] && index > 0) {
+    if (event.key === "Backspace" && !otp[index] && index > 0) {
       inputRef.current[index - 1]?.focus();
     }
   };
@@ -57,10 +57,10 @@ const VerifyMailComponent = () => {
           type="email"
           placeholder="exemple@test.com"
           className="w-full bg-neutral-50 border border-neutral-200 focus:border-[#1b4b6b] focus:bg-white text-xs sm:text-sm px-3.5 py-2.5 rounded-lg transition-colors placeholder:text-neutral-400"
-          {...register('email', { required: "L'email est obligatoire." })}
+          {...register("email", { required: "L'email est obligatoire." })}
         />
       </div>
-      <input type="hidden" {...register('code')} />
+      <input type="hidden" {...register("code")} />
       <div className="flex justify-between gap-2 sm:gap-3 w-full max-w-sm">
         {Array.from({ length: 6 }, (_, i) => i).map((i) => (
           <OptCode
@@ -83,22 +83,22 @@ const VerifyMailComponent = () => {
       </div>
       <Button
         type="submit"
-        className="w-full h-11 bg-[#f2994a] hover:bg-[#e0893a] text-white font-semibold rounded-lg shadow-xs transition-colors cursor-pointer text-xs sm:text-sm"
+        className="w-full h-11 bg-secondary-terangawork hover:bg-[#e0893a] text-white font-semibold rounded-lg shadow-xs transition-colors cursor-pointer text-xs sm:text-sm"
         disabled={
-          verifyMutation.isPending || !email || otp.join('').length !== 6
+          verifyMutation.isPending || !email || otp.join("").length !== 6
         }
       >
         {verifyMutation.isPending ? (
           <Loader2 className="w-4 h-4 animate-spin text-white" />
         ) : (
-          'Vérifier'
+          "Vérifier"
         )}
       </Button>
       <div className="flex items-center justify-center mt-4">
         <button
           type="button"
           className="flex items-center gap-2 text-xs text-neutral-500 hover:text-neutral-800 transition-colors cursor-pointer p-2 rounded-lg hover:bg-neutral-100"
-          onClick={() => navigate('/login')}
+          onClick={() => navigate("/login")}
         >
           <ArrowLeftIcon className="w-3.5 h-3.5" />
           <span>Retour à la connexion</span>

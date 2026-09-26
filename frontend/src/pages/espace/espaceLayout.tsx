@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
+import { getMediaUrl } from "../../utils/getMediaUrl";
 import Sidebar, {
   FREELANCE_SIDEBAR_SECTIONS,
   ANNONCEUR_SIDEBAR_SECTIONS,
@@ -8,14 +9,20 @@ import Sidebar, {
 } from '../../components/sidebar';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import getCurrentUser from '../../utils/getUser';
-import { Bell, LogOut, User as UserIcon } from 'lucide-react';
-import { LogoJefly } from '../../assets/images';
+import { LogOut, User as UserIcon } from 'lucide-react';
+import { TWLogo } from '../../assets/images';
+import { NotificationDropdown } from '../../components/notification/NotificationDropdown';
+import { useWebSocket, useWebSocketQuerySync } from '../../hooks/useWebSocket';
 
 const EspaceLayout: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const queryClient = useQueryClient();
   const [collapsed, setCollapsed] = useState(false);
+
+  // Connect to the single shared WebSocket and sync events to React Query
+  useWebSocket();
+  useWebSocketQuerySync();
 
   const { data: user } = useQuery({
     queryKey: ['currentUser'],
@@ -71,7 +78,7 @@ const EspaceLayout: React.FC = () => {
           {/* Left: Breadcrumb */}
           <div className="flex items-center gap-2">
             {collapsed && (
-              <img src={LogoJefly} alt="Jëfly" className="h-4.5 w-auto object-contain mr-1 sm:hidden" />
+              <img src={TWLogo} alt="Jëfly" className="h-4.5 w-auto object-contain mr-1 sm:hidden" />
             )}
             <div className="flex items-center gap-1.5 text-[11px]">
               <span className="text-neutral-400 font-normal">{breadcrumb.section}</span>
@@ -84,15 +91,8 @@ const EspaceLayout: React.FC = () => {
 
           {/* Right: Notifications & User Profile */}
           <div className="flex items-center gap-2.5">
-            {/* Notification Bell */}
-            <button
-              type="button"
-              className="relative p-1 rounded-md text-neutral-400 hover:bg-neutral-100 hover:text-neutral-800 transition-colors cursor-pointer"
-              title="Notifications"
-            >
-              <Bell className="w-3.5 h-3.5" strokeWidth={1.7} />
-              <span className="absolute top-0.5 right-0.5 w-1.5 h-1.5 rounded-full bg-[#f2994a]" />
-            </button>
+            {/* Notification Dropdown */}
+            <NotificationDropdown />
 
             <div className="h-3.5 w-px bg-neutral-200" />
 
@@ -101,7 +101,7 @@ const EspaceLayout: React.FC = () => {
               <div className="w-6 h-6 rounded-full bg-neutral-100 border border-neutral-200 flex items-center justify-center overflow-hidden shrink-0">
                 {user?.profile_picture ? (
                   <img
-                    src={user.profile_picture}
+                    src={getMediaUrl(user.profile_picture)}
                     alt={user.first_name}
                     className="w-full h-full object-cover"
                   />

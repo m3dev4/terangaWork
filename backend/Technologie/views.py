@@ -23,7 +23,7 @@ class TechnologieViewSet(ModelViewSet):
     parser_classes = [MultiPartParser, FormParser]
 
     def get_permissions(self):
-        if self.action in {"update", "partial_update", "destroy"}:
+        if self.action in {"create", "update", "partial_update", "destroy"}:
             return [IsAdminUser()]
         return [IsAuthenticated()]
 
@@ -52,3 +52,30 @@ class TechnologieViewSet(ModelViewSet):
             self.get_serializer(technology).data,
             status=status.HTTP_201_CREATED,
         )
+
+    def update(self, request, *args, **kwargs):
+        """Modifie une technologie et remplace son image si fournie."""
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        image_file = request.FILES.get("image")
+
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+
+        if image_file is not None:
+            try:
+                validate_image_file(image_file)
+                image_url = upload_image(
+                    image_file,
+                    folder="jefly/technologies",
+                    public_id_prefix="technology",
+                )
+                technology = serializer.save(imgUrl=image_url)
+            except InvalidImageError as exc:
+                return Response({"image": [str(exc)]}, status=status.HTTP_400_BAD_REQUEST)
+            except CloudinaryError as exc:
+                return Response({"image": [str(exc)]}, status=status.HTTP_502_BAD_GATEWAY)
+        else:
+            technology = serializer.save()
+
+        return Response(self.get_serializer(technology).data)

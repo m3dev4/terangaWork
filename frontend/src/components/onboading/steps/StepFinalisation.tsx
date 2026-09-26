@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { Upload, ArrowRight, ArrowLeft, Loader2, CheckCircle2, User as UserIcon } from 'lucide-react';
+import { getMediaUrl } from "../../../utils/getMediaUrl";
 
 interface StepFinalisationProps {
   role?: 'freelance' | 'annonceur' | null;
@@ -24,7 +25,7 @@ export const StepFinalisation: React.FC<StepFinalisationProps> = ({
   isLoading = false,
 }) => {
   const [photo, setPhoto] = useState<File | null>(null);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(initialData?.profile_picture || null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(initialData?.profile_picture ? getMediaUrl(initialData.profile_picture) : null);
   const [githubUrl, setGithubUrl] = useState(initialData?.githubUrl || '');
   const fileInputRef = useRef<HTMLInputElement>(null);
 

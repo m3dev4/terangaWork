@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { LogoJefly } from "../../assets/images";
+import { TWLogo } from "../../assets/images";
 import { NAV_LINKS } from "../../constants/utils";
 import { useQuery } from "@tanstack/react-query";
 import getCurrentUser from "../../utils/getUser";
@@ -16,7 +16,7 @@ export default function Header() {
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
         <a href="#top" className="flex items-center gap-2">
           <img
-            src={LogoJefly}
+            src={TWLogo}
             alt="Jëfly"
             className="h-10 w-auto object-contain"
           />
@@ -38,9 +38,14 @@ export default function Header() {
           <>
             <button
               type="button"
-              onClick={() =>
-                navigate(user.onboarding_completed ? "/espace" : "/onboarding")
-              }
+              onClick={() => {
+                const isAdmin = user.role === 'admin' || (user as any).is_staff || (user as any).is_superuser;
+                if (isAdmin) {
+                  navigate('/espace/admin');
+                } else {
+                  navigate(user.onboarding_completed ? '/espace' : '/onboarding');
+                }
+              }}
               className="py-2.5 px-5 rounded-lg cursor-pointer bg-[#f2994a] hover:bg-[#e0893a] text-white font-heading font-semibold text-sm shadow-xs transition-colors"
             >
               Mon espace
