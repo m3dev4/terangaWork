@@ -2,6 +2,7 @@ import logging
 import threading
 import requests
 from django.conf import settings
+from django.db.models import Q
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.exceptions import PermissionDenied
@@ -17,6 +18,7 @@ from paiement.services import (
     InvalidMissionStatusError,
     PayDunyaError,
     initiate_collection,
+    synchroniser_statuts_paiement,
 )
 
 from .models import Mission, MissionStatus
@@ -86,6 +88,19 @@ class MissionViewSet(viewsets.ModelViewSet):
             return queryset
         if getattr(user, "role", None) == UserRole.ANNONCEUR or hasattr(user, "announcer"):
             return queryset.filter(annonceur__user=user)
+        if getattr(user, "role", None) == UserRole.FREELANCE:
+            # La liste reste limitée aux missions ouvertes ; pour les actions de
+            # détail (marquer-livree, historique-paiement...), le freelance doit
+            # aussi accéder aux missions où sa proposition est acceptée.
+            if self.action == "list":
+                return queryset.filter(status=MissionStatus.OPEN)
+            return queryset.filter(
+                Q(status=MissionStatus.OPEN)
+                | Q(
+                    propositions__freelance__user=user,
+                    propositions__proposition_status=PropositionStatus.ACCEPTED,
+                )
+            ).distinct()
         return queryset.filter(status=MissionStatus.OPEN)
 
     def perform_create(self, serializer):
@@ -268,5 +283,9 @@ class MissionViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_404_NOT_FOUND,
             )
 
-        serializer = PaiementSerializer(accepted_prop.paiement)
+        # Réconciliation avec PayDunya : corrige les statuts restés EN_ATTENTE
+        # suite à un webhook IPN non reçu (ex: tunnel ngrok arrêté).
+        paiement = synchroniser_statuts_paiement(accepted_prop.paiement)
+
+        serializer = PaiementSerializer(paiement)
         return Response(serializer.data, status=status.HTTP_200_OK)

@@ -53,10 +53,14 @@ export const ConfirmNumeroModal: React.FC<ConfirmNumeroModalProps> = ({
   onConfirmed,
 }) => {
   const [numero, setNumero] = useState("");
+  const [step, setStep] = useState<"saisie" | "recap">("saisie");
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
+  const cleanedNumero = numero.trim();
+
   const mutation = useMutation({
-    mutationFn: () => confirmerNumeroPaiement({ propositionId, numero }),
+    mutationFn: () =>
+      confirmerNumeroPaiement({ propositionId, numero: cleanedNumero }),
     onSuccess: () => {
       onConfirmed?.();
       onClose();
@@ -108,44 +112,94 @@ export const ConfirmNumeroModal: React.FC<ConfirmNumeroModalProps> = ({
           </div>
         )}
 
-        <div className="mb-5 space-y-3 text-[11px] text-[#111118]/60">
-          <p className="leading-relaxed">
-            Veuillez vérifier ou saisir le numéro sur lequel vous souhaitez
-            recevoir le paiement net une fois la livraison validée.
-          </p>
+        {step === "saisie" ? (
+          <>
+            <div className="mb-5 space-y-3 text-[11px] text-[#111118]/60">
+              <p className="leading-relaxed">
+                Veuillez saisir le numéro sur lequel vous souhaitez recevoir le
+                paiement net une fois la livraison validée.
+              </p>
 
-          <div>
-            <label className="mb-1 block font-semibold text-[#111118]/70">
-              Numéro {operateur} (ex : 771234567) :
-            </label>
-            <input
-              type="text"
-              value={numero}
-              onChange={(e) => setNumero(e.target.value)}
-              placeholder="Saisissez votre numéro mobile money..."
-              className="w-full rounded-xl border border-[#111118]/15 bg-[#F3EBDD]/40 px-3 py-2 text-[12px] font-medium outline-none focus:border-[#D95C38]"
-            />
-          </div>
-        </div>
+              <div>
+                <label className="mb-1 block font-semibold text-[#111118]/70">
+                  Numéro {operateur} (ex : 771234567) :
+                </label>
+                <input
+                  type="text"
+                  value={numero}
+                  onChange={(e) => setNumero(e.target.value)}
+                  placeholder="Saisissez votre numéro mobile money..."
+                  className="w-full rounded-xl border border-[#111118]/15 bg-[#F3EBDD]/40 px-3 py-2 text-[12px] font-medium outline-none focus:border-[#D95C38]"
+                />
+              </div>
+            </div>
 
-        <div className="flex items-center justify-end gap-2 border-t border-[#111118]/6 pt-4">
-          <button
-            onClick={onClose}
-            className="rounded-xl border border-[#111118]/15 px-3.5 py-2 text-[11px] font-medium text-[#111118]/60 hover:bg-[#F3EBDD]/60"
-          >
-            Annuler
-          </button>
-          <button
-            onClick={() => mutation.mutate()}
-            disabled={mutation.isPending}
-            className="inline-flex items-center gap-2 rounded-xl bg-[#111118] px-4 py-2 text-[11px] font-bold text-white hover:bg-[#111118]/85 disabled:opacity-50"
-          >
-            {mutation.isPending && (
-              <Loader2 className="h-3.5 w-3.5 animate-spin" />
-            )}
-            Confirmer le numéro
-          </button>
-        </div>
+            <div className="flex items-center justify-end gap-2 border-t border-[#111118]/6 pt-4">
+              <button
+                onClick={onClose}
+                className="rounded-xl border border-[#111118]/15 px-3.5 py-2 text-[11px] font-medium text-[#111118]/60 hover:bg-[#F3EBDD]/60"
+              >
+                Annuler
+              </button>
+              <button
+                onClick={() => {
+                  setErrorMsg(null);
+                  setStep("recap");
+                }}
+                disabled={!cleanedNumero}
+                className="inline-flex items-center gap-2 rounded-xl bg-[#111118] px-4 py-2 text-[11px] font-bold text-white hover:bg-[#111118]/85 disabled:opacity-50"
+              >
+                Continuer
+              </button>
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="mb-5 space-y-3 text-[11px] text-[#111118]/60">
+              <p className="leading-relaxed font-semibold text-[#111118]">
+                Êtes-vous sûr que c'est ce numéro sur lequel vous souhaitez
+                recevoir le paiement ?
+              </p>
+
+              <div className="rounded-2xl bg-[#F3EBDD]/60 border border-[#111118]/8 p-4 text-center">
+                <span className="block text-[9.5px] font-bold text-[#111118]/40 uppercase tracking-wide mb-1">
+                  Numéro {operateur}
+                </span>
+                <span className="text-base font-bold text-[#111118] tracking-wide">
+                  {cleanedNumero}
+                </span>
+              </div>
+
+              <p className="flex items-start gap-1.5 rounded-xl border border-[#E7B84B]/40 bg-[#E7B84B]/10 p-2.5 text-[10.5px] text-[#a87921] leading-relaxed">
+                <AlertCircle className="h-3.5 w-3.5 shrink-0 mt-0.5" />
+                Une fois confirmé, ce numéro ne pourra plus être modifié.
+              </p>
+            </div>
+
+            <div className="flex items-center justify-end gap-2 border-t border-[#111118]/6 pt-4">
+              <button
+                onClick={() => {
+                  setErrorMsg(null);
+                  setStep("saisie");
+                }}
+                disabled={mutation.isPending}
+                className="rounded-xl border border-[#111118]/15 px-3.5 py-2 text-[11px] font-medium text-[#111118]/60 hover:bg-[#F3EBDD]/60 disabled:opacity-50"
+              >
+                Non, modifier
+              </button>
+              <button
+                onClick={() => mutation.mutate()}
+                disabled={mutation.isPending}
+                className="inline-flex items-center gap-2 rounded-xl bg-[#D95C38] px-4 py-2 text-[11px] font-bold text-white hover:bg-[#c14f2f] disabled:opacity-50"
+              >
+                {mutation.isPending && (
+                  <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                )}
+                Oui, confirmer ce numéro
+              </button>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

@@ -309,17 +309,28 @@ const FreelanceMesMissionsPage: React.FC = () => {
                 {/* Actions paiement & livraison */}
                 {isAccepted && (
                   <div className="mb-4 flex flex-wrap gap-2">
-                    <button
-                      onClick={() =>
-                        setConfirmNumeroTarget({
-                          propId: prop.id,
-                          operateur: 'WAVE',
-                        })
-                      }
-                      className="inline-flex items-center gap-1.5 rounded-xl border border-[#111118]/15 bg-[#F3EBDD]/60 px-3 py-1.5 text-[10.5px] font-semibold text-[#111118] hover:bg-[#111118] hover:text-white transition-colors cursor-pointer"
-                    >
-                      <Smartphone className="h-3.5 w-3.5" /> Numéro Mobile Money
-                    </button>
+                    {prop.numero_paiement_confirme ? (
+                      <button
+                        disabled
+                        className="inline-flex items-center gap-1.5 rounded-xl border border-[#111118]/10 bg-[#F3EBDD]/40 px-3 py-1.5 text-[10.5px] font-semibold text-[#111118]/45 cursor-not-allowed"
+                      >
+                        <CheckCircle2 className="h-3.5 w-3.5 text-[#D95C38]" />
+                        Numéro confirmé
+                        {prop.numero_paiement ? ` : ${prop.numero_paiement}` : ''}
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() =>
+                          setConfirmNumeroTarget({
+                            propId: prop.id,
+                            operateur: prop.mission_operateur || 'WAVE',
+                          })
+                        }
+                        className="inline-flex items-center gap-1.5 rounded-xl border border-[#111118]/15 bg-[#F3EBDD]/60 px-3 py-1.5 text-[10.5px] font-semibold text-[#111118] hover:bg-[#111118] hover:text-white transition-colors cursor-pointer"
+                      >
+                        <Smartphone className="h-3.5 w-3.5" /> Numéro Mobile Money
+                      </button>
+                    )}
 
                     {missionStatus === 'IN_PROGRESS' && (
                       <button

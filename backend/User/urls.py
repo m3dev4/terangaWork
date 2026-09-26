@@ -1,7 +1,7 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from .views import AuthViewSet, ProfileViewSet, UserProfileView, MeViewSet
-from .admin_views import SignalementViewSet, AdminDashboardStatsView
+from .admin_views import SignalementViewSet, AdminDashboardStatsView, DashboardStatsView
 from .onboarding_views import (
     OnboardingStatusView,
     OnboardingStepView,
@@ -20,6 +20,7 @@ urlpatterns = router.urls + [
     path("profile/photo/", UserProfileView.as_view(), name="profile-photo"),
     path("me/", MeViewSet.as_view(), name="me"),
     path("admin/dashboard/stats/", AdminDashboardStatsView.as_view(), name="admin-dashboard-stats"),
+    path("dashboard/stats/", DashboardStatsView.as_view(), name="dashboard-stats"),
     # Onboarding endpoints
     path(
         "onboarding/status/",

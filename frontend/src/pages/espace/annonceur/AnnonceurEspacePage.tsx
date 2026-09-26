@@ -5,6 +5,7 @@ import {
   Briefcase,
   CalendarDays,
   Clock,
+  Clock3,
   ExternalLink,
   Loader2,
   MessageSquare,
@@ -16,6 +17,7 @@ import {
   AlertCircle,
   CreditCard,
   HelpCircle,
+  CheckCircle2,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -336,21 +338,38 @@ const AnnonceurEspacePage: React.FC = () => {
                     </button>
                   )}
 
-                  {missionStatus === "COMPLETED" && (
-                    <button
-                      onClick={() =>
-                        setPayTarget({
-                          missionId: prop.mission,
-                          title: prop.mission_title || "Mission",
-                          budget: prop.mission_budget || 0,
-                        })
-                      }
-                      className="inline-flex items-center gap-1.5 rounded-xl bg-[#111118] hover:bg-[#111118]/85 px-4 py-2 text-[11px] font-bold text-white transition-all cursor-pointer"
-                    >
-                      <CreditCard className="h-4 w-4 text-[#E7B84B]" /> Payer le
-                      freelance (PayDunya)
-                    </button>
-                  )}
+                  {missionStatus === "COMPLETED" &&
+                    (prop.paiement_statut_collecte === "REUSSI" ? (
+                      <button
+                        disabled
+                        className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-900/80 px-4 py-2 text-[11px] font-bold text-white opacity-90 cursor-not-allowed"
+                      >
+                        <CheckCircle2 className="h-4 w-4 text-emerald-200" />
+                        Paiement effectué ✓
+                      </button>
+                    ) : prop.paiement_statut_collecte === "EN_ATTENTE" ? (
+                      <button
+                        disabled
+                        className="inline-flex items-center gap-1.5 rounded-xl bg-[#111118]/70 px-4 py-2 text-[11px] font-bold text-white opacity-80 cursor-not-allowed"
+                      >
+                        <Clock3 className="h-4 w-4 text-[#E7B84B] animate-pulse" />
+                        Paiement en cours...
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() =>
+                          setPayTarget({
+                            missionId: prop.mission,
+                            title: prop.mission_title || "Mission",
+                            budget: prop.mission_budget || 0,
+                          })
+                        }
+                        className="inline-flex items-center gap-1.5 rounded-xl bg-[#111118] hover:bg-[#111118]/85 px-4 py-2 text-[11px] font-bold text-white transition-all cursor-pointer"
+                      >
+                        <CreditCard className="h-4 w-4 text-[#E7B84B]" /> Payer le
+                        freelance (PayDunya)
+                      </button>
+                    ))}
 
                   <button
                     onClick={() =>

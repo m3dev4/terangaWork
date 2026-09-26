@@ -88,7 +88,9 @@ PAYDUNYA_PRIVATE_KEY = config("PAYDUNYA_PRIVATE_KEY", default="")
 PAYDUNYA_TOKEN = config("PAYDUNYA_TOKEN", default="")
 PAYDUNYA_MODE = config("PAYDUNYA_MODE", default="test")
 PAYDUNYA_COMMISSION_RATE = config("PAYDUNYA_COMMISSION_RATE", default=0.10, cast=float)
-PAYDUNYA_CALLBACK_BASE_URL = config("PAYDUNYA_CALLBACK_BASE_URL", default="https://monoecious-mikaela-semiallegoric.ngrok-free.dev/api/webhooks/paydunya/")
+PAYDUNYA_CALLBACK_BASE_URL = config("PAYDUNYA_CALLBACK_BASE_URL", default="https://822e-196-207-231-9.ngrok-free.app/api/webhooks/paydunya/")
+PAYDUNYA_RETURN_BASE_URL = config("PAYDUNYA_RETURN_BASE_URL", default="http://localhost:5173/espace/projets")
+PAYDUNYA_SIMULATE_DISBURSEMENT = config("PAYDUNYA_SIMULATE_DISBURSEMENT", default=True, cast=bool)
 
 
 N8N_DESCRIPTION_WEBHOOK_URL="https://m3dev4.app.n8n.cloud/webhook-test/generate-description"

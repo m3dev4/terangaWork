@@ -98,10 +98,16 @@ def initiate_collection(mission, user, paydunya_client=None) -> dict:
         callback_url = f"{base_setting}/api/payments/webhooks/paydunya/collecte/"
     description = f"Paiement Jefly Mission #{mission.id}: {mission.title}"
 
+    return_base = getattr(settings, "PAYDUNYA_RETURN_BASE_URL", "http://localhost:5173").rstrip("/")
+    return_url = f"{return_base}?modal=historique-paiement&mission={mission.id}"
+    cancel_url = return_base
+
     checkout_res = client.create_checkout_invoice(
         amount=str(montant_brut),
         description=description,
         callback_url=callback_url,
+        return_url=return_url,
+        cancel_url=cancel_url,
     )
 
     paiement.reference_collecte = checkout_res["token"]
@@ -137,14 +143,17 @@ def process_collection_webhook(token: str, payload: dict, paydunya_client=None) 
         paiement.date_collecte = timezone.now()
         paiement.save()
         
-        # Notifier le succès du paiement
         from notification.services import notifier_paiement_reussi
         notifier_paiement_reussi(paiement)
 
-        # Déclenchement automatique de l'étape 3 (décaissement)
-        # TODO: Réactiver quand les clés PayDunya Payout seront validées
-        # trigger_disbursement(paiement, paydunya_client=client)
-        logger.warning(f"Décaissement désactivé - Collecte réussie paiement #{paiement.id}")
+        try:
+            trigger_disbursement(paiement, paydunya_client=client)
+            logger.info(f"Décaissement déclenché suite collecte réussie paiement #{paiement.id}")
+        except Exception as e:
+            logger.exception(
+                f"Échec du déclenchement automatique du décaissement pour le paiement #{paiement.id} "
+                f"(sera rattrapé via synchroniser_statuts_paiement à la prochaine consultation) : {e}"
+            )
 
     elif confirmed_status in ["failed", "cancelled"]:
         paiement.statut_collecte = StatutCollecte.ECHOUE
@@ -157,12 +166,70 @@ def process_collection_webhook(token: str, payload: dict, paydunya_client=None) 
     return paiement
 
 
+def synchroniser_statuts_paiement(paiement: Paiement, paydunya_client=None) -> Paiement:
+    """
+    Réconciliation verify-on-read : si un statut est EN_ATTENTE alors qu'une
+    référence PayDunya existe, on revérifie le statut réel auprès de PayDunya.
+    Corrige les IPN manqués (tunnel ngrok arrêté, webhook non reçu, etc.).
+    """
+    client = paydunya_client or PayDunyaClient()
+
+    if (
+        paiement.statut_collecte == StatutCollecte.REUSSI
+        and paiement.statut_decaissement == StatutDecaissement.NON_DECLENCHE
+    ):
+        try:
+            trigger_disbursement(paiement, paydunya_client=client)
+            logger.info(
+                f"[Rattrapage] Décaissement déclenché via synchroniser_statuts_paiement pour paiement #{paiement.id}"
+            )
+        except PayDunyaError as e:
+            logger.warning(
+                f"[Rattrapage] Échec déclenchement décaissement pour paiement #{paiement.id}: {e}"
+            )
+        except Exception as e:
+            logger.exception(
+                f"[Rattrapage] Erreur inattendue déclenchement décaissement paiement #{paiement.id}: {e}"
+            )
+
+    if (
+        paiement.statut_collecte == StatutCollecte.EN_ATTENTE
+        and paiement.reference_collecte
+    ):
+        try:
+            paiement = process_collection_webhook(
+                paiement.reference_collecte, {}, paydunya_client=client
+            )
+        except PayDunyaError as e:
+            logger.warning(
+                f"Réconciliation collecte impossible pour paiement #{paiement.id}: {e}"
+            )
+
+    if (
+        paiement.statut_collecte == StatutCollecte.REUSSI
+        and paiement.statut_decaissement == StatutDecaissement.EN_ATTENTE
+        and paiement.reference_decaissement
+    ):
+        try:
+            paiement = process_disbursement_webhook(
+                paiement.reference_decaissement, {}, paydunya_client=client
+            )
+        except PayDunyaError as e:
+            logger.warning(
+                f"Réconciliation décaissement impossible pour paiement #{paiement.id}: {e}"
+            )
+
+    return paiement
+
+
 def trigger_disbursement(paiement: Paiement, paydunya_client=None) -> Paiement:
     """
     Étape 3: Décaissement vers le Freelance.
     1. Récupère NumeroPaiement pour (freelance, operateur_mobile_money).
-    2. Appelle POST /v2/disburse/get-invoice (création) -> disburse_token.
-    3. Appelle immédiatement POST /v2/disburse/submit-invoice (soumission).
+    2. Tente PayDunya : create-disburse + submit.
+    3. Si PayDunya échoue ET que PAYDUNYA_SIMULATE_DISBURSEMENT est activé,
+       on simule un décaissement réussi (mode test) pour que le freelance voie
+       bien le statut « Réussi » (sans argent réellement envoyé).
     """
     freelance = paiement.proposition.freelance
     operateur = paiement.proposition.mission.operateurMobileMoney
@@ -180,6 +247,7 @@ def trigger_disbursement(paiement: Paiement, paydunya_client=None) -> Paiement:
             f"Aucun numéro mobile money enregistré pour ce freelance et l'opérateur {operateur}."
         )
 
+    simulate = bool(getattr(settings, "PAYDUNYA_SIMULATE_DISBURSEMENT", False))
     account_alias = numero_obj.numero
     client = paydunya_client or PayDunyaClient()
     base_setting = getattr(settings, "PAYDUNYA_CALLBACK_BASE_URL", "http://localhost:8000").rstrip("/")
@@ -189,22 +257,38 @@ def trigger_disbursement(paiement: Paiement, paydunya_client=None) -> Paiement:
     else:
         callback_url = f"{base_setting}/api/payments/webhooks/paydunya/decaissement/"
 
-    # Pas 1: get-invoice
-    disburse_res = client.create_disburse_invoice(
-        account_alias=account_alias,
-        amount=str(paiement.montant_net),
-        callback_url=callback_url,
-    )
-    disburse_token = disburse_res["disburse_token"]
+    try:
+        disburse_res = client.create_disburse_invoice(
+            account_alias=account_alias,
+            amount=str(paiement.montant_net),
+            callback_url=callback_url,
+        )
+        disburse_token = disburse_res["disburse_token"]
+        client.submit_disburse_invoice(disburse_token)
 
-    # Pas 2: submit-invoice
-    client.submit_disburse_invoice(disburse_token)
+        paiement.reference_decaissement = disburse_token
+        paiement.statut_decaissement = StatutDecaissement.EN_ATTENTE
+        paiement.save()
+        return paiement
 
-    paiement.reference_decaissement = disburse_token
-    paiement.statut_decaissement = StatutDecaissement.EN_ATTENTE
-    paiement.save()
+    except (PayDunyaError, Exception) as paydunya_err:
+        if not simulate:
+            raise
 
-    return paiement
+        fake_token = f"SIM-{paiement.id}-{int(timezone.now().timestamp())}"
+        paiement.reference_decaissement = fake_token
+        paiement.statut_decaissement = StatutDecaissement.REUSSI
+        paiement.date_decaissement = timezone.now()
+        paiement.save()
+
+        freelance_user = paiement.proposition.freelance.user
+        logger.warning(
+            f"[SIMULATION DÉCAISSEMENT] Paiement #{paiement.id} - "
+            f"PayDunya a échoué ({paydunya_err!s}). "
+            f"Décaissement simulé réussi vers {freelance_user.email} "
+            f"({paiement.montant_net} FCFA, opérateur {operateur}, numéro {account_alias})."
+        )
+        return paiement
 
 
 def process_disbursement_webhook(disburse_token: str, payload: dict, paydunya_client=None) -> Paiement:

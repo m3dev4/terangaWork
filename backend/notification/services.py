@@ -283,32 +283,31 @@ def notifier_paiement_reussi(paiement):
     Returns:
         Tuple (notification_annonceur, notification_freelance)
     """
-    mission = paiement.mission
-    
+    proposition_acceptee = paiement.proposition
+    mission = proposition_acceptee.mission
+
     # Notifier l'annonceur
     notif_annonceur = notifier(
-        utilisateur=mission.annonceur,
+        utilisateur=mission.annonceur.user,
         type_notif='PAIEMENT_REUSSI',
         titre='Paiement effectué ✓',
-        message=f'Votre paiement de {paiement.montant} FCFA pour "{_get_mission_title(mission)}" a été traité avec succès.',
+        message=f'Votre paiement de {paiement.montant_brut} FCFA pour "{_get_mission_title(mission)}" a été traité avec succès.',
         mission=mission,
+        proposition=proposition_acceptee,
         paiement=paiement
     )
-    
+
     # Notifier le freelance
-    proposition_acceptee = mission.propositions.filter(statut='ACCEPTEE').first()
-    if proposition_acceptee:
-        notif_freelance = notifier(
-            utilisateur=proposition_acceptee.freelancee,
-            type_notif='PAIEMENT_REUSSI',
-            titre='Paiement reçu ✓',
-            message=f'Le paiement pour la mission "{_get_mission_title(mission)}" a été effectué. Le décaissement sera traité prochainement.',
-            mission=mission,
-            paiement=paiement
-        )
-        return (notif_annonceur, notif_freelance)
-    
-    return (notif_annonceur, None)
+    notif_freelance = notifier(
+        utilisateur=proposition_acceptee.freelance.user,
+        type_notif='PAIEMENT_REUSSI',
+        titre='Paiement reçu ✓',
+        message=f'Le paiement pour la mission "{_get_mission_title(mission)}" a été effectué. Le décaissement sera traité prochainement.',
+        mission=mission,
+        proposition=proposition_acceptee,
+        paiement=paiement
+    )
+    return (notif_annonceur, notif_freelance)
 
 
 def notifier_paiement_echoue(paiement):
@@ -321,13 +320,14 @@ def notifier_paiement_echoue(paiement):
     Returns:
         Notification créée
     """
-    mission = paiement.mission
-    
+    mission = paiement.proposition.mission
+
     return notifier(
-        utilisateur=mission.annonceur,
+        utilisateur=mission.annonceur.user,
         type_notif='PAIEMENT_ECHOUE',
         titre='Échec du paiement ❌',
         message=f'Le paiement pour "{_get_mission_title(mission)}" a échoué. Veuillez réessayer ou contacter le support.',
         mission=mission,
+        proposition=paiement.proposition,
         paiement=paiement
     )

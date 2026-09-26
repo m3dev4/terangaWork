@@ -1,6 +1,7 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getPropositions, type Proposition } from "../../api/propositionsApi";
+import { getDashboardStats, type FreelanceDashboardStats } from "../../api/paiementApi";
 import { useConversions } from "../../hooks/useConversations";
 import { getMediaUrl } from "../../utils/getMediaUrl";
 import { VerticalNotificationSlider } from "./VerticalNotificationSlider";
@@ -16,6 +17,7 @@ import {
   Search,
   User,
   Star,
+  Clock4,
 } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import type { AuthUser } from "../../interfaces/authInterface";
@@ -37,6 +39,12 @@ export const FreelanceBentoDashboard: React.FC<FreelanceBentoDashboardProps> = (
   const { data: conversations = [], isLoading: isConvsLoading } =
     useConversions();
 
+  const { data: dashboardStats, isLoading: isStatsLoading } =
+    useQuery<FreelanceDashboardStats>({
+      queryKey: ["dashboard-stats-freelance"],
+      queryFn: getDashboardStats,
+    });
+
   const activeMissions = propositions.filter(
     (p) => p.proposition_status === "ACCEPTED"
   );
@@ -49,13 +57,8 @@ export const FreelanceBentoDashboard: React.FC<FreelanceBentoDashboardProps> = (
     (p) => p.proposition_status === "PENDING"
   );
 
-  const totalEarnings = propositions
-    .filter(
-      (p) =>
-        p.proposition_status === "ACCEPTED" ||
-        p.proposition_status === "DELIVERED"
-    )
-    .reduce((acc, p) => acc + (p.montant_propose || 0), 0);
+  const totalEarnings = dashboardStats?.total_earned_net ?? 0;
+  const pendingEarnings = dashboardStats?.total_pending_net ?? 0;
 
   // Classement des projets par montant proposé, pour mettre en avant les contrats les plus rémunérateurs
   const rankedActiveMissions = React.useMemo(() => {
@@ -128,12 +131,24 @@ export const FreelanceBentoDashboard: React.FC<FreelanceBentoDashboardProps> = (
             </div>
           </div>
           <div>
-            <p className="text-4xl font-extrabold text-white font-heading">
-              {formatMoney(totalEarnings)}
-            </p>
-            <p className="text-xs text-white/45 mt-2">
-              Montant total des contrats acceptés ou livrés
-            </p>
+            {isStatsLoading ? (
+              <div className="h-12 w-40 bg-white/10 rounded-xl animate-pulse" />
+            ) : (
+              <>
+                <p className="text-4xl font-extrabold text-white font-heading">
+                  {formatMoney(totalEarnings)}
+                </p>
+                <p className="text-xs text-white/45 mt-2">
+                  Montant net effectivement reçu (décaissements réussis)
+                </p>
+                {pendingEarnings > 0 && (
+                  <p className="text-xs text-[#E7B84B] mt-2 flex items-center gap-1.5">
+                    <Clock4 className="w-3.5 h-3.5" />
+                    {formatMoney(pendingEarnings)} en attente
+                  </p>
+                )}
+              </>
+            )}
           </div>
           <div className="pt-5 border-t border-white/10 flex items-center justify-between text-xs">
             <span className="flex items-center gap-1.5 text-white/70">

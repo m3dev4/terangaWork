@@ -41,7 +41,7 @@ class PropositionViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         queryset = Proposition.objects.select_related(
             "freelance", "mission", "freelance__user", "mission__annonceur__user"
-        )
+        ).prefetch_related("paiement")
         if self.request.user.role == UserRole.FREELANCE:
             queryset = queryset.filter(freelance__user=self.request.user)
             mission_id = self.request.query_params.get("mission")
@@ -128,24 +128,25 @@ class PropositionViewSet(viewsets.ModelViewSet):
             freelance=freelance, operateur=operateur
         ).first()
 
+        if existing_numero:
+            return Response(
+                {"error": "Le numéro de paiement a déjà été confirmé et ne peut plus être modifié."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
         new_numero = str(request.data.get("numero") or "").strip()
 
-        if existing_numero:
-            if new_numero:
-                existing_numero.numero = new_numero
-            existing_numero.save()
-            num_obj = existing_numero
-        else:
-            if not new_numero:
-                return Response(
-                    {"error": f"Le numéro de paiement est obligatoire pour l'opérateur {operateur}."},
-                    status=status.HTTP_400_BAD_REQUEST,
-                )
-            num_obj = NumeroPaiement.objects.create(
-                freelance=freelance,
-                operateur=operateur,
-                numero=new_numero,
+        if not new_numero:
+            return Response(
+                {"error": f"Le numéro de paiement est obligatoire pour l'opérateur {operateur}."},
+                status=status.HTTP_400_BAD_REQUEST,
             )
+
+        num_obj = NumeroPaiement.objects.create(
+            freelance=freelance,
+            operateur=operateur,
+            numero=new_numero,
+        )
 
         return Response(
             {

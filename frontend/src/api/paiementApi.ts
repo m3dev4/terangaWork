@@ -87,3 +87,51 @@ export const confirmerNumeroPaiement = async ({
   });
   return response.data;
 };
+
+export interface DashboardTransactionBase {
+  paiement_id: number;
+  mission_id: number;
+  mission_title: string;
+  statut_collecte: 'EN_ATTENTE' | 'REUSSI' | 'ECHOUE';
+  statut_decaissement: 'NON_DECLENCHE' | 'EN_ATTENTE' | 'REUSSI' | 'ECHOUE';
+  montant_brut: number;
+  montant_net: number;
+  montant_commission: number;
+  date_collecte: string | null;
+  date_decaissement: string | null;
+  reference_collecte: string | null;
+  reference_decaissement: string | null;
+}
+
+export interface FreelanceDashboardTransaction extends DashboardTransactionBase {}
+
+export interface AnnonceurDashboardTransaction extends DashboardTransactionBase {
+  freelance_id: number;
+  freelance_nom: string;
+  freelance_email: string;
+}
+
+export interface FreelanceDashboardStats {
+  role: 'freelance';
+  total_earned_net: number;
+  total_pending_net: number;
+  transactions_count: number;
+  transactions: FreelanceDashboardTransaction[];
+}
+
+export interface AnnonceurDashboardStats {
+  role: 'annonceur';
+  total_spent_brut: number;
+  total_paid_commissions: number;
+  total_disbursed_net: number;
+  total_pending_brut: number;
+  transactions_count: number;
+  transactions: AnnonceurDashboardTransaction[];
+}
+
+export type DashboardStats = FreelanceDashboardStats | AnnonceurDashboardStats;
+
+export const getDashboardStats = async (): Promise<DashboardStats> => {
+  const response = await instance.get<DashboardStats>('/dashboard/stats/');
+  return response.data;
+};

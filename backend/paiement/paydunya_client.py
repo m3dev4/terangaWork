@@ -21,7 +21,9 @@ class PayDunyaClient:
             self.base_url = "https://app.paydunya.com/api/v1"
         else:
             self.base_url = "https://app.paydunya.com/sandbox-api/v1"
-        
+
+        # NOTE: PayDunya v2 (disburse) ne différencie PAS live/sandbox par l'URL :
+        # on utilise systématiquement api/v2 ; l'environnement est déterminé par la clé/token.
         self.disburse_base_url = "https://app.paydunya.com/api/v2"
         
         logger.info(f"PayDunyaClient initialized in {self.mode} mode")

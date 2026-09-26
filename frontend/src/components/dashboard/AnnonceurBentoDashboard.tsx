@@ -2,6 +2,7 @@ import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getMissions, type Mission } from "../../api/missionsApi";
 import { getPropositions, type Proposition } from "../../api/propositionsApi";
+import { getDashboardStats, type AnnonceurDashboardStats } from "../../api/paiementApi";
 import { VerticalNotificationSlider } from "./VerticalNotificationSlider";
 import {
   PlusCircle,
@@ -14,6 +15,7 @@ import {
   Award,
   MessageSquare,
   ShieldCheck,
+  Clock4,
 } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import type { AuthUser } from "../../interfaces/authInterface";
@@ -39,6 +41,12 @@ export const AnnonceurBentoDashboard: React.FC<
     queryFn: getPropositions,
   });
 
+  const { data: dashboardStats, isLoading: isStatsLoading } =
+    useQuery<AnnonceurDashboardStats>({
+      queryKey: ["dashboard-stats-annonceur"],
+      queryFn: getDashboardStats,
+    });
+
   const activeMissionsCount = missions.filter(
     (m) => m.status === "IN_PROGRESS" || m.status === "OPEN"
   ).length;
@@ -48,13 +56,9 @@ export const AnnonceurBentoDashboard: React.FC<
     (p) => p.proposition_status === "PENDING"
   ).length;
 
-  const totalSpent = propositions
-    .filter(
-      (p) =>
-        p.proposition_status === "ACCEPTED" ||
-        p.proposition_status === "DELIVERED"
-    )
-    .reduce((acc, p) => acc + (p.montant_propose || 0), 0);
+  const totalSpent = dashboardStats?.total_spent_brut ?? 0;
+  const pendingSpent = dashboardStats?.total_pending_brut ?? 0;
+  const commissionsPaid = dashboardStats?.total_paid_commissions ?? 0;
 
   const missionsWithCandidates = React.useMemo(() => {
     const candidateMap = new Map<number | string, number>();
@@ -140,12 +144,29 @@ export const AnnonceurBentoDashboard: React.FC<
             </div>
           </div>
           <div>
-            <p className="text-4xl font-extrabold text-white font-heading">
-              {formatMoney(totalSpent)}
-            </p>
-            <p className="text-xs text-white/45 mt-2">
-              Montant total des paiements validés
-            </p>
+            {isStatsLoading ? (
+              <div className="h-12 w-40 bg-white/10 rounded-xl animate-pulse" />
+            ) : (
+              <>
+                <p className="text-4xl font-extrabold text-white font-heading">
+                  {formatMoney(totalSpent)}
+                </p>
+                <p className="text-xs text-white/45 mt-2">
+                  Montant total effectivement payé (collectes réussies)
+                </p>
+                {pendingSpent > 0 && (
+                  <p className="text-xs text-[#E7B84B] mt-2 flex items-center gap-1.5">
+                    <Clock4 className="w-3.5 h-3.5" />
+                    {formatMoney(pendingSpent)} en attente de paiement
+                  </p>
+                )}
+                {commissionsPaid > 0 && (
+                  <p className="text-xs text-white/60 mt-2">
+                    Commissions Jefly payées : {formatMoney(commissionsPaid)}
+                  </p>
+                )}
+              </>
+            )}
           </div>
           <div className="pt-5 border-t border-white/10 flex items-center justify-between text-xs">
             <span className="flex items-center gap-1.5 text-white/70">

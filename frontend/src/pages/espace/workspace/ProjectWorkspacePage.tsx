@@ -327,7 +327,7 @@ const ProjectWorkspacePage: React.FC = () => {
             </h1>
           </div>
 
-          {user?.role === "annonceur" && (
+          {user?.role === "annonceur" && missionStatus === "DELIVERED" && (
             <button
               onClick={() =>
                 (window.location.href = "/espace/paiements-effectues")
