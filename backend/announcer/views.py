@@ -34,7 +34,7 @@ class AnnouncerViewSet(viewsets.GenericViewSet):
                     status=status.HTTP_404_NOT_FOUND,
                 )
             return Response(self.get_serializer(profile).data)
-
+ 
         if request.method == "POST":
             if profile is not None:
                 return Response(

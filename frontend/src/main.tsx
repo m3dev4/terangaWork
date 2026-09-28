@@ -32,6 +32,7 @@ import AdminDashboardPage from "./pages/espace/admin/AdminDashboardPage.tsx";
 import AdminServicesPage from "./pages/espace/admin/AdminServicesPage.tsx";
 import AdminTechnologiesPage from "./pages/espace/admin/AdminTechnologiesPage.tsx";
 import AdminSignalementsPage from "./pages/espace/admin/AdminSignalementsPage.tsx";
+import AssistantPage from "./pages/espace/AssistantPage.tsx";
 
 const router = createBrowserRouter([
   {
@@ -122,6 +123,10 @@ const router = createBrowserRouter([
       {
         path: "messages",
         element: <MessageriePage />,
+      },
+      {
+        path: "assistant",
+        element: <AssistantPage />,
       },
       {
         path: "profil",

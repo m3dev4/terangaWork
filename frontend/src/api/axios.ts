@@ -10,7 +10,7 @@ export const instance = axios.create({
   },
 });
 
-// List of public endpoints that should NEVER include the Authorization header
+
 const PUBLIC_ENDPOINTS = [
   'auth/login/',
   'auth/register/',

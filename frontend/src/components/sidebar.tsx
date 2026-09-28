@@ -18,6 +18,7 @@ import {
   ShieldCheck,
   ChevronLeft,
   ChevronRight,
+  Bot,
 } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import getCurrentUser from '../utils/getUser';
@@ -50,6 +51,7 @@ export const FREELANCE_SIDEBAR_SECTIONS: SidebarSectionConfig[] = [
     title: 'Communication',
     items: [
       { id: 'messages', label: 'Messagerie', url: '/espace/messages', icon: MessageSquare, badge: 3, badgeVariant: 'orange' },
+      { id: 'assistant', label: "Discuter avec l'assistant", url: '/espace/assistant', icon: Bot },
     ],
   },
   {
@@ -82,6 +84,7 @@ export const ANNONCEUR_SIDEBAR_SECTIONS: SidebarSectionConfig[] = [
     title: 'Communication',
     items: [
       { id: 'messages', label: 'Messagerie', url: '/espace/messages', icon: MessageSquare, badge: 3, badgeVariant: 'orange' },
+      { id: 'assistant', label: "Discuter avec l'assistant", url: '/espace/assistant', icon: Bot },
     ],
   },
   {
