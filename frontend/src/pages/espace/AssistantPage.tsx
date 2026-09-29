@@ -99,8 +99,8 @@ const AssistantPage: React.FC = () => {
 
     <div className="flex h-full relative min-h-0 w-full overflow-hidden border border-[#111118]/8 bg-white">
       <div
-        className={`min-h-0 w-full flex justify-center items-center  border-r border-[#111118]/8  lg:w-[320px] ${
-          mobileShowChat ? 'hidden sm:flex' : 'flex'
+        className={`min-h-0 w-full shrink-0 flex justify-center items-center border-r border-[#111118]/8 md:w-[280px] lg:w-[320px] ${
+          mobileShowChat ? 'hidden md:flex' : 'flex'
         }`}
       >
         <AssistantConversationList
@@ -114,7 +114,7 @@ const AssistantPage: React.FC = () => {
         />
       </div>
 
-      <div className={`min-h-0 min-w-0 flex-1 ${!mobileShowChat ? 'hidden sm:flex' : 'flex'}`}>
+      <div className={`min-h-0 min-w-0 flex-1 ${!mobileShowChat ? 'hidden md:flex' : 'flex'}`}>
         {activeConversationId ? (
           <AssistantChatPanel
             conversationId={activeConversationId}

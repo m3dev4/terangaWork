@@ -14,7 +14,6 @@ import {
   FileText,
   Megaphone,
   Laptop,
-  Users,
   ShieldCheck,
   ChevronLeft,
   ChevronRight,
@@ -133,11 +132,15 @@ export const FOOTER_ITEMS: SidebarItemConfig[] = [
 interface SidebarProps {
   collapsed?: boolean;
   onToggleCollapse?: () => void;
+  mobile?: boolean;
+  onNavigate?: () => void;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
   collapsed = false,
   onToggleCollapse,
+  mobile = false,
+  onNavigate,
 }) => {
   const location = useLocation();
 
@@ -151,20 +154,21 @@ export const Sidebar: React.FC<SidebarProps> = ({
     if (user?.role === 'annonceur') {
       return ANNONCEUR_SIDEBAR_SECTIONS;
     }
-    if (user?.role === 'admin' || (user as any)?.is_staff) {
+    if (user?.role === 'admin' || (user && 'is_staff' in user && user.is_staff)) {
       return ADMIN_SIDEBAR_SECTIONS;
     }
     return FREELANCE_SIDEBAR_SECTIONS;
-  }, [user?.role]);
+  }, [user]);
 
   return (
     <aside
-      className={`h-screen bg-white border-r border-[#EFECE6] flex flex-col justify-between transition-all duration-200 select-none z-30 shrink-0 ${
-        collapsed ? 'w-14' : 'w-48 lg:w-52'
+      aria-label="Navigation principale"
+      className={`min-h-0 h-full bg-white border-r border-[#EFECE6] flex flex-col justify-between transition-all duration-200 select-none z-30 shrink-0 ${
+        mobile ? 'w-full flex-1 [&_a]:min-h-11 [&_a]:text-sm [&_a_span]:text-sm [&_h4]:text-xs' : collapsed ? 'w-14' : 'w-48 lg:w-52'
       }`}
     >
       {/* Top Navigation */}
-      <div className="flex flex-col flex-1 overflow-y-auto px-2 py-3">
+      <div className="flex min-h-0 flex-col flex-1 overflow-y-auto overscroll-contain px-2 py-3" onClick={(event) => { if ((event.target as HTMLElement).closest('a')) onNavigate?.(); }}>
         {/* Logo */}
         <div className={`flex items-center mb-4 ${collapsed ? 'justify-center' : 'px-1.5'}`}>
           <NavLink to="/" className="flex items-center">
@@ -190,9 +194,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
               {section.items.map((item) => {
                 const Icon = item.icon;
-                const isExactDashboard = item.url === '/espace';
+                const isExactDashboard = item.url === '/espace' || item.url === '/espace/admin';
                 const isActive = isExactDashboard
-                  ? location.pathname === '/espace' || location.pathname === '/espace/'
+                  ? location.pathname === item.url || location.pathname === `${item.url}/`
                   : location.pathname.startsWith(item.url);
 
                 if (collapsed) {
@@ -266,7 +270,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       </div>
 
       {/* Footer Section */}
-      <div className="p-2 border-t border-[#EFECE6] bg-white space-y-0.5">
+      <div className="shrink-0 p-2 border-t border-[#EFECE6] bg-white space-y-0.5" onClick={(event) => { if ((event.target as HTMLElement).closest('a')) onNavigate?.(); }}>
         {FOOTER_ITEMS.map((item) => {
           const Icon = item.icon;
           const isActive = location.pathname.startsWith(item.url);
@@ -305,7 +309,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         })}
 
         {/* Collapse button */}
-        {collapsed ? (
+        {!mobile && (collapsed ? (
           <button
             type="button"
             onClick={onToggleCollapse}
@@ -327,7 +331,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               Réduire le menu
             </span>
           </button>
-        )}
+        ))}
       </div>
     </aside>
   );

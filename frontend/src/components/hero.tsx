@@ -1,46 +1,22 @@
-import React from "react";
-import { Button } from "./ui/button";
+import { Link } from "react-router-dom";
 import { HeroJefly } from "../assets/images";
 
-const Hero = () => {
+export default function Hero() {
   return (
-    <div className="flex flex-col justify-center items-center">
-      <div className="w-full text-center -mt-17">
-        <h1 className="uppercase font-heading text-[213.74px] text-text-jefly font-extrabold text-clip tracking-tight">
-          Matcher
-        </h1>
-      </div>
-      <div className="flex items-center justify-between w-full relative">
-        <div className="flex flex-col space-y-3 max-w-2xl px-10">
-          <h2 className="font-heading text-[28px] font-bold w-xl text-text-jefly leading-snug">
-            Le bon profil, la bonne mission, sans perdre de temps.
-          </h2>
-          <p className="font-sans text-sm font-normal text-text-jefly/80 w-sm leading-relaxed">
-            Jëfly connecte freelances et clients grâce à un matching intelligent
-            qui analyse compétences et besoins réels - fini les groupes WhatsApp
-            et les dizaines de candidatures à trier à la main.
-          </p>
-          <button
-            type="button"
-            className="bg-[#f2994a] hover:bg-[#e0893a] max-w-xs py-3 px-5 rounded-lg transition-colors cursor-pointer text-white shadow-xs"
-          >
-            <span className="font-sans font-medium text-sm">
-              Matcher • Connecter • Reussir
-            </span>
-          </button>
+    <section className="landing-hero" aria-labelledby="hero-title">
+      <div className="hero-inner">
+        <h1 id="hero-title">Matcher</h1>
+        <div className="hero-copy">
+          <h2>Le bon profil, la bonne mission, sans perdre de temps.</h2>
+          <p>Jëfly connecte freelances et clients grâce à un matching intelligent
+            qui analyse compétences et besoins réels — fini les groupes WhatsApp
+            et les dizaines de candidatures à trier à la main.</p>
+          <Link className="hero-button" to="/register">Matcher • Connecter • Réussir</Link>
         </div>
-        <div className="absolute right-0">
-          <div>
-            <img
-              src={HeroJefly}
-              alt="hero landing page jefly"
-              className="ml-65 mt-30 object-contain"
-            />
-          </div>
-        </div>
+        <img className="hero-illustration" src={HeroJefly}
+          alt="Un freelance travaillant sur son ordinateur portable rouge"
+          fetchPriority="high" />
       </div>
-    </div>
+    </section>
   );
-};
-
-export default Hero;
+}

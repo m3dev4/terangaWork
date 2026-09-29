@@ -99,7 +99,7 @@ export const NotificationDropdown: React.FC = () => {
       <button
         type="button"
         onClick={() => setIsOpen((prev) => !prev)}
-        className="relative p-1.5 rounded-lg text-neutral-500 hover:bg-neutral-100 hover:text-neutral-800 transition-colors cursor-pointer focus:outline-none"
+        className="relative size-11 sm:size-auto flex items-center justify-center p-1.5 rounded-lg text-neutral-500 hover:bg-neutral-100 hover:text-neutral-800 transition-colors cursor-pointer focus-visible:outline-2 focus-visible:outline-[#1b4b6b]"
         title="Notifications"
       >
         <Bell className="w-4 h-4" strokeWidth={1.8} />
@@ -112,9 +112,9 @@ export const NotificationDropdown: React.FC = () => {
 
       {/* Dropdown panel */}
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-80 sm:w-96 bg-white rounded-xl shadow-xl border border-neutral-100 z-50 overflow-hidden text-xs">
+        <div className="fixed inset-x-3 top-14 sm:absolute sm:inset-x-auto sm:top-auto sm:right-0 sm:mt-2 sm:w-96 bg-white rounded-xl shadow-xl border border-neutral-100 z-50 overflow-hidden text-xs">
           {/* Header */}
-          <div className="p-3.5 border-b border-neutral-100 flex items-center justify-between bg-neutral-50/50">
+          <div className="p-3.5 border-b border-neutral-100 flex flex-wrap gap-2 items-center justify-between bg-neutral-50/50">
             <div className="flex items-center gap-2">
               <span className="font-semibold text-neutral-800 text-sm">
                 Notifications
@@ -138,7 +138,7 @@ export const NotificationDropdown: React.FC = () => {
           </div>
 
           {/* Body */}
-          <div className="max-h-[380px] overflow-y-auto divide-y divide-neutral-100/60">
+          <div className="max-h-[min(380px,calc(100dvh-180px))] overflow-y-auto divide-y divide-neutral-100/60">
             {isLoading && notifications.length === 0 ? (
               <div className="p-6 text-center text-neutral-400">
                 Chargement...
@@ -194,7 +194,7 @@ export const NotificationDropdown: React.FC = () => {
                         e.stopPropagation();
                         deleteNotif(notif.id);
                       }}
-                      className="opacity-0 group-hover:opacity-100 p-1 text-neutral-400 hover:text-rose-500 transition-opacity"
+                      className="sm:opacity-0 sm:group-hover:opacity-100 focus:opacity-100 p-1 text-neutral-400 hover:text-rose-500 transition-opacity"
                       title="Supprimer"
                     >
                       <Trash2 className="w-3.5 h-3.5" />

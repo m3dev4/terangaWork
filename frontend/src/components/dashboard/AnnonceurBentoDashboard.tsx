@@ -91,7 +91,7 @@ export const AnnonceurBentoDashboard: React.FC<
       <div className="relative overflow-hidden rounded-[32px] bg-[#111118] text-white p-8 sm:p-10">
         <div className="relative z-10 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8">
           <div className="space-y-4 max-w-xl">
-            <h1 className="text-3xl sm:text-4xl font-extrabold font-heading tracking-tight text-white">
+            <h1 className="text-3xl sm:break-words text-3xl sm:text-4xl font-extrabold font-heading tracking-tight text-white">
               Ravi de vous revoir, {user?.first_name || "Annonceur"}
             </h1>
             <p className="text-white/60 text-sm sm:text-base leading-relaxed">
@@ -134,7 +134,7 @@ export const AnnonceurBentoDashboard: React.FC<
       {/* ── Grille bento : indicateurs + actions ── */}
       <div className="grid grid-cols-12 gap-5 auto-rows-[minmax(132px,auto)]">
         {/* Budget — tuile haute, encre */}
-        <div className="col-span-12 md:col-span-5 md:row-span-2 rounded-[28px] bg-[#111118] text-white p-7 flex flex-col justify-between">
+        <div className="min-w-0 col-span-12 md:col-span-5 md:row-span-2 rounded-[28px] bg-[#111118] text-white p-7 flex flex-col justify-between">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold text-white/50">
               Budget & dépenses
@@ -148,7 +148,7 @@ export const AnnonceurBentoDashboard: React.FC<
               <div className="h-12 w-40 bg-white/10 rounded-xl animate-pulse" />
             ) : (
               <>
-                <p className="text-4xl font-extrabold text-white font-heading">
+                <p className="break-words text-3xl sm:text-4xl font-extrabold text-white font-heading">
                   {formatMoney(totalSpent)}
                 </p>
                 <p className="text-xs text-white/45 mt-2">
@@ -168,7 +168,7 @@ export const AnnonceurBentoDashboard: React.FC<
               </>
             )}
           </div>
-          <div className="pt-5 border-t border-white/10 flex items-center justify-between text-xs">
+          <div className="pt-5 border-t border-white/10 flex flex-wrap gap-3 items-center justify-between text-xs">
             <span className="flex items-center gap-1.5 text-white/70">
               <ShieldCheck className="w-3.5 h-3.5 text-[#E7B84B]" />
               Paiement en séquestre sécurisé
@@ -183,7 +183,7 @@ export const AnnonceurBentoDashboard: React.FC<
         </div>
 
         {/* Annonces publiées */}
-        <div className="col-span-6 md:col-span-4 rounded-[24px] bg-[#F3EBDD] border border-[#111118]/8 p-6 flex flex-col justify-between">
+        <div className="min-w-0 col-span-12 sm:col-span-6 md:col-span-4 rounded-[24px] bg-[#F3EBDD] border border-[#111118]/8 p-6 flex flex-col justify-between">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold text-[#111118]/50">
               Annonces publiées
@@ -209,7 +209,7 @@ export const AnnonceurBentoDashboard: React.FC<
         </div>
 
         {/* Candidatures reçues */}
-        <div className="col-span-6 md:col-span-3 rounded-[24px] bg-[#F3EBDD] border border-[#111118]/8 p-6 flex flex-col justify-between">
+        <div className="min-w-0 col-span-12 sm:col-span-6 md:col-span-3 rounded-[24px] bg-[#F3EBDD] border border-[#111118]/8 p-6 flex flex-col justify-between">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold text-[#111118]/50">
               Candidatures
@@ -229,7 +229,7 @@ export const AnnonceurBentoDashboard: React.FC<
         {/* Messagerie — tuile action */}
         <NavLink
           to="/espace/messages"
-          className="col-span-6 md:col-span-4 rounded-[24px] bg-[#E7B84B] p-6 flex items-center justify-between group transition-colors hover:bg-[#dfae3f]"
+          className="min-w-0 col-span-12 sm:col-span-6 md:col-span-4 rounded-[24px] bg-[#E7B84B] p-6 flex items-center justify-between group transition-colors hover:bg-[#dfae3f]"
         >
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-[#111118]/10 flex items-center justify-center text-[#111118]">
@@ -245,7 +245,7 @@ export const AnnonceurBentoDashboard: React.FC<
         {/* Évaluer candidats — tuile action */}
         <NavLink
           to="/espace/candidatures-recues"
-          className="col-span-6 md:col-span-3 rounded-[24px] bg-[#D95C38] p-6 flex items-center justify-between group transition-colors hover:bg-[#c14f2f]"
+          className="min-w-0 col-span-12 sm:col-span-6 md:col-span-3 rounded-[24px] bg-[#D95C38] p-6 flex items-center justify-between group transition-colors hover:bg-[#c14f2f]"
         >
           <div className="flex flex-col gap-3">
             <Users className="w-5 h-5 text-white" />

@@ -10,7 +10,8 @@ import Sidebar, {
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import getCurrentUser from '../../utils/getUser';
 import { LogOut, User as UserIcon } from 'lucide-react';
-import { TWLogo } from '../../assets/images';
+import MobileSidebar from '../../components/MobileSidebar';
+import useMediaQuery from '../../hooks/useMediaQuery';
 import { NotificationDropdown } from '../../components/notification/NotificationDropdown';
 import { useWebSocket, useWebSocketQuerySync } from '../../hooks/useWebSocket';
 
@@ -19,6 +20,7 @@ const EspaceLayout: React.FC = () => {
   const location = useLocation();
   const queryClient = useQueryClient();
   const [collapsed, setCollapsed] = useState(false);
+  const isDesktop = useMediaQuery({ query: '(min-width: 1024px)' });
 
   // Connect to the single shared WebSocket and sync events to React Query
   useWebSocket();
@@ -67,30 +69,28 @@ const EspaceLayout: React.FC = () => {
   }, [location.pathname, user?.role]);
 
   return (
-    <div className="flex h-screen max-h-screen w-full bg-[#FAF9F6] overflow-hidden">
+    <div className="flex h-dvh max-h-dvh w-full bg-[#FAF9F6] overflow-hidden">
       {/* Sidebar */}
-      <Sidebar collapsed={collapsed} onToggleCollapse={() => setCollapsed(!collapsed)} />
+      {isDesktop && <Sidebar collapsed={collapsed} onToggleCollapse={() => setCollapsed(!collapsed)} />}
 
       {/* Main Viewport */}
       <div className="flex-1 h-full flex flex-col overflow-hidden min-w-0">
         {/* Top Header matching Image 2 */}
-        <header className="h-12 bg-white border-b border-[#EFECE6] px-4 lg:px-5 flex items-center justify-between shrink-0 select-none z-20">
+        <header className="h-12 bg-white border-b border-[#EFECE6] px-2 sm:px-4 lg:px-5 gap-2 flex items-center justify-between shrink-0 select-none z-20">
           {/* Left: Breadcrumb */}
-          <div className="flex items-center gap-2">
-            {collapsed && (
-              <img src={TWLogo} alt="Jëfly" className="h-4.5 w-auto object-contain mr-1 sm:hidden" />
-            )}
-            <div className="flex items-center gap-1.5 text-[11px]">
-              <span className="text-neutral-400 font-normal">{breadcrumb.section}</span>
-              <span className="text-neutral-300 font-normal">›</span>
-              <span className="text-[#1b4b6b] font-semibold tracking-tight">
+          <div className="flex min-w-0 items-center gap-2">
+            {!isDesktop && <MobileSidebar key={location.key} />}
+            <div className="flex min-w-0 items-center gap-1.5 text-[11px]">
+              <span className="hidden sm:inline text-neutral-400 font-normal">{breadcrumb.section}</span>
+              <span className="hidden sm:inline text-neutral-300 font-normal">›</span>
+              <span className="truncate text-[#1b4b6b] font-semibold tracking-tight">
                 {breadcrumb.label}
               </span>
             </div>
           </div>
 
           {/* Right: Notifications & User Profile */}
-          <div className="flex items-center gap-2.5">
+          <div className="flex shrink-0 items-center gap-1 sm:gap-2.5">
             {/* Notification Dropdown */}
             <NotificationDropdown />
 
@@ -110,8 +110,8 @@ const EspaceLayout: React.FC = () => {
                 )}
               </div>
 
-              <div className="flex flex-col text-left">
-                <span className="text-[11px] font-semibold text-neutral-900 leading-tight">
+              <div className="hidden sm:flex max-w-32 flex-col text-left">
+                <span className="truncate text-[11px] font-semibold text-neutral-900 leading-tight">
                   {user?.first_name ? `${user.first_name} ${user.last_name || ''}`.trim() : 'Mon Compte'}
                 </span>
                 <span className="text-[9.5px] text-neutral-400 capitalize leading-tight">
@@ -128,7 +128,7 @@ const EspaceLayout: React.FC = () => {
             <button
               type="button"
               onClick={handleLogout}
-              className="p-1 rounded-md text-neutral-400 hover:bg-red-50 hover:text-red-600 transition-colors cursor-pointer ml-1"
+              className="size-11 sm:size-auto flex items-center justify-center p-1 rounded-md text-neutral-400 hover:bg-red-50 hover:text-red-600 transition-colors cursor-pointer ml-1"
               title="Se déconnecter"
             >
               <LogOut className="w-3.5 h-3.5" strokeWidth={1.7} />
@@ -137,7 +137,7 @@ const EspaceLayout: React.FC = () => {
         </header>
 
         {/* Page Content */}
-        <main className="flex-1 overflow-y-auto p-4 sm:p-5 lg:p-6">
+        <main className="min-h-0 min-w-0 flex-1 overflow-y-auto p-4 sm:p-5 lg:p-6">
           <Outlet />
         </main>
       </div>

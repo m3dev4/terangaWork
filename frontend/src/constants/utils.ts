@@ -65,8 +65,8 @@ export const FILTERS = [
 
 export const NAV_LINKS = [
   { label: 'Comment ça marche', href: '#comment-ca-marche' },
-  { label: 'Trouver une mission', href: '#missions' },
-  { label: 'Trouver un freelance', href: '#freelances' },
+  { label: 'Trouver une mission', href: '/espace/missions' },
+  { label: 'Trouver un freelance', href: '/register' },
   { label: 'À propos', href: '#a-propos' },
 ];
 

@@ -144,7 +144,7 @@ const AnnonceurEspacePage: React.FC = () => {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Rechercher par titre ou freelance..."
-              className="w-56 sm:w-64 rounded-2xl border border-white/15 bg-white/10 py-2 pl-8 pr-3 text-[11px] text-white placeholder:text-white/40 outline-none focus:border-[#E7B84B]"
+              className="w-full sm:w-64 rounded-2xl border border-white/15 bg-white/10 py-2 pl-8 pr-3 text-[11px] text-white placeholder:text-white/40 outline-none focus:border-[#E7B84B]"
             />
           </div>
         </div>

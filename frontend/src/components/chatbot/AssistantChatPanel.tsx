@@ -111,7 +111,7 @@ const AssistantChatPanel: React.FC<AssistantChatPanelProps> = ({
         <button
           type="button"
           onClick={onBack}
-          className="flex shrink-0 items-center gap-2 border-b border-[#111118]/8 bg-white px-4 py-3 text-sm font-medium text-[#111118]/70 hover:bg-[#F3EBDD]/40 sm:hidden"
+          className="flex shrink-0 items-center gap-2 border-b border-[#111118]/8 bg-white px-4 py-3 text-sm font-medium text-[#111118]/70 hover:bg-[#F3EBDD]/40 md:hidden"
         >
           <ArrowLeft className="h-4 w-4" />
           Retour

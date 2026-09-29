@@ -70,7 +70,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioUrl, isMine }) => {
   const progressPercent = duration > 0 ? (currentTime / duration) * 100 : 0;
 
   return (
-    <div className={`flex items-center gap-3 py-1 min-w-[200px] max-w-[260px] ${isMine ? 'text-white' : 'text-neutral-800'}`}>
+    <div className={`flex items-center gap-2 py-1 min-w-0 w-[min(200px,100%)] sm:w-[260px] max-w-full ${isMine ? 'text-white' : 'text-neutral-800'}`}>
       <audio ref={audioRef} src={audioUrl} preload="metadata" />
 
       {/* Play/Pause Button */}
@@ -93,7 +93,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioUrl, isMine }) => {
       </button>
 
       {/* Waveform & Scrubber */}
-      <div className="flex-1 flex flex-col gap-1">
+      <div className="min-w-0 flex-1 flex flex-col gap-1">
         <div className="relative flex items-center h-4 group">
           {/* Waveform bars simulation */}
           <div className="absolute inset-0 flex items-center gap-0.5 pointer-events-none opacity-40">
