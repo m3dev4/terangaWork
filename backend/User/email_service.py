@@ -21,7 +21,7 @@ from decouple import config
 resend.api_key = config("RESEND_API_KEY", default="")
 
 # Adresse d'expéditeur configurable avec nom d'affichage
-DEFAULT_FROM_EMAIL = config("DEFAULT_FROM_EMAIL", default="Jëfly <no-reply@jefly.app>")
+DEFAULT_FROM_EMAIL = config("DEFAULT_FROM_EMAIL", default="Teranga Work <no-reply@jefly.app>")
 
 # Durée de validité du code OTP (en minutes) - doit correspondre au serializer
 OTP_VALIDITY_MINUTES = 10
@@ -58,7 +58,7 @@ def _load_template(template_name: str) -> str:
 
 # Templates textuels (fallback) - restent en constantes car simples
 OTP_EMAIL_TEXT_TEMPLATE = """
-Votre code de vérification Jëfly
+Votre code de vérification Teranga Work
 
 Bonjour,
 
@@ -70,11 +70,11 @@ Ne le partagez avec personne.
 Si vous n'avez pas demandé ce code, vous pouvez ignorer cet email.
 
 ---
-Jëfly
+Teranga Work
 """
 
 RESET_EMAIL_TEXT_TEMPLATE = """
-Réinitialisation de votre mot de passe - Jëfly
+Réinitialisation de votre mot de passe - Teranga Work
 
 Bonjour,
 
@@ -91,7 +91,7 @@ Votre mot de passe ne sera pas modifié tant que vous n'aurez pas cliqué sur le
 Pour votre sécurité, ce lien ne peut être utilisé qu'une seule fois.
 
 ---
-Jëfly
+Teranga Work
 """
 
 

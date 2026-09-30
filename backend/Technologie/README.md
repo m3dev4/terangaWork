@@ -2,7 +2,7 @@
 
 ## À quoi sert cette application ?
 
-Un freelance sur Jëfly indique les **technologies** qu'il maîtrise :
+Un freelance sur Teranga Work indique les **technologies** qu'il maîtrise :
 React, Python, Figma, Django, Photoshop… Cette application gère ce
 catalogue global, avec pour chaque technologie un **logo** stocké sur
 Cloudinary (service d'hébergement d'images en ligne).

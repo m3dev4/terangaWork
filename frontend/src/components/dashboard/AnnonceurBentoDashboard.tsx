@@ -162,7 +162,7 @@ export const AnnonceurBentoDashboard: React.FC<
                 )}
                 {commissionsPaid > 0 && (
                   <p className="text-xs text-white/60 mt-2">
-                    Commissions Jefly payées : {formatMoney(commissionsPaid)}
+                    Commissions Teranga Work payées : {formatMoney(commissionsPaid)}
                   </p>
                 )}
               </>

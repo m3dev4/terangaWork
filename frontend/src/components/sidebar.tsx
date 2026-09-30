@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import { TWLogo } from '../assets/images';
+import BrandLogo from './BrandLogo';
 import {
   Home,
   Search,
@@ -172,13 +172,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         {/* Logo */}
         <div className={`flex items-center mb-4 ${collapsed ? 'justify-center' : 'px-1.5'}`}>
           <NavLink to="/" className="flex items-center">
-            <img
-              src={TWLogo}
-              alt="Jëfly"
-              className={`w-auto object-contain transition-all duration-200 ${
-                collapsed ? 'h-5' : 'h-6'
-              }`}
-            />
+            <BrandLogo iconOnly={collapsed} className={collapsed ? 'w-10' : 'w-32'} />
           </NavLink>
         </div>
 

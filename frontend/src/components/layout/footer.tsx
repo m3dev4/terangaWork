@@ -1,6 +1,6 @@
 // import { Instagram, Linkedin } from "lucide-react";
 import { Link } from "react-router-dom";
-import { TWLogo } from "../../assets/images";
+import BrandLogo from "../BrandLogo";
 import { FOOTER_COLUMNS } from "../../constants/layout";
 
 const footerDestinations: Record<string, string> = {
@@ -20,7 +20,7 @@ export default function Footer() {
       <div className="landing-container">
         <div className="footer-grid">
           <div className="footer-brand">
-            <a href="#top" aria-label="Jëfly, retour en haut"><img src={TWLogo} alt="Jëfly" width="64" height="64" /></a>
+            <a href="#top" aria-label="Teranga Work, retour en haut" className="rounded-lg bg-white p-3"><BrandLogo className="w-36" /></a>
             <p>Le matching intelligent au service du freelancing en Afrique.</p>
             <div className="footer-socials" aria-label="Réseaux sociaux">
               {/* <span role="img" aria-label="LinkedIn"><Linkedin size={16} aria-hidden="true" /></span> */}
@@ -43,7 +43,7 @@ export default function Footer() {
             </div>
           ))}
         </div>
-        <div className="footer-copyright">© 2026 Jëfly. Tous droits réservés.</div>
+        <div className="footer-copyright">© 2026 Teranga Work. Tous droits réservés.</div>
       </div>
     </footer>
   );

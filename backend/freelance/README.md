@@ -2,7 +2,7 @@
 
 ## À quoi sert cette application ?
 
-Un **freelance** est un utilisateur de Jëfly qui propose ses services. Cette
+Un **freelance** est un utilisateur de Teranga Work qui propose ses services. Cette
 application gère son **profil professionnel complet** — l'équivalent d'un CV
 en ligne :
 

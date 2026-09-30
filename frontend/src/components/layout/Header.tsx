@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { TWLogo } from "../../assets/images";
+import BrandLogo from "../BrandLogo";
 import { NAV_LINKS } from "../../constants/utils";
 import { useQuery } from "@tanstack/react-query";
 import getCurrentUser from "../../utils/getUser";
@@ -13,13 +13,9 @@ export default function Header() {
   });
   return (
     <header className="sticky top-0 z-50 bg-[#F7F7F5]/90 backdrop-blur-md">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+      <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-6">
         <a href="#top" className="flex items-center gap-2">
-          <img
-            src={TWLogo}
-            alt="Jëfly"
-            className="h-10 w-auto object-contain"
-          />
+          <BrandLogo className="w-28 sm:w-36" />
         </a>
 
         <nav className="hidden items-center gap-2 lg:flex">

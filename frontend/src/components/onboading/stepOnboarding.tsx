@@ -3,7 +3,7 @@ import { Check } from "lucide-react";
 
 // ── Palette commune au produit (annonceur / freelance / admin / onboarding) ─
 // Encre #111118 · Terracotta #D95C38 · Jaune #E7B84B · Crème #F3EBDD
-// Remplace les tokens primary-jefly / secondary-jefly (ancien bleu-marine /
+// Remplace les tokens primary-terangawork / secondary-terangawork (ancien bleu-marine /
 // orange) pour rester cohérent avec la sidebar crème de l'onboarding.
 
 export interface StepItem {

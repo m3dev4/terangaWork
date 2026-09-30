@@ -186,7 +186,7 @@ export const AdminDashboardPage: React.FC = () => {
           </h1>
           <p className="text-xs text-white/50 mt-0.5">
             Suivi des utilisateurs, missions, flux financiers et modération
-            Jëfly.
+            Teranga Work.
           </p>
         </div>
 
@@ -398,7 +398,7 @@ export const AdminDashboardPage: React.FC = () => {
           </div>
 
           <div className="mt-4 pt-3 border-t border-[#111118]/6 flex items-center justify-between text-[11px] text-[#111118]/40">
-            <span>Activité communauté Jëfly</span>
+            <span>Activité communauté Teranga Work</span>
             <span className="text-[#D95C38] font-medium flex items-center gap-0.5">
               <TrendingUp className="w-3 h-3" /> Croissance active
             </span>
@@ -497,7 +497,7 @@ export const AdminDashboardPage: React.FC = () => {
 
             <div className="p-3.5 bg-[#E7B84B]/15 rounded-xl border border-[#E7B84B]/30">
               <span className="text-[11px] font-medium text-[#a87921]">
-                Commission Jëfly
+                Commission Teranga Work
               </span>
               <p className="text-xl font-black text-[#a87921] mt-0.5">
                 {formatFCFA(stats.paiements.montant_commission)}

@@ -205,7 +205,7 @@ def _construire_contexte_donnees(role: str, data: dict[str, Any], question: str,
 def _build_system_prompt(role: str, prenom: str) -> str:
     role_humain = "freelance" if role == "freelance" else "annonceur"
     autre_role = "annonceur" if role == "freelance" else "freelance"
-    return f"""Tu es l'assistant conversationnel officiel de la plateforme Jëfly, spécialisé dans l'accompagnement des freelances et des annonceurs.
+    return f"""Tu es l'assistant conversationnel officiel de la plateforme Teranga Work, spécialisé dans l'accompagnement des freelances et des annonceurs.
 
 Tu discutes actuellement avec {prenom}, un {role_humain} authentifié.
 

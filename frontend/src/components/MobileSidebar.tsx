@@ -17,7 +17,7 @@ export default function MobileSidebar() {
             <X className="size-5" />
           </DrawerClose>
         </div>
-        <DrawerDescription className="sr-only">Accédez aux pages de votre espace Jëfly.</DrawerDescription>
+        <DrawerDescription className="sr-only">Accédez aux pages de votre espace Teranga Work.</DrawerDescription>
         <Sidebar mobile onNavigate={() => setOpen(false)} />
       </DrawerContent>
     </Drawer>

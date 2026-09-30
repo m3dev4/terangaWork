@@ -209,7 +209,7 @@ export const NotificationDropdown: React.FC = () => {
           {notifications.length > 0 && (
             <div className="p-2 text-center border-t border-neutral-100 bg-neutral-50/40">
               <span className="text-[10px] text-neutral-400">
-                Temps réel activé • Jëfly Notifications
+                Temps réel activé • Teranga Work Notifications
               </span>
             </div>
           )}

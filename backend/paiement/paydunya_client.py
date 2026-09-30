@@ -61,7 +61,7 @@ class PayDunyaClient:
                 "description": description,
             },
             "store": {
-                "name": "Jëfly",
+                "name": "Teranga Work",
             },
             "actions": {
                 "callback_url": callback_url,

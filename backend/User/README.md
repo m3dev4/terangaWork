@@ -8,7 +8,7 @@ récupérer son mot de passe, choisir son rôle (freelance ou annonceur),
 compléter son profil étape par étape (onboarding) et gérer sa photo.
 
 > **Analogie pour non-développeur** : c'est le « service d'état civil » de
-  Jëfly. Il délivre la carte d'identité (compte), vérifie l'identité (code
+  Teranga Work. Il délivre la carte d'identité (compte), vérifie l'identité (code
   par email), tient le registre des entrées (sessions) et accompagne la
   personne jusqu'à ce que son dossier soit complet (onboarding).
 
@@ -44,7 +44,7 @@ flowchart TD
 ### `models.py` — Les données gérées
 
 **`User` (le compte)** : hérite du système d'utilisateurs de Django, adapté
-à Jëfly :
+à Teranga Work :
 
 | Champ | Signification |
 |---|---|

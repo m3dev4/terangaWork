@@ -96,7 +96,7 @@ def initiate_collection(mission, user, paydunya_client=None) -> dict:
         callback_url = f"{base_setting}/collecte/" if not base_setting.endswith("/collecte/") else base_setting
     else:
         callback_url = f"{base_setting}/api/payments/webhooks/paydunya/collecte/"
-    description = f"Paiement Jefly Mission #{mission.id}: {mission.title}"
+    description = f"Paiement Teranga Work Mission #{mission.id}: {mission.title}"
 
     return_base = getattr(settings, "PAYDUNYA_RETURN_BASE_URL", "http://localhost:5173").rstrip("/")
     return_url = f"{return_base}?modal=historique-paiement&mission={mission.id}"

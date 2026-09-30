@@ -742,7 +742,7 @@ class OnboardingStepView(APIView):
 
         return Response(
             {
-                "message": "Onboarding terminé avec succès ! Bienvenue sur JeFly.",
+                "message": "Onboarding terminé avec succès ! Bienvenue sur Teranga Work.",
                 "onboarding_completed": True,
             },
             status=status.HTTP_200_OK,

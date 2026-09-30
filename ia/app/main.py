@@ -9,7 +9,7 @@ logging.basicConfig(
 )
 
 app = FastAPI(
-    title="Jëfly Matching Intelligent Microservice",
+    title="Teranga Work Matching Intelligent Microservice",
     description="Microservice stateless de calcul de pertinence et matching à deux étages (Scoring déterministe + LLM OpenRouter)",
     version="1.0.0",
 )

@@ -230,7 +230,7 @@ export const AdminTechnologiesPage: React.FC = () => {
             </h1>
             <p className="text-xs text-white/50 mt-0.5">
               Gérez le catalogue des langages, frameworks et outils disponibles
-              sur Jëfly.
+              sur Teranga Work.
             </p>
           </div>
         </div>

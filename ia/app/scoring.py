@@ -44,6 +44,7 @@ def compute_stage_1(request: MatchingRequestSchema) -> list[ResultatCandidatSche
     """
     results: list[ResultatCandidatSchema] = []
 
+# contient les critères recherchés, les candidats et le nombre de résultats à conserver.
     for candidat in request.candidats:
         score_tech = calculate_technologies_score(
             candidat.technologies, request.technologies

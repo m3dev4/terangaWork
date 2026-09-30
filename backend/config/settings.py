@@ -244,8 +244,8 @@ CORS_ALLOW_HEADERS = [
 
 # drf-spectacular (Swagger / OpenAPI)
 SPECTACULAR_SETTINGS = {
-    "TITLE": "Jëfly API",
-    "DESCRIPTION": "API REST de la plateforme Jëfly",
+    "TITLE": "Teranga Work API",
+    "DESCRIPTION": "API REST de la plateforme Teranga Work",
     "VERSION": "1.0.0",
 }
 

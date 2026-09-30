@@ -51,7 +51,7 @@ export default function HowItWorks() {
           </article>
           <div className="how-card how-stat">
             <strong>200+</strong>
-            <p>missions déjà réalisées sur Jëfly</p>
+            <p>missions déjà réalisées sur Teranga Work</p>
           </div>
         </div>
       </div>

@@ -2,7 +2,7 @@
 
 ## À quoi sert cette application ?
 
-C'est le **cœur du marché** de Jëfly. Un annonceur publie une **mission**
+C'est le **cœur du marché** de Teranga Work. Un annonceur publie une **mission**
 (un besoin à faire réaliser : « Créer une application mobile », « Refonte
 d'un logo »…) avec un budget, une date limite et un mode de paiement. Les
 freelances consultent ensuite ces missions pour y candidater.
