@@ -27,6 +27,12 @@ import {
 } from "../../api/missionsApi";
 import { fetchTechnologies } from "../../api/freelanceApi";
 import { getErrorMessage } from "../../utils/errorMessage";
+import {
+  getTodayDate,
+  MissionValidation,
+  MissionTitleValidation,
+  type MissionFormErrors,
+} from "../../validations/missionValidation";
 
 const initialForm: MissionPayload = {
   title: "",
@@ -48,6 +54,18 @@ const MissionFormPage: React.FC = () => {
   const [form, setForm] = useState<MissionPayload>(initialForm);
   const [selectedTechs, setSelectedTechs] = useState<number[]>([]);
   const [error, setError] = useState("");
+  const [fieldErrors, setFieldErrors] = useState<MissionFormErrors>({});
+
+  const fieldError = (field: keyof MissionFormErrors) => fieldErrors[field] ? (
+    <p id={`${field}-error`} role="alert" className="mt-1 text-[11px] text-red-600">
+      {fieldErrors[field]}
+    </p>
+  ) : null;
+
+  const fieldAccessibility = (field: keyof MissionFormErrors) => ({
+    "aria-invalid": Boolean(fieldErrors[field]),
+    "aria-describedby": fieldErrors[field] ? `${field}-error` : undefined,
+  });
 
   const servicesQuery = useReactQuery({
     queryKey: ["mission-services"],
@@ -118,10 +136,12 @@ const MissionFormPage: React.FC = () => {
     value: MissionPayload[K]
   ) => {
     setForm((current) => ({ ...current, [field]: value }));
+    setFieldErrors((current) => ({ ...current, [field]: undefined }));
     setError("");
   };
 
   const toggleTech = (techId: number) => {
+    setFieldErrors((current) => ({ ...current, technologies: undefined }));
     if (selectedTechs.includes(techId)) {
       setSelectedTechs(selectedTechs.filter((id) => id !== techId));
     } else {
@@ -131,22 +151,23 @@ const MissionFormPage: React.FC = () => {
 
   const submit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (
-      !form.title.trim() ||
-      !form.description.trim() ||
-      !form.date_deadline ||
-      !form.budget ||
-      !form.service
-    ) {
-      setError("Complétez tous les champs obligatoires avant de publier.");
-      return;
-    }
-    createMutation.mutate({
+    if (createMutation.isPending || generateDescriptionMutation.isPending) return;
+    setError("");
+    const result = MissionValidation.safeParse({
       ...form,
-      title: form.title.trim(),
-      description: form.description.trim(),
       technologies: selectedTechs,
     });
+    if (!result.success) {
+      const errors: MissionFormErrors = {};
+      for (const issue of result.error.issues) {
+        const field = issue.path[0] as keyof MissionFormErrors;
+        if (!errors[field]) errors[field] = issue.message;
+      }
+      setFieldErrors(errors);
+      return;
+    }
+    setFieldErrors({});
+    createMutation.mutate(result.data);
   };
 
   return (
@@ -160,6 +181,7 @@ const MissionFormPage: React.FC = () => {
       </button>
 
       <form
+        noValidate
         onSubmit={submit}
         className="overflow-hidden rounded-lg border border-[#ebe8e2] bg-white shadow-[0_8px_30px_rgba(31,42,48,0.04)]"
       >
@@ -182,12 +204,14 @@ const MissionFormPage: React.FC = () => {
               Titre de l'annonce <span className="text-[#f2994a]">*</span>
             </span>
             <input
+              {...fieldAccessibility("title")}
               className={inputClass}
               value={form.title}
               onChange={(event) => updateField("title", event.target.value)}
               placeholder="Ex : Développeur Full-Stack pour refonte de site"
               maxLength={100}
             />
+            {fieldError("title")}
           </label>
 
           <label className="block">
@@ -202,14 +226,16 @@ const MissionFormPage: React.FC = () => {
                     generateDescriptionMutation.isPending || !form.title.trim()
                   }
                   onClick={() => {
-                    if (!form.title.trim()) {
-                      setError(
-                        "Veuillez saisir un titre d'annonce avant de générer la description."
-                      );
+                    const result = MissionTitleValidation.safeParse(form.title);
+                    if (!result.success) {
+                      setFieldErrors((current) => ({
+                        ...current,
+                        title: result.error.issues[0].message,
+                      }));
                       return;
                     }
                     setError("");
-                    generateDescriptionMutation.mutate(form.title.trim());
+                    generateDescriptionMutation.mutate(result.data);
                   }}
                   className="inline-flex items-center gap-1.5 rounded-full bg-[#111118] px-3 py-1 text-[10px] font-semibold text-[#E7B84B] transition hover:bg-[#111118]/85 disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer shadow-xs"
                   title={
@@ -235,6 +261,7 @@ const MissionFormPage: React.FC = () => {
               </div>
             </div>
             <textarea
+              {...fieldAccessibility("description")}
               className={`${inputClass} min-h-[140px] resize-y`}
               value={form.description}
               onChange={(event) =>
@@ -243,6 +270,7 @@ const MissionFormPage: React.FC = () => {
               placeholder="Décrivez votre projet en détail... Ou saisissez un titre et cliquez sur 'Générer avec l'IA'."
               maxLength={1000}
             />
+            {fieldError("description")}
           </label>
 
           <div className="grid gap-4 sm:grid-cols-2">
@@ -254,7 +282,9 @@ const MissionFormPage: React.FC = () => {
                 <input
                   className={`${inputClass} pr-16`}
                   type="number"
+                  {...fieldAccessibility("budget")}
                   min="1"
+                  step="1"
                   value={form.budget || ""}
                   onChange={(event) =>
                     updateField("budget", Number(event.target.value))
@@ -265,6 +295,7 @@ const MissionFormPage: React.FC = () => {
                   FCFA
                 </span>
               </div>
+              {fieldError("budget")}
             </label>
             <label className="block">
               <span className="mb-1.5 block text-[11px] font-semibold text-neutral-700">
@@ -274,6 +305,8 @@ const MissionFormPage: React.FC = () => {
                 <input
                   className={`${inputClass} pr-9`}
                   type="date"
+                  {...fieldAccessibility("date_deadline")}
+                  min={getTodayDate()}
                   value={form.date_deadline}
                   onChange={(event) =>
                     updateField("date_deadline", event.target.value)
@@ -281,6 +314,7 @@ const MissionFormPage: React.FC = () => {
                 />
                 <CalendarDays className="pointer-events-none absolute right-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-neutral-400" />
               </div>
+              {fieldError("date_deadline")}
             </label>
           </div>
 
@@ -303,6 +337,7 @@ const MissionFormPage: React.FC = () => {
                 {servicesQuery.data?.map((service) => (
                   <button
                     key={service.id}
+                    {...fieldAccessibility("service")}
                     type="button"
                     onClick={() => updateField("service", service.id)}
                     className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-[10px] font-medium transition cursor-pointer ${
@@ -319,6 +354,7 @@ const MissionFormPage: React.FC = () => {
                 ))}
               </div>
             )}
+            {fieldError("service")}
           </div>
 
           {/* Technologies Requises */}
@@ -328,7 +364,7 @@ const MissionFormPage: React.FC = () => {
                 Technologies & Stack Requis
               </span>
               <span className="text-[10px] text-neutral-400">
-                Sélectionnez 1 ou plusieurs technologies
+                Sélectionnez les technologies utiles (facultatif)
               </span>
             </div>
             {techsQuery.isLoading ? (
@@ -342,6 +378,7 @@ const MissionFormPage: React.FC = () => {
                   return (
                     <button
                       key={tech.id}
+                      {...fieldAccessibility("technologies")}
                       type="button"
                       onClick={() => toggleTech(tech.id)}
                       className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-[10px] font-semibold transition cursor-pointer ${
@@ -370,6 +407,7 @@ const MissionFormPage: React.FC = () => {
                 })}
               </div>
             )}
+            {fieldError("technologies")}
           </div>
 
           <div>
@@ -385,6 +423,7 @@ const MissionFormPage: React.FC = () => {
               ).map(([value, label, color]) => (
                 <button
                   key={value}
+                  {...fieldAccessibility("operateurMobileMoney")}
                   type="button"
                   onClick={() =>
                     updateField(
@@ -412,10 +451,11 @@ const MissionFormPage: React.FC = () => {
                 </button>
               ))}
             </div>
+            {fieldError("operateurMobileMoney")}
           </div>
 
           {(error || servicesQuery.isError) && (
-            <p className="rounded-md bg-red-50 px-3 py-2 text-[11px] text-red-600">
+            <p role="alert" className="rounded-md bg-red-50 px-3 py-2 text-[11px] text-red-600">
               {error || "Impossible de charger les services."}
             </p>
           )}
@@ -430,7 +470,7 @@ const MissionFormPage: React.FC = () => {
             Annuler
           </button>
           <button
-            disabled={createMutation.isPending}
+            disabled={createMutation.isPending || generateDescriptionMutation.isPending}
             className="inline-flex items-center justify-center gap-2 rounded-md bg-[#f2994a] px-5 py-2.5 text-[11px] font-semibold text-white shadow-sm transition hover:bg-[#df853a] disabled:cursor-not-allowed disabled:opacity-60 cursor-pointer"
           >
             {createMutation.isPending && (

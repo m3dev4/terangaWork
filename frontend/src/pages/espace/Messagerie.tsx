@@ -84,17 +84,13 @@ const MessageriePage: React.FC = () => {
 
   return (
     <div
-      className="flex overflow-hidden bg-white shadow-sm -m-4 sm:-m-5 lg:-m-6"
-      style={{
-        width: 'calc(100% + 2rem)',
-        height: 'calc(100vh - 48px)',
-      }}
+      className="flex h-[calc(100dvh-48px)] overflow-hidden bg-white shadow-sm -m-4 sm:-m-5 lg:-m-6"
     >
       {/* ─── Conversation List (left panel) ─── */}
       <div
         className={`
-          w-full sm:w-[300px] lg:w-[320px] shrink-0 border-r border-neutral-200/60
-          ${mobileShowChat ? 'hidden sm:flex' : 'flex'}
+          w-full md:w-[280px] lg:w-[320px] shrink-0 border-r border-neutral-200/60
+          ${mobileShowChat ? 'hidden md:flex' : 'flex'}
           flex-col
         `}
       >
@@ -110,7 +106,7 @@ const MessageriePage: React.FC = () => {
       <div
         className={`
           flex-1 min-w-0 flex flex-col
-          ${!mobileShowChat ? 'hidden sm:flex' : 'flex'}
+          ${!mobileShowChat ? 'hidden md:flex' : 'flex'}
         `}
       >
         {/* Mobile back button */}
@@ -118,7 +114,7 @@ const MessageriePage: React.FC = () => {
           <button
             type="button"
             onClick={handleBackToList}
-            className="sm:hidden flex items-center gap-2 px-3 py-2 text-[12px] font-medium text-[#1b4b6b] bg-white border-b border-neutral-100 shrink-0 cursor-pointer hover:bg-neutral-50 transition-colors"
+            className="md:hidden flex items-center gap-2 px-3 py-2 text-[12px] font-medium text-[#1b4b6b] bg-white border-b border-neutral-100 shrink-0 cursor-pointer hover:bg-neutral-50 transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
             Retour aux conversations

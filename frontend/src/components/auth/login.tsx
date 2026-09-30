@@ -34,7 +34,7 @@ const LoginComponent = () => {
             <Mail className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400 pointer-events-none" />
             <Input
               id="email"
-              className="w-full bg-neutral-50 border border-neutral-200 focus:border-primary-jefly focus:bg-white text-xs sm:text-sm pl-9 pr-3 py-2.5 rounded-lg transition-colors placeholder:text-neutral-400"
+              className="w-full bg-neutral-50 border border-neutral-200 focus:border-primary-terangawork focus:bg-white text-xs sm:text-sm pl-9 pr-3 py-2.5 rounded-lg transition-colors placeholder:text-neutral-400"
               placeholder="exemple@test.com"
               type="email"
               {...register("email", { required: "L'email est obligatoire." })}

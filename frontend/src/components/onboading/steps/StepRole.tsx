@@ -57,7 +57,7 @@ export const StepRole: React.FC<StepRoleProps> = ({
         Quel est votre profil ?
       </h1>
       <p className="text-[#111118]/50 text-sm sm:text-base mb-8">
-        Choisissez le rôle qui correspond à votre activité sur TerangaWork.
+        Choisissez le rôle qui correspond à votre activité sur Teranga Work.
       </p>
 
       {/* Sélection du rôle */}

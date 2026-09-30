@@ -114,7 +114,7 @@ export const useLogin = () => {
       }
       toast.add({
         title: 'Connexion réussie',
-        description: data.message || 'Bienvenue sur Jëfly.',
+        description: data.message || 'Bienvenue sur Teranga Work.',
         type: 'success',
       });
       if (data.user?.role === 'admin' || (data.user as any)?.is_staff || (data.user as any)?.is_superuser) {

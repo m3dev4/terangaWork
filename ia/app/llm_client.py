@@ -31,7 +31,7 @@ def build_llm_prompt(contexte: str, candidatos: list[CandidatSchema]) -> str:
             f"Texte libre / Motivation: {c.texte_libre}\n"
         )
 
-    prompt = f"""Tu es un expert en recrutement et en matching d'opportunités professionnelles pour la plateforme Jëfly.
+    prompt = f"""Tu es un expert en recrutement et en matching d'opportunités professionnelles pour la plateforme Teranga Work.
 
 CONTEXTE DE LA DEMANDE (Mission ou Profil Freelance) :
 {contexte}
@@ -78,7 +78,7 @@ async def run_stage_2_llm(
         "Authorization": f"Bearer {settings.OPENROUTER_API_KEY}",
         "Content-Type": "application/json",
         "HTTP-Referer": "https://jefly.com",
-        "X-Title": "Jefly Matching Intelligent",
+        "X-Title": "Teranga Work Matching Intelligent",
     }
 
     payload = {

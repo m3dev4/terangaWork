@@ -80,6 +80,7 @@ INSTALLED_APPS = [
     "paiement",
     "message",  # Messaging
     "notification",  # Notifications
+    "chatbot",  # Assistant Conversationnel (distinct de l'app message P2P)
 ]
 
 # PayDunya Configuration
@@ -243,8 +244,8 @@ CORS_ALLOW_HEADERS = [
 
 # drf-spectacular (Swagger / OpenAPI)
 SPECTACULAR_SETTINGS = {
-    "TITLE": "Jëfly API",
-    "DESCRIPTION": "API REST de la plateforme Jëfly",
+    "TITLE": "Teranga Work API",
+    "DESCRIPTION": "API REST de la plateforme Teranga Work",
     "VERSION": "1.0.0",
 }
 
@@ -276,7 +277,7 @@ CLOUDINARY_API_SECRET = config(
 )
 
 # Microservice FastAPI Matching Intelligent
-FASTAPI_MATCHING_URL = config("FASTAPI_MATCHING_URL", default="http://localhost:8000")
+FASTAPI_MATCHING_URL = config("FASTAPI_MATCHING_URL", default="http://localhost:8001")
 FASTAPI_INTERNAL_API_KEY = config(
     "FASTAPI_INTERNAL_API_KEY", default="dev-secret-internal-key"
 )

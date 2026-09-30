@@ -1,26 +1,11 @@
-import React from "react";
+import { useCallback, useSyncExternalStore } from "react";
 
-interface Props {
-  query: string;
-}
-
-const useMediaQuery = ({ query }: Props) => {
-  const [isDesktop, setIsDesktop] = React.useState(false);
-
-  React.useEffect(() => {
-    const checkDesktop = () => {
-      setIsDesktop(window.matchMedia(query).matches);
-    };
-
-    checkDesktop();
-    window.addEventListener("resize", checkDesktop);
-
-    return () => {
-      window.removeEventListener("resize", checkDesktop);
-    };
+export default function useMediaQuery({ query }: { query: string }) {
+  const subscribe = useCallback((onChange: () => void) => {
+    const media = window.matchMedia(query);
+    media.addEventListener("change", onChange);
+    return () => media.removeEventListener("change", onChange);
   }, [query]);
-
-  return isDesktop;
-};
-
-export default useMediaQuery;
+  const getSnapshot = useCallback(() => window.matchMedia(query).matches, [query]);
+  return useSyncExternalStore(subscribe, getSnapshot, () => false);
+}

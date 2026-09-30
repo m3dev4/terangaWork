@@ -20,7 +20,7 @@ const ProfilePage: React.FC = () => {
   if (isLoading) {
     return (
       <div className="flex h-64 flex-col items-center justify-center gap-3">
-        <Loader2 className="h-8 w-8 animate-spin text-primary-jefly" />
+        <Loader2 className="h-8 w-8 animate-spin text-primary-terangawork" />
         <p className="text-xs text-neutral-500">Chargement de votre profil...</p>
       </div>
     );

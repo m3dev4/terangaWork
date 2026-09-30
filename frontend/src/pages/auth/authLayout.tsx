@@ -1,5 +1,6 @@
 import { Outlet, Link } from "react-router-dom";
-import { terangaWorkIllust, TWLogo } from "../../assets/images";
+import { terangaWorkIllust } from "../../assets/images";
+import BrandLogo from "../../components/BrandLogo";
 
 const AuthLayout = () => {
   return (
@@ -12,11 +13,7 @@ const AuthLayout = () => {
             to="/"
             className="inline-block transition-opacity hover:opacity-85"
           >
-            <img
-              src={TWLogo}
-              alt="TerangaWork logo"
-              className="h-20 w-auto object-contain"
-            />
+            <BrandLogo className="w-40 sm:w-48" />
           </Link>
         </div>
 
@@ -28,7 +25,7 @@ const AuthLayout = () => {
         {/* Footer */}
         <div className="w-full max-w-md mx-auto pt-4 text-center sm:text-left">
           <p className="text-[11px] text-neutral-400">
-            © {new Date().getFullYear()} TerangaWork. Tous droits réservés.
+            © {new Date().getFullYear()} Teranga Work. Tous droits réservés.
           </p>
         </div>
       </section>
@@ -38,7 +35,7 @@ const AuthLayout = () => {
         <div className="relative flex items-center justify-center w-full">
           <img
             src={terangaWorkIllust}
-            alt="TerangaWork Illustration"
+            alt="Teranga Work Illustration"
             className="w-full object-cover drop-shadow-sm transition-transform duration-500 hover:scale-[1.01]"
           />
         </div>

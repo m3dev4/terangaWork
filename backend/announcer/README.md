@@ -2,7 +2,7 @@
 
 ## À quoi sert cette application ?
 
-Un **annonceur** est un utilisateur de Jëfly qui publie des missions :
+Un **annonceur** est un utilisateur de Teranga Work qui publie des missions :
 une entreprise qui cherche un prestataire, ou un particulier qui a un besoin
 ponctuel. Cette application gère la **fiche d'identité professionnelle** de
 l'annonceur : nom de l'entreprise, adresse, secteur d'activité, taille…

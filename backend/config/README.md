@@ -36,7 +36,7 @@ immédiatement, avec le contexte.
 
 **Applications chargées (`INSTALLED_APPS`)** : d'abord les briques Django
 (admin, auth, sessions…), puis les bibliothèques tierces (REST Framework,
-JWT, CORS, drf-spectacular), enfin les six applications de Jëfly :
+JWT, CORS, drf-spectacular), enfin les six applications de Teranga Work :
 `User`, `Service`, `Technologie`, `freelance`, `announcer`, `mission`.
 
 **Middleware** : la « chaîne de contrôle » par laquelle passe chaque

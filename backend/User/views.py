@@ -609,7 +609,6 @@ class AuthViewSet(viewsets.ViewSet):
         )
 
 
-
 class ProfileViewSet(viewsets.ViewSet):
     """
     ViewSet de gestion du profil utilisateur authentifié.

@@ -298,7 +298,7 @@ export const InitiatePaymentModal: React.FC<InitiatePaymentModalProps> = ({
           </div>
 
           <div className="flex items-center justify-between text-[#111118]/60">
-            <span>Commission service Jëfly (10%) :</span>
+            <span>Commission service Teranga Work (10%) :</span>
             <span className="font-semibold text-[#c9922e]">
               {formatFCFA(montantCommission)}
             </span>
@@ -431,7 +431,7 @@ export const HistoriquePaiementModal: React.FC<
               </div>
               <div className="flex justify-between text-[#c9922e]">
                 <span>
-                  Commission Jëfly ({parseFloat(paiement.taux_commission) * 100}
+                  Commission Teranga Work ({parseFloat(paiement.taux_commission) * 100}
                   %) :
                 </span>
                 <span className="font-semibold">

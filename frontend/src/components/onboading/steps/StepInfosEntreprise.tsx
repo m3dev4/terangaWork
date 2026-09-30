@@ -77,7 +77,7 @@ export const StepInfosEntreprise: React.FC<StepInfosEntrepriseProps> = ({
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            placeholder="Ex: Jëfly Studio SAS"
+            placeholder="Ex: Teranga Work Studio SAS"
             className="w-full px-4 py-3 rounded-xl border border-neutral-200 focus:outline-none focus:ring-2 focus:ring-[#1b4b6b]/20 focus:border-[#1b4b6b] transition-all placeholder:text-neutral-300 text-neutral-900 text-sm"
             required
           />

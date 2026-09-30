@@ -199,7 +199,7 @@ export default function MatchingAndComparison() {
 
               <h2 className="font-heading text-3xl font-black leading-tight sm:text-5xl lg:text-6xl lg:leading-[75px]">
                 <span className="text-white">L&apos;avantage </span>
-                <span className="text-orange-400">Jëfly</span>
+                <span className="text-orange-400">Teranga Work</span>
               </h2>
 
               <p className="font-sans max-w-md text-base font-normal leading-relaxed text-gray-400 sm:text-xl sm:leading-8">
@@ -229,11 +229,11 @@ export default function MatchingAndComparison() {
 
           {/* Colonne carte comparative */}
           <div className="flex flex-1 flex-col gap-6">
-            {/* Jëfly — mis en avant */}
+            {/* Teranga Work — mis en avant */}
             <div className="flex flex-col gap-6 rounded-r-3xl border-l-4 border-orange-400 bg-gradient-to-r from-orange-400/10 to-transparent p-6 sm:p-8">
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <span className="font-heading text-2xl font-black leading-9 text-orange-400 sm:text-3xl">
-                  Jëfly
+                  Teranga Work
                 </span>
                 <span className="rounded-full bg-orange-400 px-4 py-1 font-sans text-[10px] font-black uppercase leading-4 text-neutral-800">
                   Leader Régional

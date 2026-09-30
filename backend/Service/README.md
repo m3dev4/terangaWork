@@ -2,7 +2,7 @@
 
 ## À quoi sert cette application ?
 
-Sur Jëfly, un **service** est une grande famille de prestation proposée sur la
+Sur Teranga Work, un **service** est une grande famille de prestation proposée sur la
 plateforme : par exemple « Développement web », « Design graphique »,
 « Rédaction », « Marketing digital »…
 

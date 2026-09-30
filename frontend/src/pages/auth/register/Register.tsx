@@ -8,7 +8,7 @@ const Register = () => {
       <AuthTitleDesc
         title="Créer votre"
         span="compte"
-        description="Rejoignez la communauté TerangaWork dès aujourd'hui"
+        description="Rejoignez la communauté Teranga Work dès aujourd'hui"
       />
       <RegisterComponent />
     </div>

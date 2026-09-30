@@ -1,5 +1,5 @@
 import TWLogo from "./twLogo.png";
-import HeroJefly from "./hero.svg";
+import HeroTerangaWork from "./hero.svg";
 import terangaWorkIllust from "./terangawork-illust.png";
 
-export { TWLogo, HeroJefly, terangaWorkIllust };
+export { TWLogo, HeroTerangaWork, terangaWorkIllust };

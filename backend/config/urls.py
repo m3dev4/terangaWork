@@ -34,6 +34,7 @@ urlpatterns = [
     path("api/matching/", include("matching.urls")),
     path("api/", include("message.urls")),  # Messagerie
     path("api/", include("notification.urls")),  # Notifications
+    path("api/chat/", include("chatbot.urls")),  # Assistant conversationnel
 ]
 
 if settings.DEBUG:

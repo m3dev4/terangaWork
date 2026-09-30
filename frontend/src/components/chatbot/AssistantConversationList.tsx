@@ -1,0 +1,134 @@
+import { Bot, Plus, Trash2 } from "lucide-react";
+import type { ChatConversation } from "../../api/chatApi";
+import { formatDate, truncate } from "../../utils/formatDate";
+
+interface AssistantConversationListProps {
+  conversations: ChatConversation[];
+  activeId: number | null;
+  onSelect: (conv: ChatConversation) => void;
+  onCreate: () => void;
+  onDelete: (id: number) => void;
+  isCreating: boolean;
+  isLoading: boolean;
+}
+
+const AssistantConversationList: React.FC<AssistantConversationListProps> = ({
+  conversations,
+  activeId,
+  onSelect,
+  onCreate,
+  onDelete,
+  isCreating,
+  isLoading,
+}) => {
+  return (
+    <div className="flex h-full min-h-0 flex-col w-full overflow-x-hidden bg-[#F3EBDD]/25">
+      <div className="shrink-0 border-b border-[#111118]/8 bg-white p-4">
+        <div className="mb-3 flex items-center gap-2.5">
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#111118]">
+            <Bot className="h-4.5 w-4.5 text-[#E7B84B]" strokeWidth={2} />
+          </div>
+          <div className="min-w-0">
+            <h2 className="truncate text-sm font-bold text-[#111118]">
+              Assistant Malaw
+            </h2>
+            <p className="truncate text-xs text-[#111118]/45">
+              Connecté à vos données
+            </p>
+          </div>
+        </div>
+        <button
+          type="button"
+          onClick={onCreate}
+          disabled={isCreating}
+          className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#D95C38] px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#c14f2f] disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          <Plus className="h-4 w-4 shrink-0" />
+          <span className="truncate">
+            {isCreating ? "Création…" : "Nouvelle conversation"}
+          </span>
+        </button>
+      </div>
+
+      <div className="min-h-0 flex-1 space-y-1.5 overflow-y-auto p-3">
+        {isLoading && conversations.length === 0 ? (
+          <div className="space-y-2">
+            {[0, 1, 2].map((i) => (
+              <div
+                key={i}
+                className="h-16 animate-pulse rounded-xl bg-[#111118]/5"
+              />
+            ))}
+          </div>
+        ) : conversations.length === 0 ? (
+          <div className="flex h-full flex-col items-center justify-center px-4 py-8 text-center">
+            <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-[#111118]/5">
+              <Bot className="h-6 w-6 text-[#111118]/30" />
+            </div>
+            <p className="text-sm font-medium text-[#111118]/60">
+              Aucune conversation
+            </p>
+            <p className="mt-1 text-xs text-[#111118]/35">
+              Commencez une discussion
+            </p>
+          </div>
+        ) : (
+          conversations.map((conv) => {
+            const isActive = conv.id === activeId;
+            return (
+              <div
+                key={conv.id}
+                className={`group relative rounded-xl transition-colors ${
+                  isActive ? "bg-white shadow-sm" : "hover:bg-white/70"
+                }`}
+              >
+                <button
+                  type="button"
+                  onClick={() => onSelect(conv)}
+                  className="block w-full min-w-0 p-3 pr-10 text-left"
+                >
+                  <div className="mb-1 flex min-w-0 items-center justify-between gap-2">
+                    <span
+                      className={`min-w-0 truncate text-sm font-medium ${
+                        isActive ? "text-[#111118]" : "text-[#111118]/75"
+                      }`}
+                    >
+                      {truncate(conv.title || `Conversation #${conv.id}`, 32)}
+                    </span>
+                    <span className="shrink-0 text-xs text-[#111118]/35">
+                      {formatDate(conv.updated)}
+                    </span>
+                  </div>
+                  <p className="truncate text-xs text-[#111118]/45">
+                    {conv.last_message
+                      ? typeof conv.last_message === "string"
+                        ? truncate(conv.last_message, 48)
+                        : truncate(conv.last_message.content, 48)
+                      : `${conv.message_count || 0} message${
+                          conv.message_count && conv.message_count > 1
+                            ? "s"
+                            : ""
+                        }`}
+                  </p>
+                </button>
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onDelete(conv.id);
+                  }}
+                  className="absolute right-2 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-lg text-[#111118]/30 opacity-100 transition-colors hover:bg-[#D95C38]/10 hover:text-[#D95C38] sm:opacity-0 sm:group-hover:opacity-100"
+                  title="Supprimer"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </button>
+              </div>
+            );
+          })
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default AssistantConversationList;
