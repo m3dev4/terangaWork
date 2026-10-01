@@ -5,8 +5,12 @@ set -e
 python - <<'EOF'
 import os, socket, sys, time
 
+if os.environ.get("USE_SQLITE", "True").strip().lower() in ("true", "1", "yes", "on"):
+    print("SQLite sélectionné : aucune attente MySQL nécessaire")
+    sys.exit(0)
+
 host = os.environ.get("DB_HOST", "db")
-port = int(os.environ.get("DB_PORT", "3306"))
+port = int(os.environ.get("MYSQL_DATABASE_PORT", os.environ.get("DB_PORT", "3306")))
 
 for _ in range(30):
     try:
