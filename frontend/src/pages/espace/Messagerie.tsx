@@ -89,7 +89,7 @@ const MessageriePage: React.FC = () => {
       {/* ─── Conversation List (left panel) ─── */}
       <div
         className={`
-          w-full md:w-[280px] lg:w-[320px] shrink-0 border-r border-neutral-200/60
+          w-full md:w-[280px] lg:w-[320px] shrink-0 border-r border-border/60
           ${mobileShowChat ? 'hidden md:flex' : 'flex'}
           flex-col
         `}
@@ -114,7 +114,7 @@ const MessageriePage: React.FC = () => {
           <button
             type="button"
             onClick={handleBackToList}
-            className="md:hidden flex items-center gap-2 px-3 py-2 text-[12px] font-medium text-[#1b4b6b] bg-white border-b border-neutral-100 shrink-0 cursor-pointer hover:bg-neutral-50 transition-colors"
+            className="md:hidden flex items-center gap-2 px-3 py-2 text-[12px] font-medium text-brand-ink bg-white border-b border-border shrink-0 cursor-pointer hover:bg-brand-canvas transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
             Retour aux conversations

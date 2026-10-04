@@ -45,21 +45,21 @@ const formatDate = (v: string | null) =>
 const STATUS_META = {
   PENDING: {
     label: "En attente",
-    bg: "bg-[#E7B84B]/20",
-    text: "text-[#c9922e]",
-    border: "border-[#E7B84B]/40",
+    bg: "bg-brand-peach/20",
+    text: "text-brand-ink",
+    border: "border-brand-peach/40",
   },
   ACCEPTED: {
     label: "Acceptée",
-    bg: "bg-[#F3EBDD]",
-    text: "text-[#111118]/70",
-    border: "border-[#111118]/10",
+    bg: "bg-brand-sand",
+    text: "text-muted-foreground",
+    border: "border-brand-ink/10",
   },
   REJECTED: {
     label: "Refusée",
-    bg: "bg-[#D95C38]/10",
-    text: "text-[#c14f2f]",
-    border: "border-[#D95C38]/25",
+    bg: "bg-brand-green/10",
+    text: "text-brand-violet",
+    border: "border-brand-green/25",
   },
 } as const;
 
@@ -89,12 +89,12 @@ function MatchScoreBadge({
   const isSmall = size === "sm";
   return (
     <span
-      className={`inline-flex items-center gap-1 rounded-full bg-[#111118] font-bold text-white ${
+      className={`inline-flex items-center gap-1 rounded-full bg-brand-ink font-bold text-white ${
         isSmall ? "px-2 py-0.5 text-[9px]" : "px-2.5 py-1 text-[10px]"
       }`}
     >
       <span
-        className={`rounded-full bg-[#E7B84B] ${isSmall ? "h-1.5 w-1.5" : "h-2 w-2"}`}
+        className={`rounded-full bg-brand-peach ${isSmall ? "h-1.5 w-1.5" : "h-2 w-2"}`}
       />
       {pct}% pertinence
     </span>
@@ -128,7 +128,7 @@ function CandidateModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-[#111118]/50 p-4 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-brand-ink/50 p-4 backdrop-blur-sm"
       onClick={onClose}
     >
       <div
@@ -137,15 +137,15 @@ function CandidateModal({
       >
         <button
           onClick={onClose}
-          className="absolute right-4 top-4 rounded-lg p-1 text-[#111118]/35 hover:bg-[#F3EBDD] hover:text-[#111118]"
+          className="absolute right-4 top-4 rounded-lg p-1 text-muted-foreground hover:bg-brand-sand hover:text-brand-ink"
         >
           <X className="h-4 w-4" />
         </button>
 
         {/* header */}
-        <div className="border-b border-[#111118]/6 px-6 py-5">
+        <div className="border-b border-brand-ink/6 px-6 py-5">
           <div className="flex items-start gap-4">
-            <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-2xl bg-[#F3EBDD] ring-2 ring-white">
+            <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-2xl bg-brand-sand ring-2 ring-white">
               {fi?.profile_picture ? (
                 <img
                   src={getMediaUrl(fi.profile_picture)}
@@ -154,13 +154,13 @@ function CandidateModal({
                 />
               ) : (
                 <div className="flex h-full w-full items-center justify-center">
-                  <User className="h-6 w-6 text-[#D95C38]" />
+                  <User className="h-6 w-6 text-brand-violet" />
                 </div>
               )}
             </div>
             <div className="min-w-0 flex-1">
               <div className="flex flex-wrap items-center gap-2">
-                <h2 className="font-heading text-base font-semibold text-[#111118]">
+                <h2 className="font-heading text-base font-semibold text-brand-ink">
                   {fi?.first_name} {fi?.last_name}
                 </h2>
                 <span
@@ -172,11 +172,11 @@ function CandidateModal({
                   <MatchScoreBadge score={matchingResult.score} />
                 )}
               </div>
-              <p className="mt-0.5 text-[11px] text-[#111118]/50">
+              <p className="mt-0.5 text-[11px] text-muted-foreground">
                 {fi?.title}
               </p>
               {fi?.ville && (
-                <p className="mt-1 flex items-center gap-1 text-[10px] text-[#111118]/40">
+                <p className="mt-1 flex items-center gap-1 text-[10px] text-muted-foreground">
                   <MapPin className="h-3 w-3" /> {fi.ville}
                 </p>
               )}
@@ -188,32 +188,32 @@ function CandidateModal({
         <div className="flex-1 space-y-5 overflow-y-auto px-6 py-5">
           {/* Analyse de matching */}
           {matchingResult && (
-            <div className="rounded-2xl border border-[#111118]/8 bg-[#F3EBDD]/50 p-4">
+            <div className="rounded-2xl border border-brand-ink/8 bg-brand-sand/50 p-4">
               <div className="mb-2 flex items-center justify-between">
-                <div className="flex items-center gap-1.5 font-heading text-xs font-bold text-[#111118]">
-                  <Brain className="h-4 w-4 text-[#D95C38]" />
+                <div className="flex items-center gap-1.5 font-heading text-xs font-bold text-brand-ink">
+                  <Brain className="h-4 w-4 text-brand-violet" />
                   Score de matching : {Math.round(matchingResult.score * 100)}%
                 </div>
               </div>
 
               <div className="mb-3 grid grid-cols-3 gap-2 text-center">
-                <div className="rounded-xl bg-white p-2 border border-[#111118]/6">
-                  <p className="text-[9px] text-[#111118]/45">Tech (45%)</p>
-                  <p className="text-[11px] font-bold text-[#111118]">
+                <div className="rounded-xl bg-white p-2 border border-brand-ink/6">
+                  <p className="text-[9px] text-muted-foreground">Tech (45%)</p>
+                  <p className="text-[11px] font-bold text-brand-ink">
                     {Math.round(matchingResult.score_technologies * 100)}%
                   </p>
                 </div>
-                <div className="rounded-xl bg-white p-2 border border-[#111118]/6">
-                  <p className="text-[9px] text-[#111118]/45">Service (45%)</p>
-                  <p className="text-[11px] font-bold text-[#111118]">
+                <div className="rounded-xl bg-white p-2 border border-brand-ink/6">
+                  <p className="text-[9px] text-muted-foreground">Service (45%)</p>
+                  <p className="text-[11px] font-bold text-brand-ink">
                     {Math.round(matchingResult.score_service * 100)}%
                   </p>
                 </div>
-                <div className="rounded-xl bg-white p-2 border border-[#111118]/6">
-                  <p className="text-[9px] text-[#111118]/45">
+                <div className="rounded-xl bg-white p-2 border border-brand-ink/6">
+                  <p className="text-[9px] text-muted-foreground">
                     Expérience (10%)
                   </p>
-                  <p className="text-[11px] font-bold text-[#111118]">
+                  <p className="text-[11px] font-bold text-brand-ink">
                     {matchingResult.score_experience !== null
                       ? `${Math.round(matchingResult.score_experience * 100)}%`
                       : "N/A"}
@@ -222,8 +222,8 @@ function CandidateModal({
               </div>
 
               {matchingResult.justification_ia && (
-                <div className="rounded-xl bg-white p-3 text-[11px] leading-relaxed text-[#111118]/75 border border-[#111118]/6">
-                  <p className="mb-1 font-semibold text-[#111118]">
+                <div className="rounded-xl bg-white p-3 text-[11px] leading-relaxed text-brand-ink/75 border border-brand-ink/6">
+                  <p className="mb-1 font-semibold text-brand-ink">
                     Remarque :
                   </p>
                   {matchingResult.justification_ia}
@@ -233,22 +233,22 @@ function CandidateModal({
           )}
 
           {/* mission context */}
-          <div className="flex items-center gap-2 rounded-xl bg-[#F3EBDD]/60 px-3 py-2.5">
-            <Briefcase className="h-3.5 w-3.5 text-[#D95C38]" />
-            <span className="text-[10px] font-medium text-[#111118]/50">
+          <div className="flex items-center gap-2 rounded-xl bg-brand-sand/60 px-3 py-2.5">
+            <Briefcase className="h-3.5 w-3.5 text-brand-violet" />
+            <span className="text-[10px] font-medium text-muted-foreground">
               Mission :
             </span>
-            <span className="truncate text-[10px] font-semibold text-[#111118]">
+            <span className="truncate text-[10px] font-semibold text-brand-ink">
               {missionTitle}
             </span>
           </div>
 
           {/* date livraison */}
           <div className="flex items-center gap-2">
-            <CalendarDays className="h-3.5 w-3.5 text-[#D95C38]" />
+            <CalendarDays className="h-3.5 w-3.5 text-brand-violet" />
             <div>
-              <p className="text-[9px] text-[#111118]/40">Livraison proposée</p>
-              <p className="text-[11px] font-semibold text-[#111118]">
+              <p className="text-[9px] text-muted-foreground">Livraison proposée</p>
+              <p className="text-[11px] font-semibold text-brand-ink">
                 {formatDate(proposition.date_livraison)}
               </p>
             </div>
@@ -256,11 +256,11 @@ function CandidateModal({
 
           {/* lettre */}
           <div>
-            <p className="mb-2 text-[10px] font-semibold text-[#111118]/40">
+            <p className="mb-2 text-[10px] font-semibold text-muted-foreground">
               Message de motivation
             </p>
-            <div className="rounded-xl border border-[#111118]/8 bg-[#F3EBDD]/40 px-4 py-3">
-              <p className="whitespace-pre-line text-[12px] leading-7 text-[#111118]/75">
+            <div className="rounded-xl border border-brand-ink/8 bg-brand-sand/40 px-4 py-3">
+              <p className="whitespace-pre-line text-[12px] leading-7 text-brand-ink/75">
                 {proposition.lettre_motivation}
               </p>
             </div>
@@ -269,14 +269,14 @@ function CandidateModal({
           {/* technologies */}
           {fi?.technologies && fi.technologies.length > 0 && (
             <div>
-              <p className="mb-2 text-[10px] font-semibold text-[#111118]/40">
+              <p className="mb-2 text-[10px] font-semibold text-muted-foreground">
                 Services &amp; technologies
               </p>
               <div className="flex flex-wrap gap-1.5">
                 {fi.technologies.map((t) => (
                   <span
                     key={t.id}
-                    className="rounded-lg bg-[#F3EBDD] px-2.5 py-1 text-[10px] font-medium text-[#111118]/70"
+                    className="rounded-lg bg-brand-sand px-2.5 py-1 text-[10px] font-medium text-muted-foreground"
                   >
                     {t.name}
                   </span>
@@ -287,7 +287,7 @@ function CandidateModal({
         </div>
 
         {/* footer */}
-        <div className="flex items-center justify-between gap-2 border-t border-[#111118]/6 bg-white px-6 py-4">
+        <div className="flex items-center justify-between gap-2 border-t border-brand-ink/6 bg-white px-6 py-4">
           <button
             type="button"
             onClick={() => {
@@ -301,7 +301,7 @@ function CandidateModal({
               }).toString();
               navigate(`/espace/messages?${query}`);
             }}
-            className="inline-flex items-center gap-1.5 rounded-xl border border-[#111118]/15 bg-white px-3 py-2 text-[11px] font-semibold text-[#111118] hover:bg-[#F3EBDD]/60 transition-colors cursor-pointer"
+            className="inline-flex items-center gap-1.5 rounded-xl border border-brand-ink/15 bg-white px-3 py-2 text-[11px] font-semibold text-brand-ink hover:bg-brand-sand/60 transition-colors cursor-pointer"
           >
             <MessageSquare className="h-3.5 w-3.5" /> Envoyer un message
           </button>
@@ -313,7 +313,7 @@ function CandidateModal({
                 onClick={() =>
                   mutation.mutate({ id: proposition.id, status: "REJECTED" })
                 }
-                className="flex items-center justify-center gap-2 rounded-xl border border-[#111118]/12 px-3 py-2 text-[11px] font-semibold text-[#111118]/70 transition-colors hover:border-[#D95C38]/40 hover:bg-[#D95C38]/10 hover:text-[#c14f2f] disabled:opacity-50"
+                className="flex items-center justify-center gap-2 rounded-xl border border-brand-ink/12 px-3 py-2 text-[11px] font-semibold text-muted-foreground transition-colors hover:border-brand-green/40 hover:bg-brand-green/10 hover:text-brand-violet disabled:opacity-50"
               >
                 {mutation.isPending ? (
                   <Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -327,7 +327,7 @@ function CandidateModal({
                 onClick={() =>
                   mutation.mutate({ id: proposition.id, status: "ACCEPTED" })
                 }
-                className="flex items-center justify-center gap-2 rounded-xl bg-[#111118] px-4 py-2 text-[11px] font-semibold text-white transition-colors hover:bg-[#111118]/85 disabled:opacity-50"
+                className="flex items-center justify-center gap-2 rounded-xl bg-brand-ink px-4 py-2 text-[11px] font-semibold text-white transition-colors hover:bg-brand-ink/85 disabled:opacity-50"
               >
                 {mutation.isPending ? (
                   <Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -338,7 +338,7 @@ function CandidateModal({
               </button>
             </div>
           ) : (
-            <span className="text-[11px] text-[#111118]/50">
+            <span className="text-[11px] text-muted-foreground">
               Candidature{" "}
               <span className={`font-semibold ${statusMeta.text}`}>
                 {statusMeta.label.toLowerCase()}
@@ -371,12 +371,12 @@ function CandidateCard({
       <div
         className={`flex items-center gap-4 rounded-2xl border p-4 transition-all ${
           matchingResult
-            ? "border-[#E7B84B]/40 bg-[#F3EBDD]/40"
-            : "border-[#111118]/8 bg-white"
-        } hover:border-[#111118]/15`}
+            ? "border-brand-peach/40 bg-brand-sand/40"
+            : "border-brand-ink/8 bg-white"
+        } hover:border-brand-ink/15`}
       >
         {/* avatar */}
-        <div className="h-10 w-10 shrink-0 overflow-hidden rounded-xl bg-[#F3EBDD] ring-1 ring-white">
+        <div className="h-10 w-10 shrink-0 overflow-hidden rounded-xl bg-brand-sand ring-1 ring-white">
           {fi?.profile_picture ? (
             <img
               src={getMediaUrl(fi.profile_picture)}
@@ -385,7 +385,7 @@ function CandidateCard({
             />
           ) : (
             <div className="flex h-full w-full items-center justify-center">
-              <User className="h-5 w-5 text-[#D95C38]" />
+              <User className="h-5 w-5 text-brand-violet" />
             </div>
           )}
         </div>
@@ -393,7 +393,7 @@ function CandidateCard({
         {/* info */}
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2">
-            <span className="font-heading text-[12px] font-semibold text-[#111118]">
+            <span className="font-heading text-[12px] font-semibold text-brand-ink">
               {fi?.first_name} {fi?.last_name}
             </span>
             <span
@@ -403,7 +403,7 @@ function CandidateCard({
             </span>
             {matchingResult && <MatchScoreBadge score={matchingResult.score} />}
           </div>
-          <p className="mt-0.5 truncate text-[10px] text-[#111118]/50">
+          <p className="mt-0.5 truncate text-[10px] text-muted-foreground">
             {fi?.title}
           </p>
 
@@ -412,13 +412,13 @@ function CandidateCard({
               {fi.technologies.slice(0, 4).map((t) => (
                 <span
                   key={t.id}
-                  className="rounded bg-[#F3EBDD] px-1.5 py-0.5 text-[9px] font-medium text-[#111118]/60"
+                  className="rounded bg-brand-sand px-1.5 py-0.5 text-[9px] font-medium text-muted-foreground"
                 >
                   {t.name}
                 </span>
               ))}
               {fi.technologies.length > 4 && (
-                <span className="rounded bg-[#F3EBDD] px-1.5 py-0.5 text-[9px] font-medium text-[#111118]/40">
+                <span className="rounded bg-brand-sand px-1.5 py-0.5 text-[9px] font-medium text-muted-foreground">
                   +{fi.technologies.length - 4}
                 </span>
               )}
@@ -428,7 +428,7 @@ function CandidateCard({
 
         {/* date + cta */}
         <div className="flex shrink-0 flex-col items-end gap-2">
-          <span className="text-[9px] text-[#111118]/35">
+          <span className="text-[9px] text-muted-foreground">
             {formatDate(proposition.date_livraison)}
           </span>
           <div className="flex items-center gap-1.5">
@@ -445,14 +445,14 @@ function CandidateCard({
                 }).toString();
                 navigate(`/espace/messages?${query}`);
               }}
-              className="inline-flex items-center gap-1 rounded-lg border border-[#111118]/15 bg-white px-2.5 py-1.5 text-[10px] font-semibold text-[#111118] hover:bg-[#F3EBDD]/60 transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1 rounded-lg border border-brand-ink/15 bg-white px-2.5 py-1.5 text-[10px] font-semibold text-brand-ink hover:bg-brand-sand/60 transition-colors cursor-pointer"
               title="Envoyer un message"
             >
               <MessageSquare className="h-3 w-3" /> Contacter
             </button>
             <button
               onClick={() => setOpen(true)}
-              className="inline-flex items-center gap-1 rounded-lg bg-[#111118] px-3 py-1.5 text-[10px] font-semibold text-white transition-colors hover:bg-[#111118]/85 cursor-pointer"
+              className="inline-flex items-center gap-1 rounded-lg bg-brand-ink px-3 py-1.5 text-[10px] font-semibold text-white transition-colors hover:bg-brand-ink/85 cursor-pointer"
             >
               Candidature <ChevronRight className="h-3 w-3" />
             </button>
@@ -509,23 +509,23 @@ function MissionGroup({
   }, [propositions, matchingResults]);
 
   return (
-    <div className="overflow-hidden rounded-[24px] border border-[#111118]/8 bg-[#F3EBDD]/30">
-      <div className="flex w-full items-center justify-between gap-3 border-b border-[#111118]/6 px-5 py-4">
+    <div className="overflow-hidden rounded-[24px] border border-brand-ink/8 bg-brand-sand/30">
+      <div className="flex w-full items-center justify-between gap-3 border-b border-brand-ink/6 px-5 py-4">
         <button
           type="button"
           onClick={() => setExpanded(!expanded)}
           className="flex min-w-0 flex-1 items-center gap-3 text-left transition hover:opacity-80"
         >
-          <Briefcase className="h-4 w-4 shrink-0 text-[#D95C38]" />
-          <span className="truncate font-heading text-[13px] font-semibold text-[#111118]">
+          <Briefcase className="h-4 w-4 shrink-0 text-brand-violet" />
+          <span className="truncate font-heading text-[13px] font-semibold text-brand-ink">
             {missionTitle}
           </span>
-          <span className="shrink-0 rounded-full bg-white px-2 py-0.5 text-[10px] font-semibold text-[#111118]/70 border border-[#111118]/10">
+          <span className="shrink-0 rounded-full bg-white px-2 py-0.5 text-[10px] font-semibold text-muted-foreground border border-brand-ink/10">
             {propositions.length} candidature
             {propositions.length > 1 ? "s" : ""}
           </span>
           {pending > 0 && (
-            <span className="shrink-0 rounded-full bg-[#E7B84B]/25 px-2 py-0.5 text-[10px] font-semibold text-[#c9922e]">
+            <span className="shrink-0 rounded-full bg-brand-peach/25 px-2 py-0.5 text-[10px] font-semibold text-brand-ink">
               {pending} en attente
             </span>
           )}
@@ -536,24 +536,24 @@ function MissionGroup({
             type="button"
             onClick={() => matchingMutation.mutate()}
             disabled={matchingMutation.isPending}
-            className="relative inline-flex items-center gap-1.5 rounded-xl bg-[#111118] px-3 py-1.5 text-[10px] font-semibold text-white transition-colors hover:bg-[#111118]/85 disabled:opacity-60 cursor-pointer"
+            className="relative inline-flex items-center gap-1.5 rounded-xl bg-brand-ink px-3 py-1.5 text-[10px] font-semibold text-white transition-colors hover:bg-brand-ink/85 disabled:opacity-60 cursor-pointer"
           >
             {!matchingMutation.isPending && !matchingResults && (
-              <span className="absolute -top-1 -right-1 h-2 w-2 rounded-full bg-[#D95C38]">
-                <span className="absolute inset-0 rounded-full bg-[#D95C38] animate-ping opacity-60" />
+              <span className="absolute -top-1 -right-1 h-2 w-2 rounded-full bg-brand-green">
+                <span className="absolute inset-0 rounded-full bg-brand-green animate-ping opacity-60" />
               </span>
             )}
             {matchingMutation.isPending ? (
-              <Loader2 className="h-3 w-3 animate-spin text-[#E7B84B]" />
+              <Loader2 className="h-3 w-3 animate-spin text-brand-green" />
             ) : (
-              <Brain className="h-3 w-3 text-[#E7B84B]" />
+              <Brain className="h-3 w-3 text-brand-green" />
             )}
             {matchingResults ? "Recalculer le matching" : "Lancer le matching"}
           </button>
           <button
             type="button"
             onClick={() => setExpanded(!expanded)}
-            className="p-1 text-[#111118]/35 hover:text-[#111118]/70"
+            className="p-1 text-muted-foreground hover:text-muted-foreground"
           >
             {expanded ? (
               <ChevronDown className="h-4 w-4 shrink-0" />
@@ -565,7 +565,7 @@ function MissionGroup({
       </div>
 
       {matchingMutation.isError && (
-        <div className="flex items-center gap-1.5 border-b border-[#D95C38]/20 bg-[#D95C38]/10 px-4 py-2 text-[10px] text-[#c14f2f]">
+        <div className="flex items-center gap-1.5 border-b border-brand-green/20 bg-brand-green/10 px-4 py-2 text-[10px] text-brand-violet">
           <AlertCircle className="h-3.5 w-3.5" />
           <span>Le service de matching est indisponible pour le moment.</span>
         </div>
@@ -623,17 +623,17 @@ const CandidaturesRecuesPage: React.FC = () => {
   return (
     <div className="relative mx-auto max-w-3xl pb-20">
       {/* ── En-tête ── */}
-      <div className="relative overflow-hidden rounded-[28px] bg-[#111118] text-white p-6 sm:p-7 mb-6">
+      <div className="relative overflow-hidden rounded-[28px] bg-brand-ink text-white p-6 sm:p-7 mb-6">
         <h1 className="font-heading text-xl font-semibold text-white">
           Candidatures reçues
         </h1>
-        <p className="mt-1 text-[11px] text-white/50 max-w-md">
+        <p className="mt-1 text-[11px] text-white/75 max-w-md">
           Consultez et évaluez les profils des freelances ayant postulé à vos
           annonces, avec l'appui du matching.
         </p>
         {totalPending > 0 && (
           <div className="mt-3 inline-flex items-center gap-2 rounded-xl bg-white/10 border border-white/10 px-3 py-2 text-[11px] text-white/80">
-            <CheckCircle2 className="h-3.5 w-3.5 text-[#E7B84B]" />
+            <CheckCircle2 className="h-3.5 w-3.5 text-brand-green" />
             <span>
               <strong className="text-white">{totalPending}</strong> candidature
               {totalPending > 1 ? "s" : ""} en attente de votre décision
@@ -644,22 +644,22 @@ const CandidaturesRecuesPage: React.FC = () => {
 
       {/* loading */}
       {isLoading && (
-        <div className="flex items-center justify-center gap-2 py-16 text-[11px] text-[#111118]/40">
-          <Loader2 className="h-4 w-4 animate-spin text-[#D95C38]" /> Chargement
+        <div className="flex items-center justify-center gap-2 py-16 text-[11px] text-muted-foreground">
+          <Loader2 className="h-4 w-4 animate-spin text-brand-violet" /> Chargement
           des candidatures…
         </div>
       )}
 
       {/* empty */}
       {!isLoading && propositions.length === 0 && (
-        <div className="rounded-[28px] border border-dashed border-[#111118]/15 bg-white p-12 text-center">
-          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#F3EBDD]">
-            <Briefcase className="h-5 w-5 text-[#D95C38]" />
+        <div className="rounded-[28px] border border-dashed border-brand-ink/15 bg-white p-12 text-center">
+          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-sand">
+            <Briefcase className="h-5 w-5 text-brand-violet" />
           </div>
-          <p className="text-[12px] font-medium text-[#111118]/60">
+          <p className="text-[12px] font-medium text-muted-foreground">
             Aucune candidature reçue pour le moment.
           </p>
-          <p className="mt-1 text-[11px] text-[#111118]/40">
+          <p className="mt-1 text-[11px] text-muted-foreground">
             Les freelances qui postuleront à vos missions apparaîtront ici.
           </p>
         </div>

@@ -127,7 +127,7 @@ export const PersonalInfoTab: React.FC<PersonalInfoTabProps> = ({ user }) => {
   };
 
   return (
-    <div className="rounded-2xl border border-[#ebe8e2] bg-white p-6 sm:p-8 shadow-xs max-w-3xl">
+    <div className="rounded-2xl border border-brand-sand bg-white p-6 sm:p-8 shadow-xs max-w-3xl">
       {successMessage && (
         <div className="mb-6 flex items-center gap-2 rounded-lg bg-emerald-50 border border-emerald-200 p-3 text-[11px] font-semibold text-emerald-700">
           <CheckCircle className="h-4 w-4 shrink-0 text-emerald-600" />
@@ -154,7 +154,7 @@ export const PersonalInfoTab: React.FC<PersonalInfoTabProps> = ({ user }) => {
                   className="h-full w-full object-cover"
                 />
               ) : (
-                <User className="h-12 w-12 text-neutral-400" />
+                <User className="h-12 w-12 text-muted-foreground" />
               )}
             </div>
 
@@ -179,7 +179,7 @@ export const PersonalInfoTab: React.FC<PersonalInfoTabProps> = ({ user }) => {
         <div className="grid gap-5 sm:grid-cols-2">
           {/* Nom */}
           <div>
-            <label className="mb-1.5 block font-semibold uppercase text-[9.5px] tracking-wider text-neutral-400">
+            <label className="mb-1.5 block font-semibold uppercase text-[9.5px] tracking-wider text-muted-foreground">
               Nom
             </label>
             <input
@@ -187,13 +187,13 @@ export const PersonalInfoTab: React.FC<PersonalInfoTabProps> = ({ user }) => {
               value={lastName}
               onChange={(e) => setLastName(e.target.value)}
               placeholder="Votre nom"
-              className="w-full rounded-lg border border-[#e7e3dc] bg-[#faf9f7] px-3.5 py-2.5 text-[11.5px] font-medium text-neutral-800 outline-none focus:border-[#1b4b6b] focus:bg-white transition-all"
+              className="w-full rounded-lg border border-border bg-brand-canvas px-3.5 py-2.5 text-[11.5px] font-medium text-brand-ink outline-none focus:border-brand-violet focus:bg-white transition-all"
             />
           </div>
 
           {/* Prénom */}
           <div>
-            <label className="mb-1.5 block font-semibold uppercase text-[9.5px] tracking-wider text-neutral-400">
+            <label className="mb-1.5 block font-semibold uppercase text-[9.5px] tracking-wider text-muted-foreground">
               Prénom
             </label>
             <input
@@ -201,14 +201,14 @@ export const PersonalInfoTab: React.FC<PersonalInfoTabProps> = ({ user }) => {
               value={firstName}
               onChange={(e) => setFirstName(e.target.value)}
               placeholder="Votre prénom"
-              className="w-full rounded-lg border border-[#e7e3dc] bg-[#faf9f7] px-3.5 py-2.5 text-[11.5px] font-medium text-neutral-800 outline-none focus:border-[#1b4b6b] focus:bg-white transition-all"
+              className="w-full rounded-lg border border-border bg-brand-canvas px-3.5 py-2.5 text-[11.5px] font-medium text-brand-ink outline-none focus:border-brand-violet focus:bg-white transition-all"
             />
           </div>
         </div>
 
         {/* Email */}
         <div>
-          <label className="mb-1.5 block font-semibold uppercase text-[9.5px] tracking-wider text-neutral-400">
+          <label className="mb-1.5 block font-semibold uppercase text-[9.5px] tracking-wider text-muted-foreground">
             Adresse Email
           </label>
           <div className="relative">
@@ -216,9 +216,9 @@ export const PersonalInfoTab: React.FC<PersonalInfoTabProps> = ({ user }) => {
               type="email"
               readOnly
               value={email}
-              className="w-full rounded-lg border border-[#e7e3dc] bg-[#faf9f7] px-3.5 py-2.5 text-[11.5px] font-medium text-neutral-600 outline-none cursor-not-allowed"
+              className="w-full rounded-lg border border-border bg-brand-canvas px-3.5 py-2.5 text-[11.5px] font-medium text-neutral-600 outline-none cursor-not-allowed"
             />
-            <Lock className="absolute right-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-neutral-400" />
+            <Lock className="absolute right-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
           </div>
         </div>
 
@@ -226,7 +226,7 @@ export const PersonalInfoTab: React.FC<PersonalInfoTabProps> = ({ user }) => {
         <div className="grid gap-5 sm:grid-cols-2">
           {/* Téléphone */}
           <div>
-            <label className="mb-1.5 block font-semibold uppercase text-[9.5px] tracking-wider text-neutral-400">
+            <label className="mb-1.5 block font-semibold uppercase text-[9.5px] tracking-wider text-muted-foreground">
               Téléphone
             </label>
             <input
@@ -234,20 +234,20 @@ export const PersonalInfoTab: React.FC<PersonalInfoTabProps> = ({ user }) => {
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               placeholder="+221 77 000 00 00"
-              className="w-full rounded-lg border border-[#e7e3dc] bg-white px-3.5 py-2.5 text-[11.5px] font-medium text-neutral-800 outline-none focus:border-[#1b4b6b] transition-all"
+              className="w-full rounded-lg border border-border bg-white px-3.5 py-2.5 text-[11.5px] font-medium text-brand-ink outline-none focus:border-brand-violet transition-all"
             />
           </div>
 
           {/* Mot de passe */}
           <div>
             <div className="mb-1.5 flex items-center justify-between">
-              <label className="font-semibold uppercase text-[9.5px] tracking-wider text-neutral-400">
+              <label className="font-semibold uppercase text-[9.5px] tracking-wider text-muted-foreground">
                 Mot de passe
               </label>
               <button
                 type="button"
                 onClick={() => setIsPasswordModalOpen(true)}
-                className="text-[10px] font-semibold text-[#1b4b6b] hover:underline cursor-pointer"
+                className="text-[10px] font-semibold text-brand-ink hover:underline cursor-pointer"
               >
                 Modifier le mot de passe
               </button>
@@ -256,21 +256,21 @@ export const PersonalInfoTab: React.FC<PersonalInfoTabProps> = ({ user }) => {
               type="password"
               readOnly
               value="••••••••••••"
-              className="w-full rounded-lg border border-[#e7e3dc] bg-[#faf9f7] px-3.5 py-2.5 text-[11.5px] text-neutral-400 outline-none cursor-not-allowed"
+              className="w-full rounded-lg border border-border bg-brand-canvas px-3.5 py-2.5 text-[11.5px] text-muted-foreground outline-none cursor-not-allowed"
             />
           </div>
         </div>
 
         {/* Freelance Specific Section */}
         {isFreelance && (
-          <div className="border-t border-[#f0ede8] pt-6 space-y-4">
-            <h4 className="font-heading text-xs font-bold text-neutral-900">
+          <div className="border-t border-brand-sand pt-6 space-y-4">
+            <h4 className="font-heading text-xs font-bold text-brand-ink">
               Profil Freelance & Portfolio Links
             </h4>
 
             {/* Title */}
             <div>
-              <label className="mb-1.5 block font-semibold uppercase text-[9.5px] tracking-wider text-neutral-400">
+              <label className="mb-1.5 block font-semibold uppercase text-[9.5px] tracking-wider text-muted-foreground">
                 Titre Professionnel
               </label>
               <input
@@ -278,13 +278,13 @@ export const PersonalInfoTab: React.FC<PersonalInfoTabProps> = ({ user }) => {
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="ex: Développeur Lead Fullstack React & Python"
-                className="w-full rounded-lg border border-[#e7e3dc] bg-white px-3.5 py-2.5 text-[11.5px] font-medium text-neutral-800 outline-none focus:border-[#1b4b6b]"
+                className="w-full rounded-lg border border-border bg-white px-3.5 py-2.5 text-[11.5px] font-medium text-brand-ink outline-none focus:border-brand-violet"
               />
             </div>
 
             {/* Description */}
             <div>
-              <label className="mb-1.5 block font-semibold uppercase text-[9.5px] tracking-wider text-neutral-400">
+              <label className="mb-1.5 block font-semibold uppercase text-[9.5px] tracking-wider text-muted-foreground">
                 Présentation / Bio
               </label>
               <textarea
@@ -292,14 +292,14 @@ export const PersonalInfoTab: React.FC<PersonalInfoTabProps> = ({ user }) => {
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="Décrivez votre expérience, vos spécialités et votre passion..."
-                className="w-full rounded-lg border border-[#e7e3dc] bg-white px-3.5 py-2.5 text-[11.5px] font-medium text-neutral-800 outline-none focus:border-[#1b4b6b]"
+                className="w-full rounded-lg border border-border bg-white px-3.5 py-2.5 text-[11.5px] font-medium text-brand-ink outline-none focus:border-brand-violet"
               />
             </div>
 
             {/* GitHub & LinkedIn Links */}
             <div className="grid gap-5 sm:grid-cols-2">
               <div>
-                <label className="mb-1.5 block font-semibold uppercase text-[9.5px] tracking-wider text-neutral-400 flex items-center gap-1">
+                <label className="mb-1.5 block font-semibold uppercase text-[9.5px] tracking-wider text-muted-foreground flex items-center gap-1">
                   Profil GitHub
                 </label>
                 <input
@@ -307,12 +307,12 @@ export const PersonalInfoTab: React.FC<PersonalInfoTabProps> = ({ user }) => {
                   value={githubUrl}
                   onChange={(e) => setGithubUrl(e.target.value)}
                   placeholder="https://github.com/username"
-                  className="w-full rounded-lg border border-[#e7e3dc] bg-white px-3.5 py-2.5 text-[11.5px] font-medium text-neutral-800 outline-none focus:border-[#1b4b6b]"
+                  className="w-full rounded-lg border border-border bg-white px-3.5 py-2.5 text-[11.5px] font-medium text-brand-ink outline-none focus:border-brand-violet"
                 />
               </div>
 
               <div>
-                <label className="mb-1.5 block font-semibold uppercase text-[9.5px] tracking-wider text-neutral-400 flex items-center gap-1">
+                <label className="mb-1.5 block font-semibold uppercase text-[9.5px] tracking-wider text-muted-foreground flex items-center gap-1">
                   Profil LinkedIn
                 </label>
                 <input
@@ -320,7 +320,7 @@ export const PersonalInfoTab: React.FC<PersonalInfoTabProps> = ({ user }) => {
                   value={linkedinUrl}
                   onChange={(e) => setLinkedinUrl(e.target.value)}
                   placeholder="https://linkedin.com/in/username"
-                  className="w-full rounded-lg border border-[#e7e3dc] bg-white px-3.5 py-2.5 text-[11.5px] font-medium text-neutral-800 outline-none focus:border-[#1b4b6b]"
+                  className="w-full rounded-lg border border-border bg-white px-3.5 py-2.5 text-[11.5px] font-medium text-brand-ink outline-none focus:border-brand-violet"
                 />
               </div>
             </div>
@@ -328,11 +328,11 @@ export const PersonalInfoTab: React.FC<PersonalInfoTabProps> = ({ user }) => {
         )}
 
         {/* Save Button */}
-        <div className="border-t border-[#f0ede8] pt-4 flex justify-end">
+        <div className="border-t border-brand-sand pt-4 flex justify-end">
           <button
             type="submit"
             disabled={updateProfileMutation.isPending}
-            className="rounded-lg bg-[#1b4b6b] px-6 py-2.5 text-[11px] font-semibold text-white hover:bg-[#143952] transition-all shadow-2xs cursor-pointer flex items-center gap-2 disabled:opacity-50"
+            className="rounded-lg bg-brand-violet px-6 py-2.5 text-[11px] font-semibold text-white hover:bg-brand-violet transition-all shadow-2xs cursor-pointer flex items-center gap-2 disabled:opacity-50"
           >
             {updateProfileMutation.isPending && (
               <Loader2 className="h-3.5 w-3.5 animate-spin" />

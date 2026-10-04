@@ -8,6 +8,7 @@ from proposition.models import Proposition, PropositionStatus
 from matching.models import ResultatMatching
 
 logger = logging.getLogger(__name__)
+MIN_MISSION_TECH_COVERAGE = 0.5
 
 
 class MatchingServiceUnavailableError(Exception):
@@ -174,7 +175,7 @@ def process_candidats_recommandes(mission: Mission) -> dict:
     }
 
 
-def process_missions_recommandees(freelance: Freelancee) -> dict:
+def process_missions_recommandees(freelance: Freelancee, *, scoring_only=False) -> dict:
     """
     Rassemble les missions ouvertes, appelle le microservice, persiste et enrichit le résultat.
     """
@@ -217,7 +218,10 @@ def process_missions_recommandees(freelance: Freelancee) -> dict:
         "technologies": technologies,
         "service": service,
         "candidats": candidats_payload,
-        "top_n": 4,
+        "top_n": len(missions) if scoring_only else 4,
+        "type_matching": "missions",
+        "scoring_only": scoring_only,
+        "min_technology_score": 0.0 if scoring_only else MIN_MISSION_TECH_COVERAGE,
     }
 
     fastapi_res = call_fastapi_matching(payload)
@@ -234,22 +238,24 @@ def process_missions_recommandees(freelance: Freelancee) -> dict:
         annonceur_user = m.annonceur.user
         annonceur_nom = f"{annonceur_user.first_name} {annonceur_user.last_name}".strip()
 
-        # Persistance en BD
-        ResultatMatching.objects.create(
-            mission=m,
-            freelance=freelance,
-            proposition=None,
-            score=item["score"],
-            score_technologies=item["score_technologies"],
-            score_service=item["score_service"],
-            score_experience=item.get("score_experience"),
-            justification_ia=item.get("justification_ia"),
-        )
+        # La consultation initiale ne crée pas d'historique de matching.
+        if not scoring_only:
+            ResultatMatching.objects.create(
+                mission=m,
+                freelance=freelance,
+                proposition=None,
+                score=item["score"],
+                score_technologies=item["score_technologies"],
+                score_service=item["score_service"],
+                score_experience=item.get("score_experience"),
+                justification_ia=item.get("justification_ia"),
+            )
 
         enriched_results.append(
             {
                 "candidat_id": cand_id,
                 "mission_id": m.id,
+                "compatible": item["score_technologies"] >= MIN_MISSION_TECH_COVERAGE,
                 "mission_title": m.title,
                 "mission_description": m.description,
                 "mission_budget": m.budget,

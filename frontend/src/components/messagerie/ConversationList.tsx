@@ -38,7 +38,7 @@ const ConversationList: React.FC<ConversationListProps> = ({
       <div className="px-3 pt-3 pb-2 shrink-0">
         <div className="relative">
           <Search
-            className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-neutral-400"
+            className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground"
             strokeWidth={1.8}
           />
           <input
@@ -46,7 +46,7 @@ const ConversationList: React.FC<ConversationListProps> = ({
             placeholder="Rechercher..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-9 pr-3 py-2 text-[12px] rounded-lg border border-neutral-200 bg-neutral-50/60 placeholder:text-neutral-400 text-neutral-700 focus:outline-none focus:ring-1.5 focus:ring-[#1b4b6b]/20 focus:border-[#1b4b6b]/30 transition-all"
+            className="w-full pl-9 pr-3 py-2 text-[12px] rounded-lg border border-border bg-brand-canvas/60 placeholder:text-muted-foreground text-brand-ink focus:outline-none focus:ring-1.5 focus:ring-brand-violet/20 focus:border-brand-violet/30 transition-all"
           />
         </div>
       </div>
@@ -81,7 +81,7 @@ const ConversationList: React.FC<ConversationListProps> = ({
                 : "Aucune conversation pour le moment"}
             </p>
             {!searchQuery && (
-              <p className="text-[10.5px] text-neutral-400 mt-1 leading-relaxed">
+              <p className="text-[10.5px] text-muted-foreground mt-1 leading-relaxed">
                 Les échanges s'ouvrent dès que vous contactez un membre depuis
                 vos candidatures ou vos projets.
               </p>

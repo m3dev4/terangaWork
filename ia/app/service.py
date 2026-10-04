@@ -19,6 +19,8 @@ async def process_matching_request(
 
     # Étage 1
     stage_1_results = compute_stage_1(request)
+    if request.scoring_only or not stage_1_results:
+        return MatchingResponseSchema(resultats=stage_1_results, etage_2_reussi=False)
 
     # Filtrer les candidats originaux correspondant au Top N retenu par l'Étage 1
     top_ids = {r.candidat_id for r in stage_1_results}
@@ -26,7 +28,14 @@ async def process_matching_request(
 
     # Étage 2
     final_results, etage_2_reussi = await run_stage_2_llm(
-        contexte=request.contexte,
+        contexte=(
+            f"{request.contexte}\n"
+            f"Service cible : {request.service}\n"
+            f"Technologies du {'freelance' if request.type_matching == 'missions' else 'besoin mission'} : "
+            f"{', '.join(request.technologies)}\n"
+            "N'attribue aucune compétence non déclarée au freelance. "
+            "Les technologies d'une mission sont des exigences, pas des compétences du freelance."
+        ),
         top_candidates_input=top_candidates_input,
         stage_1_results=stage_1_results,
     )

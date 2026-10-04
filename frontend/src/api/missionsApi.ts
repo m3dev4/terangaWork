@@ -26,7 +26,7 @@ export interface Mission {
   technologies?: number[];
   technologies_detail?: TechnologieOption[];
   annonceur: number;
-  status?: 'OPEN' | 'IN_PROGRESS' | 'DELIVERED' | 'COMPLETED' | 'CLOSED';
+  status?: 'PENDING_MODERATION' | 'OPEN' | 'IN_PROGRESS' | 'DELIVERED' | 'COMPLETED' | 'CLOSED';
   created_at: string;
   updated_at: string;
 }
@@ -99,4 +99,4 @@ export const moderateMission = async ({
     { decision }
   );
   return response.data;
-};
+};

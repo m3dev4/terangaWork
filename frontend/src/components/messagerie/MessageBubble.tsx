@@ -40,8 +40,8 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
           ) : (
             <div className={`w-full h-full flex items-center justify-center ${
               isMine 
-                ? 'bg-gradient-to-br from-[#f2994a] to-[#e87b2d]' 
-                : 'bg-gradient-to-br from-[#1b4b6b] to-[#2d6f9a]'
+                ? 'bg-gradient-to-br from-brand-green to-brand-green' 
+                : 'bg-gradient-to-br from-brand-violet to-brand-violet'
             }`}>
               <span className="text-white text-[9px] font-semibold">{initials}</span>
             </div>
@@ -55,8 +55,8 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
           className={`
             px-3.5 py-2.5 text-[12.5px] leading-relaxed
             ${isMine
-              ? 'bg-[#1b4b6b] text-white rounded-2xl rounded-br-md'
-              : 'bg-white text-neutral-800 rounded-2xl rounded-bl-md border border-neutral-100 shadow-[0_1px_3px_rgba(0,0,0,0.04)]'
+              ? 'bg-brand-violet text-white rounded-2xl rounded-br-md'
+              : 'bg-white text-brand-ink rounded-2xl rounded-bl-md border border-border shadow-[0_1px_3px_rgba(0,0,0,0.04)]'
             }
           `}
         >
@@ -69,14 +69,14 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
         
         {/* Time + read receipt */}
         <div className={`flex items-center gap-1 mt-1 ${isMine ? 'justify-end' : 'justify-start'}`}>
-          <span className="text-[9.5px] text-neutral-400 font-medium">
+          <span className="text-[9.5px] text-muted-foreground font-medium">
             {formatMessageTime(message.date_envoi)}
           </span>
           {isMine && (
             message.est_lu ? (
-              <CheckCheck className="w-3 h-3 text-[#1b4b6b]" strokeWidth={2.5} />
+              <CheckCheck className="w-3 h-3 text-brand-ink" strokeWidth={2.5} />
             ) : (
-              <Check className="w-3 h-3 text-neutral-400" strokeWidth={2.5} />
+              <Check className="w-3 h-3 text-muted-foreground" strokeWidth={2.5} />
             )
           )}
         </div>

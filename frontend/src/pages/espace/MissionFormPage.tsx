@@ -45,7 +45,7 @@ const initialForm: MissionPayload = {
 };
 
 const inputClass =
-  "w-full rounded-md border border-[#e8e5df] bg-white px-3 py-2.5 text-[12px] text-[#252525] outline-none transition focus:border-[#1b4b6b] focus:ring-2 focus:ring-[#1b4b6b]/10";
+  "w-full rounded-md border border-border bg-white px-3 py-2.5 text-[12px] text-[#252525] outline-none transition focus:border-brand-violet focus:ring-2 focus:ring-brand-violet/10";
 
 const MissionFormPage: React.FC = () => {
   const navigate = useNavigate();
@@ -175,7 +175,7 @@ const MissionFormPage: React.FC = () => {
       <button
         type="button"
         onClick={() => navigate("/espace/mes-annonces")}
-        className="mb-4 inline-flex items-center gap-2 text-[11px] font-medium text-neutral-500 hover:text-[#1b4b6b]"
+        className="mb-4 inline-flex items-center gap-2 text-[11px] font-medium text-muted-foreground hover:text-brand-ink"
       >
         <ArrowLeft className="h-3.5 w-3.5" /> Retour à mes annonces
       </button>
@@ -183,16 +183,16 @@ const MissionFormPage: React.FC = () => {
       <form
         noValidate
         onSubmit={submit}
-        className="overflow-hidden rounded-lg border border-[#ebe8e2] bg-white shadow-[0_8px_30px_rgba(31,42,48,0.04)]"
+        className="overflow-hidden rounded-lg border border-brand-sand bg-white shadow-[0_8px_30px_rgba(31,42,48,0.04)]"
       >
-        <div className="border-b border-[#f0ede8] px-5 py-4 sm:px-7">
-          <p className="mb-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-[#f2994a]">
+        <div className="border-b border-brand-sand px-5 py-4 sm:px-7">
+          <p className="mb-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-brand-violet">
             Nouvelle annonce
           </p>
           <h1 className="font-heading text-xl font-semibold tracking-tight text-[#20252a]">
             Détails de l'annonce
           </h1>
-          <p className="mt-1 text-[11px] text-neutral-400">
+          <p className="mt-1 text-[11px] text-muted-foreground">
             Présentez clairement votre besoin et les technologies requises pour
             attirer les bons profils.
           </p>
@@ -200,8 +200,8 @@ const MissionFormPage: React.FC = () => {
 
         <div className="space-y-5 px-5 py-6 sm:px-7">
           <label className="block">
-            <span className="mb-1.5 block text-[11px] font-semibold text-neutral-700">
-              Titre de l'annonce <span className="text-[#f2994a]">*</span>
+            <span className="mb-1.5 block text-[11px] font-semibold text-brand-ink">
+              Titre de l'annonce <span className="text-brand-violet">*</span>
             </span>
             <input
               {...fieldAccessibility("title")}
@@ -216,8 +216,8 @@ const MissionFormPage: React.FC = () => {
 
           <label className="block">
             <div className="mb-1.5 flex flex-wrap items-center justify-between gap-2">
-              <span className="text-[11px] font-semibold text-neutral-700">
-                Description <span className="text-[#f2994a]">*</span>
+              <span className="text-[11px] font-semibold text-brand-ink">
+                Description <span className="text-brand-violet">*</span>
               </span>
               <div className="flex items-center gap-3">
                 <button
@@ -237,7 +237,7 @@ const MissionFormPage: React.FC = () => {
                     setError("");
                     generateDescriptionMutation.mutate(result.data);
                   }}
-                  className="inline-flex items-center gap-1.5 rounded-full bg-[#111118] px-3 py-1 text-[10px] font-semibold text-[#E7B84B] transition hover:bg-[#111118]/85 disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer shadow-xs"
+                  className="inline-flex items-center gap-1.5 rounded-full bg-brand-ink px-3 py-1 text-[10px] font-semibold text-brand-green transition hover:bg-brand-ink/85 disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer shadow-xs"
                   title={
                     !form.title.trim()
                       ? "Saisissez un titre pour générer une description par l'IA"
@@ -245,9 +245,9 @@ const MissionFormPage: React.FC = () => {
                   }
                 >
                   {generateDescriptionMutation.isPending ? (
-                    <Loader2 className="h-3 w-3 animate-spin text-[#E7B84B]" />
+                    <Loader2 className="h-3 w-3 animate-spin text-brand-green" />
                   ) : (
-                    <Sparkles className="h-3 w-3 text-[#E7B84B]" />
+                    <Sparkles className="h-3 w-3 text-brand-green" />
                   )}
                   <span>
                     {generateDescriptionMutation.isPending
@@ -255,7 +255,7 @@ const MissionFormPage: React.FC = () => {
                       : "Générer avec l'IA"}
                   </span>
                 </button>
-                <span className="text-[10px] text-neutral-400">
+                <span className="text-[10px] text-muted-foreground">
                   {form.description.length} / 1000 caractères
                 </span>
               </div>
@@ -275,8 +275,8 @@ const MissionFormPage: React.FC = () => {
 
           <div className="grid gap-4 sm:grid-cols-2">
             <label className="block">
-              <span className="mb-1.5 block text-[11px] font-semibold text-neutral-700">
-                Budget estimé <span className="text-[#f2994a]">*</span>
+              <span className="mb-1.5 block text-[11px] font-semibold text-brand-ink">
+                Budget estimé <span className="text-brand-violet">*</span>
               </span>
               <div className="relative">
                 <input
@@ -291,15 +291,15 @@ const MissionFormPage: React.FC = () => {
                   }
                   placeholder="0"
                 />
-                <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-medium text-neutral-400">
+                <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-medium text-muted-foreground">
                   FCFA
                 </span>
               </div>
               {fieldError("budget")}
             </label>
             <label className="block">
-              <span className="mb-1.5 block text-[11px] font-semibold text-neutral-700">
-                Date limite <span className="text-[#f2994a]">*</span>
+              <span className="mb-1.5 block text-[11px] font-semibold text-brand-ink">
+                Date limite <span className="text-brand-violet">*</span>
               </span>
               <div className="relative">
                 <input
@@ -312,7 +312,7 @@ const MissionFormPage: React.FC = () => {
                     updateField("date_deadline", event.target.value)
                   }
                 />
-                <CalendarDays className="pointer-events-none absolute right-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-neutral-400" />
+                <CalendarDays className="pointer-events-none absolute right-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
               </div>
               {fieldError("date_deadline")}
             </label>
@@ -321,15 +321,15 @@ const MissionFormPage: React.FC = () => {
           {/* Service Requis */}
           <div>
             <div className="mb-2 flex items-center justify-between">
-              <span className="text-[11px] font-semibold text-neutral-700">
-                Service requis <span className="text-[#f2994a]">*</span>
+              <span className="text-[11px] font-semibold text-brand-ink">
+                Service requis <span className="text-brand-violet">*</span>
               </span>
-              <span className="text-[10px] text-neutral-400">
+              <span className="text-[10px] text-muted-foreground">
                 Un service par annonce
               </span>
             </div>
             {servicesQuery.isLoading ? (
-              <div className="text-[11px] text-neutral-400">
+              <div className="text-[11px] text-muted-foreground">
                 Chargement des services...
               </div>
             ) : (
@@ -342,8 +342,8 @@ const MissionFormPage: React.FC = () => {
                     onClick={() => updateField("service", service.id)}
                     className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-[10px] font-medium transition cursor-pointer ${
                       form.service === service.id
-                        ? "border-[#1b4b6b] bg-[#1b4b6b] text-white"
-                        : "border-[#e7e3dc] bg-white text-neutral-600 hover:border-[#1b4b6b]"
+                        ? "border-brand-violet bg-brand-violet text-white"
+                        : "border-border bg-white text-neutral-600 hover:border-brand-violet"
                     }`}
                   >
                     {form.service === service.id && (
@@ -360,15 +360,15 @@ const MissionFormPage: React.FC = () => {
           {/* Technologies Requises */}
           <div>
             <div className="mb-2 flex items-center justify-between">
-              <span className="text-[11px] font-semibold text-neutral-700">
+              <span className="text-[11px] font-semibold text-brand-ink">
                 Technologies & Stack Requis
               </span>
-              <span className="text-[10px] text-neutral-400">
+              <span className="text-[10px] text-muted-foreground">
                 Sélectionnez les technologies utiles (facultatif)
               </span>
             </div>
             {techsQuery.isLoading ? (
-              <div className="text-[11px] text-neutral-400">
+              <div className="text-[11px] text-muted-foreground">
                 Chargement des technologies...
               </div>
             ) : (
@@ -383,8 +383,8 @@ const MissionFormPage: React.FC = () => {
                       onClick={() => toggleTech(tech.id)}
                       className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-[10px] font-semibold transition cursor-pointer ${
                         isSelected
-                          ? "border-[#1b4b6b] bg-[#1b4b6b] text-white shadow-xs"
-                          : "border-[#e7e3dc] bg-white text-neutral-700 hover:border-neutral-400"
+                          ? "border-brand-violet bg-brand-violet text-white shadow-xs"
+                          : "border-border bg-white text-brand-ink hover:border-neutral-400"
                       }`}
                     >
                       {tech.imgUrl ? (
@@ -394,13 +394,13 @@ const MissionFormPage: React.FC = () => {
                           className="h-3 w-3 object-contain"
                         />
                       ) : (
-                        <Code2 className="h-3 w-3 text-[#f2994a]" />
+                        <Code2 className="h-3 w-3 text-brand-violet" />
                       )}
                       {tech.name}
                       {isSelected ? (
                         <X className="h-3 w-3 ml-0.5 text-white/80" />
                       ) : (
-                        <Plus className="h-3 w-3 ml-0.5 text-neutral-400" />
+                        <Plus className="h-3 w-3 ml-0.5 text-muted-foreground" />
                       )}
                     </button>
                   );
@@ -411,14 +411,14 @@ const MissionFormPage: React.FC = () => {
           </div>
 
           <div>
-            <span className="mb-2 block text-[11px] font-semibold text-neutral-700">
+            <span className="mb-2 block text-[11px] font-semibold text-brand-ink">
               Mode de paiement souhaité
             </span>
             <div className="grid gap-3 sm:grid-cols-2">
               {(
                 [
-                  ["WAVE", "Wave", "bg-[#e8f7fb]"],
-                  ["OM", "Orange Money", "bg-[#fff0e9]"],
+                  ["WAVE", "Wave", "bg-brand-canvas"],
+                  ["OM", "Orange Money", "bg-brand-peach"],
                 ] as const
               ).map(([value, label, color]) => (
                 <button
@@ -433,20 +433,20 @@ const MissionFormPage: React.FC = () => {
                   }
                   className={`relative flex items-center gap-3 rounded-md border p-3 text-left transition cursor-pointer ${
                     form.operateurMobileMoney === value
-                      ? "border-[#1b4b6b] ring-1 ring-[#1b4b6b]"
-                      : "border-[#e7e3dc] hover:border-[#c9c2b9]"
+                      ? "border-brand-violet ring-1 ring-brand-violet"
+                      : "border-border hover:border-border"
                   }`}
                 >
                   <span
                     className={`flex h-8 w-8 items-center justify-center rounded-full ${color}`}
                   >
-                    <WalletCards className="h-4 w-4 text-[#1b4b6b]" />
+                    <WalletCards className="h-4 w-4 text-brand-ink" />
                   </span>
-                  <span className="text-[11px] font-semibold text-neutral-800">
+                  <span className="text-[11px] font-semibold text-brand-ink">
                     {label}
                   </span>
                   {form.operateurMobileMoney === value && (
-                    <Check className="absolute right-3 h-3.5 w-3.5 text-[#1b4b6b]" />
+                    <Check className="absolute right-3 h-3.5 w-3.5 text-brand-ink" />
                   )}
                 </button>
               ))}
@@ -461,17 +461,17 @@ const MissionFormPage: React.FC = () => {
           )}
         </div>
 
-        <div className="flex flex-col-reverse items-stretch justify-between gap-3 border-t border-[#f0ede8] bg-[#fcfbf9] px-5 py-4 sm:flex-row sm:items-center sm:px-7">
+        <div className="flex flex-col-reverse items-stretch justify-between gap-3 border-t border-brand-sand bg-brand-canvas px-5 py-4 sm:flex-row sm:items-center sm:px-7">
           <button
             type="button"
             onClick={() => navigate("/espace/mes-annonces")}
-            className="text-[11px] font-medium text-neutral-500 hover:text-neutral-800 cursor-pointer"
+            className="text-[11px] font-medium text-muted-foreground hover:text-brand-ink cursor-pointer"
           >
             Annuler
           </button>
           <button
             disabled={createMutation.isPending || generateDescriptionMutation.isPending}
-            className="inline-flex items-center justify-center gap-2 rounded-md bg-[#f2994a] px-5 py-2.5 text-[11px] font-semibold text-white shadow-sm transition hover:bg-[#df853a] disabled:cursor-not-allowed disabled:opacity-60 cursor-pointer"
+            className="inline-flex items-center justify-center gap-2 rounded-md bg-brand-green px-5 py-2.5 text-[11px] font-semibold text-brand-ink shadow-sm transition hover:bg-brand-green-hover disabled:cursor-not-allowed disabled:opacity-60 cursor-pointer"
           >
             {createMutation.isPending && (
               <Loader2 className="h-3.5 w-3.5 animate-spin" />

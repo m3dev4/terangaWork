@@ -24,6 +24,7 @@ export interface MatchingCandidatsResponse {
 export interface MatchingMissionResult {
   candidat_id: number;
   mission_id: number;
+  compatible: boolean;
   mission_title: string;
   mission_description: string;
   mission_budget: number;
@@ -56,5 +57,10 @@ export const getMissionsRecommandees = async (): Promise<MatchingMissionsRespons
   const response = await instance.post<MatchingMissionsResponse>(
     'matching/missions-recommandees/'
   );
+  return response.data;
+};
+
+export const getMissionsCompatibilite = async (): Promise<MatchingMissionsResponse> => {
+  const response = await instance.get<MatchingMissionsResponse>('matching/missions-compatibilite/');
   return response.data;
 };

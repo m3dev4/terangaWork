@@ -2,7 +2,7 @@ import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getMissions, type Mission } from "../../api/missionsApi";
 import { getPropositions, type Proposition } from "../../api/propositionsApi";
-import { getDashboardStats, type AnnonceurDashboardStats } from "../../api/paiementApi";
+import { getDashboardStats } from "../../api/paiementApi";
 import { VerticalNotificationSlider } from "./VerticalNotificationSlider";
 import {
   PlusCircle,
@@ -21,7 +21,7 @@ import { NavLink } from "react-router-dom";
 import type { AuthUser } from "../../interfaces/authInterface";
 
 interface AnnonceurBentoDashboardProps {
-  user: AuthUser | undefined;
+  user: AuthUser | null | undefined;
 }
 
 export const AnnonceurBentoDashboard: React.FC<
@@ -38,13 +38,14 @@ export const AnnonceurBentoDashboard: React.FC<
     Proposition[]
   >({
     queryKey: ["propositions"],
-    queryFn: getPropositions,
+    queryFn: () => getPropositions(),
   });
 
   const { data: dashboardStats, isLoading: isStatsLoading } =
-    useQuery<AnnonceurDashboardStats>({
+    useQuery({
       queryKey: ["dashboard-stats-annonceur"],
       queryFn: getDashboardStats,
+      select: (stats) => stats.role === "annonceur" ? stats : undefined,
     });
 
   const activeMissionsCount = missions.filter(
@@ -88,20 +89,20 @@ export const AnnonceurBentoDashboard: React.FC<
   return (
     <div className="space-y-5 max-w-7xl mx-auto pb-16">
       {/* ── Bandeau d'accueil ── */}
-      <div className="relative overflow-hidden rounded-[32px] bg-[#111118] text-white p-8 sm:p-10">
+      <div className="relative overflow-hidden rounded-[32px] bg-brand-ink text-white p-8 sm:p-10">
         <div className="relative z-10 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8">
           <div className="space-y-4 max-w-xl">
             <h1 className="text-3xl sm:break-words text-3xl sm:text-4xl font-extrabold font-heading tracking-tight text-white">
               Ravi de vous revoir, {user?.first_name || "Annonceur"}
             </h1>
-            <p className="text-white/60 text-sm sm:text-base leading-relaxed">
+            <p className="text-white/75 text-sm sm:text-base leading-relaxed">
               Vos offres, vos candidats les plus actifs et l'avancement de vos
               projets, en un coup d'œil.
             </p>
             <div className="pt-2 flex flex-wrap items-center gap-3">
               <NavLink
                 to="/espace/publier-mission"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-[#D95C38] hover:bg-[#c14f2f] text-white text-sm font-semibold transition-colors"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-brand-green hover:bg-brand-green-hover text-brand-ink text-sm font-semibold transition-colors"
               >
                 <PlusCircle className="w-4.5 h-4.5" />
                 <span>Publier une nouvelle mission</span>
@@ -110,20 +111,20 @@ export const AnnonceurBentoDashboard: React.FC<
                 to="/espace/candidatures-recues"
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-white/10 hover:bg-white/15 text-white text-sm font-medium transition-colors border border-white/10"
               >
-                <Users className="w-4.5 h-4.5 text-[#E7B84B]" />
+                <Users className="w-4.5 h-4.5 text-brand-green" />
                 <span>Candidatures reçues ({pendingPropositionsCount})</span>
               </NavLink>
             </div>
           </div>
 
           <div className="shrink-0 text-left lg:text-right">
-            <p className="text-xs font-medium text-white/45">
+            <p className="text-xs font-medium text-white/75">
               Annonces publiées
             </p>
             <p className="text-5xl font-extrabold text-white font-heading mt-1">
               {missions.length}
             </p>
-            <p className="text-xs text-[#E7B84B] font-semibold mt-1">
+            <p className="text-xs text-brand-green font-semibold mt-1">
               {activeMissionsCount} active{activeMissionsCount > 1 ? "s" : ""}{" "}
               en ce moment
             </p>
@@ -134,12 +135,12 @@ export const AnnonceurBentoDashboard: React.FC<
       {/* ── Grille bento : indicateurs + actions ── */}
       <div className="grid grid-cols-12 gap-5 auto-rows-[minmax(132px,auto)]">
         {/* Budget — tuile haute, encre */}
-        <div className="min-w-0 col-span-12 md:col-span-5 md:row-span-2 rounded-[28px] bg-[#111118] text-white p-7 flex flex-col justify-between">
+        <div className="min-w-0 col-span-12 md:col-span-5 md:row-span-2 rounded-[28px] bg-brand-ink text-white p-7 flex flex-col justify-between">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-white/50">
+            <span className="text-xs font-semibold text-white/75">
               Budget & dépenses
             </span>
-            <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-[#E7B84B]">
+            <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-brand-green">
               <DollarSign className="w-5 h-5" />
             </div>
           </div>
@@ -151,17 +152,17 @@ export const AnnonceurBentoDashboard: React.FC<
                 <p className="break-words text-3xl sm:text-4xl font-extrabold text-white font-heading">
                   {formatMoney(totalSpent)}
                 </p>
-                <p className="text-xs text-white/45 mt-2">
+                <p className="text-xs text-white/75 mt-2">
                   Montant total effectivement payé (collectes réussies)
                 </p>
                 {pendingSpent > 0 && (
-                  <p className="text-xs text-[#E7B84B] mt-2 flex items-center gap-1.5">
+                  <p className="text-xs text-brand-green mt-2 flex items-center gap-1.5">
                     <Clock4 className="w-3.5 h-3.5" />
                     {formatMoney(pendingSpent)} en attente de paiement
                   </p>
                 )}
                 {commissionsPaid > 0 && (
-                  <p className="text-xs text-white/60 mt-2">
+                  <p className="text-xs text-white/75 mt-2">
                     Commissions Teranga Work payées : {formatMoney(commissionsPaid)}
                   </p>
                 )}
@@ -170,12 +171,12 @@ export const AnnonceurBentoDashboard: React.FC<
           </div>
           <div className="pt-5 border-t border-white/10 flex flex-wrap gap-3 items-center justify-between text-xs">
             <span className="flex items-center gap-1.5 text-white/70">
-              <ShieldCheck className="w-3.5 h-3.5 text-[#E7B84B]" />
+              <ShieldCheck className="w-3.5 h-3.5 text-brand-green" />
               Paiement en séquestre sécurisé
             </span>
             <NavLink
               to="/espace/candidatures-recues"
-              className="font-semibold text-[#E7B84B] hover:text-[#f0c869]"
+              className="font-semibold text-brand-green hover:text-brand-green"
             >
               Historique
             </NavLink>
@@ -183,24 +184,24 @@ export const AnnonceurBentoDashboard: React.FC<
         </div>
 
         {/* Annonces publiées */}
-        <div className="min-w-0 col-span-12 sm:col-span-6 md:col-span-4 rounded-[24px] bg-[#F3EBDD] border border-[#111118]/8 p-6 flex flex-col justify-between">
+        <div className="min-w-0 col-span-12 sm:col-span-6 md:col-span-4 rounded-[24px] bg-brand-sand border border-brand-ink/8 p-6 flex flex-col justify-between">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-[#111118]/50">
+            <span className="text-xs font-semibold text-muted-foreground">
               Annonces publiées
             </span>
-            <Briefcase className="w-4.5 h-4.5 text-[#D95C38]" />
+            <Briefcase className="w-4.5 h-4.5 text-brand-violet" />
           </div>
           <div>
-            <p className="text-3xl font-extrabold text-[#111118] font-heading">
+            <p className="text-3xl font-extrabold text-brand-ink font-heading">
               {missions.length}
             </p>
             <div className="flex items-center justify-between mt-1">
-              <span className="text-xs text-[#111118]/55">
+              <span className="text-xs text-muted-foreground">
                 {activeMissionsCount} en cours
               </span>
               <NavLink
                 to="/espace/mes-annonces"
-                className="text-xs font-semibold text-[#D95C38] hover:underline"
+                className="text-xs font-semibold text-brand-violet hover:underline"
               >
                 Gérer
               </NavLink>
@@ -209,18 +210,18 @@ export const AnnonceurBentoDashboard: React.FC<
         </div>
 
         {/* Candidatures reçues */}
-        <div className="min-w-0 col-span-12 sm:col-span-6 md:col-span-3 rounded-[24px] bg-[#F3EBDD] border border-[#111118]/8 p-6 flex flex-col justify-between">
+        <div className="min-w-0 col-span-12 sm:col-span-6 md:col-span-3 rounded-[24px] bg-brand-sand border border-brand-ink/8 p-6 flex flex-col justify-between">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-[#111118]/50">
+            <span className="text-xs font-semibold text-muted-foreground">
               Candidatures
             </span>
-            <Users className="w-4.5 h-4.5 text-[#D95C38]" />
+            <Users className="w-4.5 h-4.5 text-brand-violet" />
           </div>
           <div>
-            <p className="text-3xl font-extrabold text-[#111118] font-heading">
+            <p className="text-3xl font-extrabold text-brand-ink font-heading">
               {totalPropositionsCount}
             </p>
-            <p className="text-xs text-[#111118]/55 mt-1">
+            <p className="text-xs text-muted-foreground mt-1">
               {pendingPropositionsCount} en attente
             </p>
           </div>
@@ -229,23 +230,23 @@ export const AnnonceurBentoDashboard: React.FC<
         {/* Messagerie — tuile action */}
         <NavLink
           to="/espace/messages"
-          className="min-w-0 col-span-12 sm:col-span-6 md:col-span-4 rounded-[24px] bg-[#E7B84B] p-6 flex items-center justify-between group transition-colors hover:bg-[#dfae3f]"
+          className="min-w-0 col-span-12 sm:col-span-6 md:col-span-4 rounded-[24px] bg-brand-peach p-6 flex items-center justify-between group transition-colors hover:bg-brand-peach"
         >
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-[#111118]/10 flex items-center justify-center text-[#111118]">
+            <div className="w-10 h-10 rounded-xl bg-brand-ink/10 flex items-center justify-center text-brand-ink">
               <MessageSquare className="w-5 h-5" />
             </div>
-            <span className="text-sm font-bold text-[#111118]">
+            <span className="text-sm font-bold text-brand-ink">
               Messagerie directe
             </span>
           </div>
-          <ArrowRight className="w-4 h-4 text-[#111118] group-hover:translate-x-1 transition-transform" />
+          <ArrowRight className="w-4 h-4 text-brand-ink group-hover:translate-x-1 transition-transform" />
         </NavLink>
 
         {/* Évaluer candidats — tuile action */}
         <NavLink
           to="/espace/candidatures-recues"
-          className="min-w-0 col-span-12 sm:col-span-6 md:col-span-3 rounded-[24px] bg-[#D95C38] p-6 flex items-center justify-between group transition-colors hover:bg-[#c14f2f]"
+          className="min-w-0 col-span-12 sm:col-span-6 md:col-span-3 rounded-[24px] bg-brand-green p-6 flex items-center justify-between group transition-colors hover:bg-brand-green-hover"
         >
           <div className="flex flex-col gap-3">
             <Users className="w-5 h-5 text-white" />
@@ -262,24 +263,24 @@ export const AnnonceurBentoDashboard: React.FC<
         {/* Colonne principale */}
         <div className="col-span-12 lg:col-span-7 space-y-5">
           {/* Missions les plus candidatées */}
-          <div className="rounded-[28px] bg-white border border-[#111118]/8 p-6">
+          <div className="rounded-[28px] bg-white border border-brand-ink/8 p-6">
             <div className="flex items-center justify-between pb-4 mb-1">
               <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-xl bg-[#F3EBDD] flex items-center justify-center text-[#D95C38]">
+                <div className="w-9 h-9 rounded-xl bg-brand-sand flex items-center justify-center text-brand-violet">
                   <Award className="w-4.5 h-4.5" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-bold font-heading text-[#111118]">
+                  <h3 className="text-sm font-bold font-heading text-brand-ink">
                     Missions les plus candidatées
                   </h3>
-                  <p className="text-xs text-[#111118]/50">
+                  <p className="text-xs text-muted-foreground">
                     Classées par nombre d'offres reçues
                   </p>
                 </div>
               </div>
               <NavLink
                 to="/espace/mes-annonces"
-                className="text-xs font-semibold text-[#D95C38] hover:underline flex items-center gap-1 shrink-0"
+                className="text-xs font-semibold text-brand-violet hover:underline flex items-center gap-1 shrink-0"
               >
                 Toutes mes annonces
                 <ChevronRight className="w-3.5 h-3.5" />
@@ -288,16 +289,16 @@ export const AnnonceurBentoDashboard: React.FC<
 
             {isMissionsLoading || isPropsLoading ? (
               <div className="space-y-2.5">
-                <div className="h-16 bg-[#F3EBDD] rounded-2xl animate-pulse" />
-                <div className="h-16 bg-[#F3EBDD] rounded-2xl animate-pulse" />
+                <div className="h-16 bg-brand-sand rounded-2xl animate-pulse" />
+                <div className="h-16 bg-brand-sand rounded-2xl animate-pulse" />
               </div>
             ) : topMissions.length === 0 ? (
-              <div className="text-center py-10 bg-[#F3EBDD]/60 rounded-2xl">
-                <Briefcase className="w-8 h-8 text-[#111118]/25 mx-auto mb-2" />
-                <p className="text-xs font-semibold text-[#111118]/70">
+              <div className="text-center py-10 bg-brand-sand/60 rounded-2xl">
+                <Briefcase className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
+                <p className="text-xs font-semibold text-muted-foreground">
                   Aucune candidature reçue pour le moment
                 </p>
-                <p className="text-[11px] text-[#111118]/45 mt-1">
+                <p className="text-[11px] text-muted-foreground mt-1">
                   Publiez une nouvelle mission pour attirer des candidats.
                 </p>
               </div>
@@ -306,30 +307,30 @@ export const AnnonceurBentoDashboard: React.FC<
                 {topMissions.map((m, idx) => (
                   <div
                     key={m.id}
-                    className="p-4 rounded-2xl bg-[#F3EBDD]/60 hover:bg-[#F3EBDD] transition-colors flex items-center justify-between gap-4 group"
+                    className="p-4 rounded-2xl bg-brand-sand/60 hover:bg-brand-sand transition-colors flex items-center justify-between gap-4 group"
                   >
                     <div className="flex items-center gap-3.5 min-w-0">
-                      <div className="w-8 h-8 rounded-lg bg-[#E7B84B] text-[#111118] flex items-center justify-center font-bold text-xs shrink-0">
+                      <div className="w-8 h-8 rounded-lg bg-brand-peach text-brand-ink flex items-center justify-center font-bold text-xs shrink-0">
                         {idx + 1}
                       </div>
                       <div className="min-w-0 space-y-0.5">
-                        <p className="text-sm font-bold text-[#111118] truncate">
+                        <p className="text-sm font-bold text-brand-ink truncate">
                           {m.title || (m as any).titre || `Mission #${m.id}`}
                         </p>
-                        <p className="text-xs text-[#111118]/55">
+                        <p className="text-xs text-muted-foreground">
                           {m.budget ? formatMoney(m.budget) : "Sur devis"} ·{" "}
                           {m.status}
                         </p>
                       </div>
                     </div>
                     <div className="flex items-center gap-3 shrink-0">
-                      <span className="px-3 py-1 rounded-full bg-white text-[#111118] font-bold text-xs border border-[#111118]/10">
+                      <span className="px-3 py-1 rounded-full bg-white text-brand-ink font-bold text-xs border border-brand-ink/10">
                         {m.candidateCount} candidat
                         {m.candidateCount > 1 ? "s" : ""}
                       </span>
                       <NavLink
                         to="/espace/candidatures-recues"
-                        className="inline-flex items-center gap-1 text-[#D95C38] text-xs font-semibold hover:underline"
+                        className="inline-flex items-center gap-1 text-brand-violet text-xs font-semibold hover:underline"
                       >
                         Voir
                         <ArrowRight className="w-3.5 h-3.5" />
@@ -342,24 +343,24 @@ export const AnnonceurBentoDashboard: React.FC<
           </div>
 
           {/* Projets actifs */}
-          <div className="rounded-[28px] bg-white border border-[#111118]/8 p-6">
+          <div className="rounded-[28px] bg-white border border-brand-ink/8 p-6">
             <div className="flex items-center justify-between pb-4 mb-1">
               <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-xl bg-[#F3EBDD] flex items-center justify-center text-[#111118]">
+                <div className="w-9 h-9 rounded-xl bg-brand-sand flex items-center justify-center text-brand-ink">
                   <CheckCircle2 className="w-4.5 h-4.5" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-bold font-heading text-[#111118]">
+                  <h3 className="text-sm font-bold font-heading text-brand-ink">
                     Projets actifs
                   </h3>
-                  <p className="text-xs text-[#111118]/50">
+                  <p className="text-xs text-muted-foreground">
                     Missions attribuées, en cours de réalisation
                   </p>
                 </div>
               </div>
               <NavLink
                 to="/espace/projets"
-                className="text-xs font-semibold text-[#111118] hover:underline flex items-center gap-1 shrink-0"
+                className="text-xs font-semibold text-brand-ink hover:underline flex items-center gap-1 shrink-0"
               >
                 Workspaces
                 <ChevronRight className="w-3.5 h-3.5" />
@@ -367,11 +368,11 @@ export const AnnonceurBentoDashboard: React.FC<
             </div>
 
             {activeProjects.length === 0 ? (
-              <div className="text-center py-8 bg-[#F3EBDD]/60 rounded-2xl">
-                <p className="text-xs font-semibold text-[#111118]/70">
+              <div className="text-center py-8 bg-brand-sand/60 rounded-2xl">
+                <p className="text-xs font-semibold text-muted-foreground">
                   Aucun projet en cours de développement
                 </p>
-                <p className="text-[11px] text-[#111118]/45 mt-1">
+                <p className="text-[11px] text-muted-foreground mt-1">
                   Acceptez une candidature pour démarrer un contrat.
                 </p>
               </div>
@@ -380,20 +381,20 @@ export const AnnonceurBentoDashboard: React.FC<
                 {activeProjects.slice(0, 3).map((prop) => (
                   <div
                     key={prop.id}
-                    className="p-4 rounded-2xl bg-[#F3EBDD]/60 flex items-center justify-between gap-4"
+                    className="p-4 rounded-2xl bg-brand-sand/60 flex items-center justify-between gap-4"
                   >
                     <div className="space-y-0.5 min-w-0">
-                      <p className="text-sm font-bold text-[#111118] truncate">
+                      <p className="text-sm font-bold text-brand-ink truncate">
                         {prop.mission_title || `Mission #${prop.mission}`}
                       </p>
-                      <p className="text-xs text-[#111118]/55">
+                      <p className="text-xs text-muted-foreground">
                         {prop.freelance_info?.first_name || "Freelance"}{" "}
                         {prop.freelance_info?.last_name || "Freelance"} ·{" "}
                       </p>
                     </div>
                     <NavLink
                       to="/espace/projets"
-                      className="shrink-0 px-3.5 py-1.5 rounded-xl bg-[#111118] hover:bg-[#111118]/85 text-white text-xs font-semibold transition-colors"
+                      className="shrink-0 px-3.5 py-1.5 rounded-xl bg-brand-ink hover:bg-brand-ink/85 text-white text-xs font-semibold transition-colors"
                     >
                       Workspace
                     </NavLink>

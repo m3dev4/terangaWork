@@ -52,7 +52,7 @@ export const DangerZoneCard: React.FC = () => {
         </div>
 
         <div className="flex-1">
-          <h3 className="font-heading text-sm font-bold text-neutral-900">
+          <h3 className="font-heading text-sm font-bold text-brand-ink">
             Supprimer le compte
           </h3>
           <p className="mt-1 text-[11px] text-neutral-600 leading-relaxed max-w-xl">
@@ -84,7 +84,7 @@ export const DangerZoneCard: React.FC = () => {
           >
             <button
               onClick={handleCloseModal}
-              className="absolute right-4 top-4 rounded-md p-1 text-neutral-400 hover:bg-neutral-100"
+              className="absolute right-4 top-4 rounded-md p-1 text-muted-foreground hover:bg-neutral-100"
             >
               <X className="h-4 w-4" />
             </button>
@@ -93,10 +93,10 @@ export const DangerZoneCard: React.FC = () => {
               <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-red-100 text-red-600">
                 <AlertTriangle className="h-6 w-6" />
               </div>
-              <h3 className="font-heading text-base font-bold text-neutral-900">
+              <h3 className="font-heading text-base font-bold text-brand-ink">
                 Confirmer la suppression
               </h3>
-              <p className="mt-1 text-[11px] text-neutral-500">
+              <p className="mt-1 text-[11px] text-muted-foreground">
                 Pour confirmer, saisissez votre{' '}
                 <span className="font-bold text-red-600">mot de passe actuel</span> ci-dessous :
               </p>
@@ -121,7 +121,7 @@ export const DangerZoneCard: React.FC = () => {
                 <button
                   type="button"
                   onClick={handleCloseModal}
-                  className="flex-1 rounded-md border border-neutral-300 py-2.5 font-semibold text-neutral-600 hover:bg-neutral-50 cursor-pointer"
+                  className="flex-1 rounded-md border border-neutral-300 py-2.5 font-semibold text-neutral-600 hover:bg-brand-canvas cursor-pointer"
                 >
                   Annuler
                 </button>

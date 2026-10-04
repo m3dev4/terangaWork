@@ -47,16 +47,16 @@ export const StepRole: React.FC<StepRoleProps> = ({
     <div className="w-full max-w-xl mx-auto flex flex-col justify-center">
       {/* Badge d'étape */}
       <div className="mb-4">
-        <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-[#F3EBDD] text-[#111118]/70">
+        <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-brand-sand text-muted-foreground">
           Étape {stepNumber} sur {totalSteps}
         </span>
       </div>
 
       {/* En-tête */}
-      <h1 className="text-2xl sm:text-3xl font-bold text-[#111118] tracking-tight mb-2">
+      <h1 className="text-2xl sm:text-3xl font-bold text-brand-ink tracking-tight mb-2">
         Quel est votre profil ?
       </h1>
-      <p className="text-[#111118]/50 text-sm sm:text-base mb-8">
+      <p className="text-muted-foreground text-sm sm:text-base mb-8">
         Choisissez le rôle qui correspond à votre activité sur Teranga Work.
       </p>
 
@@ -67,25 +67,25 @@ export const StepRole: React.FC<StepRoleProps> = ({
           onClick={() => setSelectedRole("freelance")}
           className={`w-full p-5 rounded-2xl cursor-pointer flex items-center justify-between transition-all duration-200 ${
             selectedRole === "freelance"
-              ? "border-2 border-[#111118] bg-[#F3EBDD]/50"
-              : "border border-[#111118]/12 bg-white hover:border-[#111118]/25"
+              ? "border-2 border-brand-ink bg-brand-sand/50"
+              : "border border-brand-ink/12 bg-white hover:border-brand-ink/25"
           }`}
         >
           <div className="flex items-center gap-4">
             <div
               className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 ${
                 selectedRole === "freelance"
-                  ? "bg-white text-[#D95C38]"
-                  : "bg-[#F3EBDD]/60 text-[#111118]/40"
+                  ? "bg-white text-brand-violet"
+                  : "bg-brand-sand/60 text-muted-foreground"
               }`}
             >
               <User className="w-6 h-6" />
             </div>
             <div>
-              <h3 className="font-bold text-[#111118] text-base mb-0.5">
+              <h3 className="font-bold text-brand-ink text-base mb-0.5">
                 Freelance
               </h3>
-              <p className="text-xs sm:text-sm text-[#111118]/50">
+              <p className="text-xs sm:text-sm text-muted-foreground">
                 Je propose mes services et mon expertise aux annonceurs.
               </p>
             </div>
@@ -95,12 +95,12 @@ export const StepRole: React.FC<StepRoleProps> = ({
             <div
               className={`w-5 h-5 rounded-full flex items-center justify-center border-2 transition-all ${
                 selectedRole === "freelance"
-                  ? "border-[#111118]"
-                  : "border-[#111118]/20 bg-transparent"
+                  ? "border-brand-ink"
+                  : "border-brand-ink/20 bg-transparent"
               }`}
             >
               {selectedRole === "freelance" && (
-                <div className="w-2.5 h-2.5 rounded-full bg-[#D95C38]" />
+                <div className="w-2.5 h-2.5 rounded-full bg-brand-green" />
               )}
             </div>
           </div>
@@ -111,25 +111,25 @@ export const StepRole: React.FC<StepRoleProps> = ({
           onClick={() => setSelectedRole("annonceur")}
           className={`w-full p-5 rounded-2xl cursor-pointer flex items-center justify-between transition-all duration-200 ${
             selectedRole === "annonceur"
-              ? "border-2 border-[#111118] bg-[#F3EBDD]/50"
-              : "border border-[#111118]/12 bg-white hover:border-[#111118]/25"
+              ? "border-2 border-brand-ink bg-brand-sand/50"
+              : "border border-brand-ink/12 bg-white hover:border-brand-ink/25"
           }`}
         >
           <div className="flex items-center gap-4">
             <div
               className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 ${
                 selectedRole === "annonceur"
-                  ? "bg-white text-[#D95C38]"
-                  : "bg-[#F3EBDD]/60 text-[#111118]/40"
+                  ? "bg-white text-brand-violet"
+                  : "bg-brand-sand/60 text-muted-foreground"
               }`}
             >
               <Briefcase className="w-6 h-6" />
             </div>
             <div>
-              <h3 className="font-bold text-[#111118] text-base mb-0.5">
+              <h3 className="font-bold text-brand-ink text-base mb-0.5">
                 Annonceur
               </h3>
-              <p className="text-xs sm:text-sm text-[#111118]/50">
+              <p className="text-xs sm:text-sm text-muted-foreground">
                 Je recherche des talents pour réaliser mes projets.
               </p>
             </div>
@@ -139,12 +139,12 @@ export const StepRole: React.FC<StepRoleProps> = ({
             <div
               className={`w-5 h-5 rounded-full flex items-center justify-center border-2 transition-all ${
                 selectedRole === "annonceur"
-                  ? "border-[#111118]"
-                  : "border-[#111118]/20 bg-transparent"
+                  ? "border-brand-ink"
+                  : "border-brand-ink/20 bg-transparent"
               }`}
             >
               {selectedRole === "annonceur" && (
-                <div className="w-2.5 h-2.5 rounded-full bg-[#D95C38]" />
+                <div className="w-2.5 h-2.5 rounded-full bg-brand-green" />
               )}
             </div>
           </div>
@@ -155,7 +155,7 @@ export const StepRole: React.FC<StepRoleProps> = ({
           <Button
             type="button"
             onClick={onBack}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-[#111118]/12 bg-white text-[#111118]/70 font-medium hover:bg-[#F3EBDD]/60 transition-colors cursor-pointer"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-brand-ink/12 bg-white text-muted-foreground font-medium hover:bg-brand-sand/60 transition-colors cursor-pointer"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>Retour</span>
@@ -164,7 +164,7 @@ export const StepRole: React.FC<StepRoleProps> = ({
           <Button
             type="submit"
             disabled={isLoading}
-            className="inline-flex items-center gap-2 px-7 py-3 rounded-xl bg-[#D95C38] hover:bg-[#c14f2f] text-white font-medium transition-all duration-150 disabled:opacity-50 cursor-pointer"
+            className="inline-flex items-center gap-2 px-7 py-3 rounded-xl bg-brand-green hover:bg-brand-green-hover text-brand-ink font-medium transition-all duration-150 disabled:opacity-50 cursor-pointer"
           >
             {isLoading ? (
               <>
@@ -181,15 +181,15 @@ export const StepRole: React.FC<StepRoleProps> = ({
         </div>
 
         {/* Encart d'aide */}
-        <div className="mt-8 p-4 rounded-2xl bg-[#F3EBDD]/50 border border-[#111118]/8 flex items-center gap-3.5">
-          <div className="w-9 h-9 rounded-full bg-white flex items-center justify-center text-[#D95C38] shrink-0">
+        <div className="mt-8 p-4 rounded-2xl bg-brand-sand/50 border border-brand-ink/8 flex items-center gap-3.5">
+          <div className="w-9 h-9 rounded-full bg-white flex items-center justify-center text-brand-violet shrink-0">
             <HelpCircle className="w-5 h-5" />
           </div>
           <div>
-            <h4 className="text-xs font-semibold text-[#111118]">
+            <h4 className="text-xs font-semibold text-brand-ink">
               Besoin d'aide ?
             </h4>
-            <p className="text-xs text-[#111118]/50">
+            <p className="text-xs text-muted-foreground">
               Consultez notre guide pour choisir le profil qui vous convient le
               mieux.
             </p>

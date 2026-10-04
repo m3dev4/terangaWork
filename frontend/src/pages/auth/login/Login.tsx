@@ -1,17 +1,8 @@
-import AuthTitleDesc from '../../../components/auth/authTitleDesc';
-import LoginComponent from '../../../components/auth/login';
+import { Link } from "react-router-dom";
+import AuthTitleDesc from "../../../components/auth/authTitleDesc";
+import LoginComponent from "../../../components/auth/login";
 
-const Login = () => {
-  return (
-    <div className="flex flex-col space-y-2 justify-start items-start w-full">
-      <AuthTitleDesc
-        title="Connectez-"
-        span="vous"
-        description="Heureux de vous revoir sur Teranga Work"
-      />
-      <LoginComponent />
-    </div>
-  );
-};
-
-export default Login;
+export default function Login() {
+  return <><AuthTitleDesc title="Se connecter à votre" span="compte"
+    description={<>Pas encore de compte ? <Link to="/register">S’inscrire</Link></>} /><LoginComponent /></>;
+}

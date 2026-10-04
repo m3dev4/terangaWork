@@ -19,12 +19,12 @@ export default function MatchingAndComparison() {
               <span className="h-px w-12 flex-none bg-orange-400" />
             </div>
 
-            <h2 className="font-heading text-3xl font-black leading-tight text-neutral-800 sm:text-5xl lg:text-6xl lg:leading-[75px]">
+            <h2 className="font-heading text-3xl font-black leading-tight text-brand-ink sm:text-5xl lg:text-6xl lg:leading-[75px]">
               Un matching,{' '}
               <span className="text-orange-400">deux gagnants</span>
             </h2>
 
-            <p className="font-sans max-w-2xl text-base font-normal leading-relaxed text-neutral-800/80 sm:text-xl sm:leading-8">
+            <p className="font-sans max-w-2xl text-base font-normal leading-relaxed text-brand-ink/80 sm:text-xl sm:leading-8">
               Notre moteur d&apos;IA analyse des milliers de points de données
               pour créer des connexions authentiques entre talents et
               opportunités.
@@ -43,7 +43,7 @@ export default function MatchingAndComparison() {
                     alt="Awa Diallo"
                   />
                   <div className="flex flex-col gap-1">
-                    <span className="font-heading text-lg font-bold leading-7 tracking-tight text-neutral-800">
+                    <span className="font-heading text-lg font-bold leading-7 tracking-tight text-brand-ink">
                       Awa Diallo
                     </span>
                     <span className="font-sans text-xs font-medium uppercase leading-4 tracking-wide text-orange-400">
@@ -55,7 +55,7 @@ export default function MatchingAndComparison() {
                   {['React', 'UI Design', 'Framer'].map((tag) => (
                     <span
                       key={tag}
-                      className="rounded-full bg-white/5 px-3 py-1 font-sans text-[10px] leading-4 tracking-tight text-neutral-800 outline outline-1 -outline-offset-1 outline-white/10"
+                      className="rounded-full bg-white/5 px-3 py-1 font-sans text-[10px] leading-4 tracking-tight text-brand-ink outline outline-1 -outline-offset-1 outline-white/10"
                     >
                       {tag}
                     </span>
@@ -64,11 +64,11 @@ export default function MatchingAndComparison() {
               </div>
 
               <div className="flex flex-col gap-4 pl-0 sm:pl-14 lg:pl-20">
-                <span className="font-sans text-[10px] font-bold uppercase leading-4 tracking-wide text-gray-400">
+                <span className="font-sans text-[10px] font-bold uppercase leading-4 tracking-wide text-muted-foreground">
                   Missions Recommandées
                 </span>
                 <div className="flex items-center justify-between gap-3 rounded-xl bg-gradient-to-l from-orange-300/60 to-white p-4 outline outline-1 -outline-offset-1 outline-white/10">
-                  <span className="font-heading text-sm font-semibold leading-5 tracking-tight text-neutral-800">
+                  <span className="font-heading text-sm font-semibold leading-5 tracking-tight text-brand-ink">
                     SaaS Redesign
                   </span>
                   <span className="whitespace-nowrap font-sans text-sm font-bold leading-5 tracking-tight text-green-600">
@@ -76,7 +76,7 @@ export default function MatchingAndComparison() {
                   </span>
                 </div>
                 <div className="flex items-center justify-between gap-3 rounded-xl bg-white/80 p-4 opacity-70 outline outline-1 -outline-offset-1 outline-white/5">
-                  <span className="font-heading text-sm font-semibold leading-5 tracking-tight text-neutral-800">
+                  <span className="font-heading text-sm font-semibold leading-5 tracking-tight text-brand-ink">
                     Mobile App FinTech
                   </span>
                   <span className="whitespace-nowrap font-sans text-sm font-bold leading-5 tracking-tight text-green-600">
@@ -110,7 +110,7 @@ export default function MatchingAndComparison() {
               <div className="flex flex-col items-end gap-4 rounded-2xl p-5 text-right outline outline-1 -outline-offset-1 outline-white/10">
                 <div className="flex items-center gap-4">
                   <div className="flex flex-col items-end gap-1">
-                    <span className="font-heading text-lg font-bold leading-7 text-neutral-800">
+                    <span className="font-heading text-lg font-bold leading-7 text-brand-ink">
                       FinTech Dashboard
                     </span>
                     <span className="font-sans text-xs font-medium uppercase leading-4 tracking-wide text-orange-400">
@@ -125,13 +125,13 @@ export default function MatchingAndComparison() {
                   <span className="font-bold leading-5 tracking-tight text-green-600">
                     Budget: 5k FCFA
                   </span>
-                  <span className="text-gray-400">•</span>
+                  <span className="text-muted-foreground">•</span>
                   <span className="text-zinc-500">Dashboard, UX</span>
                 </div>
               </div>
 
               <div className="flex w-full flex-col items-end gap-4 pr-0 sm:pr-14 lg:pr-20">
-                <span className="font-sans text-right text-[10px] font-bold uppercase leading-4 tracking-wide text-gray-400">
+                <span className="font-sans text-right text-[10px] font-bold uppercase leading-4 tracking-wide text-muted-foreground">
                   Top Candidats
                 </span>
                 <div className="flex w-full items-center justify-between gap-3 rounded-xl bg-gradient-to-r from-orange-300/60 to-transparent p-4 outline outline-1 -outline-offset-1 outline-white/10">
@@ -141,12 +141,12 @@ export default function MatchingAndComparison() {
                       src="https://placehold.co/32x32"
                       alt="Marc Diop"
                     />
-                    <span className="font-heading text-sm font-medium leading-5 text-neutral-800">
+                    <span className="font-heading text-sm font-medium leading-5 text-brand-ink">
                       Marc Diop
                     </span>
                   </div>
                   <span className="whitespace-nowrap text-right">
-                    <b className="font-heading text-sm font-black leading-5 text-neutral-800">
+                    <b className="font-heading text-sm font-black leading-5 text-brand-ink">
                       98%
                     </b>{' '}
                     <span className="font-sans text-[10px] leading-4 tracking-tight text-zinc-500">
@@ -161,12 +161,12 @@ export default function MatchingAndComparison() {
                       src="https://placehold.co/32x32"
                       alt="Fatou Sow"
                     />
-                    <span className="font-heading text-sm font-medium leading-5 tracking-tight text-neutral-800">
+                    <span className="font-heading text-sm font-medium leading-5 tracking-tight text-brand-ink">
                       Fatou Sow
                     </span>
                   </div>
                   <span className="whitespace-nowrap text-right">
-                    <b className="font-heading text-sm font-black leading-5 text-neutral-800">
+                    <b className="font-heading text-sm font-black leading-5 text-brand-ink">
                       94%
                     </b>{' '}
                     <span className="font-sans text-[10px] leading-4 tracking-tight text-zinc-500">
@@ -202,7 +202,7 @@ export default function MatchingAndComparison() {
                 <span className="text-orange-400">Teranga Work</span>
               </h2>
 
-              <p className="font-sans max-w-md text-base font-normal leading-relaxed text-gray-400 sm:text-xl sm:leading-8">
+              <p className="font-sans max-w-md text-base font-normal leading-relaxed text-muted-foreground sm:text-xl sm:leading-8">
                 Plus qu&apos;une marketplace, nous construisons
                 l&apos;infrastructure du travail de demain pour l&apos;Afrique
                 Francophone.
@@ -235,7 +235,7 @@ export default function MatchingAndComparison() {
                 <span className="font-heading text-2xl font-black leading-9 text-orange-400 sm:text-3xl">
                   Teranga Work
                 </span>
-                <span className="rounded-full bg-orange-400 px-4 py-1 font-sans text-[10px] font-black uppercase leading-4 text-neutral-800">
+                <span className="rounded-full bg-orange-400 px-4 py-1 font-sans text-[10px] font-black uppercase leading-4 text-brand-ink">
                   Leader Régional
                 </span>
               </div>
@@ -261,14 +261,14 @@ export default function MatchingAndComparison() {
             <div className="pl-4 sm:pl-8">
               <div className="rounded-r-2xl border-l-4 border-gray-400 bg-white/5 px-4 py-6 opacity-60 sm:px-6 sm:pb-10">
                 <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
-                  <span className="font-heading text-lg font-bold leading-7 text-gray-400 sm:text-xl">
+                  <span className="font-heading text-lg font-bold leading-7 text-muted-foreground sm:text-xl">
                     Upwork
                   </span>
                   <div className="flex flex-wrap gap-4">
-                    <span className="font-sans text-[10px] font-bold leading-4 tracking-tight text-gray-400">
+                    <span className="font-sans text-[10px] font-bold leading-4 tracking-tight text-muted-foreground">
                       Matching générique
                     </span>
-                    <span className="font-sans text-[10px] font-bold leading-4 tracking-tight text-gray-400">
+                    <span className="font-sans text-[10px] font-bold leading-4 tracking-tight text-muted-foreground">
                       Pas de Mobile Money
                     </span>
                   </div>
@@ -280,10 +280,10 @@ export default function MatchingAndComparison() {
             <div className="pl-6 sm:pl-16">
               <div className="rounded-r-xl border-l-4 border-gray-400/40 p-6 opacity-40">
                 <div className="flex flex-col justify-between gap-2 sm:flex-row sm:items-center">
-                  <span className="font-heading text-base font-bold leading-7 tracking-tight text-gray-400 sm:text-lg">
+                  <span className="font-heading text-base font-bold leading-7 tracking-tight text-muted-foreground sm:text-lg">
                     Fiverr
                   </span>
-                  <span className="font-sans text-[10px] font-bold leading-4 text-gray-400">
+                  <span className="font-sans text-[10px] font-bold leading-4 text-muted-foreground">
                     Micro-services globaux
                   </span>
                 </div>

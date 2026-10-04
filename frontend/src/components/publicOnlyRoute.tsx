@@ -21,8 +21,8 @@ export default function PublicOnlyRoute({ children }: PublicOnlyRouteProps) {
   // If token is present and we are checking user status, show a subtle loading state
   if (token && isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#FAF9F6]">
-        <Loader2 className="animate-spin h-8 w-8 text-[#1b4b6b]" />
+      <div className="min-h-screen flex items-center justify-center bg-brand-canvas">
+        <Loader2 className="animate-spin h-8 w-8 text-brand-ink" />
       </div>
     );
   }

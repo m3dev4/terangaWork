@@ -79,19 +79,19 @@ export const FormationTab: React.FC = () => {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <Loader2 className="h-6 w-6 animate-spin text-[#1b4b6b]" />
+        <Loader2 className="h-6 w-6 animate-spin text-brand-ink" />
       </div>
     );
   }
 
   return (
-    <div className="rounded-2xl border border-[#ebe8e2] bg-white p-6 sm:p-8 shadow-xs max-w-3xl space-y-6 text-[11px]">
-      <div className="flex items-center justify-between border-b border-[#f0ede8] pb-4">
+    <div className="rounded-2xl border border-brand-sand bg-white p-6 sm:p-8 shadow-xs max-w-3xl space-y-6 text-[11px]">
+      <div className="flex items-center justify-between border-b border-brand-sand pb-4">
         <div>
-          <h3 className="font-heading text-xs font-bold text-neutral-900 flex items-center gap-1.5">
-            <GraduationCap className="h-4 w-4 text-[#1b4b6b]" /> Formations & Diplômes
+          <h3 className="font-heading text-xs font-bold text-brand-ink flex items-center gap-1.5">
+            <GraduationCap className="h-4 w-4 text-brand-ink" /> Formations & Diplômes
           </h3>
-          <p className="text-neutral-500 mt-0.5">
+          <p className="text-muted-foreground mt-0.5">
             Vos formations enregistrées en base de données backend.
           </p>
         </div>
@@ -99,7 +99,7 @@ export const FormationTab: React.FC = () => {
         <button
           type="button"
           onClick={() => setIsAdding(!isAdding)}
-          className="inline-flex items-center gap-1.5 rounded-lg bg-[#1b4b6b] px-3.5 py-2 text-[11px] font-semibold text-white hover:bg-[#143952] cursor-pointer"
+          className="inline-flex items-center gap-1.5 rounded-lg bg-brand-violet px-3.5 py-2 text-[11px] font-semibold text-white hover:bg-brand-violet cursor-pointer"
         >
           <Plus className="h-3.5 w-3.5" /> Ajouter une formation
         </button>
@@ -113,14 +113,14 @@ export const FormationTab: React.FC = () => {
       )}
 
       {isAdding && (
-        <form onSubmit={handleAdd} className="rounded-xl bg-[#FAF9F6] border border-[#e7e3dc] p-4 space-y-3">
+        <form onSubmit={handleAdd} className="rounded-xl bg-brand-canvas border border-border p-4 space-y-3">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
               <label className="block font-semibold text-neutral-600 mb-1">Type de formation *</label>
               <select
                 value={role}
                 onChange={(e: any) => setRole(e.target.value)}
-                className="w-full rounded-md border border-[#e7e3dc] bg-white p-2 outline-none focus:border-[#1b4b6b]"
+                className="w-full rounded-md border border-border bg-white p-2 outline-none focus:border-brand-violet"
               >
                 <option value="UNIVERSITAIRE">Universitaire</option>
                 <option value="FORMATION_PROFESSIONNELLE">Formation professionnelle</option>
@@ -135,7 +135,7 @@ export const FormationTab: React.FC = () => {
                 value={nom}
                 onChange={(e) => setNom(e.target.value)}
                 placeholder="ex: Master en Génie Logiciel"
-                className="w-full rounded-md border border-[#e7e3dc] bg-white p-2 outline-none focus:border-[#1b4b6b]"
+                className="w-full rounded-md border border-border bg-white p-2 outline-none focus:border-brand-violet"
               />
             </div>
           </div>
@@ -148,7 +148,7 @@ export const FormationTab: React.FC = () => {
                 required
                 value={startDate}
                 onChange={(e) => setStartDate(e.target.value)}
-                className="w-full rounded-md border border-[#e7e3dc] bg-white p-2 outline-none focus:border-[#1b4b6b]"
+                className="w-full rounded-md border border-border bg-white p-2 outline-none focus:border-brand-violet"
               />
             </div>
             <div>
@@ -158,7 +158,7 @@ export const FormationTab: React.FC = () => {
                 disabled={current}
                 value={endDate}
                 onChange={(e) => setEndDate(e.target.value)}
-                className="w-full rounded-md border border-[#e7e3dc] bg-white p-2 outline-none focus:border-[#1b4b6b] disabled:bg-neutral-100"
+                className="w-full rounded-md border border-border bg-white p-2 outline-none focus:border-brand-violet disabled:bg-neutral-100"
               />
             </div>
           </div>
@@ -169,9 +169,9 @@ export const FormationTab: React.FC = () => {
               id="currentEdu"
               checked={current}
               onChange={(e) => setCurrent(e.target.checked)}
-              className="rounded border-[#e7e3dc]"
+              className="rounded border-border"
             />
-            <label htmlFor="currentEdu" className="text-[11px] font-medium text-neutral-700 cursor-pointer">
+            <label htmlFor="currentEdu" className="text-[11px] font-medium text-brand-ink cursor-pointer">
               Formation en cours
             </label>
           </div>
@@ -183,7 +183,7 @@ export const FormationTab: React.FC = () => {
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Détails du programme..."
-              className="w-full rounded-md border border-[#e7e3dc] bg-white p-2 outline-none focus:border-[#1b4b6b]"
+              className="w-full rounded-md border border-border bg-white p-2 outline-none focus:border-brand-violet"
             />
           </div>
 
@@ -198,7 +198,7 @@ export const FormationTab: React.FC = () => {
             <button
               type="submit"
               disabled={createMutation.isPending}
-              className="inline-flex items-center gap-1.5 rounded-md bg-[#1b4b6b] px-4 py-1.5 font-semibold text-white hover:bg-[#143952] cursor-pointer disabled:opacity-50"
+              className="inline-flex items-center gap-1.5 rounded-md bg-brand-violet px-4 py-1.5 font-semibold text-white hover:bg-brand-violet cursor-pointer disabled:opacity-50"
             >
               {createMutation.isPending && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
               Enregistrer
@@ -209,7 +209,7 @@ export const FormationTab: React.FC = () => {
 
       {/* List from DB */}
       {educations.length === 0 ? (
-        <div className="py-8 text-center text-neutral-400">
+        <div className="py-8 text-center text-muted-foreground">
           Aucune formation enregistrée. Cliquez sur "Ajouter une formation" pour commencer.
         </div>
       ) : (
@@ -217,18 +217,18 @@ export const FormationTab: React.FC = () => {
           {educations.map((item) => (
             <div
               key={item.id}
-              className="flex items-center justify-between rounded-xl border border-[#ebe8e2] bg-[#faf9f7] p-4"
+              className="flex items-center justify-between rounded-xl border border-brand-sand bg-brand-canvas p-4"
             >
               <div className="flex items-start gap-3">
-                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-[#1b4b6b]">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-brand-ink">
                   <GraduationCap className="h-5 w-5" />
                 </div>
                 <div>
-                  <h4 className="font-heading text-xs font-bold text-neutral-900">{item.nom}</h4>
-                  <p className="text-neutral-500">
-                    <span className="font-semibold text-[#1b4b6b]">{getRoleLabel(item.role)}</span> •{' '}
+                  <h4 className="font-heading text-xs font-bold text-brand-ink">{item.nom}</h4>
+                  <p className="text-muted-foreground">
+                    <span className="font-semibold text-brand-ink">{getRoleLabel(item.role)}</span> •{' '}
                     <span className="inline-flex items-center gap-1 text-[10px]">
-                      <Calendar className="h-3 w-3 text-neutral-400" />
+                      <Calendar className="h-3 w-3 text-muted-foreground" />
                       {item.startDate} {item.current ? ' - En cours' : item.endDate ? ` à ${item.endDate}` : ''}
                     </span>
                   </p>
@@ -242,7 +242,7 @@ export const FormationTab: React.FC = () => {
                 type="button"
                 disabled={deleteMutation.isPending}
                 onClick={() => deleteMutation.mutate(item.id)}
-                className="text-neutral-400 hover:text-red-500 cursor-pointer p-1"
+                className="text-muted-foreground hover:text-red-500 cursor-pointer p-1"
                 title="Supprimer"
               >
                 <Trash2 className="h-4 w-4" />

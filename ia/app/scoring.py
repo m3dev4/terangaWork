@@ -29,8 +29,8 @@ def calculate_technologies_score(
     """
     normalized_target = {t.strip().lower() for t in target_techs if t.strip()}
     if not normalized_target:
-        normalized_candidat = {t.strip().lower() for t in candidat_techs if t.strip()}
-        return 1.0 if not normalized_candidat else 0.0
+        # Aucune exigence technique : aucune compétence manquante.
+        return 1.0
 
     normalized_candidat = {t.strip().lower() for t in candidat_techs if t.strip()}
     common = normalized_candidat & normalized_target
@@ -46,10 +46,20 @@ def compute_stage_1(request: MatchingRequestSchema) -> list[ResultatCandidatSche
 
 # contient les critères recherchés, les candidats et le nombre de résultats à conserver.
     for candidat in request.candidats:
+        # Le dénominateur est toujours le besoin de la mission, quel que soit
+        # le sens de la recommandation. Les compétences supplémentaires du
+        # freelance ne doivent jamais faire baisser son score.
+        freelance_techs, mission_techs = (
+            (request.technologies, candidat.technologies)
+            if request.type_matching == "missions"
+            else (candidat.technologies, request.technologies)
+        )
         score_tech = calculate_technologies_score(
-            candidat.technologies, request.technologies
+            freelance_techs, mission_techs
         )
         score_serv = calculate_service_score(candidat.service, request.service)
+        if score_tech < request.min_technology_score:
+            continue
         score_exp = min_max_experience_score(candidat.annees_experience)
 
         if score_exp is None:

@@ -205,3 +205,31 @@ class MatchingTests(TestCase):
 
         assert res.status_code == status.HTTP_503_SERVICE_UNAVAILABLE
         assert res.json()["detail"] == "Matching temporairement indisponible."
+
+    @patch("matching.services.call_fastapi_matching")
+    def test_initial_compatibility_is_read_only_and_not_limited_to_top_four(self, mock_fastapi):
+        for i in range(5):
+            Mission.objects.create(title=f"Mission {i}", description="Test", budget=100,
+                                   service=self.service_backend, annonceur=self.announcer1,
+                                   status=MissionStatus.OPEN)
+        self.client.force_authenticate(user=self.user_freelance)
+        for coverage, compatible in [(0, False), (.49, False), (.5, True), (1, True)]:
+            mock_fastapi.return_value = {"etage_2_reussi": False, "resultats": [{
+                "candidat_id": self.mission.id, "score": .5 + coverage / 2,
+                "score_technologies": coverage, "score_service": 1,
+            }]}
+            response = self.client.get("/api/matching/missions-compatibilite/")
+            assert response.status_code == 200
+            assert response.json()["resultats"][0]["compatible"] is compatible
+            payload = mock_fastapi.call_args.args[0]
+            assert payload["type_matching"] == "missions"
+            assert payload["scoring_only"] is True
+            assert payload["top_n"] == 6
+            assert payload["min_technology_score"] == 0
+        assert not ResultatMatching.objects.exists()
+
+    def test_initial_compatibility_requires_freelance(self):
+        url = "/api/matching/missions-compatibilite/"
+        assert self.client.get(url).status_code == 401
+        self.client.force_authenticate(user=self.user_announcer1)
+        assert self.client.get(url).status_code == 403

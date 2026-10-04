@@ -219,16 +219,16 @@ export const AdminTechnologiesPage: React.FC = () => {
   return (
     <div className="space-y-6 pb-8">
       {/* ── En-tête ── */}
-      <div className="relative overflow-hidden rounded-[28px] bg-[#111118] text-white p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="relative overflow-hidden rounded-[28px] bg-brand-ink text-white p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="p-3 bg-white/10 text-[#E7B84B] rounded-2xl">
+          <div className="p-3 bg-white/10 text-brand-green rounded-2xl">
             <Cpu className="w-6 h-6" />
           </div>
           <div>
             <h1 className="text-xl font-bold text-white tracking-tight">
               Gestion des technologies
             </h1>
-            <p className="text-xs text-white/50 mt-0.5">
+            <p className="text-xs text-white/75 mt-0.5">
               Gérez le catalogue des langages, frameworks et outils disponibles
               sur Teranga Work.
             </p>
@@ -237,7 +237,7 @@ export const AdminTechnologiesPage: React.FC = () => {
 
         <button
           onClick={openCreateModal}
-          className="flex items-center justify-center gap-2 px-4 py-2.5 bg-[#D95C38] hover:bg-[#c14f2f] text-white font-semibold rounded-2xl text-xs transition cursor-pointer shrink-0"
+          className="flex items-center justify-center gap-2 px-4 py-2.5 bg-brand-green hover:bg-brand-green-hover text-brand-ink font-semibold rounded-2xl text-xs transition cursor-pointer shrink-0"
         >
           <Plus className="w-4 h-4" />
           <span>Créer une technologie</span>
@@ -245,32 +245,32 @@ export const AdminTechnologiesPage: React.FC = () => {
       </div>
 
       {/* ── Grille des technologies ── */}
-      <div className="bg-white rounded-[24px] border border-[#111118]/8 p-5 space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#111118]/6">
+      <div className="bg-white rounded-[24px] border border-brand-ink/8 p-5 space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-brand-ink/6">
           <div className="relative max-w-md w-full">
-            <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#111118]/35" />
+            <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
             <input
               type="text"
               placeholder="Rechercher une technologie..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-9 pr-3 py-2 text-xs bg-[#F3EBDD]/40 border border-[#111118]/10 rounded-xl focus:outline-none focus:border-[#D95C38] focus:bg-white transition"
+              className="w-full pl-9 pr-3 py-2 text-xs bg-brand-sand/40 border border-brand-ink/10 rounded-xl focus:outline-none focus:border-brand-green focus:bg-white transition"
             />
           </div>
-          <span className="text-xs text-[#111118]/50 font-medium">
+          <span className="text-xs text-muted-foreground font-medium">
             {filteredTechs.length} technologie(s) répertoriée(s)
           </span>
         </div>
 
         {isLoading ? (
           <div className="flex flex-col items-center justify-center py-12 space-y-3">
-            <Loader2 className="w-8 h-8 animate-spin text-[#D95C38]" />
-            <p className="text-xs text-[#111118]/40">
+            <Loader2 className="w-8 h-8 animate-spin text-brand-violet" />
+            <p className="text-xs text-muted-foreground">
               Chargement des technologies...
             </p>
           </div>
         ) : isError ? (
-          <div className="p-4 bg-[#D95C38]/10 text-[#c14f2f] rounded-xl text-xs text-center">
+          <div className="p-4 bg-brand-green/10 text-brand-violet rounded-xl text-xs text-center">
             Erreur de chargement.{" "}
             <button
               onClick={() => refetch()}
@@ -281,11 +281,11 @@ export const AdminTechnologiesPage: React.FC = () => {
           </div>
         ) : filteredTechs.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-12 text-center space-y-2">
-            <Cpu className="w-10 h-10 text-[#111118]/20" />
-            <p className="text-sm font-semibold text-[#111118]">
+            <Cpu className="w-10 h-10 text-muted-foreground" />
+            <p className="text-sm font-semibold text-brand-ink">
               Aucune technologie trouvée
             </p>
-            <p className="text-xs text-[#111118]/40">
+            <p className="text-xs text-muted-foreground">
               {searchTerm
                 ? "Aucun résultat pour cette recherche."
                 : "Ajoutez la première technologie au catalogue."}
@@ -296,9 +296,9 @@ export const AdminTechnologiesPage: React.FC = () => {
             {filteredTechs.map((tech) => (
               <div
                 key={tech.id}
-                className="group bg-[#F3EBDD]/30 hover:bg-white rounded-2xl border border-[#111118]/8 p-3.5 flex flex-col items-center justify-between text-center transition hover:shadow-md hover:border-[#111118]/15 relative"
+                className="group bg-brand-sand/30 hover:bg-white rounded-2xl border border-brand-ink/8 p-3.5 flex flex-col items-center justify-between text-center transition hover:shadow-md hover:border-brand-ink/15 relative"
               >
-                <div className="w-12 h-12 rounded-xl bg-white border border-[#111118]/6 flex items-center justify-center p-2 mb-2 overflow-hidden">
+                <div className="w-12 h-12 rounded-xl bg-white border border-brand-ink/6 flex items-center justify-center p-2 mb-2 overflow-hidden">
                   {tech.imgUrl ? (
                     <img
                       src={tech.imgUrl}
@@ -306,28 +306,28 @@ export const AdminTechnologiesPage: React.FC = () => {
                       className="w-full h-full object-contain"
                     />
                   ) : (
-                    <ImageIcon className="w-6 h-6 text-[#111118]/20" />
+                    <ImageIcon className="w-6 h-6 text-muted-foreground" />
                   )}
                 </div>
 
-                <span className="font-bold text-xs text-[#111118] truncate w-full">
+                <span className="font-bold text-xs text-brand-ink truncate w-full">
                   {tech.name}
                 </span>
-                <span className="text-[10px] text-[#111118]/35 mt-0.5">
+                <span className="text-[10px] text-muted-foreground mt-0.5">
                   ID : #{tech.id}
                 </span>
 
                 <div className="flex items-center gap-1 mt-3">
                   <button
                     onClick={() => openEditModal(tech)}
-                    className="p-1 rounded-md text-[#111118]/40 hover:text-[#D95C38] hover:bg-[#F3EBDD] transition cursor-pointer"
+                    className="p-1 rounded-md text-muted-foreground hover:text-brand-violet hover:bg-brand-sand transition cursor-pointer"
                     title="Modifier"
                   >
                     <Pencil className="w-3.5 h-3.5" />
                   </button>
                   <button
                     onClick={() => setDeletingTech(tech)}
-                    className="p-1 rounded-md text-[#111118]/40 hover:text-[#c14f2f] hover:bg-[#D95C38]/10 transition cursor-pointer"
+                    className="p-1 rounded-md text-muted-foreground hover:text-brand-violet hover:bg-brand-green/10 transition cursor-pointer"
                     title="Supprimer"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
@@ -341,17 +341,17 @@ export const AdminTechnologiesPage: React.FC = () => {
 
       {/* ── Modal créer / modifier ── */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#111118]/50 backdrop-blur-xs">
-          <div className="bg-white w-full max-w-md rounded-[28px] shadow-xl border border-[#111118]/8 overflow-hidden">
-            <div className="flex items-center justify-between px-5 py-4 border-b border-[#111118]/6 bg-[#F3EBDD]/40">
-              <h3 className="text-sm font-bold text-[#111118]">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-brand-ink/50 backdrop-blur-xs">
+          <div className="bg-white w-full max-w-md rounded-[28px] shadow-xl border border-brand-ink/8 overflow-hidden">
+            <div className="flex items-center justify-between px-5 py-4 border-b border-brand-ink/6 bg-brand-sand/40">
+              <h3 className="text-sm font-bold text-brand-ink">
                 {editingTech
                   ? "Modifier la technologie"
                   : "Créer une technologie"}
               </h3>
               <button
                 onClick={closeModal}
-                className="p-1 rounded-lg text-[#111118]/35 hover:text-[#111118] hover:bg-white transition cursor-pointer"
+                className="p-1 rounded-lg text-muted-foreground hover:text-brand-ink hover:bg-white transition cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -359,9 +359,9 @@ export const AdminTechnologiesPage: React.FC = () => {
 
             <form onSubmit={handleSubmit} className="p-5 space-y-4">
               <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-[#111118]/70">
+                <label className="text-xs font-semibold text-muted-foreground">
                   Nom de la technologie{" "}
-                  <span className="text-[#D95C38]">*</span>
+                  <span className="text-brand-violet">*</span>
                 </label>
                 <input
                   type="text"
@@ -369,39 +369,39 @@ export const AdminTechnologiesPage: React.FC = () => {
                   placeholder="ex : React.js, Python, Flutter"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full px-3 py-2 text-xs bg-[#F3EBDD]/40 border border-[#111118]/10 rounded-xl focus:outline-none focus:border-[#D95C38] focus:bg-white transition"
+                  className="w-full px-3 py-2 text-xs bg-brand-sand/40 border border-brand-ink/10 rounded-xl focus:outline-none focus:border-brand-green focus:bg-white transition"
                 />
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-[#111118]/70">
+                <label className="text-xs font-semibold text-muted-foreground">
                   Icône / logo (image)
                 </label>
 
                 {previewUrl && (
-                  <div className="flex items-center gap-3 p-3 bg-[#F3EBDD]/40 border border-[#111118]/8 rounded-xl mb-2">
+                  <div className="flex items-center gap-3 p-3 bg-brand-sand/40 border border-brand-ink/8 rounded-xl mb-2">
                     <img
                       src={previewUrl}
                       alt="Aperçu"
-                      className="w-10 h-10 object-contain rounded-lg bg-white p-1 border border-[#111118]/6"
+                      className="w-10 h-10 object-contain rounded-lg bg-white p-1 border border-brand-ink/6"
                     />
                     <div className="flex-1 truncate">
-                      <span className="text-xs font-semibold text-[#111118] block truncate">
+                      <span className="text-xs font-semibold text-brand-ink block truncate">
                         Aperçu image
                       </span>
-                      <span className="text-[10px] text-[#111118]/40">
+                      <span className="text-[10px] text-muted-foreground">
                         Prêt à être envoyé au serveur
                       </span>
                     </div>
                   </div>
                 )}
 
-                <label className="flex flex-col items-center justify-center border-2 border-dashed border-[#111118]/15 hover:border-[#D95C38] rounded-2xl p-4 bg-[#F3EBDD]/30 hover:bg-[#F3EBDD]/50 transition cursor-pointer text-center space-y-1">
-                  <Upload className="w-5 h-5 text-[#111118]/40" />
-                  <span className="text-xs font-medium text-[#111118]/70">
+                <label className="flex flex-col items-center justify-center border-2 border-dashed border-brand-ink/15 hover:border-brand-green rounded-2xl p-4 bg-brand-sand/30 hover:bg-brand-sand/50 transition cursor-pointer text-center space-y-1">
+                  <Upload className="w-5 h-5 text-muted-foreground" />
+                  <span className="text-xs font-medium text-muted-foreground">
                     Téléverser une image
                   </span>
-                  <span className="text-[10px] text-[#111118]/40">
+                  <span className="text-[10px] text-muted-foreground">
                     Format PNG, SVG, JPG (max 5 Mo)
                   </span>
                   <input
@@ -413,7 +413,7 @@ export const AdminTechnologiesPage: React.FC = () => {
                 </label>
 
                 <div className="pt-2">
-                  <span className="text-[10px] text-[#111118]/40 font-medium block mb-1">
+                  <span className="text-[10px] text-muted-foreground font-medium block mb-1">
                     Ou saisir une URL d'image :
                   </span>
                   <input
@@ -424,7 +424,7 @@ export const AdminTechnologiesPage: React.FC = () => {
                       setImgUrlInput(e.target.value);
                       if (e.target.value) setPreviewUrl(e.target.value);
                     }}
-                    className="w-full px-3 py-1.5 text-xs bg-[#F3EBDD]/40 border border-[#111118]/10 rounded-xl focus:outline-none focus:border-[#D95C38] focus:bg-white transition"
+                    className="w-full px-3 py-1.5 text-xs bg-brand-sand/40 border border-brand-ink/10 rounded-xl focus:outline-none focus:border-brand-green focus:bg-white transition"
                   />
                 </div>
               </div>
@@ -433,14 +433,14 @@ export const AdminTechnologiesPage: React.FC = () => {
                 <button
                   type="button"
                   onClick={closeModal}
-                  className="px-4 py-2 text-xs font-medium text-[#111118]/60 hover:bg-[#F3EBDD]/60 rounded-xl transition cursor-pointer"
+                  className="px-4 py-2 text-xs font-medium text-muted-foreground hover:bg-brand-sand/60 rounded-xl transition cursor-pointer"
                 >
                   Annuler
                 </button>
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="flex items-center gap-1.5 px-4 py-2 text-xs font-semibold bg-[#111118] hover:bg-[#111118]/85 text-white rounded-xl transition cursor-pointer disabled:opacity-50"
+                  className="flex items-center gap-1.5 px-4 py-2 text-xs font-semibold bg-brand-ink hover:bg-brand-ink/85 text-white rounded-xl transition cursor-pointer disabled:opacity-50"
                 >
                   {isSubmitting && (
                     <Loader2 className="w-3.5 h-3.5 animate-spin" />
@@ -457,17 +457,17 @@ export const AdminTechnologiesPage: React.FC = () => {
 
       {/* ── Modal confirmation suppression ── */}
       {deletingTech && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#111118]/50 backdrop-blur-xs">
-          <div className="bg-white w-full max-w-sm rounded-[28px] shadow-xl border border-[#111118]/8 p-5 text-center space-y-3">
-            <div className="w-12 h-12 rounded-2xl bg-[#D95C38]/10 text-[#D95C38] flex items-center justify-center mx-auto">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-brand-ink/50 backdrop-blur-xs">
+          <div className="bg-white w-full max-w-sm rounded-[28px] shadow-xl border border-brand-ink/8 p-5 text-center space-y-3">
+            <div className="w-12 h-12 rounded-2xl bg-brand-green/10 text-brand-violet flex items-center justify-center mx-auto">
               <AlertTriangle className="w-6 h-6" />
             </div>
-            <h3 className="text-sm font-bold text-[#111118]">
+            <h3 className="text-sm font-bold text-brand-ink">
               Supprimer cette technologie ?
             </h3>
-            <p className="text-xs text-[#111118]/50">
+            <p className="text-xs text-muted-foreground">
               Voulez-vous vraiment supprimer{" "}
-              <strong className="text-[#111118]">
+              <strong className="text-brand-ink">
                 « {deletingTech.name} »
               </strong>{" "}
               du catalogue ?
@@ -476,14 +476,14 @@ export const AdminTechnologiesPage: React.FC = () => {
             <div className="pt-2 flex items-center justify-center gap-2">
               <button
                 onClick={() => setDeletingTech(null)}
-                className="px-4 py-2 text-xs font-medium text-[#111118]/60 bg-[#F3EBDD]/60 hover:bg-[#F3EBDD] rounded-xl transition cursor-pointer"
+                className="px-4 py-2 text-xs font-medium text-muted-foreground bg-brand-sand/60 hover:bg-brand-sand rounded-xl transition cursor-pointer"
               >
                 Annuler
               </button>
               <button
                 onClick={() => deleteMutation.mutate(deletingTech.id)}
                 disabled={deleteMutation.isPending}
-                className="flex items-center gap-1.5 px-4 py-2 text-xs font-semibold bg-[#D95C38] hover:bg-[#c14f2f] text-white rounded-xl transition cursor-pointer disabled:opacity-50"
+                className="flex items-center gap-1.5 px-4 py-2 text-xs font-semibold bg-brand-green hover:bg-brand-green-hover text-brand-ink rounded-xl transition cursor-pointer disabled:opacity-50"
               >
                 {deleteMutation.isPending && (
                   <Loader2 className="w-3.5 h-3.5 animate-spin" />

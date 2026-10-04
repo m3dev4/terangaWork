@@ -1,4 +1,6 @@
-from pydantic import BaseModel
+from typing import Literal
+
+from pydantic import BaseModel, Field
 
 
 class CandidatSchema(BaseModel):
@@ -10,6 +12,9 @@ class CandidatSchema(BaseModel):
 
 
 class MatchingRequestSchema(BaseModel):
+    type_matching: Literal["candidatures", "missions"] = "candidatures"
+    scoring_only: bool = False
+    min_technology_score: float = Field(default=0.0, ge=0.0, le=1.0)
     contexte: str  # description complète de la mission ou du profil freelance
     technologies: list[str]  # technologies cibles (obligatoires)
     service: str  # service cible (obligatoire)

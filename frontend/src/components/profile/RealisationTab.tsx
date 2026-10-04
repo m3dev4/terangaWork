@@ -55,19 +55,19 @@ export const RealisationTab: React.FC = () => {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <Loader2 className="h-6 w-6 animate-spin text-[#1b4b6b]" />
+        <Loader2 className="h-6 w-6 animate-spin text-brand-ink" />
       </div>
     );
   }
 
   return (
-    <div className="rounded-2xl border border-[#ebe8e2] bg-white p-6 sm:p-8 shadow-xs max-w-3xl space-y-6 text-[11px]">
-      <div className="flex items-center justify-between border-b border-[#f0ede8] pb-4">
+    <div className="rounded-2xl border border-brand-sand bg-white p-6 sm:p-8 shadow-xs max-w-3xl space-y-6 text-[11px]">
+      <div className="flex items-center justify-between border-b border-brand-sand pb-4">
         <div>
-          <h3 className="font-heading text-xs font-bold text-neutral-900 flex items-center gap-1.5">
-            <FolderGit2 className="h-4 w-4 text-[#1b4b6b]" /> Portfolio & Réalisations
+          <h3 className="font-heading text-xs font-bold text-brand-ink flex items-center gap-1.5">
+            <FolderGit2 className="h-4 w-4 text-brand-ink" /> Portfolio & Réalisations
           </h3>
-          <p className="text-neutral-500 mt-0.5">
+          <p className="text-muted-foreground mt-0.5">
             Vos projets et liens enregistrés en base de données backend.
           </p>
         </div>
@@ -75,7 +75,7 @@ export const RealisationTab: React.FC = () => {
         <button
           type="button"
           onClick={() => setIsAdding(!isAdding)}
-          className="inline-flex items-center gap-1.5 rounded-lg bg-[#1b4b6b] px-3.5 py-2 text-[11px] font-semibold text-white hover:bg-[#143952] cursor-pointer"
+          className="inline-flex items-center gap-1.5 rounded-lg bg-brand-violet px-3.5 py-2 text-[11px] font-semibold text-white hover:bg-brand-violet cursor-pointer"
         >
           <Plus className="h-3.5 w-3.5" /> Ajouter une réalisation
         </button>
@@ -89,7 +89,7 @@ export const RealisationTab: React.FC = () => {
       )}
 
       {isAdding && (
-        <form onSubmit={handleAdd} className="rounded-xl bg-[#FAF9F6] border border-[#e7e3dc] p-4 space-y-3">
+        <form onSubmit={handleAdd} className="rounded-xl bg-brand-canvas border border-border p-4 space-y-3">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
               <label className="block font-semibold text-neutral-600 mb-1">Titre du Projet *</label>
@@ -99,7 +99,7 @@ export const RealisationTab: React.FC = () => {
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="ex: Plateforme E-Commerce Mobile Money"
-                className="w-full rounded-md border border-[#e7e3dc] bg-white p-2 outline-none focus:border-[#1b4b6b]"
+                className="w-full rounded-md border border-border bg-white p-2 outline-none focus:border-brand-violet"
               />
             </div>
             <div>
@@ -109,7 +109,7 @@ export const RealisationTab: React.FC = () => {
                 value={link}
                 onChange={(e) => setLink(e.target.value)}
                 placeholder="https://votre-projet.com"
-                className="w-full rounded-md border border-[#e7e3dc] bg-white p-2 outline-none focus:border-[#1b4b6b]"
+                className="w-full rounded-md border border-border bg-white p-2 outline-none focus:border-brand-violet"
               />
             </div>
           </div>
@@ -125,7 +125,7 @@ export const RealisationTab: React.FC = () => {
             <button
               type="submit"
               disabled={createMutation.isPending}
-              className="inline-flex items-center gap-1.5 rounded-md bg-[#1b4b6b] px-4 py-1.5 font-semibold text-white hover:bg-[#143952] cursor-pointer disabled:opacity-50"
+              className="inline-flex items-center gap-1.5 rounded-md bg-brand-violet px-4 py-1.5 font-semibold text-white hover:bg-brand-violet cursor-pointer disabled:opacity-50"
             >
               {createMutation.isPending && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
               Enregistrer
@@ -136,7 +136,7 @@ export const RealisationTab: React.FC = () => {
 
       {/* List from DB */}
       {realisations.length === 0 ? (
-        <div className="py-8 text-center text-neutral-400">
+        <div className="py-8 text-center text-muted-foreground">
           Aucune réalisation enregistrée. Cliquez sur "Ajouter une réalisation" pour commencer.
         </div>
       ) : (
@@ -144,18 +144,18 @@ export const RealisationTab: React.FC = () => {
           {realisations.map((item) => (
             <div
               key={item.id}
-              className="flex items-center justify-between rounded-xl border border-[#ebe8e2] bg-[#faf9f7] p-4"
+              className="flex items-center justify-between rounded-xl border border-brand-sand bg-brand-canvas p-4"
             >
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
-                  <FolderGit2 className="h-4 w-4 text-[#1b4b6b]" />
-                  <h4 className="font-heading text-xs font-bold text-neutral-900">{item.title}</h4>
+                  <FolderGit2 className="h-4 w-4 text-brand-ink" />
+                  <h4 className="font-heading text-xs font-bold text-brand-ink">{item.title}</h4>
                   {item.link && (
                     <a
                       href={item.link}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-0.5 text-[10px] font-semibold text-[#1b4b6b] hover:underline ml-2"
+                      className="inline-flex items-center gap-0.5 text-[10px] font-semibold text-brand-ink hover:underline ml-2"
                     >
                       Voir démo <ExternalLink className="h-2.5 w-2.5" />
                     </a>
@@ -167,7 +167,7 @@ export const RealisationTab: React.FC = () => {
                 type="button"
                 disabled={deleteMutation.isPending}
                 onClick={() => deleteMutation.mutate(item.id)}
-                className="text-neutral-400 hover:text-red-500 cursor-pointer p-1"
+                className="text-muted-foreground hover:text-red-500 cursor-pointer p-1"
                 title="Supprimer"
               >
                 <Trash2 className="h-4 w-4" />

@@ -20,11 +20,11 @@ const SettingsPage: React.FC = () => {
   return (
     <div className="mx-auto max-w-[900px] pb-12 space-y-6">
       {/* Breadcrumb & Header */}
-      <div className="border-b border-[#EFECE6] pb-4">
-        <span className="text-[9.5px] font-semibold uppercase tracking-[0.16em] text-neutral-400">
+      <div className="border-b border-border pb-4">
+        <span className="text-[9.5px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
           Compte › Paramètres
         </span>
-        <h1 className="font-heading text-xl font-bold tracking-tight text-neutral-900 mt-0.5">
+        <h1 className="font-heading text-xl font-bold tracking-tight text-brand-ink mt-0.5">
           Paramètres
         </h1>
       </div>
@@ -39,7 +39,7 @@ const SettingsPage: React.FC = () => {
         <button
           type="button"
           onClick={handleLogout}
-          className="inline-flex items-center gap-2 rounded-lg border border-[#e7e3dc] bg-white px-5 py-2 text-[11px] font-semibold text-neutral-700 hover:border-red-300 hover:bg-red-50 hover:text-red-600 transition-colors shadow-2xs cursor-pointer"
+          className="inline-flex items-center gap-2 rounded-lg border border-border bg-white px-5 py-2 text-[11px] font-semibold text-brand-ink hover:border-red-300 hover:bg-red-50 hover:text-red-600 transition-colors shadow-2xs cursor-pointer"
         >
           <LogOut className="h-3.5 w-3.5" /> Se déconnecter de la session
         </button>

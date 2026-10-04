@@ -48,8 +48,8 @@ const MessageList: React.FC<MessageListProps> = ({
     return (
       <div className="flex-1 flex items-center justify-center">
         <div className="flex flex-col items-center gap-3">
-          <Loader2 className="w-6 h-6 text-[#1b4b6b] animate-spin" />
-          <p className="text-[12px] text-neutral-400">Chargement des messages...</p>
+          <Loader2 className="w-6 h-6 text-brand-ink animate-spin" />
+          <p className="text-[12px] text-muted-foreground">Chargement des messages...</p>
         </div>
       </div>
     );
@@ -59,13 +59,13 @@ const MessageList: React.FC<MessageListProps> = ({
     return (
       <div className="flex-1 flex items-center justify-center">
         <div className="flex flex-col items-center gap-2 text-center px-8">
-          <div className="w-14 h-14 rounded-2xl bg-[#1b4b6b]/5 flex items-center justify-center mb-1">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="text-[#1b4b6b]/40">
+          <div className="w-14 h-14 rounded-2xl bg-brand-violet/5 flex items-center justify-center mb-1">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="text-muted-foreground">
               <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
           </div>
-          <p className="text-[13px] font-medium text-neutral-500">Aucun message</p>
-          <p className="text-[11px] text-neutral-400">Envoyez votre premier message pour démarrer la conversation</p>
+          <p className="text-[13px] font-medium text-muted-foreground">Aucun message</p>
+          <p className="text-[11px] text-muted-foreground">Envoyez votre premier message pour démarrer la conversation</p>
         </div>
       </div>
     );
@@ -77,7 +77,7 @@ const MessageList: React.FC<MessageListProps> = ({
         <div key={group.dateKey}>
           {/* Date Separator */}
           <div className="flex items-center justify-center my-4">
-            <span className="px-3 py-1 text-[10px] font-semibold text-neutral-400 bg-neutral-100/80 rounded-full uppercase tracking-wider">
+            <span className="px-3 py-1 text-[10px] font-semibold text-muted-foreground bg-neutral-100/80 rounded-full uppercase tracking-wider">
               {group.dateLabel}
             </span>
           </div>

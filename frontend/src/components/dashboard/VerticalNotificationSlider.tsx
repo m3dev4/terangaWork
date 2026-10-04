@@ -41,42 +41,42 @@ export const VerticalNotificationSlider: React.FC = () => {
   const getNotifIcon = (type: string) => {
     switch (type) {
       case "NOUVEAU_MESSAGE":
-        return <MessageSquare className="w-4.5 h-4.5 text-[#111118]" />;
+        return <MessageSquare className="w-4.5 h-4.5 text-brand-ink" />;
       case "PROPOSITION_ACCEPTEE":
         return <CheckCircle className="w-4.5 h-4.5 text-emerald-600" />;
       case "PROPOSITION_REJETEE":
-        return <AlertTriangle className="w-4.5 h-4.5 text-[#D95C38]" />;
+        return <AlertTriangle className="w-4.5 h-4.5 text-brand-violet" />;
       case "PAIEMENT_REUSSI":
         return <DollarSign className="w-4.5 h-4.5 text-emerald-600" />;
       case "MISSION_DEMARREE":
       case "MISSION_LIVREE":
       case "MISSION_COMPLETEE":
-        return <Briefcase className="w-4.5 h-4.5 text-[#D95C38]" />;
+        return <Briefcase className="w-4.5 h-4.5 text-brand-violet" />;
       default:
-        return <Bell className="w-4.5 h-4.5 text-[#D95C38]" />;
+        return <Bell className="w-4.5 h-4.5 text-brand-violet" />;
     }
   };
 
   if (isLoading) {
     return (
-      <div className="flex flex-col justify-center items-center h-full min-h-[340px] bg-white rounded-[28px] border border-[#111118]/8 p-8 animate-pulse">
-        <div className="w-10 h-10 rounded-xl bg-[#F3EBDD] mb-3" />
-        <div className="w-36 h-4 bg-[#F3EBDD] rounded mb-2" />
-        <div className="w-24 h-3 bg-[#F3EBDD] rounded" />
+      <div className="flex flex-col justify-center items-center h-full min-h-[340px] bg-white rounded-[28px] border border-brand-ink/8 p-8 animate-pulse">
+        <div className="w-10 h-10 rounded-xl bg-brand-sand mb-3" />
+        <div className="w-36 h-4 bg-brand-sand rounded mb-2" />
+        <div className="w-24 h-3 bg-brand-sand rounded" />
       </div>
     );
   }
 
   if (!notifications || notifications.length === 0) {
     return (
-      <div className="flex flex-col justify-center items-center h-full min-h-[340px] bg-white rounded-[28px] border border-[#111118]/8 p-8 text-center">
-        <div className="w-14 h-14 rounded-2xl bg-[#F3EBDD] flex items-center justify-center text-[#D95C38] mb-4">
+      <div className="flex flex-col justify-center items-center h-full min-h-[340px] bg-white rounded-[28px] border border-brand-ink/8 p-8 text-center">
+        <div className="w-14 h-14 rounded-2xl bg-brand-sand flex items-center justify-center text-brand-violet mb-4">
           <Bell className="w-7 h-7" />
         </div>
-        <h4 className="text-base font-bold text-[#111118] font-heading">
+        <h4 className="text-base font-bold text-brand-ink font-heading">
           Aucune notification
         </h4>
-        <p className="text-xs text-[#111118]/50 mt-1.5 max-w-[220px] leading-relaxed">
+        <p className="text-xs text-muted-foreground mt-1.5 max-w-[220px] leading-relaxed">
           Vos notifications et alertes d'activité apparaîtront en temps réel
           ici.
         </p>
@@ -87,25 +87,25 @@ export const VerticalNotificationSlider: React.FC = () => {
   const currentNotif = notifications[currentIndex] || notifications[0];
 
   return (
-    <div className="flex flex-col justify-between h-full min-h-[360px] bg-white rounded-[28px] border border-[#111118]/8 p-6">
+    <div className="flex flex-col justify-between h-full min-h-[360px] bg-white rounded-[28px] border border-brand-ink/8 p-6">
       {/* En-tête */}
-      <div className="flex items-center justify-between pb-4 border-b border-[#111118]/8">
+      <div className="flex items-center justify-between pb-4 border-b border-brand-ink/8">
         <div className="flex items-center gap-3">
           <div className="relative">
-            <div className="w-10 h-10 rounded-xl bg-[#F3EBDD] flex items-center justify-center text-[#111118]">
+            <div className="w-10 h-10 rounded-xl bg-brand-sand flex items-center justify-center text-brand-ink">
               <Bell className="w-5 h-5" />
             </div>
             {unreadCount > 0 && (
-              <span className="absolute -top-1 -right-1 flex h-4.5 w-4.5 items-center justify-center rounded-full bg-[#D95C38] text-[10px] font-bold text-white">
+              <span className="absolute -top-1 -right-1 flex h-4.5 w-4.5 items-center justify-center rounded-full bg-brand-green text-[10px] font-bold text-brand-ink">
                 {unreadCount}
               </span>
             )}
           </div>
           <div>
-            <h3 className="text-sm font-bold font-heading text-[#111118]">
+            <h3 className="text-sm font-bold font-heading text-brand-ink">
               Flux d'activité
             </h3>
-            <p className="text-[11px] text-[#111118]/50 mt-0.5">
+            <p className="text-[11px] text-muted-foreground mt-0.5">
               {currentIndex + 1} / {notifications.length} alerte
               {notifications.length > 1 ? "s" : ""}
             </p>
@@ -116,7 +116,7 @@ export const VerticalNotificationSlider: React.FC = () => {
           {unreadCount > 0 && (
             <button
               onClick={() => markAllRead()}
-              className="text-[11px] font-semibold text-[#D95C38] hover:text-[#c14f2f] bg-[#F3EBDD] px-2.5 py-1 rounded-lg transition-colors cursor-pointer mr-1"
+              className="text-[11px] font-semibold text-brand-violet hover:text-brand-violet bg-brand-sand px-2.5 py-1 rounded-lg transition-colors cursor-pointer mr-1"
             >
               Tout lire
             </button>
@@ -124,14 +124,14 @@ export const VerticalNotificationSlider: React.FC = () => {
           <div className="flex items-center gap-1">
             <button
               onClick={handlePrev}
-              className="p-1.5 rounded-lg bg-[#F3EBDD] hover:bg-[#111118]/10 text-[#111118] transition-colors cursor-pointer"
+              className="p-1.5 rounded-lg bg-brand-sand hover:bg-brand-ink/10 text-brand-ink transition-colors cursor-pointer"
               title="Notification précédente"
             >
               <ChevronUp className="w-4 h-4" />
             </button>
             <button
               onClick={handleNext}
-              className="p-1.5 rounded-lg bg-[#F3EBDD] hover:bg-[#111118]/10 text-[#111118] transition-colors cursor-pointer"
+              className="p-1.5 rounded-lg bg-brand-sand hover:bg-brand-ink/10 text-brand-ink transition-colors cursor-pointer"
               title="Notification suivante"
             >
               <ChevronDown className="w-4 h-4" />
@@ -144,31 +144,31 @@ export const VerticalNotificationSlider: React.FC = () => {
       <div className="my-5 flex-1 flex flex-col justify-center">
         <div
           key={currentNotif.id}
-          className="animate-in fade-in slide-in-from-top-3 duration-300 flex flex-col gap-3 p-5 rounded-2xl bg-[#F3EBDD]/60 hover:bg-[#F3EBDD] transition-colors"
+          className="animate-in fade-in slide-in-from-top-3 duration-300 flex flex-col gap-3 p-5 rounded-2xl bg-brand-sand/60 hover:bg-brand-sand transition-colors"
         >
           <div className="flex items-start justify-between gap-3">
             <div className="flex items-center gap-3">
-              <div className="p-2.5 rounded-xl bg-white border border-[#111118]/8">
+              <div className="p-2.5 rounded-xl bg-white border border-brand-ink/8">
                 {getNotifIcon(currentNotif.type)}
               </div>
-              <span className="text-xs font-bold text-[#111118] line-clamp-1">
+              <span className="text-xs font-bold text-brand-ink line-clamp-1">
                 {currentNotif.titre}
               </span>
             </div>
-            {!currentNotif.est_lu && (
+            {!currentNotif.lue && (
               <button
                 onClick={() => markRead(currentNotif.id)}
-                className="shrink-0 w-2.5 h-2.5 rounded-full bg-[#D95C38] hover:bg-[#c14f2f] transition-colors cursor-pointer"
+                className="shrink-0 w-2.5 h-2.5 rounded-full bg-brand-green hover:bg-brand-green-hover transition-colors cursor-pointer"
                 title="Marquer comme lu"
               />
             )}
           </div>
 
-          <p className="text-xs text-[#111118]/60 leading-relaxed line-clamp-3">
+          <p className="text-xs text-muted-foreground leading-relaxed line-clamp-3">
             {currentNotif.message}
           </p>
 
-          <div className="flex items-center justify-between pt-3 border-t border-[#111118]/8 text-[11px] text-[#111118]/45">
+          <div className="flex items-center justify-between pt-3 border-t border-brand-ink/8 text-[11px] text-muted-foreground">
             <span className="flex items-center gap-1">
               <Clock className="w-3 h-3" />
               {new Date(currentNotif.date_creation).toLocaleTimeString([], {
@@ -180,7 +180,7 @@ export const VerticalNotificationSlider: React.FC = () => {
             {currentNotif.type === "NOUVEAU_MESSAGE" ? (
               <NavLink
                 to="/espace/messages"
-                className="inline-flex items-center gap-1 font-semibold text-[#111118] hover:underline"
+                className="inline-flex items-center gap-1 font-semibold text-brand-ink hover:underline"
               >
                 Répondre
                 <ArrowRight className="w-3.5 h-3.5" />
@@ -188,7 +188,7 @@ export const VerticalNotificationSlider: React.FC = () => {
             ) : currentNotif.mission ? (
               <NavLink
                 to={`/espace/missions/${currentNotif.mission}`}
-                className="inline-flex items-center gap-1 font-semibold text-[#D95C38] hover:underline"
+                className="inline-flex items-center gap-1 font-semibold text-brand-violet hover:underline"
               >
                 Consulter
                 <ArrowRight className="w-3.5 h-3.5" />
@@ -199,15 +199,15 @@ export const VerticalNotificationSlider: React.FC = () => {
       </div>
 
       {/* Puces de progression */}
-      <div className="flex items-center justify-center gap-1.5 pt-2 border-t border-[#111118]/8">
+      <div className="flex items-center justify-center gap-1.5 pt-2 border-t border-brand-ink/8">
         {notifications.slice(0, 8).map((_, idx) => (
           <button
             key={idx}
             onClick={() => setCurrentIndex(idx)}
             className={`h-1.5 rounded-full transition-all cursor-pointer ${
               idx === currentIndex
-                ? "w-6 bg-[#D95C38]"
-                : "w-1.5 bg-[#111118]/15 hover:bg-[#111118]/25"
+                ? "w-6 bg-brand-green"
+                : "w-1.5 bg-brand-ink/15 hover:bg-brand-ink/25"
             }`}
           />
         ))}

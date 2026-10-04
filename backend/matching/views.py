@@ -70,6 +70,9 @@ class MissionsRecommandeesView(APIView):
     permission_classes = [IsAuthenticated, IsOnboardingComplete, IsFreelance]
 
     def post(self, request) -> Response:
+        return self._get_results(request, scoring_only=False)
+
+    def _get_results(self, request, *, scoring_only) -> Response:
         freelance = (
             Freelancee.objects.filter(user=request.user)
             .select_related("user", "service")
@@ -84,7 +87,7 @@ class MissionsRecommandeesView(APIView):
             )
 
         try:
-            res = process_missions_recommandees(freelance)
+            res = process_missions_recommandees(freelance, scoring_only=scoring_only)
             return Response(res, status=status.HTTP_200_OK)
         except MatchingServiceUnavailableError as e:
             logger.error(f"Service de matching indisponible (Freelance #{freelance.id}): {e}")
@@ -92,3 +95,12 @@ class MissionsRecommandeesView(APIView):
                 {"detail": "Matching temporairement indisponible."},
                 status=status.HTTP_503_SERVICE_UNAVAILABLE,
             )
+
+
+class MissionsCompatibiliteView(MissionsRecommandeesView):
+    """Scores de toutes les missions, sans appel LLM ni écriture en base."""
+
+    http_method_names = ["get", "head", "options"]
+
+    def get(self, request) -> Response:
+        return self._get_results(request, scoring_only=True)

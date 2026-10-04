@@ -20,19 +20,19 @@ interface StepOnboardingProps {
 }
 
 export const ActiveStepIcon: React.FC = () => (
-  <div className="relative w-6 h-6 rounded-full border-2 border-[#111118] flex items-center justify-center shrink-0">
-    <span className="w-2 h-2 rounded-full bg-secondary-terangawork z-10" />
+  <div className="relative w-6 h-6 rounded-full border-2 border-brand-ink flex items-center justify-center shrink-0">
+    <span className="w-2 h-2 rounded-full bg-brand-green z-10" />
   </div>
 );
 
 export const CompletedStepIcon: React.FC = () => (
-  <div className="w-6 h-6 rounded-full bg-[#111118] flex items-center justify-center shrink-0">
-    <Check className="w-3.5 h-3.5 text-[#E7B84B] stroke-[2.5]" />
+  <div className="w-6 h-6 rounded-full bg-brand-ink flex items-center justify-center shrink-0">
+    <Check className="w-3.5 h-3.5 text-brand-green stroke-[2.5]" />
   </div>
 );
 
 export const InactiveStepIcon: React.FC = () => (
-  <div className="w-6 h-6 rounded-full border-2 border-[#111118]/15 bg-transparent shrink-0" />
+  <div className="w-6 h-6 rounded-full border-2 border-brand-ink/15 bg-transparent shrink-0" />
 );
 
 const StepOnboarding: React.FC<StepOnboardingProps> = ({
@@ -48,7 +48,7 @@ const StepOnboarding: React.FC<StepOnboardingProps> = ({
         onClick={onClick}
         className={`w-full flex items-center gap-3.5 transition-all duration-150 ${
           active
-            ? "bg-white rounded-2xl py-2.5 px-4 border border-[#111118]/8"
+            ? "bg-white rounded-2xl py-2.5 px-4 border border-brand-ink/8"
             : "py-1.5 px-4"
         } ${completed && onClick ? "cursor-pointer hover:opacity-70" : ""}`}
       >
@@ -65,10 +65,10 @@ const StepOnboarding: React.FC<StepOnboardingProps> = ({
         <span
           className={`text-sm tracking-tight transition-colors font-inter ${
             active
-              ? "font-bold text-[#111118]"
+              ? "font-bold text-brand-ink"
               : completed
-                ? "font-medium text-[#111118]/80"
-                : "font-normal text-[#111118]/40"
+                ? "font-medium text-brand-ink/80"
+                : "font-normal text-muted-foreground"
           }`}
         >
           {label}
@@ -77,7 +77,7 @@ const StepOnboarding: React.FC<StepOnboardingProps> = ({
 
       {!isLast && (
         <div className="pl-6.75 py-0.5">
-          <div className="w-[1.5px] h-2.5 bg-[#111118]/12" />
+          <div className="w-[1.5px] h-2.5 bg-brand-ink/12" />
         </div>
       )}
     </div>

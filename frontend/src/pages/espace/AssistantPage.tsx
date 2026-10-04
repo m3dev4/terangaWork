@@ -97,9 +97,9 @@ const AssistantPage: React.FC = () => {
 
   return (
 
-    <div className="flex h-full relative min-h-0 w-full overflow-hidden border border-[#111118]/8 bg-white">
+    <div className="flex h-full relative min-h-0 w-full overflow-hidden border border-brand-ink/8 bg-white">
       <div
-        className={`min-h-0 w-full shrink-0 flex justify-center items-center border-r border-[#111118]/8 md:w-[280px] lg:w-[320px] ${
+        className={`min-h-0 w-full shrink-0 flex justify-center items-center border-r border-brand-ink/8 md:w-[280px] lg:w-[320px] ${
           mobileShowChat ? 'hidden md:flex' : 'flex'
         }`}
       >

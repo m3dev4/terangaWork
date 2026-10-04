@@ -163,7 +163,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   return (
     <aside
       aria-label="Navigation principale"
-      className={`min-h-0 h-full bg-white border-r border-[#EFECE6] flex flex-col justify-between transition-all duration-200 select-none z-30 shrink-0 ${
+      className={`min-h-0 h-full bg-white border-r border-border flex flex-col justify-between transition-all duration-200 select-none z-30 shrink-0 ${
         mobile ? 'w-full flex-1 [&_a]:min-h-11 [&_a]:text-sm [&_a_span]:text-sm [&_h4]:text-xs' : collapsed ? 'w-14' : 'w-48 lg:w-52'
       }`}
     >
@@ -181,7 +181,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           {sections.map((section) => (
             <div key={section.title} className="flex flex-col space-y-0.5">
               {!collapsed && (
-                <h4 className="text-[9px] uppercase tracking-wider font-semibold text-neutral-400 px-2 mb-0.5">
+                <h4 className="text-[9px] uppercase tracking-wider font-semibold text-muted-foreground px-2 mb-0.5">
                   {section.title}
                 </h4>
               )}
@@ -201,15 +201,15 @@ export const Sidebar: React.FC<SidebarProps> = ({
                       end={isExactDashboard}
                       className={`w-8 h-8 mx-auto rounded-lg flex items-center justify-center relative transition-all duration-150 ${
                         isActive
-                          ? 'bg-[#1b4b6b] text-white shadow-2xs'
-                          : 'text-neutral-500 hover:text-neutral-900 hover:bg-neutral-100'
+                          ? 'bg-brand-violet text-white shadow-2xs'
+                          : 'text-muted-foreground hover:text-brand-ink hover:bg-neutral-100'
                       }`}
                       title={item.label}
                     >
                       <Icon className="w-3.5 h-3.5 shrink-0" strokeWidth={isActive ? 2 : 1.6} />
                       {/* Orange notification dot */}
                       {!isActive && item.badge !== undefined && (
-                        <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-[#f2994a]" />
+                        <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-brand-green" />
                       )}
                     </NavLink>
                   );
@@ -222,20 +222,20 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     end={isExactDashboard}
                     className={`relative flex items-center gap-2 px-2 py-1.5 rounded-md text-[11px] transition-all group ${
                       isActive
-                        ? 'bg-[#F0F4F8] text-[#1b4b6b] font-semibold'
-                        : 'text-neutral-600 hover:bg-neutral-100/70 hover:text-neutral-900 font-medium'
+                        ? 'bg-brand-sand text-brand-ink font-semibold'
+                        : 'text-neutral-600 hover:bg-neutral-100/70 hover:text-brand-ink font-medium'
                     }`}
                   >
                     {/* Active left orange bar */}
                     {isActive && (
-                      <span className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-3.5 bg-[#f2994a] rounded-r-xs" />
+                      <span className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-3.5 bg-brand-green rounded-r-xs" />
                     )}
 
                     <Icon
                       className={`w-3.5 h-3.5 shrink-0 transition-colors ${
                         isActive
-                          ? 'text-[#1b4b6b]'
-                          : 'text-neutral-500 group-hover:text-neutral-700'
+                          ? 'text-brand-ink'
+                          : 'text-muted-foreground group-hover:text-brand-ink'
                       }`}
                       strokeWidth={isActive ? 2 : 1.6}
                     />
@@ -248,8 +248,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
                       <span
                         className={`text-[8.5px] px-1.5 py-0.2 rounded-full font-bold leading-none ${
                           item.badgeVariant === 'orange'
-                            ? 'bg-[#f2994a] text-white'
-                            : 'bg-neutral-100 text-neutral-500'
+                            ? 'bg-brand-green text-brand-ink'
+                            : 'bg-neutral-100 text-muted-foreground'
                         }`}
                       >
                         {item.badge}
@@ -264,7 +264,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       </div>
 
       {/* Footer Section */}
-      <div className="shrink-0 p-2 border-t border-[#EFECE6] bg-white space-y-0.5" onClick={(event) => { if ((event.target as HTMLElement).closest('a')) onNavigate?.(); }}>
+      <div className="shrink-0 p-2 border-t border-border bg-white space-y-0.5" onClick={(event) => { if ((event.target as HTMLElement).closest('a')) onNavigate?.(); }}>
         {FOOTER_ITEMS.map((item) => {
           const Icon = item.icon;
           const isActive = location.pathname.startsWith(item.url);
@@ -276,8 +276,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 to={item.url}
                 className={`w-8 h-8 mx-auto rounded-lg flex items-center justify-center transition-all ${
                   isActive
-                    ? 'bg-[#1b4b6b] text-white'
-                    : 'text-neutral-500 hover:text-neutral-900 hover:bg-neutral-100'
+                    ? 'bg-brand-violet text-white'
+                    : 'text-muted-foreground hover:text-brand-ink hover:bg-neutral-100'
                 }`}
                 title={item.label}
               >
@@ -292,8 +292,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
               to={item.url}
               className={`flex items-center gap-2 px-2 py-1.5 rounded-md text-[11px] transition-all ${
                 isActive
-                  ? 'bg-[#F0F4F8] text-[#1b4b6b] font-semibold'
-                  : 'text-neutral-500 hover:bg-neutral-100/70 hover:text-neutral-900 font-medium'
+                  ? 'bg-brand-sand text-brand-ink font-semibold'
+                  : 'text-muted-foreground hover:bg-neutral-100/70 hover:text-brand-ink font-medium'
               }`}
             >
               <Icon className="w-3.5 h-3.5 shrink-0" strokeWidth={1.6} />
@@ -307,21 +307,21 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <button
             type="button"
             onClick={onToggleCollapse}
-            className="w-6 h-6 rounded-full border border-neutral-200 bg-white shadow-2xs flex items-center justify-center hover:bg-neutral-50 text-neutral-600 transition-all mx-auto mt-1.5 cursor-pointer"
+            className="w-6 h-6 rounded-full border border-border bg-white shadow-2xs flex items-center justify-center hover:bg-brand-canvas text-neutral-600 transition-all mx-auto mt-1.5 cursor-pointer"
             title="Agrandir le menu"
           >
-            <ChevronRight className="w-3 h-3 text-neutral-500" />
+            <ChevronRight className="w-3 h-3 text-muted-foreground" />
           </button>
         ) : (
           <button
             type="button"
             onClick={onToggleCollapse}
-            className="w-full flex items-center gap-2 px-2 py-1 mt-0.5 rounded-md text-neutral-400 hover:bg-neutral-100/70 hover:text-neutral-700 transition-colors cursor-pointer"
+            className="w-full flex items-center gap-2 px-2 py-1 mt-0.5 rounded-md text-muted-foreground hover:bg-neutral-100/70 hover:text-brand-ink transition-colors cursor-pointer"
           >
             <div className="w-3.5 h-3.5 rounded-full border border-neutral-300 flex items-center justify-center shrink-0">
-              <ChevronLeft className="w-2.5 h-2.5 text-neutral-500" />
+              <ChevronLeft className="w-2.5 h-2.5 text-muted-foreground" />
             </div>
-            <span className="text-[10px] text-neutral-400 tracking-tight">
+            <span className="text-[10px] text-muted-foreground tracking-tight">
               Réduire le menu
             </span>
           </button>

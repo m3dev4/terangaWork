@@ -111,20 +111,20 @@ const AssistantChatPanel: React.FC<AssistantChatPanelProps> = ({
         <button
           type="button"
           onClick={onBack}
-          className="flex shrink-0 items-center gap-2 border-b border-[#111118]/8 bg-white px-4 py-3 text-sm font-medium text-[#111118]/70 hover:bg-[#F3EBDD]/40 md:hidden"
+          className="flex shrink-0 items-center gap-2 border-b border-brand-ink/8 bg-white px-4 py-3 text-sm font-medium text-muted-foreground hover:bg-brand-sand/40 md:hidden"
         >
           <ArrowLeft className="h-4 w-4" />
           Retour
         </button>
       )}
 
-      <div className="flex shrink-0 items-center gap-3 border-b border-[#111118]/8 bg-white px-4 py-3">
-        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#111118]">
-          <Bot className="h-4.5 w-4.5 text-[#E7B84B]" />
+      <div className="flex shrink-0 items-center gap-3 border-b border-brand-ink/8 bg-white px-4 py-3">
+        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-brand-ink">
+          <Bot className="h-4.5 w-4.5 text-brand-green" />
         </div>
         <div className="min-w-0 flex-1">
-          <h3 className="truncate text-sm font-bold text-[#111118]">{truncate(convTitle, 60)}</h3>
-          <p className="truncate text-xs text-[#111118]/45">
+          <h3 className="truncate text-sm font-bold text-brand-ink">{truncate(convTitle, 60)}</h3>
+          <p className="truncate text-xs text-muted-foreground">
             {isSending ? 'Réflexion en cours…' : sendError ? 'Erreur' : 'Prêt à répondre'}
           </p>
         </div>
@@ -133,18 +133,18 @@ const AssistantChatPanel: React.FC<AssistantChatPanelProps> = ({
       <div ref={scrollRef} className="min-h-0 flex-1 space-y-4 overflow-y-auto px-4 py-5">
         {isLoadingMessages ? (
           <div className="flex justify-center py-12">
-            <div className="flex items-center gap-2 text-sm text-[#111118]/45">
-              <div className="h-4 w-4 shrink-0 animate-spin rounded-full border-2 border-[#D95C38] border-t-transparent" />
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <div className="h-4 w-4 shrink-0 animate-spin rounded-full border-2 border-brand-green border-t-transparent" />
               Chargement…
             </div>
           </div>
         ) : displayMessages.length === 0 ? (
           <div className="flex h-full flex-col items-center justify-center px-2 text-center">
-            <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#F3EBDD]">
-              <Bot className="h-7 w-7 text-[#D95C38]" />
+            <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-sand">
+              <Bot className="h-7 w-7 text-brand-violet" />
             </div>
-            <h4 className="mb-2 text-base font-bold text-[#111118]">Assistant Malaw</h4>
-            <p className="mb-6 max-w-md text-sm text-[#111118]/50">
+            <h4 className="mb-2 text-base font-bold text-brand-ink">Assistant Malaw</h4>
+            <p className="mb-6 max-w-md text-sm text-muted-foreground">
               Posez des questions sur vos candidatures, missions, paiements ou obtenez des conseils personnalisés.
             </p>
             <div className="grid w-full max-w-lg grid-cols-1 gap-2 sm:grid-cols-2">
@@ -158,7 +158,7 @@ const AssistantChatPanel: React.FC<AssistantChatPanelProps> = ({
                   key={i}
                   type="button"
                   onClick={() => setInput(sug)}
-                  className="rounded-xl border border-[#111118]/10 bg-[#F3EBDD]/40 p-3 text-left text-xs text-[#111118]/70 transition-colors hover:border-[#D95C38]/40 hover:bg-white"
+                  className="rounded-xl border border-brand-ink/10 bg-brand-sand/40 p-3 text-left text-xs text-muted-foreground transition-colors hover:border-brand-green/40 hover:bg-white"
                 >
                   {sug}
                 </button>
@@ -180,16 +180,16 @@ const AssistantChatPanel: React.FC<AssistantChatPanelProps> = ({
                 className={`flex items-start gap-2.5 ${isUser ? 'justify-end' : 'justify-start'}`}
               >
                 {!isUser && (
-                  <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[#111118]">
-                    <Bot className="h-3.5 w-3.5 text-[#E7B84B]" />
+                  <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-brand-ink">
+                    <Bot className="h-3.5 w-3.5 text-brand-green" />
                   </div>
                 )}
 
                 <div
                   className={`min-w-0 max-w-[85%] rounded-2xl px-3.5 py-2.5 text-sm sm:max-w-[75%] ${
                     isUser
-                      ? 'rounded-br-md bg-[#111118] text-white'
-                      : 'rounded-bl-md border border-[#111118]/8 bg-[#F3EBDD]/40 text-[#111118]'
+                      ? 'rounded-br-md bg-brand-ink text-white'
+                      : 'rounded-bl-md border border-brand-ink/8 bg-brand-sand/40 text-brand-ink'
                   }`}
                 >
                   {isUser ? (
@@ -199,13 +199,13 @@ const AssistantChatPanel: React.FC<AssistantChatPanelProps> = ({
                   ) : (
                     <div className="whitespace-pre-wrap break-words">{msg.content}</div>
                   )}
-                  <div className={`mt-1.5 text-xs ${isUser ? 'text-white/50' : 'text-[#111118]/35'}`}>
+                  <div className={`mt-1.5 text-xs ${isUser ? 'text-white/75' : 'text-muted-foreground'}`}>
                     {formatDate(msg.created_at)}
                   </div>
                 </div>
 
                 {isUser && (
-                  <div className="flex h-7 w-7 shrink-0 items-center relative overflow-hidden justify-center rounded-lg bg-[#D95C38]">
+                  <div className="flex h-7 w-7 shrink-0 items-center relative overflow-hidden justify-center rounded-lg bg-brand-green">
                     <img src={getMediaUrl(user.profile_picture)} alt={user.first_name} className="h-7 rounded-lg w-7 object-cover" />
                   </div>
                 )}
@@ -216,21 +216,21 @@ const AssistantChatPanel: React.FC<AssistantChatPanelProps> = ({
 
         {isSending && !optimisticMessage && displayMessages.length > 0 && (
           <div className="flex items-start gap-2.5">
-            <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[#111118]">
-              <Bot className="h-3.5 w-3.5 text-[#E7B84B]" />
+            <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-brand-ink">
+              <Bot className="h-3.5 w-3.5 text-brand-green" />
             </div>
-            <div className="rounded-2xl rounded-bl-md border border-[#111118]/8 bg-[#F3EBDD]/40 px-4 py-3">
+            <div className="rounded-2xl rounded-bl-md border border-brand-ink/8 bg-brand-sand/40 px-4 py-3">
               <div className="flex items-center gap-1">
-                <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-[#111118]/30 [animation-delay:-0.3s]" />
-                <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-[#111118]/30 [animation-delay:-0.15s]" />
-                <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-[#111118]/30" />
+                <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-brand-ink/30 [animation-delay:-0.3s]" />
+                <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-brand-ink/30 [animation-delay:-0.15s]" />
+                <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-brand-ink/30" />
               </div>
             </div>
           </div>
         )}
 
         {sendError && !isSending && (
-          <div className="mx-auto flex max-w-md items-start gap-2 rounded-xl border border-[#D95C38]/25 bg-[#D95C38]/10 px-4 py-3 text-sm text-[#c14f2f]">
+          <div className="mx-auto flex max-w-md items-start gap-2 rounded-xl border border-brand-green/25 bg-brand-green/10 px-4 py-3 text-sm text-brand-violet">
             <AlertCircle className="h-5 w-5 shrink-0" />
             <div className="min-w-0">
               <p className="font-medium">Erreur</p>
@@ -243,7 +243,7 @@ const AssistantChatPanel: React.FC<AssistantChatPanelProps> = ({
       </div>
 
       <div
-        className="shrink-0 border-t border-[#111118]/8 bg-white px-4 py-3"
+        className="shrink-0 border-t border-brand-ink/8 bg-white px-4 py-3"
         style={{ paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))' }}
       >
         <div className="flex items-end gap-2">
@@ -255,14 +255,14 @@ const AssistantChatPanel: React.FC<AssistantChatPanelProps> = ({
             rows={1}
             disabled={isSending}
             placeholder="Posez votre question…"
-            className="min-w-0 flex-1 resize-none rounded-xl border border-[#111118]/12 bg-[#F3EBDD]/30 px-3.5 py-2.5 text-sm text-[#111118] placeholder:text-[#111118]/35 focus:outline-none focus:ring-2 focus:ring-[#D95C38]/15 focus:border-[#D95C38] disabled:opacity-60"
+            className="min-w-0 flex-1 resize-none rounded-xl border border-brand-ink/12 bg-brand-sand/30 px-3.5 py-2.5 text-sm text-brand-ink placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-brand-green/15 focus:border-brand-green disabled:opacity-60"
             style={{ minHeight: '44px', maxHeight: '120px' }}
           />
           <button
             type="button"
             onClick={handleSubmit}
             disabled={!input.trim() || isSending}
-            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#D95C38] text-white transition-colors hover:bg-[#c14f2f] disabled:cursor-not-allowed disabled:opacity-50"
+            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand-green text-brand-ink transition-colors hover:bg-brand-green-hover disabled:cursor-not-allowed disabled:opacity-50"
           >
             {isSending ? (
               <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
@@ -271,7 +271,7 @@ const AssistantChatPanel: React.FC<AssistantChatPanelProps> = ({
             )}
           </button>
         </div>
-        <p className="mt-2 text-center text-xs text-[#111118]/35">{input.length}/2000 caractères</p>
+        <p className="mt-2 text-center text-xs text-muted-foreground">{input.length}/2000 caractères</p>
       </div>
     </div>
   );
