@@ -127,17 +127,17 @@ export const PersonalInfoTab: React.FC<PersonalInfoTabProps> = ({ user }) => {
   };
 
   return (
-    <div className="rounded-2xl border border-brand-sand bg-white p-6 sm:p-8 shadow-xs max-w-3xl">
+    <div className="rounded-2xl border border-brand-sand dark:border-border bg-white dark:bg-card p-6 sm:p-8 shadow-xs max-w-3xl">
       {successMessage && (
-        <div className="mb-6 flex items-center gap-2 rounded-lg bg-emerald-50 border border-emerald-200 p-3 text-[11px] font-semibold text-emerald-700">
-          <CheckCircle className="h-4 w-4 shrink-0 text-emerald-600" />
+        <div className="mb-6 flex items-center gap-2 rounded-lg bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/30 p-3 text-[11px] font-semibold text-emerald-700 dark:text-emerald-300">
+          <CheckCircle className="h-4 w-4 shrink-0 text-emerald-600 dark:text-emerald-300" />
           Modifications enregistrées avec succès !
         </div>
       )}
 
       {errorMessage && (
-        <div className="mb-6 flex items-center gap-2 rounded-lg bg-red-50 border border-red-200 p-3 text-[11px] font-semibold text-red-700">
-          <AlertCircle className="h-4 w-4 shrink-0 text-red-600" />
+        <div className="mb-6 flex items-center gap-2 rounded-lg bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/30 p-3 text-[11px] font-semibold text-red-700 dark:text-red-300">
+          <AlertCircle className="h-4 w-4 shrink-0 text-red-600 dark:text-red-300" />
           {errorMessage}
         </div>
       )}
@@ -146,7 +146,7 @@ export const PersonalInfoTab: React.FC<PersonalInfoTabProps> = ({ user }) => {
         {/* Avatar Upload Section */}
         <div className="flex flex-col items-center justify-center mb-6">
           <div className="relative group">
-            <div className="h-28 w-28 overflow-hidden rounded-full border-4 border-white bg-neutral-100 shadow-md flex items-center justify-center ring-1 ring-neutral-200">
+            <div className="h-28 w-28 overflow-hidden rounded-full border-4 border-white dark:border-card bg-neutral-100 dark:bg-muted shadow-md flex items-center justify-center ring-1 ring-neutral-200 dark:ring-border">
               {avatarPreview ? (
                 <img
                   src={avatarPreview}
@@ -187,7 +187,7 @@ export const PersonalInfoTab: React.FC<PersonalInfoTabProps> = ({ user }) => {
               value={lastName}
               onChange={(e) => setLastName(e.target.value)}
               placeholder="Votre nom"
-              className="w-full rounded-lg border border-border bg-brand-canvas px-3.5 py-2.5 text-[11.5px] font-medium text-brand-ink outline-none focus:border-brand-violet focus:bg-white transition-all"
+              className="w-full rounded-lg border border-border bg-brand-canvas dark:bg-background px-3.5 py-2.5 text-[11.5px] font-medium text-brand-ink dark:text-foreground outline-none focus:border-brand-violet dark:focus:border-violet-300 focus:bg-white dark:focus:bg-card transition-all"
             />
           </div>
 
@@ -201,7 +201,7 @@ export const PersonalInfoTab: React.FC<PersonalInfoTabProps> = ({ user }) => {
               value={firstName}
               onChange={(e) => setFirstName(e.target.value)}
               placeholder="Votre prénom"
-              className="w-full rounded-lg border border-border bg-brand-canvas px-3.5 py-2.5 text-[11.5px] font-medium text-brand-ink outline-none focus:border-brand-violet focus:bg-white transition-all"
+              className="w-full rounded-lg border border-border bg-brand-canvas dark:bg-background px-3.5 py-2.5 text-[11.5px] font-medium text-brand-ink dark:text-foreground outline-none focus:border-brand-violet dark:focus:border-violet-300 focus:bg-white dark:focus:bg-card transition-all"
             />
           </div>
         </div>
@@ -216,7 +216,7 @@ export const PersonalInfoTab: React.FC<PersonalInfoTabProps> = ({ user }) => {
               type="email"
               readOnly
               value={email}
-              className="w-full rounded-lg border border-border bg-brand-canvas px-3.5 py-2.5 text-[11.5px] font-medium text-neutral-600 outline-none cursor-not-allowed"
+              className="w-full rounded-lg border border-border bg-brand-canvas dark:bg-background px-3.5 py-2.5 text-[11.5px] font-medium text-neutral-600 dark:text-muted-foreground outline-none cursor-not-allowed"
             />
             <Lock className="absolute right-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
           </div>
@@ -234,7 +234,7 @@ export const PersonalInfoTab: React.FC<PersonalInfoTabProps> = ({ user }) => {
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               placeholder="+221 77 000 00 00"
-              className="w-full rounded-lg border border-border bg-white px-3.5 py-2.5 text-[11.5px] font-medium text-brand-ink outline-none focus:border-brand-violet transition-all"
+              className="w-full rounded-lg border border-border bg-white dark:bg-card px-3.5 py-2.5 text-[11.5px] font-medium text-brand-ink dark:text-foreground outline-none focus:border-brand-violet dark:focus:border-violet-300 transition-all"
             />
           </div>
 
@@ -247,7 +247,7 @@ export const PersonalInfoTab: React.FC<PersonalInfoTabProps> = ({ user }) => {
               <button
                 type="button"
                 onClick={() => setIsPasswordModalOpen(true)}
-                className="text-[10px] font-semibold text-brand-ink hover:underline cursor-pointer"
+                className="text-[10px] font-semibold text-brand-ink dark:text-foreground hover:underline cursor-pointer"
               >
                 Modifier le mot de passe
               </button>
@@ -256,15 +256,15 @@ export const PersonalInfoTab: React.FC<PersonalInfoTabProps> = ({ user }) => {
               type="password"
               readOnly
               value="••••••••••••"
-              className="w-full rounded-lg border border-border bg-brand-canvas px-3.5 py-2.5 text-[11.5px] text-muted-foreground outline-none cursor-not-allowed"
+              className="w-full rounded-lg border border-border bg-brand-canvas dark:bg-background px-3.5 py-2.5 text-[11.5px] text-muted-foreground outline-none cursor-not-allowed"
             />
           </div>
         </div>
 
         {/* Freelance Specific Section */}
         {isFreelance && (
-          <div className="border-t border-brand-sand pt-6 space-y-4">
-            <h4 className="font-heading text-xs font-bold text-brand-ink">
+          <div className="border-t border-brand-sand dark:border-border pt-6 space-y-4">
+            <h4 className="font-heading text-xs font-bold text-brand-ink dark:text-foreground">
               Profil Freelance & Portfolio Links
             </h4>
 
@@ -278,7 +278,7 @@ export const PersonalInfoTab: React.FC<PersonalInfoTabProps> = ({ user }) => {
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="ex: Développeur Lead Fullstack React & Python"
-                className="w-full rounded-lg border border-border bg-white px-3.5 py-2.5 text-[11.5px] font-medium text-brand-ink outline-none focus:border-brand-violet"
+                className="w-full rounded-lg border border-border bg-white dark:bg-card px-3.5 py-2.5 text-[11.5px] font-medium text-brand-ink dark:text-foreground outline-none focus:border-brand-violet dark:focus:border-violet-300"
               />
             </div>
 
@@ -292,7 +292,7 @@ export const PersonalInfoTab: React.FC<PersonalInfoTabProps> = ({ user }) => {
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="Décrivez votre expérience, vos spécialités et votre passion..."
-                className="w-full rounded-lg border border-border bg-white px-3.5 py-2.5 text-[11.5px] font-medium text-brand-ink outline-none focus:border-brand-violet"
+                className="w-full rounded-lg border border-border bg-white dark:bg-card px-3.5 py-2.5 text-[11.5px] font-medium text-brand-ink dark:text-foreground outline-none focus:border-brand-violet dark:focus:border-violet-300"
               />
             </div>
 
@@ -307,7 +307,7 @@ export const PersonalInfoTab: React.FC<PersonalInfoTabProps> = ({ user }) => {
                   value={githubUrl}
                   onChange={(e) => setGithubUrl(e.target.value)}
                   placeholder="https://github.com/username"
-                  className="w-full rounded-lg border border-border bg-white px-3.5 py-2.5 text-[11.5px] font-medium text-brand-ink outline-none focus:border-brand-violet"
+                  className="w-full rounded-lg border border-border bg-white dark:bg-card px-3.5 py-2.5 text-[11.5px] font-medium text-brand-ink dark:text-foreground outline-none focus:border-brand-violet dark:focus:border-violet-300"
                 />
               </div>
 
@@ -320,7 +320,7 @@ export const PersonalInfoTab: React.FC<PersonalInfoTabProps> = ({ user }) => {
                   value={linkedinUrl}
                   onChange={(e) => setLinkedinUrl(e.target.value)}
                   placeholder="https://linkedin.com/in/username"
-                  className="w-full rounded-lg border border-border bg-white px-3.5 py-2.5 text-[11.5px] font-medium text-brand-ink outline-none focus:border-brand-violet"
+                  className="w-full rounded-lg border border-border bg-white dark:bg-card px-3.5 py-2.5 text-[11.5px] font-medium text-brand-ink dark:text-foreground outline-none focus:border-brand-violet dark:focus:border-violet-300"
                 />
               </div>
             </div>
@@ -328,7 +328,7 @@ export const PersonalInfoTab: React.FC<PersonalInfoTabProps> = ({ user }) => {
         )}
 
         {/* Save Button */}
-        <div className="border-t border-brand-sand pt-4 flex justify-end">
+        <div className="border-t border-brand-sand dark:border-border pt-4 flex justify-end">
           <button
             type="submit"
             disabled={updateProfileMutation.isPending}

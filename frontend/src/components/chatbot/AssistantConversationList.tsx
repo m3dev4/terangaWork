@@ -22,14 +22,14 @@ const AssistantConversationList: React.FC<AssistantConversationListProps> = ({
   isLoading,
 }) => {
   return (
-    <div className="flex h-full min-h-0 flex-col w-full overflow-x-hidden bg-brand-sand/25">
-      <div className="shrink-0 border-b border-brand-ink/8 bg-white p-4">
+    <div className="flex h-full min-h-0 flex-col w-full overflow-x-hidden bg-brand-sand/25 dark:bg-muted/25">
+      <div className="shrink-0 border-b border-brand-ink/8 dark:border-border bg-white dark:bg-card p-4">
         <div className="mb-3 flex items-center gap-2.5">
           <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-brand-ink">
             <Bot className="h-4.5 w-4.5 text-brand-green" strokeWidth={2} />
           </div>
           <div className="min-w-0">
-            <h2 className="truncate text-sm font-bold text-brand-ink">
+            <h2 className="truncate text-sm font-bold text-brand-ink dark:text-foreground">
               Assistant Malaw
             </h2>
             <p className="truncate text-xs text-muted-foreground">
@@ -41,7 +41,7 @@ const AssistantConversationList: React.FC<AssistantConversationListProps> = ({
           type="button"
           onClick={onCreate}
           disabled={isCreating}
-          className="flex w-full items-center justify-center gap-2 rounded-xl bg-brand-green px-4 py-2.5 text-sm font-semibold text-brand-ink transition-colors hover:bg-brand-green-hover disabled:cursor-not-allowed disabled:opacity-50"
+          className="flex w-full items-center justify-center gap-2 rounded-xl bg-brand-green px-4 py-2.5 text-sm font-semibold text-brand-ink dark:text-primary-foreground transition-colors hover:bg-brand-green-hover disabled:cursor-not-allowed disabled:opacity-50"
         >
           <Plus className="h-4 w-4 shrink-0" />
           <span className="truncate">
@@ -56,13 +56,13 @@ const AssistantConversationList: React.FC<AssistantConversationListProps> = ({
             {[0, 1, 2].map((i) => (
               <div
                 key={i}
-                className="h-16 animate-pulse rounded-xl bg-brand-ink/5"
+                className="h-16 animate-pulse rounded-xl bg-brand-ink/5 dark:bg-foreground/5"
               />
             ))}
           </div>
         ) : conversations.length === 0 ? (
           <div className="flex h-full flex-col items-center justify-center px-4 py-8 text-center">
-            <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-brand-ink/5">
+            <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-brand-ink/5 dark:bg-foreground/5">
               <Bot className="h-6 w-6 text-muted-foreground" />
             </div>
             <p className="text-sm font-medium text-muted-foreground">
@@ -79,7 +79,7 @@ const AssistantConversationList: React.FC<AssistantConversationListProps> = ({
               <div
                 key={conv.id}
                 className={`group relative rounded-xl transition-colors ${
-                  isActive ? "bg-white shadow-sm" : "hover:bg-white/70"
+                  isActive ? "bg-white dark:bg-card shadow-sm" : "hover:bg-white/70 dark:hover:bg-card/70"
                 }`}
               >
                 <button
@@ -90,7 +90,7 @@ const AssistantConversationList: React.FC<AssistantConversationListProps> = ({
                   <div className="mb-1 flex min-w-0 items-center justify-between gap-2">
                     <span
                       className={`min-w-0 truncate text-sm font-medium ${
-                        isActive ? "text-brand-ink" : "text-brand-ink/75"
+                        isActive ? "text-brand-ink dark:text-foreground" : "text-brand-ink/75 dark:text-foreground/75"
                       }`}
                     >
                       {truncate(conv.title || `Conversation #${conv.id}`, 32)}
@@ -117,7 +117,7 @@ const AssistantConversationList: React.FC<AssistantConversationListProps> = ({
                     e.stopPropagation();
                     onDelete(conv.id);
                   }}
-                  className="absolute right-2 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-lg text-muted-foreground opacity-100 transition-colors hover:bg-brand-green/10 hover:text-brand-violet sm:opacity-0 sm:group-hover:opacity-100"
+                  className="absolute right-2 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-lg text-muted-foreground opacity-100 transition-colors hover:bg-brand-green/10 hover:text-brand-violet dark:hover:text-violet-300 sm:opacity-0 sm:group-hover:opacity-100"
                   title="Supprimer"
                 >
                   <Trash2 className="h-4 w-4" />

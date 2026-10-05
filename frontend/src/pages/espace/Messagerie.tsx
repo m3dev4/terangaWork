@@ -84,7 +84,7 @@ const MessageriePage: React.FC = () => {
 
   return (
     <div
-      className="flex h-[calc(100dvh-48px)] overflow-hidden bg-white shadow-sm -m-4 sm:-m-5 lg:-m-6"
+      className="flex h-[calc(100dvh-48px)] overflow-hidden bg-white dark:bg-card shadow-sm -m-4 sm:-m-5 lg:-m-6"
     >
       {/* ─── Conversation List (left panel) ─── */}
       <div
@@ -114,7 +114,7 @@ const MessageriePage: React.FC = () => {
           <button
             type="button"
             onClick={handleBackToList}
-            className="md:hidden flex items-center gap-2 px-3 py-2 text-[12px] font-medium text-brand-ink bg-white border-b border-border shrink-0 cursor-pointer hover:bg-brand-canvas transition-colors"
+            className="md:hidden flex items-center gap-2 px-3 py-2 text-[12px] font-medium text-brand-ink dark:text-foreground bg-white dark:bg-card border-b border-border shrink-0 cursor-pointer hover:bg-brand-canvas dark:hover:bg-background transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
             Retour aux conversations

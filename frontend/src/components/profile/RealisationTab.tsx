@@ -55,17 +55,17 @@ export const RealisationTab: React.FC = () => {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <Loader2 className="h-6 w-6 animate-spin text-brand-ink" />
+        <Loader2 className="h-6 w-6 animate-spin text-brand-ink dark:text-foreground" />
       </div>
     );
   }
 
   return (
-    <div className="rounded-2xl border border-brand-sand bg-white p-6 sm:p-8 shadow-xs max-w-3xl space-y-6 text-[11px]">
-      <div className="flex items-center justify-between border-b border-brand-sand pb-4">
+    <div className="rounded-2xl border border-brand-sand dark:border-border bg-white dark:bg-card p-6 sm:p-8 shadow-xs max-w-3xl space-y-6 text-[11px]">
+      <div className="flex items-center justify-between border-b border-brand-sand dark:border-border pb-4">
         <div>
-          <h3 className="font-heading text-xs font-bold text-brand-ink flex items-center gap-1.5">
-            <FolderGit2 className="h-4 w-4 text-brand-ink" /> Portfolio & Réalisations
+          <h3 className="font-heading text-xs font-bold text-brand-ink dark:text-foreground flex items-center gap-1.5">
+            <FolderGit2 className="h-4 w-4 text-brand-ink dark:text-foreground" /> Portfolio & Réalisations
           </h3>
           <p className="text-muted-foreground mt-0.5">
             Vos projets et liens enregistrés en base de données backend.
@@ -82,34 +82,34 @@ export const RealisationTab: React.FC = () => {
       </div>
 
       {successMsg && (
-        <div className="flex items-center gap-2 rounded-lg bg-emerald-50 border border-emerald-200 p-3 font-semibold text-emerald-700">
-          <CheckCircle className="h-4 w-4 text-emerald-600" />
+        <div className="flex items-center gap-2 rounded-lg bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/30 p-3 font-semibold text-emerald-700 dark:text-emerald-300">
+          <CheckCircle className="h-4 w-4 text-emerald-600 dark:text-emerald-300" />
           {successMsg}
         </div>
       )}
 
       {isAdding && (
-        <form onSubmit={handleAdd} className="rounded-xl bg-brand-canvas border border-border p-4 space-y-3">
+        <form onSubmit={handleAdd} className="rounded-xl bg-brand-canvas dark:bg-background border border-border p-4 space-y-3">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label className="block font-semibold text-neutral-600 mb-1">Titre du Projet *</label>
+              <label className="block font-semibold text-neutral-600 dark:text-muted-foreground mb-1">Titre du Projet *</label>
               <input
                 type="text"
                 required
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="ex: Plateforme E-Commerce Mobile Money"
-                className="w-full rounded-md border border-border bg-white p-2 outline-none focus:border-brand-violet"
+                className="w-full rounded-md border border-border bg-white dark:bg-card p-2 outline-none focus:border-brand-violet dark:focus:border-violet-300"
               />
             </div>
             <div>
-              <label className="block font-semibold text-neutral-600 mb-1">Lien Web / Démo</label>
+              <label className="block font-semibold text-neutral-600 dark:text-muted-foreground mb-1">Lien Web / Démo</label>
               <input
                 type="url"
                 value={link}
                 onChange={(e) => setLink(e.target.value)}
                 placeholder="https://votre-projet.com"
-                className="w-full rounded-md border border-border bg-white p-2 outline-none focus:border-brand-violet"
+                className="w-full rounded-md border border-border bg-white dark:bg-card p-2 outline-none focus:border-brand-violet dark:focus:border-violet-300"
               />
             </div>
           </div>
@@ -118,7 +118,7 @@ export const RealisationTab: React.FC = () => {
             <button
               type="button"
               onClick={() => setIsAdding(false)}
-              className="rounded-md border border-neutral-300 px-3.5 py-1.5 font-semibold text-neutral-600 cursor-pointer"
+              className="rounded-md border border-neutral-300 dark:border-border px-3.5 py-1.5 font-semibold text-neutral-600 dark:text-muted-foreground cursor-pointer"
             >
               Annuler
             </button>
@@ -144,18 +144,18 @@ export const RealisationTab: React.FC = () => {
           {realisations.map((item) => (
             <div
               key={item.id}
-              className="flex items-center justify-between rounded-xl border border-brand-sand bg-brand-canvas p-4"
+              className="flex items-center justify-between rounded-xl border border-brand-sand dark:border-border bg-brand-canvas dark:bg-background p-4"
             >
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
-                  <FolderGit2 className="h-4 w-4 text-brand-ink" />
-                  <h4 className="font-heading text-xs font-bold text-brand-ink">{item.title}</h4>
+                  <FolderGit2 className="h-4 w-4 text-brand-ink dark:text-foreground" />
+                  <h4 className="font-heading text-xs font-bold text-brand-ink dark:text-foreground">{item.title}</h4>
                   {item.link && (
                     <a
                       href={item.link}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-0.5 text-[10px] font-semibold text-brand-ink hover:underline ml-2"
+                      className="inline-flex items-center gap-0.5 text-[10px] font-semibold text-brand-ink dark:text-foreground hover:underline ml-2"
                     >
                       Voir démo <ExternalLink className="h-2.5 w-2.5" />
                     </a>
@@ -167,7 +167,7 @@ export const RealisationTab: React.FC = () => {
                 type="button"
                 disabled={deleteMutation.isPending}
                 onClick={() => deleteMutation.mutate(item.id)}
-                className="text-muted-foreground hover:text-red-500 cursor-pointer p-1"
+                className="text-muted-foreground hover:text-red-500 dark:hover:text-red-300 cursor-pointer p-1"
                 title="Supprimer"
               >
                 <Trash2 className="h-4 w-4" />

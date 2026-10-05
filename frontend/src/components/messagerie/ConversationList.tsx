@@ -33,7 +33,7 @@ const ConversationList: React.FC<ConversationListProps> = ({
   }, [conversations, searchQuery]);
 
   return (
-    <div className="w-full h-full flex flex-col bg-white">
+    <div className="w-full h-full flex flex-col bg-white dark:bg-card">
       {/* Search Bar */}
       <div className="px-3 pt-3 pb-2 shrink-0">
         <div className="relative">
@@ -46,7 +46,7 @@ const ConversationList: React.FC<ConversationListProps> = ({
             placeholder="Rechercher..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-9 pr-3 py-2 text-[12px] rounded-lg border border-border bg-brand-canvas/60 placeholder:text-muted-foreground text-brand-ink focus:outline-none focus:ring-1.5 focus:ring-brand-violet/20 focus:border-brand-violet/30 transition-all"
+            className="w-full pl-9 pr-3 py-2 text-[12px] rounded-lg border border-border bg-brand-canvas/60 dark:bg-background/60 placeholder:text-muted-foreground text-brand-ink dark:text-foreground focus:outline-none focus:ring-1.5 focus:ring-brand-violet/20 dark:focus:ring-violet-300/40 focus:border-brand-violet/30 dark:focus:border-violet-300/40 transition-all"
           />
         </div>
       </div>
@@ -60,22 +60,22 @@ const ConversationList: React.FC<ConversationListProps> = ({
               key={i}
               className="flex items-center gap-3 px-3 py-3 animate-pulse"
             >
-              <div className="w-10 h-10 rounded-full bg-neutral-200 shrink-0" />
+              <div className="w-10 h-10 rounded-full bg-neutral-200 dark:bg-muted shrink-0" />
               <div className="flex-1 space-y-2">
                 <div className="flex justify-between">
-                  <div className="h-3 bg-neutral-200 rounded w-24" />
-                  <div className="h-2.5 bg-neutral-100 rounded w-10" />
+                  <div className="h-3 bg-neutral-200 dark:bg-muted rounded w-24" />
+                  <div className="h-2.5 bg-neutral-100 dark:bg-muted rounded w-10" />
                 </div>
-                <div className="h-2.5 bg-neutral-100 rounded w-40" />
+                <div className="h-2.5 bg-neutral-100 dark:bg-muted rounded w-40" />
               </div>
             </div>
           ))
         ) : filteredConversations.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-12 px-4 text-center">
-            <div className="w-12 h-12 rounded-full bg-neutral-100 flex items-center justify-center mb-3">
-              <Search className="w-5 h-5 text-neutral-300" />
+            <div className="w-12 h-12 rounded-full bg-neutral-100 dark:bg-muted flex items-center justify-center mb-3">
+              <Search className="w-5 h-5 text-neutral-300 dark:text-muted-foreground" />
             </div>
-            <p className="text-[12px] text-neutral-600 font-medium">
+            <p className="text-[12px] text-neutral-600 dark:text-muted-foreground font-medium">
               {searchQuery
                 ? "Aucun résultat trouvé"
                 : "Aucune conversation pour le moment"}

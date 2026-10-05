@@ -70,7 +70,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioUrl, isMine }) => {
   const progressPercent = duration > 0 ? (currentTime / duration) * 100 : 0;
 
   return (
-    <div className={`flex items-center gap-2 py-1 min-w-0 w-[min(200px,100%)] sm:w-[260px] max-w-full ${isMine ? 'text-white' : 'text-brand-ink'}`}>
+    <div className={`flex items-center gap-2 py-1 min-w-0 w-[min(200px,100%)] sm:w-[260px] max-w-full ${isMine ? 'text-white' : 'text-brand-ink dark:text-foreground'}`}>
       <audio ref={audioRef} src={audioUrl} preload="metadata" />
 
       {/* Play/Pause Button */}
@@ -106,7 +106,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioUrl, isMine }) => {
                   className={`flex-1 rounded-full transition-colors ${
                     isMine
                       ? isPassed ? 'bg-white' : 'bg-white/40'
-                      : isPassed ? 'bg-brand-violet' : 'bg-neutral-300'
+                      : isPassed ? 'bg-brand-violet' : 'bg-neutral-300 dark:bg-muted'
                   }`}
                   style={{ height: `${h}%` }}
                 />

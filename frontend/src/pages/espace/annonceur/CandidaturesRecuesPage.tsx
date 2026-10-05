@@ -45,20 +45,20 @@ const formatDate = (v: string | null) =>
 const STATUS_META = {
   PENDING: {
     label: "En attente",
-    bg: "bg-brand-peach/20",
-    text: "text-brand-ink",
+    bg: "bg-brand-peach/20 dark:bg-brand-peach/10",
+    text: "text-brand-ink dark:text-foreground",
     border: "border-brand-peach/40",
   },
   ACCEPTED: {
     label: "Acceptée",
-    bg: "bg-brand-sand",
+    bg: "bg-brand-sand dark:bg-muted",
     text: "text-muted-foreground",
-    border: "border-brand-ink/10",
+    border: "border-brand-ink/10 dark:border-border",
   },
   REJECTED: {
     label: "Refusée",
     bg: "bg-brand-green/10",
-    text: "text-brand-violet",
+    text: "text-brand-violet dark:text-violet-300",
     border: "border-brand-green/25",
   },
 } as const;
@@ -94,7 +94,7 @@ function MatchScoreBadge({
       }`}
     >
       <span
-        className={`rounded-full bg-brand-peach ${isSmall ? "h-1.5 w-1.5" : "h-2 w-2"}`}
+        className={`rounded-full bg-brand-peach dark:bg-brand-peach/10 ${isSmall ? "h-1.5 w-1.5" : "h-2 w-2"}`}
       />
       {pct}% pertinence
     </span>
@@ -128,24 +128,24 @@ function CandidateModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-brand-ink/50 p-4 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-brand-ink/50 dark:bg-black/65 p-4 backdrop-blur-sm"
       onClick={onClose}
     >
       <div
-        className="relative flex max-h-[90vh] w-full max-w-lg flex-col overflow-hidden rounded-[28px] bg-white shadow-2xl"
+        className="relative flex max-h-[90vh] w-full max-w-lg flex-col overflow-hidden rounded-[28px] bg-white dark:bg-card shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         <button
           onClick={onClose}
-          className="absolute right-4 top-4 rounded-lg p-1 text-muted-foreground hover:bg-brand-sand hover:text-brand-ink"
+          className="absolute right-4 top-4 rounded-lg p-1 text-muted-foreground hover:bg-brand-sand dark:hover:bg-muted hover:text-brand-ink dark:hover:text-foreground"
         >
           <X className="h-4 w-4" />
         </button>
 
         {/* header */}
-        <div className="border-b border-brand-ink/6 px-6 py-5">
+        <div className="border-b border-brand-ink/6 dark:border-border px-6 py-5">
           <div className="flex items-start gap-4">
-            <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-2xl bg-brand-sand ring-2 ring-white">
+            <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-2xl bg-brand-sand dark:bg-muted ring-2 ring-white dark:ring-card">
               {fi?.profile_picture ? (
                 <img
                   src={getMediaUrl(fi.profile_picture)}
@@ -154,13 +154,13 @@ function CandidateModal({
                 />
               ) : (
                 <div className="flex h-full w-full items-center justify-center">
-                  <User className="h-6 w-6 text-brand-violet" />
+                  <User className="h-6 w-6 text-brand-violet dark:text-violet-300" />
                 </div>
               )}
             </div>
             <div className="min-w-0 flex-1">
               <div className="flex flex-wrap items-center gap-2">
-                <h2 className="font-heading text-base font-semibold text-brand-ink">
+                <h2 className="font-heading text-base font-semibold text-brand-ink dark:text-foreground">
                   {fi?.first_name} {fi?.last_name}
                 </h2>
                 <span
@@ -188,32 +188,32 @@ function CandidateModal({
         <div className="flex-1 space-y-5 overflow-y-auto px-6 py-5">
           {/* Analyse de matching */}
           {matchingResult && (
-            <div className="rounded-2xl border border-brand-ink/8 bg-brand-sand/50 p-4">
+            <div className="rounded-2xl border border-brand-ink/8 dark:border-border bg-brand-sand/50 dark:bg-muted/50 p-4">
               <div className="mb-2 flex items-center justify-between">
-                <div className="flex items-center gap-1.5 font-heading text-xs font-bold text-brand-ink">
-                  <Brain className="h-4 w-4 text-brand-violet" />
+                <div className="flex items-center gap-1.5 font-heading text-xs font-bold text-brand-ink dark:text-foreground">
+                  <Brain className="h-4 w-4 text-brand-violet dark:text-violet-300" />
                   Score de matching : {Math.round(matchingResult.score * 100)}%
                 </div>
               </div>
 
               <div className="mb-3 grid grid-cols-3 gap-2 text-center">
-                <div className="rounded-xl bg-white p-2 border border-brand-ink/6">
+                <div className="rounded-xl bg-white dark:bg-card p-2 border border-brand-ink/6 dark:border-border">
                   <p className="text-[9px] text-muted-foreground">Tech (45%)</p>
-                  <p className="text-[11px] font-bold text-brand-ink">
+                  <p className="text-[11px] font-bold text-brand-ink dark:text-foreground">
                     {Math.round(matchingResult.score_technologies * 100)}%
                   </p>
                 </div>
-                <div className="rounded-xl bg-white p-2 border border-brand-ink/6">
+                <div className="rounded-xl bg-white dark:bg-card p-2 border border-brand-ink/6 dark:border-border">
                   <p className="text-[9px] text-muted-foreground">Service (45%)</p>
-                  <p className="text-[11px] font-bold text-brand-ink">
+                  <p className="text-[11px] font-bold text-brand-ink dark:text-foreground">
                     {Math.round(matchingResult.score_service * 100)}%
                   </p>
                 </div>
-                <div className="rounded-xl bg-white p-2 border border-brand-ink/6">
+                <div className="rounded-xl bg-white dark:bg-card p-2 border border-brand-ink/6 dark:border-border">
                   <p className="text-[9px] text-muted-foreground">
                     Expérience (10%)
                   </p>
-                  <p className="text-[11px] font-bold text-brand-ink">
+                  <p className="text-[11px] font-bold text-brand-ink dark:text-foreground">
                     {matchingResult.score_experience !== null
                       ? `${Math.round(matchingResult.score_experience * 100)}%`
                       : "N/A"}
@@ -222,8 +222,8 @@ function CandidateModal({
               </div>
 
               {matchingResult.justification_ia && (
-                <div className="rounded-xl bg-white p-3 text-[11px] leading-relaxed text-brand-ink/75 border border-brand-ink/6">
-                  <p className="mb-1 font-semibold text-brand-ink">
+                <div className="rounded-xl bg-white dark:bg-card p-3 text-[11px] leading-relaxed text-brand-ink/75 dark:text-foreground/75 border border-brand-ink/6 dark:border-border">
+                  <p className="mb-1 font-semibold text-brand-ink dark:text-foreground">
                     Remarque :
                   </p>
                   {matchingResult.justification_ia}
@@ -233,22 +233,22 @@ function CandidateModal({
           )}
 
           {/* mission context */}
-          <div className="flex items-center gap-2 rounded-xl bg-brand-sand/60 px-3 py-2.5">
-            <Briefcase className="h-3.5 w-3.5 text-brand-violet" />
+          <div className="flex items-center gap-2 rounded-xl bg-brand-sand/60 dark:bg-muted/60 px-3 py-2.5">
+            <Briefcase className="h-3.5 w-3.5 text-brand-violet dark:text-violet-300" />
             <span className="text-[10px] font-medium text-muted-foreground">
               Mission :
             </span>
-            <span className="truncate text-[10px] font-semibold text-brand-ink">
+            <span className="truncate text-[10px] font-semibold text-brand-ink dark:text-foreground">
               {missionTitle}
             </span>
           </div>
 
           {/* date livraison */}
           <div className="flex items-center gap-2">
-            <CalendarDays className="h-3.5 w-3.5 text-brand-violet" />
+            <CalendarDays className="h-3.5 w-3.5 text-brand-violet dark:text-violet-300" />
             <div>
               <p className="text-[9px] text-muted-foreground">Livraison proposée</p>
-              <p className="text-[11px] font-semibold text-brand-ink">
+              <p className="text-[11px] font-semibold text-brand-ink dark:text-foreground">
                 {formatDate(proposition.date_livraison)}
               </p>
             </div>
@@ -259,8 +259,8 @@ function CandidateModal({
             <p className="mb-2 text-[10px] font-semibold text-muted-foreground">
               Message de motivation
             </p>
-            <div className="rounded-xl border border-brand-ink/8 bg-brand-sand/40 px-4 py-3">
-              <p className="whitespace-pre-line text-[12px] leading-7 text-brand-ink/75">
+            <div className="rounded-xl border border-brand-ink/8 dark:border-border bg-brand-sand/40 dark:bg-muted/40 px-4 py-3">
+              <p className="whitespace-pre-line text-[12px] leading-7 text-brand-ink/75 dark:text-foreground/75">
                 {proposition.lettre_motivation}
               </p>
             </div>
@@ -276,7 +276,7 @@ function CandidateModal({
                 {fi.technologies.map((t) => (
                   <span
                     key={t.id}
-                    className="rounded-lg bg-brand-sand px-2.5 py-1 text-[10px] font-medium text-muted-foreground"
+                    className="rounded-lg bg-brand-sand dark:bg-muted px-2.5 py-1 text-[10px] font-medium text-muted-foreground"
                   >
                     {t.name}
                   </span>
@@ -287,7 +287,7 @@ function CandidateModal({
         </div>
 
         {/* footer */}
-        <div className="flex items-center justify-between gap-2 border-t border-brand-ink/6 bg-white px-6 py-4">
+        <div className="flex items-center justify-between gap-2 border-t border-brand-ink/6 dark:border-border bg-white dark:bg-card px-6 py-4">
           <button
             type="button"
             onClick={() => {
@@ -301,7 +301,7 @@ function CandidateModal({
               }).toString();
               navigate(`/espace/messages?${query}`);
             }}
-            className="inline-flex items-center gap-1.5 rounded-xl border border-brand-ink/15 bg-white px-3 py-2 text-[11px] font-semibold text-brand-ink hover:bg-brand-sand/60 transition-colors cursor-pointer"
+            className="inline-flex items-center gap-1.5 rounded-xl border border-brand-ink/15 dark:border-border bg-white dark:bg-card px-3 py-2 text-[11px] font-semibold text-brand-ink dark:text-foreground hover:bg-brand-sand/60 dark:hover:bg-muted/60 transition-colors cursor-pointer"
           >
             <MessageSquare className="h-3.5 w-3.5" /> Envoyer un message
           </button>
@@ -313,7 +313,7 @@ function CandidateModal({
                 onClick={() =>
                   mutation.mutate({ id: proposition.id, status: "REJECTED" })
                 }
-                className="flex items-center justify-center gap-2 rounded-xl border border-brand-ink/12 px-3 py-2 text-[11px] font-semibold text-muted-foreground transition-colors hover:border-brand-green/40 hover:bg-brand-green/10 hover:text-brand-violet disabled:opacity-50"
+                className="flex items-center justify-center gap-2 rounded-xl border border-brand-ink/12 dark:border-border px-3 py-2 text-[11px] font-semibold text-muted-foreground transition-colors hover:border-brand-green/40 hover:bg-brand-green/10 hover:text-brand-violet dark:hover:text-violet-300 disabled:opacity-50"
               >
                 {mutation.isPending ? (
                   <Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -327,7 +327,7 @@ function CandidateModal({
                 onClick={() =>
                   mutation.mutate({ id: proposition.id, status: "ACCEPTED" })
                 }
-                className="flex items-center justify-center gap-2 rounded-xl bg-brand-ink px-4 py-2 text-[11px] font-semibold text-white transition-colors hover:bg-brand-ink/85 disabled:opacity-50"
+                className="flex items-center justify-center gap-2 rounded-xl bg-brand-ink px-4 py-2 text-[11px] font-semibold text-white transition-colors hover:bg-brand-ink/85 dark:hover:bg-black/65 disabled:opacity-50"
               >
                 {mutation.isPending ? (
                   <Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -371,12 +371,12 @@ function CandidateCard({
       <div
         className={`flex items-center gap-4 rounded-2xl border p-4 transition-all ${
           matchingResult
-            ? "border-brand-peach/40 bg-brand-sand/40"
-            : "border-brand-ink/8 bg-white"
-        } hover:border-brand-ink/15`}
+            ? "border-brand-peach/40 bg-brand-sand/40 dark:bg-muted/40"
+            : "border-brand-ink/8 dark:border-border bg-white dark:bg-card"
+        } hover:border-brand-ink/15 dark:hover:border-border`}
       >
         {/* avatar */}
-        <div className="h-10 w-10 shrink-0 overflow-hidden rounded-xl bg-brand-sand ring-1 ring-white">
+        <div className="h-10 w-10 shrink-0 overflow-hidden rounded-xl bg-brand-sand dark:bg-muted ring-1 ring-white dark:ring-card">
           {fi?.profile_picture ? (
             <img
               src={getMediaUrl(fi.profile_picture)}
@@ -385,7 +385,7 @@ function CandidateCard({
             />
           ) : (
             <div className="flex h-full w-full items-center justify-center">
-              <User className="h-5 w-5 text-brand-violet" />
+              <User className="h-5 w-5 text-brand-violet dark:text-violet-300" />
             </div>
           )}
         </div>
@@ -393,7 +393,7 @@ function CandidateCard({
         {/* info */}
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2">
-            <span className="font-heading text-[12px] font-semibold text-brand-ink">
+            <span className="font-heading text-[12px] font-semibold text-brand-ink dark:text-foreground">
               {fi?.first_name} {fi?.last_name}
             </span>
             <span
@@ -412,13 +412,13 @@ function CandidateCard({
               {fi.technologies.slice(0, 4).map((t) => (
                 <span
                   key={t.id}
-                  className="rounded bg-brand-sand px-1.5 py-0.5 text-[9px] font-medium text-muted-foreground"
+                  className="rounded bg-brand-sand dark:bg-muted px-1.5 py-0.5 text-[9px] font-medium text-muted-foreground"
                 >
                   {t.name}
                 </span>
               ))}
               {fi.technologies.length > 4 && (
-                <span className="rounded bg-brand-sand px-1.5 py-0.5 text-[9px] font-medium text-muted-foreground">
+                <span className="rounded bg-brand-sand dark:bg-muted px-1.5 py-0.5 text-[9px] font-medium text-muted-foreground">
                   +{fi.technologies.length - 4}
                 </span>
               )}
@@ -445,14 +445,14 @@ function CandidateCard({
                 }).toString();
                 navigate(`/espace/messages?${query}`);
               }}
-              className="inline-flex items-center gap-1 rounded-lg border border-brand-ink/15 bg-white px-2.5 py-1.5 text-[10px] font-semibold text-brand-ink hover:bg-brand-sand/60 transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1 rounded-lg border border-brand-ink/15 dark:border-border bg-white dark:bg-card px-2.5 py-1.5 text-[10px] font-semibold text-brand-ink dark:text-foreground hover:bg-brand-sand/60 dark:hover:bg-muted/60 transition-colors cursor-pointer"
               title="Envoyer un message"
             >
               <MessageSquare className="h-3 w-3" /> Contacter
             </button>
             <button
               onClick={() => setOpen(true)}
-              className="inline-flex items-center gap-1 rounded-lg bg-brand-ink px-3 py-1.5 text-[10px] font-semibold text-white transition-colors hover:bg-brand-ink/85 cursor-pointer"
+              className="inline-flex items-center gap-1 rounded-lg bg-brand-ink px-3 py-1.5 text-[10px] font-semibold text-white transition-colors hover:bg-brand-ink/85 dark:hover:bg-black/65 cursor-pointer"
             >
               Candidature <ChevronRight className="h-3 w-3" />
             </button>
@@ -509,23 +509,23 @@ function MissionGroup({
   }, [propositions, matchingResults]);
 
   return (
-    <div className="overflow-hidden rounded-[24px] border border-brand-ink/8 bg-brand-sand/30">
-      <div className="flex w-full items-center justify-between gap-3 border-b border-brand-ink/6 px-5 py-4">
+    <div className="overflow-hidden rounded-[24px] border border-brand-ink/8 dark:border-border bg-brand-sand/30 dark:bg-muted/30">
+      <div className="flex w-full items-center justify-between gap-3 border-b border-brand-ink/6 dark:border-border px-5 py-4">
         <button
           type="button"
           onClick={() => setExpanded(!expanded)}
           className="flex min-w-0 flex-1 items-center gap-3 text-left transition hover:opacity-80"
         >
-          <Briefcase className="h-4 w-4 shrink-0 text-brand-violet" />
-          <span className="truncate font-heading text-[13px] font-semibold text-brand-ink">
+          <Briefcase className="h-4 w-4 shrink-0 text-brand-violet dark:text-violet-300" />
+          <span className="truncate font-heading text-[13px] font-semibold text-brand-ink dark:text-foreground">
             {missionTitle}
           </span>
-          <span className="shrink-0 rounded-full bg-white px-2 py-0.5 text-[10px] font-semibold text-muted-foreground border border-brand-ink/10">
+          <span className="shrink-0 rounded-full bg-white dark:bg-card px-2 py-0.5 text-[10px] font-semibold text-muted-foreground border border-brand-ink/10 dark:border-border">
             {propositions.length} candidature
             {propositions.length > 1 ? "s" : ""}
           </span>
           {pending > 0 && (
-            <span className="shrink-0 rounded-full bg-brand-peach/25 px-2 py-0.5 text-[10px] font-semibold text-brand-ink">
+            <span className="shrink-0 rounded-full bg-brand-peach/25 dark:bg-brand-peach/10 px-2 py-0.5 text-[10px] font-semibold text-brand-ink dark:text-foreground">
               {pending} en attente
             </span>
           )}
@@ -536,7 +536,7 @@ function MissionGroup({
             type="button"
             onClick={() => matchingMutation.mutate()}
             disabled={matchingMutation.isPending}
-            className="relative inline-flex items-center gap-1.5 rounded-xl bg-brand-ink px-3 py-1.5 text-[10px] font-semibold text-white transition-colors hover:bg-brand-ink/85 disabled:opacity-60 cursor-pointer"
+            className="relative inline-flex items-center gap-1.5 rounded-xl bg-brand-ink px-3 py-1.5 text-[10px] font-semibold text-white transition-colors hover:bg-brand-ink/85 dark:hover:bg-black/65 disabled:opacity-60 cursor-pointer"
           >
             {!matchingMutation.isPending && !matchingResults && (
               <span className="absolute -top-1 -right-1 h-2 w-2 rounded-full bg-brand-green">
@@ -565,14 +565,14 @@ function MissionGroup({
       </div>
 
       {matchingMutation.isError && (
-        <div className="flex items-center gap-1.5 border-b border-brand-green/20 bg-brand-green/10 px-4 py-2 text-[10px] text-brand-violet">
+        <div className="flex items-center gap-1.5 border-b border-brand-green/20 bg-brand-green/10 px-4 py-2 text-[10px] text-brand-violet dark:text-violet-300">
           <AlertCircle className="h-3.5 w-3.5" />
           <span>Le service de matching est indisponible pour le moment.</span>
         </div>
       )}
 
       {expanded && (
-        <div className="space-y-2.5 bg-white p-4">
+        <div className="space-y-2.5 bg-white dark:bg-card p-4">
           {orderedPropositions.map((p) => {
             const matchRes = matchingResults?.find(
               (r) => r.proposition_id === p.id
@@ -645,16 +645,16 @@ const CandidaturesRecuesPage: React.FC = () => {
       {/* loading */}
       {isLoading && (
         <div className="flex items-center justify-center gap-2 py-16 text-[11px] text-muted-foreground">
-          <Loader2 className="h-4 w-4 animate-spin text-brand-violet" /> Chargement
+          <Loader2 className="h-4 w-4 animate-spin text-brand-violet dark:text-violet-300" /> Chargement
           des candidatures…
         </div>
       )}
 
       {/* empty */}
       {!isLoading && propositions.length === 0 && (
-        <div className="rounded-[28px] border border-dashed border-brand-ink/15 bg-white p-12 text-center">
-          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-sand">
-            <Briefcase className="h-5 w-5 text-brand-violet" />
+        <div className="rounded-[28px] border border-dashed border-brand-ink/15 dark:border-border bg-white dark:bg-card p-12 text-center">
+          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-sand dark:bg-muted">
+            <Briefcase className="h-5 w-5 text-brand-violet dark:text-violet-300" />
           </div>
           <p className="text-[12px] font-medium text-muted-foreground">
             Aucune candidature reçue pour le moment.

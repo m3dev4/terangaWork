@@ -106,24 +106,24 @@ const AssistantChatPanel: React.FC<AssistantChatPanelProps> = ({
     `Conversation #${conversationId}`;
 
   return (
-    <div className="flex h-full relative min-h-0 flex-col w-full bg-white">
+    <div className="flex h-full relative min-h-0 flex-col w-full bg-white dark:bg-card">
       {mobile && (
         <button
           type="button"
           onClick={onBack}
-          className="flex shrink-0 items-center gap-2 border-b border-brand-ink/8 bg-white px-4 py-3 text-sm font-medium text-muted-foreground hover:bg-brand-sand/40 md:hidden"
+          className="flex shrink-0 items-center gap-2 border-b border-brand-ink/8 dark:border-border bg-white dark:bg-card px-4 py-3 text-sm font-medium text-muted-foreground hover:bg-brand-sand/40 dark:hover:bg-muted/40 md:hidden"
         >
           <ArrowLeft className="h-4 w-4" />
           Retour
         </button>
       )}
 
-      <div className="flex shrink-0 items-center gap-3 border-b border-brand-ink/8 bg-white px-4 py-3">
+      <div className="flex shrink-0 items-center gap-3 border-b border-brand-ink/8 dark:border-border bg-white dark:bg-card px-4 py-3">
         <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-brand-ink">
           <Bot className="h-4.5 w-4.5 text-brand-green" />
         </div>
         <div className="min-w-0 flex-1">
-          <h3 className="truncate text-sm font-bold text-brand-ink">{truncate(convTitle, 60)}</h3>
+          <h3 className="truncate text-sm font-bold text-brand-ink dark:text-foreground">{truncate(convTitle, 60)}</h3>
           <p className="truncate text-xs text-muted-foreground">
             {isSending ? 'Réflexion en cours…' : sendError ? 'Erreur' : 'Prêt à répondre'}
           </p>
@@ -140,10 +140,10 @@ const AssistantChatPanel: React.FC<AssistantChatPanelProps> = ({
           </div>
         ) : displayMessages.length === 0 ? (
           <div className="flex h-full flex-col items-center justify-center px-2 text-center">
-            <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-sand">
-              <Bot className="h-7 w-7 text-brand-violet" />
+            <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-sand dark:bg-muted">
+              <Bot className="h-7 w-7 text-brand-violet dark:text-violet-300" />
             </div>
-            <h4 className="mb-2 text-base font-bold text-brand-ink">Assistant Malaw</h4>
+            <h4 className="mb-2 text-base font-bold text-brand-ink dark:text-foreground">Assistant Malaw</h4>
             <p className="mb-6 max-w-md text-sm text-muted-foreground">
               Posez des questions sur vos candidatures, missions, paiements ou obtenez des conseils personnalisés.
             </p>
@@ -158,7 +158,7 @@ const AssistantChatPanel: React.FC<AssistantChatPanelProps> = ({
                   key={i}
                   type="button"
                   onClick={() => setInput(sug)}
-                  className="rounded-xl border border-brand-ink/10 bg-brand-sand/40 p-3 text-left text-xs text-muted-foreground transition-colors hover:border-brand-green/40 hover:bg-white"
+                  className="rounded-xl border border-brand-ink/10 dark:border-border bg-brand-sand/40 dark:bg-muted/40 p-3 text-left text-xs text-muted-foreground transition-colors hover:border-brand-green/40 hover:bg-white dark:hover:bg-card"
                 >
                   {sug}
                 </button>
@@ -189,7 +189,7 @@ const AssistantChatPanel: React.FC<AssistantChatPanelProps> = ({
                   className={`min-w-0 max-w-[85%] rounded-2xl px-3.5 py-2.5 text-sm sm:max-w-[75%] ${
                     isUser
                       ? 'rounded-br-md bg-brand-ink text-white'
-                      : 'rounded-bl-md border border-brand-ink/8 bg-brand-sand/40 text-brand-ink'
+                      : 'rounded-bl-md border border-brand-ink/8 dark:border-border bg-brand-sand/40 dark:bg-muted/40 text-brand-ink dark:text-foreground'
                   }`}
                 >
                   {isUser ? (
@@ -219,18 +219,18 @@ const AssistantChatPanel: React.FC<AssistantChatPanelProps> = ({
             <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-brand-ink">
               <Bot className="h-3.5 w-3.5 text-brand-green" />
             </div>
-            <div className="rounded-2xl rounded-bl-md border border-brand-ink/8 bg-brand-sand/40 px-4 py-3">
+            <div className="rounded-2xl rounded-bl-md border border-brand-ink/8 dark:border-border bg-brand-sand/40 dark:bg-muted/40 px-4 py-3">
               <div className="flex items-center gap-1">
-                <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-brand-ink/30 [animation-delay:-0.3s]" />
-                <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-brand-ink/30 [animation-delay:-0.15s]" />
-                <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-brand-ink/30" />
+                <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-brand-ink/30 dark:bg-foreground/30 [animation-delay:-0.3s]" />
+                <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-brand-ink/30 dark:bg-foreground/30 [animation-delay:-0.15s]" />
+                <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-brand-ink/30 dark:bg-foreground/30" />
               </div>
             </div>
           </div>
         )}
 
         {sendError && !isSending && (
-          <div className="mx-auto flex max-w-md items-start gap-2 rounded-xl border border-brand-green/25 bg-brand-green/10 px-4 py-3 text-sm text-brand-violet">
+          <div className="mx-auto flex max-w-md items-start gap-2 rounded-xl border border-brand-green/25 bg-brand-green/10 px-4 py-3 text-sm text-brand-violet dark:text-violet-300">
             <AlertCircle className="h-5 w-5 shrink-0" />
             <div className="min-w-0">
               <p className="font-medium">Erreur</p>
@@ -243,7 +243,7 @@ const AssistantChatPanel: React.FC<AssistantChatPanelProps> = ({
       </div>
 
       <div
-        className="shrink-0 border-t border-brand-ink/8 bg-white px-4 py-3"
+        className="shrink-0 border-t border-brand-ink/8 dark:border-border bg-white dark:bg-card px-4 py-3"
         style={{ paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))' }}
       >
         <div className="flex items-end gap-2">
@@ -255,17 +255,17 @@ const AssistantChatPanel: React.FC<AssistantChatPanelProps> = ({
             rows={1}
             disabled={isSending}
             placeholder="Posez votre question…"
-            className="min-w-0 flex-1 resize-none rounded-xl border border-brand-ink/12 bg-brand-sand/30 px-3.5 py-2.5 text-sm text-brand-ink placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-brand-green/15 focus:border-brand-green disabled:opacity-60"
+            className="min-w-0 flex-1 resize-none rounded-xl border border-brand-ink/12 dark:border-border bg-brand-sand/30 dark:bg-muted/30 px-3.5 py-2.5 text-sm text-brand-ink dark:text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-brand-green/15 focus:border-brand-green disabled:opacity-60"
             style={{ minHeight: '44px', maxHeight: '120px' }}
           />
           <button
             type="button"
             onClick={handleSubmit}
             disabled={!input.trim() || isSending}
-            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand-green text-brand-ink transition-colors hover:bg-brand-green-hover disabled:cursor-not-allowed disabled:opacity-50"
+            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand-green text-brand-ink dark:text-primary-foreground transition-colors hover:bg-brand-green-hover disabled:cursor-not-allowed disabled:opacity-50"
           >
             {isSending ? (
-              <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+              <div className="h-4 w-4 animate-spin rounded-full border-2 border-white dark:border-card border-t-transparent" />
             ) : (
               <Send className="h-5 w-5" />
             )}

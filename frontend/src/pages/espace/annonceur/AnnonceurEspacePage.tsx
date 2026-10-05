@@ -151,31 +151,31 @@ const AnnonceurEspacePage: React.FC = () => {
       </div>
 
       {/* ── Encart explicatif du workflow ── */}
-      <div className="mb-6 rounded-2xl border border-brand-ink/8 bg-brand-sand/50 p-4 text-[11px] text-muted-foreground">
+      <div className="mb-6 rounded-2xl border border-brand-ink/8 dark:border-border bg-brand-sand/50 dark:bg-muted/50 p-4 text-[11px] text-muted-foreground">
         <div className="flex items-start gap-2.5">
-          <HelpCircle className="h-4 w-4 shrink-0 text-brand-violet mt-0.5" />
+          <HelpCircle className="h-4 w-4 shrink-0 text-brand-violet dark:text-violet-300 mt-0.5" />
           <div>
-            <p className="font-bold text-brand-ink">
+            <p className="font-bold text-brand-ink dark:text-foreground">
               Comment fonctionne le déclenchement du paiement PayDunya ?
             </p>
             <ol className="mt-1.5 list-inside list-decimal space-y-1 text-[10.5px] text-muted-foreground">
               <li>
                 Le freelance termine le projet et clique sur{" "}
-                <span className="font-semibold text-brand-ink">
+                <span className="font-semibold text-brand-ink dark:text-foreground">
                   « Marquer comme livrée »
                 </span>{" "}
                 depuis son espace.
               </li>
               <li>
                 Le bouton{" "}
-                <span className="font-semibold text-brand-violet">
+                <span className="font-semibold text-brand-violet dark:text-violet-300">
                   « Valider la livraison »
                 </span>{" "}
                 apparaît ci-dessous pour l'annonceur.
               </li>
               <li>
                 Une fois validée, le bouton{" "}
-                <span className="font-semibold text-brand-ink">
+                <span className="font-semibold text-brand-ink dark:text-foreground">
                   « Payer le freelance (PayDunya) »
                 </span>{" "}
                 s'active pour régler la prestation.
@@ -186,7 +186,7 @@ const AnnonceurEspacePage: React.FC = () => {
       </div>
 
       {validationError && (
-        <div className="mb-4 flex items-center gap-2 rounded-2xl border border-brand-green/25 bg-brand-green/10 p-3 text-[11px] text-brand-violet">
+        <div className="mb-4 flex items-center gap-2 rounded-2xl border border-brand-green/25 bg-brand-green/10 p-3 text-[11px] text-brand-violet dark:text-violet-300">
           <AlertCircle className="h-4 w-4 shrink-0" />
           <span>{validationError}</span>
         </div>
@@ -194,8 +194,8 @@ const AnnonceurEspacePage: React.FC = () => {
 
       {/* ── Chargement ── */}
       {isLoading && (
-        <div className="flex h-48 flex-col items-center justify-center gap-3 rounded-[24px] border border-brand-ink/8 bg-white p-8">
-          <Loader2 className="h-6 w-6 animate-spin text-brand-violet" />
+        <div className="flex h-48 flex-col items-center justify-center gap-3 rounded-[24px] border border-brand-ink/8 dark:border-border bg-white dark:bg-card p-8">
+          <Loader2 className="h-6 w-6 animate-spin text-brand-violet dark:text-violet-300" />
           <p className="text-[11px] font-medium text-muted-foreground">
             Chargement de vos projets...
           </p>
@@ -204,11 +204,11 @@ const AnnonceurEspacePage: React.FC = () => {
 
       {/* ── État vide ── */}
       {!isLoading && acceptedProjects.length === 0 && (
-        <div className="rounded-[28px] border border-dashed border-brand-ink/15 bg-white p-12 text-center">
-          <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-sand text-brand-violet">
+        <div className="rounded-[28px] border border-dashed border-brand-ink/15 dark:border-border bg-white dark:bg-card p-12 text-center">
+          <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-sand dark:bg-muted text-brand-violet dark:text-violet-300">
             <Briefcase className="h-6 w-6" />
           </div>
-          <h3 className="font-heading text-sm font-semibold text-brand-ink">
+          <h3 className="font-heading text-sm font-semibold text-brand-ink dark:text-foreground">
             Aucun projet en développement
           </h3>
           <p className="mx-auto mt-1 max-w-sm text-[11px] text-muted-foreground leading-relaxed">
@@ -220,7 +220,7 @@ const AnnonceurEspacePage: React.FC = () => {
           </p>
           <button
             onClick={() => navigate("/espace/candidatures-recues")}
-            className="mt-4 inline-flex items-center gap-2 rounded-2xl bg-brand-green hover:bg-brand-green-hover px-4 py-2 text-[11px] font-semibold text-brand-ink transition-colors cursor-pointer"
+            className="mt-4 inline-flex items-center gap-2 rounded-2xl bg-brand-green hover:bg-brand-green-hover px-4 py-2 text-[11px] font-semibold text-brand-ink dark:text-primary-foreground transition-colors cursor-pointer"
           >
             <UserCheck className="h-3.5 w-3.5" /> Voir les candidatures reçues
           </button>
@@ -240,19 +240,19 @@ const AnnonceurEspacePage: React.FC = () => {
             return (
               <div
                 key={prop.id}
-                className="flex flex-col rounded-[24px] border border-brand-ink/8 bg-white p-5 transition-all hover:shadow-md"
+                className="flex flex-col rounded-[24px] border border-brand-ink/8 dark:border-border bg-white dark:bg-card p-5 transition-all hover:shadow-md"
               >
                 {/* En-tête mission */}
-                <div className="mb-3 flex items-start justify-between gap-2 border-b border-brand-ink/6 pb-3">
+                <div className="mb-3 flex items-start justify-between gap-2 border-b border-brand-ink/6 dark:border-border pb-3">
                   <div>
                     {missionStatus === "IN_PROGRESS" && (
-                      <span className="mb-1 inline-flex items-center gap-1 rounded-full bg-brand-sand px-2.5 py-0.5 text-[9.5px] font-semibold text-muted-foreground">
-                        <Clock className="h-3 w-3 text-brand-violet" /> En cours de
+                      <span className="mb-1 inline-flex items-center gap-1 rounded-full bg-brand-sand dark:bg-muted px-2.5 py-0.5 text-[9.5px] font-semibold text-muted-foreground">
+                        <Clock className="h-3 w-3 text-brand-violet dark:text-violet-300" /> En cours de
                         réalisation par le freelance
                       </span>
                     )}
                     {missionStatus === "DELIVERED" && (
-                      <span className="mb-1 inline-flex items-center gap-1 rounded-full bg-brand-peach/25 px-2.5 py-0.5 text-[9.5px] font-bold text-brand-ink border border-brand-peach/40">
+                      <span className="mb-1 inline-flex items-center gap-1 rounded-full bg-brand-peach/25 dark:bg-brand-peach/10 px-2.5 py-0.5 text-[9.5px] font-bold text-brand-ink dark:text-foreground border border-brand-peach/40">
                         <Truck className="h-3 w-3" /> Travail livré — à valider
                         ci-dessous
                       </span>
@@ -264,18 +264,18 @@ const AnnonceurEspacePage: React.FC = () => {
                       </span>
                     )}
 
-                    <h2 className="font-heading text-sm font-bold text-brand-ink leading-tight">
+                    <h2 className="font-heading text-sm font-bold text-brand-ink dark:text-foreground leading-tight">
                       {prop.mission_title}
                     </h2>
                   </div>
-                  <span className="text-[11px] font-bold text-brand-ink shrink-0">
+                  <span className="text-[11px] font-bold text-brand-ink dark:text-foreground shrink-0">
                     {formatBudget(prop.mission_budget || 0)}
                   </span>
                 </div>
 
                 {/* Freelance assigné */}
-                <div className="mb-4 flex items-center gap-3 rounded-2xl border border-brand-ink/8 bg-brand-sand/50 p-3">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-brand-ink/10 bg-white">
+                <div className="mb-4 flex items-center gap-3 rounded-2xl border border-brand-ink/8 dark:border-border bg-brand-sand/50 dark:bg-muted/50 p-3">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-brand-ink/10 dark:border-border bg-white dark:bg-card">
                     {freelance?.profile_picture ? (
                       <img
                         src={getMediaUrl(freelance.profile_picture)}
@@ -283,14 +283,14 @@ const AnnonceurEspacePage: React.FC = () => {
                         className="h-full w-full object-cover"
                       />
                     ) : (
-                      <div className="text-xs font-bold text-brand-violet">
+                      <div className="text-xs font-bold text-brand-violet dark:text-violet-300">
                         {fullName.charAt(0).toUpperCase()}
                       </div>
                     )}
                   </div>
 
                   <div className="min-w-0 flex-1">
-                    <p className="truncate text-[11px] font-bold text-brand-ink">
+                    <p className="truncate text-[11px] font-bold text-brand-ink dark:text-foreground">
                       {fullName}
                     </p>
                     <p className="truncate text-[10px] text-muted-foreground">
@@ -306,7 +306,7 @@ const AnnonceurEspacePage: React.FC = () => {
                       <CalendarDays className="h-3.5 w-3.5" /> Date de livraison
                       prévue :
                     </span>
-                    <span className="font-semibold text-brand-ink">
+                    <span className="font-semibold text-brand-ink dark:text-foreground">
                       {formatDate(prop.date_livraison)}
                     </span>
                   </div>
@@ -327,7 +327,7 @@ const AnnonceurEspacePage: React.FC = () => {
                         validateDeliveryMutation.mutate(prop.mission)
                       }
                       disabled={validateDeliveryMutation.isPending}
-                      className="inline-flex items-center gap-1.5 rounded-xl bg-brand-green hover:bg-brand-green-hover px-4 py-2 text-[11px] font-bold text-brand-ink transition-all disabled:opacity-50 cursor-pointer"
+                      className="inline-flex items-center gap-1.5 rounded-xl bg-brand-green hover:bg-brand-green-hover px-4 py-2 text-[11px] font-bold text-brand-ink dark:text-primary-foreground transition-all disabled:opacity-50 cursor-pointer"
                     >
                       {validateDeliveryMutation.isPending ? (
                         <Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -350,7 +350,7 @@ const AnnonceurEspacePage: React.FC = () => {
                     ) : prop.paiement_statut_collecte === "EN_ATTENTE" ? (
                       <button
                         disabled
-                        className="inline-flex items-center gap-1.5 rounded-xl bg-brand-ink/70 px-4 py-2 text-[11px] font-bold text-white opacity-80 cursor-not-allowed"
+                        className="inline-flex items-center gap-1.5 rounded-xl bg-brand-ink/70 dark:bg-black/65 px-4 py-2 text-[11px] font-bold text-white opacity-80 cursor-not-allowed"
                       >
                         <Clock3 className="h-4 w-4 text-brand-green animate-pulse" />
                         Paiement en cours...
@@ -364,7 +364,7 @@ const AnnonceurEspacePage: React.FC = () => {
                             budget: prop.mission_budget || 0,
                           })
                         }
-                        className="inline-flex items-center gap-1.5 rounded-xl bg-brand-ink hover:bg-brand-ink/85 px-4 py-2 text-[11px] font-bold text-white transition-all cursor-pointer"
+                        className="inline-flex items-center gap-1.5 rounded-xl bg-brand-ink hover:bg-brand-ink/85 dark:hover:bg-black/65 px-4 py-2 text-[11px] font-bold text-white transition-all cursor-pointer"
                       >
                         <CreditCard className="h-4 w-4 text-brand-green" /> Payer le
                         freelance (PayDunya)
@@ -378,7 +378,7 @@ const AnnonceurEspacePage: React.FC = () => {
                         title: prop.mission_title || "Mission",
                       })
                     }
-                    className="inline-flex items-center gap-1.5 rounded-xl border border-brand-ink/12 bg-white px-3 py-1.5 text-[10.5px] font-semibold text-muted-foreground hover:bg-brand-sand/60 transition-colors cursor-pointer"
+                    className="inline-flex items-center gap-1.5 rounded-xl border border-brand-ink/12 dark:border-border bg-white dark:bg-card px-3 py-1.5 text-[10.5px] font-semibold text-muted-foreground hover:bg-brand-sand/60 dark:hover:bg-muted/60 transition-colors cursor-pointer"
                   >
                     <Receipt className="h-3.5 w-3.5 text-muted-foreground" />{" "}
                     Historique paiement
@@ -386,10 +386,10 @@ const AnnonceurEspacePage: React.FC = () => {
                 </div>
 
                 {/* Actions bas de carte */}
-                <div className="mt-auto flex items-center justify-between gap-2 border-t border-brand-ink/6 pt-3">
+                <div className="mt-auto flex items-center justify-between gap-2 border-t border-brand-ink/6 dark:border-border pt-3">
                   <button
                     onClick={() => navigate("/espace/messages")}
-                    className="inline-flex items-center gap-1.5 rounded-xl border border-brand-ink/15 bg-white px-3 py-1.5 text-[10.5px] font-semibold text-brand-ink hover:bg-brand-sand/60 transition-colors cursor-pointer"
+                    className="inline-flex items-center gap-1.5 rounded-xl border border-brand-ink/15 dark:border-border bg-white dark:bg-card px-3 py-1.5 text-[10.5px] font-semibold text-brand-ink dark:text-foreground hover:bg-brand-sand/60 dark:hover:bg-muted/60 transition-colors cursor-pointer"
                   >
                     <MessageSquare className="h-3.5 w-3.5" /> Contacter le
                     freelance
@@ -397,7 +397,7 @@ const AnnonceurEspacePage: React.FC = () => {
 
                   <button
                     onClick={() => navigate(`/espace/missions/${prop.mission}`)}
-                    className="inline-flex items-center gap-1 text-[10.5px] font-semibold text-muted-foreground hover:text-brand-ink cursor-pointer"
+                    className="inline-flex items-center gap-1 text-[10.5px] font-semibold text-muted-foreground hover:text-brand-ink dark:hover:text-foreground cursor-pointer"
                   >
                     Détails mission <ExternalLink className="h-3 w-3" />
                   </button>

@@ -32,26 +32,26 @@ const formatDate = (value: string | null) =>
 // candidatures reçues) : pas de dégradé arc-en-ciel, une seule couleur de marque.
 const MatchScoreBadge: React.FC<{ score: number }> = ({ score }) => (
   <span className="inline-flex items-center gap-1 rounded-full bg-brand-ink px-2.5 py-1 text-[10px] font-bold text-white">
-    <span className="h-1.5 w-1.5 rounded-full bg-brand-peach" />
+    <span className="h-1.5 w-1.5 rounded-full bg-brand-peach dark:bg-brand-peach/10" />
     {Math.round(score * 100)}% pertinence
   </span>
 );
 
 const MissionCardSkeleton = () => (
-  <div className="animate-pulse rounded-2xl border border-brand-ink/8 bg-white p-4">
+  <div className="animate-pulse rounded-2xl border border-brand-ink/8 dark:border-border bg-white dark:bg-card p-4">
     <div className="mb-4 flex items-center justify-between">
-      <div className="h-4 w-20 rounded bg-brand-sand" />
-      <div className="h-3 w-12 rounded bg-brand-sand/60" />
+      <div className="h-4 w-20 rounded bg-brand-sand dark:bg-muted" />
+      <div className="h-3 w-12 rounded bg-brand-sand/60 dark:bg-muted/60" />
     </div>
-    <div className="mb-2 h-4 w-4/5 rounded bg-brand-sand" />
-    <div className="mb-5 h-9 w-full rounded bg-brand-sand/60" />
+    <div className="mb-2 h-4 w-4/5 rounded bg-brand-sand dark:bg-muted" />
+    <div className="mb-5 h-9 w-full rounded bg-brand-sand/60 dark:bg-muted/60" />
     <div className="mb-4 flex gap-2">
-      <div className="h-5 w-14 rounded-full bg-brand-sand/60" />
-      <div className="h-5 w-16 rounded-full bg-brand-sand/60" />
+      <div className="h-5 w-14 rounded-full bg-brand-sand/60 dark:bg-muted/60" />
+      <div className="h-5 w-16 rounded-full bg-brand-sand/60 dark:bg-muted/60" />
     </div>
-    <div className="flex justify-between border-t border-brand-ink/6 pt-3">
-      <div className="h-3 w-20 rounded bg-brand-sand" />
-      <div className="h-3 w-14 rounded bg-brand-sand" />
+    <div className="flex justify-between border-t border-brand-ink/6 dark:border-border pt-3">
+      <div className="h-3 w-20 rounded bg-brand-sand dark:bg-muted" />
+      <div className="h-3 w-14 rounded bg-brand-sand dark:bg-muted" />
     </div>
   </div>
 );
@@ -112,10 +112,10 @@ const FreelanceMissionsPage: React.FC = () => {
       {/* ── En-tête ── */}
       <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="mb-1 text-[10px] font-semibold text-brand-violet">
+          <p className="mb-1 text-[10px] font-semibold text-brand-violet dark:text-violet-300">
             Opportunités
           </p>
-          <h1 className="font-heading text-xl font-semibold tracking-tight text-brand-ink">
+          <h1 className="font-heading text-xl font-semibold tracking-tight text-brand-ink dark:text-foreground">
             Rechercher une mission
           </h1>
           <p className="mt-1 text-[11px] text-muted-foreground">
@@ -126,7 +126,7 @@ const FreelanceMissionsPage: React.FC = () => {
           {isMatchingActive && (
             <button
               onClick={() => matchingMutation.reset()}
-              className="inline-flex items-center gap-1 rounded-full bg-brand-sand px-3 py-1 text-[10px] font-semibold text-muted-foreground hover:bg-brand-sand/70 transition cursor-pointer"
+              className="inline-flex items-center gap-1 rounded-full bg-brand-sand dark:bg-muted px-3 py-1 text-[10px] font-semibold text-muted-foreground hover:bg-brand-sand/70 dark:hover:bg-muted/70 transition cursor-pointer"
             >
               <RefreshCw className="h-3 w-3" /> Réinitialiser le matching
             </button>
@@ -143,14 +143,14 @@ const FreelanceMissionsPage: React.FC = () => {
 
       {/* ── Bandeau matching actif ── */}
       {isMatchingActive && (
-        <div className="mb-5 flex items-center justify-between rounded-2xl border border-brand-ink/8 bg-brand-sand/50 p-4">
+        <div className="mb-5 flex items-center justify-between rounded-2xl border border-brand-ink/8 dark:border-border bg-brand-sand/50 dark:bg-muted/50 p-4">
           <div className="flex items-center gap-3">
             <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand-ink text-brand-green">
               <Brain className="h-5 w-5" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <p className="font-heading text-xs font-bold text-brand-ink">
+                <p className="font-heading text-xs font-bold text-brand-ink dark:text-foreground">
                   {matchingData?.etage_2_reussi ? "Analyse IA disponible" : "Classement par compatibilité"}
                 </p>
                 <span className="rounded-full bg-brand-ink px-2 py-0.5 text-[9px] font-semibold text-brand-green">
@@ -165,7 +165,7 @@ const FreelanceMissionsPage: React.FC = () => {
           <button
             onClick={() => matchingMutation.mutate()}
             disabled={matchingMutation.isPending || !canMatch}
-            className="inline-flex items-center gap-1.5 rounded-xl bg-brand-ink px-3 py-1.5 text-[10px] font-semibold text-white hover:bg-brand-ink/85 transition disabled:opacity-50 cursor-pointer"
+            className="inline-flex items-center gap-1.5 rounded-xl bg-brand-ink px-3 py-1.5 text-[10px] font-semibold text-white hover:bg-brand-ink/85 dark:hover:bg-black/65 transition disabled:opacity-50 cursor-pointer"
           >
             <RefreshCw
               className={`h-3 w-3 ${matchingMutation.isPending ? "animate-spin" : ""}`}
@@ -193,7 +193,7 @@ const FreelanceMissionsPage: React.FC = () => {
 
       {/* ── Erreur matching ── */}
       {matchingMutation.isError && (
-        <div className="mb-5 flex items-center gap-2 rounded-2xl border border-brand-green/25 bg-brand-green/10 p-4 text-[11px] text-brand-violet">
+        <div className="mb-5 flex items-center gap-2 rounded-2xl border border-brand-green/25 bg-brand-green/10 p-4 text-[11px] text-brand-violet dark:text-violet-300">
           <AlertCircle className="h-4 w-4 shrink-0" />
           <span>
             Le service de matching est temporairement indisponible. Réessayez
@@ -210,12 +210,12 @@ const FreelanceMissionsPage: React.FC = () => {
             value={search}
             onChange={(event) => setSearch(event.target.value)}
             placeholder="Rechercher par titre ou compétence..."
-            className="w-full rounded-2xl border border-brand-ink/12 bg-white py-2.5 pl-9 pr-3 text-[11px] outline-none focus:border-brand-green"
+            className="w-full rounded-2xl border border-brand-ink/12 dark:border-border bg-white dark:bg-card py-2.5 pl-9 pr-3 text-[11px] outline-none focus:border-brand-green"
           />
         </label>
         <button
           type="button"
-          className="inline-flex items-center justify-center gap-2 rounded-2xl border border-brand-ink/12 bg-white px-4 py-2.5 text-[11px] font-semibold text-muted-foreground hover:border-brand-ink/25"
+          className="inline-flex items-center justify-center gap-2 rounded-2xl border border-brand-ink/12 dark:border-border bg-white dark:bg-card px-4 py-2.5 text-[11px] font-semibold text-muted-foreground hover:border-brand-ink/25 dark:hover:border-border"
         >
           <SlidersHorizontal className="h-3.5 w-3.5" /> Filtres
         </button>
@@ -225,13 +225,13 @@ const FreelanceMissionsPage: React.FC = () => {
         <span className="rounded-full bg-brand-ink px-3 py-1.5 text-[10px] font-medium text-white">
           Toutes les missions
         </span>
-        <span className="rounded-full border border-brand-ink/12 bg-white px-3 py-1.5 text-[10px] text-muted-foreground">
+        <span className="rounded-full border border-brand-ink/12 dark:border-border bg-white dark:bg-card px-3 py-1.5 text-[10px] text-muted-foreground">
           Développement
         </span>
-        <span className="rounded-full border border-brand-ink/12 bg-white px-3 py-1.5 text-[10px] text-muted-foreground">
+        <span className="rounded-full border border-brand-ink/12 dark:border-border bg-white dark:bg-card px-3 py-1.5 text-[10px] text-muted-foreground">
           Design
         </span>
-        <span className="rounded-full border border-brand-ink/12 bg-white px-3 py-1.5 text-[10px] text-muted-foreground">
+        <span className="rounded-full border border-brand-ink/12 dark:border-border bg-white dark:bg-card px-3 py-1.5 text-[10px] text-muted-foreground">
           Marketing
         </span>
       </div>
@@ -247,7 +247,7 @@ const FreelanceMissionsPage: React.FC = () => {
 
       {/* ── Erreur de requête ── */}
       {missionsQuery.isError && (
-        <div className="rounded-2xl border border-brand-green/20 bg-brand-green/5 p-8 text-center text-[11px] text-brand-violet">
+        <div className="rounded-2xl border border-brand-green/20 bg-brand-green/5 p-8 text-center text-[11px] text-brand-violet dark:text-violet-300">
           Impossible de charger les missions pour le moment.
         </div>
       )}
@@ -256,8 +256,8 @@ const FreelanceMissionsPage: React.FC = () => {
       {!isLoading &&
         !missionsQuery.isError &&
         displayedMissions.length === 0 && (
-          <div className="rounded-2xl border border-dashed border-brand-ink/15 bg-white p-12 text-center">
-            <p className="font-heading text-sm font-semibold text-brand-ink">
+          <div className="rounded-2xl border border-dashed border-brand-ink/15 dark:border-border bg-white dark:bg-card p-12 text-center">
+            <p className="font-heading text-sm font-semibold text-brand-ink dark:text-foreground">
               Aucune mission trouvée
             </p>
             <p className="mt-1 text-[11px] text-muted-foreground">
@@ -282,10 +282,10 @@ const FreelanceMissionsPage: React.FC = () => {
                   key={mission.id}
                   className={`relative flex min-h-[220px] flex-col rounded-2xl border transition ${
                     isDisabled
-                      ? "border-brand-ink/10 bg-brand-canvas/80 opacity-60 grayscale"
+                      ? "border-brand-ink/10 dark:border-border bg-brand-canvas/80 dark:bg-background/80 opacity-60 grayscale"
                       : isMatchingActive && isRecommended
-                        ? "border-brand-peach bg-white shadow-md hover:-translate-y-0.5 ring-1 ring-brand-peach/40"
-                        : "border-brand-ink/8 bg-white hover:-translate-y-0.5 hover:border-brand-ink/20 hover:shadow-md"
+                        ? "border-brand-peach bg-white dark:bg-card shadow-md hover:-translate-y-0.5 ring-1 ring-brand-peach/40"
+                        : "border-brand-ink/8 dark:border-border bg-white dark:bg-card hover:-translate-y-0.5 hover:border-brand-ink/20 dark:hover:border-border hover:shadow-md"
                   } p-4`}
                 >
                   <div className="mb-3 flex items-center justify-between">
@@ -293,12 +293,12 @@ const FreelanceMissionsPage: React.FC = () => {
                       matchItem.compatible ? (
                         <MatchScoreBadge score={matchItem.score} />
                       ) : (
-                        <span className="inline-flex items-center gap-1 rounded-full bg-brand-ink/10 px-2.5 py-1 text-[10px] font-semibold text-muted-foreground">
+                        <span className="inline-flex items-center gap-1 rounded-full bg-brand-ink/10 dark:bg-foreground/10 px-2.5 py-1 text-[10px] font-semibold text-muted-foreground">
                           Moins pertinent
                         </span>
                       )
                     ) : (
-                      <span className="rounded-full bg-brand-sand px-2 py-1 text-[9px] font-semibold text-muted-foreground">
+                      <span className="rounded-full bg-brand-sand dark:bg-muted px-2 py-1 text-[9px] font-semibold text-muted-foreground">
                         Compatibilité indisponible
                       </span>
                     )}
@@ -307,7 +307,7 @@ const FreelanceMissionsPage: React.FC = () => {
                     </span>
                   </div>
 
-                  <h2 className="mb-2 line-clamp-2 font-heading text-[13px] font-semibold leading-snug text-brand-ink">
+                  <h2 className="mb-2 line-clamp-2 font-heading text-[13px] font-semibold leading-snug text-brand-ink dark:text-foreground">
                     {mission.title}
                   </h2>
                   <p className="line-clamp-3 text-[11px] leading-relaxed text-muted-foreground">
@@ -316,38 +316,38 @@ const FreelanceMissionsPage: React.FC = () => {
 
                   {/* Justification ou détails IA pour les cartes recommandées */}
                   {matchItem && (
-                    <div className="my-2 rounded-xl border border-brand-peach/30 bg-brand-sand/40 p-2 text-[9.5px]">
+                    <div className="my-2 rounded-xl border border-brand-peach/30 bg-brand-sand/40 dark:bg-muted/40 p-2 text-[9.5px]">
                       <div className="flex justify-between text-muted-foreground mb-0.5">
                         <span>Technologies (50%) :</span>
-                        <span className="font-semibold text-brand-ink">
+                        <span className="font-semibold text-brand-ink dark:text-foreground">
                           {Math.round(matchItem.score_technologies * 100)}%
                         </span>
                       </div>
                       <div className="flex justify-between text-muted-foreground">
                         <span>Service (50%) :</span>
-                        <span className="font-semibold text-brand-ink">
+                        <span className="font-semibold text-brand-ink dark:text-foreground">
                           {Math.round(matchItem.score_service * 100)}%
                         </span>
                       </div>
                       {isRecommended && recommendation?.justification_ia && (
-                        <div className="mt-1.5 border-t border-brand-ink/6 pt-1 text-[9.5px] text-brand-ink/75">
-                          <p className="font-semibold text-brand-ink">Avis IA :</p>
+                        <div className="mt-1.5 border-t border-brand-ink/6 dark:border-border pt-1 text-[9.5px] text-brand-ink/75 dark:text-foreground/75">
+                          <p className="font-semibold text-brand-ink dark:text-foreground">Avis IA :</p>
                           <p className="line-clamp-2">{recommendation.justification_ia}</p>
                         </div>
                       )}
                     </div>
                   )}
 
-                  <div className="mt-auto pt-3 border-t border-brand-ink/6">
+                  <div className="mt-auto pt-3 border-t border-brand-ink/6 dark:border-border">
                     <div className="mb-3 flex flex-wrap gap-1.5">
-                      <span className="inline-flex items-center gap-1 rounded-full bg-brand-sand/60 px-2 py-1 text-[9px] text-muted-foreground">
+                      <span className="inline-flex items-center gap-1 rounded-full bg-brand-sand/60 dark:bg-muted/60 px-2 py-1 text-[9px] text-muted-foreground">
                         <Clock3 className="h-2.5 w-2.5" />{" "}
                         {formatDate(mission.date_deadline)}
                       </span>
                       {mission.technologies_detail?.map((tech) => (
                         <span
                           key={tech.id}
-                          className="inline-flex items-center gap-1 rounded-full bg-brand-sand px-2 py-0.5 text-[9px] font-semibold text-muted-foreground"
+                          className="inline-flex items-center gap-1 rounded-full bg-brand-sand dark:bg-muted px-2 py-0.5 text-[9px] font-semibold text-muted-foreground"
                         >
                           {tech.name}
                         </span>
@@ -359,7 +359,7 @@ const FreelanceMissionsPage: React.FC = () => {
                         <p className="text-[8px] text-muted-foreground">
                           Budget estimé
                         </p>
-                        <p className="mt-0.5 text-[11px] font-semibold text-brand-ink">
+                        <p className="mt-0.5 text-[11px] font-semibold text-brand-ink dark:text-foreground">
                           {formatBudget(mission.budget)}
                         </p>
                       </div>
@@ -370,8 +370,8 @@ const FreelanceMissionsPage: React.FC = () => {
                         onClick={() => navigate(`/espace/missions/${mission.id}`)}
                         className={`inline-flex items-center gap-1 rounded-xl px-3 py-1.5 text-[10px] font-semibold transition ${
                           isDisabled
-                            ? "bg-gray-200 text-muted-foreground cursor-not-allowed"
-                            : "bg-brand-ink text-white hover:bg-brand-ink/85 cursor-pointer"
+                            ? "bg-gray-200 dark:bg-muted text-muted-foreground cursor-not-allowed"
+                            : "bg-brand-ink text-white hover:bg-brand-ink/85 dark:hover:bg-black/65 cursor-pointer"
                         }`}
                       >
                         {isDisabled ? (
@@ -396,7 +396,7 @@ const FreelanceMissionsPage: React.FC = () => {
           type="button"
           onClick={() => matchingMutation.mutate()}
           disabled={matchingMutation.isPending || !canMatch}
-          className="group relative flex items-center gap-2.5 rounded-2xl bg-brand-ink px-5 py-3.5 text-xs font-semibold text-white shadow-lg shadow-brand-ink/20 transition-colors hover:bg-brand-ink/90 disabled:opacity-70 cursor-pointer"
+          className="group relative flex items-center gap-2.5 rounded-2xl bg-brand-ink px-5 py-3.5 text-xs font-semibold text-white shadow-lg shadow-brand-ink/20 transition-colors hover:bg-brand-ink/90 dark:hover:bg-black/65 disabled:opacity-70 cursor-pointer"
         >
           {!matchingMutation.isPending && (
             <span className="absolute -top-1 -right-1 h-2.5 w-2.5 rounded-full bg-brand-green">

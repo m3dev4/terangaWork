@@ -84,7 +84,7 @@ const EspaceLayout: React.FC = () => {
             {!isDesktop && <MobileSidebar key={location.key} />}
             <div className="flex min-w-0 items-center gap-1.5 text-[11px]">
               <span className="hidden sm:inline text-muted-foreground font-normal">{breadcrumb.section}</span>
-              <span className="hidden sm:inline text-neutral-300 font-normal">›</span>
+              <span className="hidden sm:inline text-neutral-300 dark:text-muted-foreground font-normal">›</span>
               <span className="truncate text-foreground font-semibold tracking-tight">
                 {breadcrumb.label}
               </span>
@@ -131,7 +131,7 @@ const EspaceLayout: React.FC = () => {
             <button
               type="button"
               onClick={handleLogout}
-              className="size-11 sm:size-auto flex items-center justify-center p-1 rounded-md text-muted-foreground hover:bg-red-50 hover:text-red-600 transition-colors cursor-pointer ml-1"
+              className="size-11 sm:size-auto flex items-center justify-center p-1 rounded-md text-muted-foreground hover:bg-red-50 dark:hover:bg-red-500/10 hover:text-red-600 dark:hover:text-red-300 transition-colors cursor-pointer ml-1"
               title="Se déconnecter"
             >
               <LogOut className="w-3.5 h-3.5" strokeWidth={1.7} />

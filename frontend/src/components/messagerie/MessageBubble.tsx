@@ -56,7 +56,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
             px-3.5 py-2.5 text-[12.5px] leading-relaxed
             ${isMine
               ? 'bg-brand-violet text-white rounded-2xl rounded-br-md'
-              : 'bg-white text-brand-ink rounded-2xl rounded-bl-md border border-border shadow-[0_1px_3px_rgba(0,0,0,0.04)]'
+              : 'bg-white dark:bg-card text-brand-ink dark:text-foreground rounded-2xl rounded-bl-md border border-border shadow-[0_1px_3px_rgba(0,0,0,0.04)]'
             }
           `}
         >
@@ -74,7 +74,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
           </span>
           {isMine && (
             message.est_lu ? (
-              <CheckCheck className="w-3 h-3 text-brand-ink" strokeWidth={2.5} />
+              <CheckCheck className="w-3 h-3 text-brand-ink dark:text-foreground" strokeWidth={2.5} />
             ) : (
               <Check className="w-3 h-3 text-muted-foreground" strokeWidth={2.5} />
             )

@@ -127,7 +127,7 @@ export const AdminSignalementsPage: React.FC = () => {
     switch (status) {
       case 'PENDING':
         return (
-          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-brand-peach/20 text-brand-ink border border-brand-peach/40">
+          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-brand-peach/20 dark:bg-brand-peach/10 text-brand-ink dark:text-foreground border border-brand-peach/40">
             <Clock className="w-3 h-3" /> En attente
           </span>
         );
@@ -139,7 +139,7 @@ export const AdminSignalementsPage: React.FC = () => {
         );
       case 'DISMISSED':
         return (
-          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-brand-sand text-muted-foreground">
+          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-brand-sand dark:bg-muted text-muted-foreground">
             <XCircle className="w-3 h-3" /> Rejeté
           </span>
         );
@@ -150,7 +150,7 @@ export const AdminSignalementsPage: React.FC = () => {
     <div className="space-y-5 pb-8">
       {/* ── En-tête ── */}
       <div className="relative overflow-hidden rounded-[28px] bg-brand-ink text-white p-6 flex items-center gap-3">
-        <div className="p-3 bg-brand-green/15 text-brand-violet rounded-2xl">
+        <div className="p-3 bg-brand-green/15 text-brand-violet dark:text-violet-300 rounded-2xl">
           <ShieldAlert className="w-6 h-6" />
         </div>
         <div>
@@ -173,13 +173,13 @@ export const AdminSignalementsPage: React.FC = () => {
 
           <div className="space-y-3 mt-4">
             <div className="h-2.5 w-full bg-white/10 rounded-full overflow-hidden flex gap-0.5">
-              <div style={{ width: `${(pendingCount / totalCount) * 100}%` }} className="h-full bg-brand-peach" />
+              <div style={{ width: `${(pendingCount / totalCount) * 100}%` }} className="h-full bg-brand-peach dark:bg-brand-peach/10" />
               <div style={{ width: `${(resolvedCount / totalCount) * 100}%` }} className="h-full bg-brand-green" />
               <div style={{ width: `${(dismissedCount / totalCount) * 100}%` }} className="h-full bg-white/25" />
             </div>
             <div className="space-y-1.5 text-xs">
               <div className="flex items-center justify-between text-white/70">
-                <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-brand-peach" /> En attente</span>
+                <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-brand-peach dark:bg-brand-peach/10" /> En attente</span>
                 <span className="font-bold text-white">{pendingCount}</span>
               </div>
               <div className="flex items-center justify-between text-white/70">
@@ -195,32 +195,32 @@ export const AdminSignalementsPage: React.FC = () => {
         </div>
 
         {/* Missions en attente de validation — tuile large */}
-        <div className="col-span-12 md:col-span-8 md:row-span-2 rounded-[28px] border border-brand-ink/8 bg-white p-6 flex flex-col">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-brand-ink/6 pb-3 mb-3">
+        <div className="col-span-12 md:col-span-8 md:row-span-2 rounded-[28px] border border-brand-ink/8 dark:border-border bg-white dark:bg-card p-6 flex flex-col">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-brand-ink/6 dark:border-border pb-3 mb-3">
             <div className="flex items-center gap-3">
-              <div className="p-2.5 bg-brand-sand text-brand-violet rounded-xl">
+              <div className="p-2.5 bg-brand-sand dark:bg-muted text-brand-violet dark:text-violet-300 rounded-xl">
                 <Clock className="w-5 h-5" />
               </div>
               <div>
-                <h2 className="text-sm font-bold text-brand-ink">Missions en attente de validation</h2>
+                <h2 className="text-sm font-bold text-brand-ink dark:text-foreground">Missions en attente de validation</h2>
                 <p className="text-[11px] text-muted-foreground mt-0.5">
                   Approuvez pour publier ou supprimez pour retirer immédiatement de la plateforme.
                 </p>
               </div>
             </div>
             {pendingMissions.length > 0 ? (
-              <span className="rounded-full bg-brand-peach/20 text-brand-ink px-2.5 py-0.5 text-[9.5px] font-bold shrink-0">
+              <span className="rounded-full bg-brand-peach/20 dark:bg-brand-peach/10 text-brand-ink dark:text-foreground px-2.5 py-0.5 text-[9.5px] font-bold shrink-0">
                 {pendingMissions.length} mission(s) en attente
               </span>
             ) : (
-              <span className="rounded-full bg-brand-sand text-muted-foreground px-2.5 py-0.5 text-[9.5px] font-bold shrink-0">
+              <span className="rounded-full bg-brand-sand dark:bg-muted text-muted-foreground px-2.5 py-0.5 text-[9.5px] font-bold shrink-0">
                 Aucune mission en attente
               </span>
             )}
           </div>
 
           {pendingMissions.length === 0 ? (
-            <div className="flex-1 flex items-center justify-center py-6 text-center text-xs text-muted-foreground bg-brand-sand/40 rounded-2xl border border-dashed border-brand-ink/10">
+            <div className="flex-1 flex items-center justify-center py-6 text-center text-xs text-muted-foreground bg-brand-sand/40 dark:bg-muted/40 rounded-2xl border border-dashed border-brand-ink/10 dark:border-border">
               Aucune mission en attente de modération pour le moment.
             </div>
           ) : (
@@ -228,7 +228,7 @@ export const AdminSignalementsPage: React.FC = () => {
               {pendingMissions.map((m) => (
                 <div
                   key={m.id}
-                  className="flex flex-col justify-between rounded-2xl border border-brand-peach/35 bg-brand-sand/40 p-4 transition hover:border-brand-peach/60"
+                  className="flex flex-col justify-between rounded-2xl border border-brand-peach/35 bg-brand-sand/40 dark:bg-muted/40 p-4 transition hover:border-brand-peach/60"
                 >
                   <div>
                     <div className="flex items-center justify-between mb-1.5">
@@ -237,12 +237,12 @@ export const AdminSignalementsPage: React.FC = () => {
                       </span>
                       <span className="text-[10px] text-muted-foreground font-mono">#{m.id}</span>
                     </div>
-                    <h4 className="font-heading text-xs font-bold text-brand-ink line-clamp-1">{m.title}</h4>
+                    <h4 className="font-heading text-xs font-bold text-brand-ink dark:text-foreground line-clamp-1">{m.title}</h4>
                     <p className="text-[10.5px] text-muted-foreground line-clamp-2 mt-1 leading-relaxed">
                       {m.description}
                     </p>
                     <div className="mt-2 text-[10px] text-muted-foreground">
-                      Budget : <strong className="text-brand-ink">{new Intl.NumberFormat('fr-FR').format(m.budget)} FCFA</strong>
+                      Budget : <strong className="text-brand-ink dark:text-foreground">{new Intl.NumberFormat('fr-FR').format(m.budget)} FCFA</strong>
                     </div>
                   </div>
 
@@ -251,7 +251,7 @@ export const AdminSignalementsPage: React.FC = () => {
                       type="button"
                       disabled={moderateMutation.isPending}
                       onClick={() => moderateMutation.mutate({ missionId: m.id, decision: 'supprimer' })}
-                      className="inline-flex items-center gap-1 rounded-xl bg-brand-green/10 border border-brand-green/30 px-3 py-1.5 text-[10px] font-semibold text-brand-violet hover:bg-brand-green/20 transition cursor-pointer disabled:opacity-50"
+                      className="inline-flex items-center gap-1 rounded-xl bg-brand-green/10 border border-brand-green/30 px-3 py-1.5 text-[10px] font-semibold text-brand-violet dark:text-violet-300 hover:bg-brand-green/20 transition cursor-pointer disabled:opacity-50"
                     >
                       <Trash2 className="h-3 w-3" /> Supprimer
                     </button>
@@ -259,7 +259,7 @@ export const AdminSignalementsPage: React.FC = () => {
                       type="button"
                       disabled={moderateMutation.isPending}
                       onClick={() => moderateMutation.mutate({ missionId: m.id, decision: 'approuver' })}
-                      className="inline-flex items-center gap-1 rounded-xl bg-brand-ink px-3.5 py-1.5 text-[10px] font-bold text-white hover:bg-brand-ink/85 transition cursor-pointer disabled:opacity-50"
+                      className="inline-flex items-center gap-1 rounded-xl bg-brand-ink px-3.5 py-1.5 text-[10px] font-bold text-white hover:bg-brand-ink/85 dark:hover:bg-black/65 transition cursor-pointer disabled:opacity-50"
                     >
                       <CheckCircle2 className="h-3 w-3 text-brand-green" /> Approuver & publier
                     </button>
@@ -272,8 +272,8 @@ export const AdminSignalementsPage: React.FC = () => {
       </div>
 
       {/* ── Table des signalements ── */}
-      <div className="bg-white rounded-[24px] border border-brand-ink/8 p-5 space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-brand-ink/6">
+      <div className="bg-white dark:bg-card rounded-[24px] border border-brand-ink/8 dark:border-border p-5 space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-brand-ink/6 dark:border-border">
           <div className="relative max-w-md w-full">
             <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
             <input
@@ -281,7 +281,7 @@ export const AdminSignalementsPage: React.FC = () => {
               placeholder="Rechercher par membre, motif, mission..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-9 pr-3 py-2 text-xs bg-brand-sand/40 border border-brand-ink/10 rounded-xl focus:outline-none focus:border-brand-green focus:bg-white transition"
+              className="w-full pl-9 pr-3 py-2 text-xs bg-brand-sand/40 dark:bg-muted/40 border border-brand-ink/10 dark:border-border rounded-xl focus:outline-none focus:border-brand-green focus:bg-white dark:focus:bg-card transition"
             />
           </div>
 
@@ -294,7 +294,7 @@ export const AdminSignalementsPage: React.FC = () => {
                 className={`px-3 py-1.5 rounded-xl font-semibold transition cursor-pointer text-xs ${
                   statusFilter === filterKey
                     ? 'bg-brand-ink text-white'
-                    : 'bg-brand-sand/60 text-muted-foreground hover:bg-brand-sand'
+                    : 'bg-brand-sand/60 dark:bg-muted/60 text-muted-foreground hover:bg-brand-sand dark:hover:bg-muted'
                 }`}
               >
                 {filterKey === 'ALL'
@@ -311,11 +311,11 @@ export const AdminSignalementsPage: React.FC = () => {
 
         {isLoading ? (
           <div className="flex flex-col items-center justify-center py-12 space-y-3">
-            <Loader2 className="w-8 h-8 animate-spin text-brand-violet" />
+            <Loader2 className="w-8 h-8 animate-spin text-brand-violet dark:text-violet-300" />
             <p className="text-xs text-muted-foreground">Chargement des signalements...</p>
           </div>
         ) : isError ? (
-          <div className="p-4 bg-brand-green/10 text-brand-violet rounded-xl text-xs text-center">
+          <div className="p-4 bg-brand-green/10 text-brand-violet dark:text-violet-300 rounded-xl text-xs text-center">
             Erreur lors du chargement des signalements.{' '}
             <button onClick={() => refetch()} className="underline font-semibold cursor-pointer">
               Réessayer
@@ -324,7 +324,7 @@ export const AdminSignalementsPage: React.FC = () => {
         ) : filteredSignalements.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-12 text-center space-y-2">
             <AlertOctagon className="w-10 h-10 text-muted-foreground" />
-            <p className="text-sm font-semibold text-brand-ink">Aucun signalement trouvé</p>
+            <p className="text-sm font-semibold text-brand-ink dark:text-foreground">Aucun signalement trouvé</p>
             <p className="text-xs text-muted-foreground">
               {searchTerm || statusFilter !== 'ALL'
                 ? 'Aucun résultat ne correspond aux filtres.'
@@ -335,7 +335,7 @@ export const AdminSignalementsPage: React.FC = () => {
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs border-collapse">
               <thead>
-                <tr className="border-b border-brand-ink/6 bg-brand-sand/40 text-muted-foreground font-semibold text-[10px]">
+                <tr className="border-b border-brand-ink/6 dark:border-border bg-brand-sand/40 dark:bg-muted/40 text-muted-foreground font-semibold text-[10px]">
                   <th className="py-3 px-4 rounded-l-xl">ID</th>
                   <th className="py-3 px-4">Signaleur</th>
                   <th className="py-3 px-4">Catégorie & motif</th>
@@ -344,29 +344,29 @@ export const AdminSignalementsPage: React.FC = () => {
                   <th className="py-3 px-4 text-right rounded-r-xl">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#111118]/6">
+              <tbody className="divide-y divide-[#111118]/6 dark:divide-border">
                 {filteredSignalements.map((item) => (
-                  <tr key={item.id} className="hover:bg-brand-sand/30 transition group">
+                  <tr key={item.id} className="hover:bg-brand-sand/30 dark:hover:bg-muted/30 transition group">
                     <td className="py-3.5 px-4 font-bold text-muted-foreground">#{item.id}</td>
                     <td className="py-3.5 px-4">
                       <div className="flex flex-col">
-                        <span className="font-bold text-brand-ink text-xs">{item.reporter_name}</span>
+                        <span className="font-bold text-brand-ink dark:text-foreground text-xs">{item.reporter_name}</span>
                         <span className="text-[10px] text-muted-foreground">{item.reporter_email}</span>
                       </div>
                     </td>
                     <td className="py-3.5 px-4 max-w-xs">
-                      <span className="inline-block px-2 py-0.5 rounded-md text-[10px] font-semibold bg-brand-sand text-muted-foreground mb-1">
+                      <span className="inline-block px-2 py-0.5 rounded-md text-[10px] font-semibold bg-brand-sand dark:bg-muted text-muted-foreground mb-1">
                         {item.category}
                       </span>
                       <p className="text-xs text-muted-foreground truncate">{item.reason}</p>
                     </td>
                     <td className="py-3.5 px-4">
                       {item.reported_user_email ? (
-                        <span className="text-xs font-medium text-brand-ink">
+                        <span className="text-xs font-medium text-brand-ink dark:text-foreground">
                           Membre : {item.reported_user_email}
                         </span>
                       ) : item.mission_title ? (
-                        <span className="text-xs font-medium text-brand-ink">
+                        <span className="text-xs font-medium text-brand-ink dark:text-foreground">
                           Mission : {item.mission_title}
                         </span>
                       ) : (
@@ -377,7 +377,7 @@ export const AdminSignalementsPage: React.FC = () => {
                     <td className="py-3.5 px-4 text-right">
                       <button
                         onClick={() => setSelectedSignalement(item)}
-                        className="px-2.5 py-1 rounded-lg bg-brand-sand hover:bg-brand-ink hover:text-white text-muted-foreground text-[11px] font-semibold transition cursor-pointer inline-flex items-center gap-1"
+                        className="px-2.5 py-1 rounded-lg bg-brand-sand dark:bg-muted hover:bg-brand-ink hover:text-white text-muted-foreground text-[11px] font-semibold transition cursor-pointer inline-flex items-center gap-1"
                       >
                         <Eye className="w-3.5 h-3.5" />
                         <span>Détails</span>
@@ -393,44 +393,44 @@ export const AdminSignalementsPage: React.FC = () => {
 
       {/* ── Modale détail / action de modération ── */}
       {selectedSignalement && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-brand-ink/50 backdrop-blur-xs">
-          <div className="bg-white w-full max-w-lg rounded-[28px] shadow-xl border border-brand-ink/8 overflow-hidden">
-            <div className="flex items-center justify-between px-5 py-4 border-b border-brand-ink/6 bg-brand-sand/40">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-brand-ink/50 dark:bg-black/65 backdrop-blur-xs">
+          <div className="bg-white dark:bg-card w-full max-w-lg rounded-[28px] shadow-xl border border-brand-ink/8 dark:border-border overflow-hidden">
+            <div className="flex items-center justify-between px-5 py-4 border-b border-brand-ink/6 dark:border-border bg-brand-sand/40 dark:bg-muted/40">
               <div className="flex items-center gap-2">
-                <ShieldAlert className="w-5 h-5 text-brand-violet" />
-                <h3 className="text-sm font-bold text-brand-ink">
+                <ShieldAlert className="w-5 h-5 text-brand-violet dark:text-violet-300" />
+                <h3 className="text-sm font-bold text-brand-ink dark:text-foreground">
                   Signalement #{selectedSignalement.id}
                 </h3>
               </div>
               <button
                 onClick={() => setSelectedSignalement(null)}
-                className="p-1 rounded-lg text-muted-foreground hover:text-brand-ink hover:bg-white transition cursor-pointer"
+                className="p-1 rounded-lg text-muted-foreground hover:text-brand-ink dark:hover:text-foreground hover:bg-white dark:hover:bg-card transition cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
             <div className="p-5 space-y-4 text-xs">
-              <div className="flex items-center justify-between p-3 bg-brand-sand/40 rounded-xl border border-brand-ink/6">
+              <div className="flex items-center justify-between p-3 bg-brand-sand/40 dark:bg-muted/40 rounded-xl border border-brand-ink/6 dark:border-border">
                 <span className="font-semibold text-muted-foreground">Statut actuel :</span>
                 {getStatusBadge(selectedSignalement.status)}
               </div>
 
               <div className="space-y-1">
                 <span className="font-semibold text-muted-foreground block text-[11px]">Auteur du signalement</span>
-                <p className="font-bold text-brand-ink">{selectedSignalement.reporter_name} ({selectedSignalement.reporter_email})</p>
+                <p className="font-bold text-brand-ink dark:text-foreground">{selectedSignalement.reporter_name} ({selectedSignalement.reporter_email})</p>
               </div>
 
               <div className="space-y-1">
                 <span className="font-semibold text-muted-foreground block text-[11px]">Catégorie</span>
-                <span className="inline-block px-2.5 py-1 bg-brand-green/10 text-brand-violet rounded-md font-bold">
+                <span className="inline-block px-2.5 py-1 bg-brand-green/10 text-brand-violet dark:text-violet-300 rounded-md font-bold">
                   {selectedSignalement.category}
                 </span>
               </div>
 
               <div className="space-y-1">
                 <span className="font-semibold text-muted-foreground block text-[11px]">Explication / motif</span>
-                <div className="p-3 bg-brand-sand/40 border border-brand-ink/8 rounded-xl text-brand-ink font-medium leading-relaxed">
+                <div className="p-3 bg-brand-sand/40 dark:bg-muted/40 border border-brand-ink/8 dark:border-border rounded-xl text-brand-ink dark:text-foreground font-medium leading-relaxed">
                   {selectedSignalement.reason}
                 </div>
               </div>
@@ -438,22 +438,22 @@ export const AdminSignalementsPage: React.FC = () => {
               {selectedSignalement.reported_user_email && (
                 <div className="space-y-1">
                   <span className="font-semibold text-muted-foreground block text-[11px]">Membre mis en cause</span>
-                  <p className="font-semibold text-brand-ink">{selectedSignalement.reported_user_email}</p>
+                  <p className="font-semibold text-brand-ink dark:text-foreground">{selectedSignalement.reported_user_email}</p>
                 </div>
               )}
 
               {selectedSignalement.mission_title && (
                 <div className="space-y-1">
                   <span className="font-semibold text-muted-foreground block text-[11px]">Mission concernée</span>
-                  <p className="font-semibold text-brand-ink">{selectedSignalement.mission_title}</p>
+                  <p className="font-semibold text-brand-ink dark:text-foreground">{selectedSignalement.mission_title}</p>
                 </div>
               )}
 
-              <div className="pt-4 border-t border-brand-ink/6 flex items-center justify-between">
+              <div className="pt-4 border-t border-brand-ink/6 dark:border-border flex items-center justify-between">
                 <button
                   type="button"
                   onClick={() => setSelectedSignalement(null)}
-                  className="px-4 py-2 text-xs font-medium text-muted-foreground hover:bg-brand-sand/60 rounded-xl transition cursor-pointer"
+                  className="px-4 py-2 text-xs font-medium text-muted-foreground hover:bg-brand-sand/60 dark:hover:bg-muted/60 rounded-xl transition cursor-pointer"
                 >
                   Fermer
                 </button>
@@ -464,7 +464,7 @@ export const AdminSignalementsPage: React.FC = () => {
                       updateStatusMutation.mutate({ id: selectedSignalement.id, status: 'DISMISSED' })
                     }
                     disabled={updateStatusMutation.isPending || selectedSignalement.status === 'DISMISSED'}
-                    className="px-3.5 py-2 text-xs font-semibold bg-brand-sand hover:bg-brand-sand/70 text-muted-foreground rounded-xl transition cursor-pointer disabled:opacity-50"
+                    className="px-3.5 py-2 text-xs font-semibold bg-brand-sand dark:bg-muted hover:bg-brand-sand/70 dark:hover:bg-muted/70 text-muted-foreground rounded-xl transition cursor-pointer disabled:opacity-50"
                   >
                     Rejeter
                   </button>
@@ -474,7 +474,7 @@ export const AdminSignalementsPage: React.FC = () => {
                       updateStatusMutation.mutate({ id: selectedSignalement.id, status: 'RESOLVED' })
                     }
                     disabled={updateStatusMutation.isPending || selectedSignalement.status === 'RESOLVED'}
-                    className="flex items-center gap-1.5 px-4 py-2 text-xs font-semibold bg-brand-ink hover:bg-brand-ink/85 text-white rounded-xl transition cursor-pointer disabled:opacity-50"
+                    className="flex items-center gap-1.5 px-4 py-2 text-xs font-semibold bg-brand-ink hover:bg-brand-ink/85 dark:hover:bg-black/65 text-white rounded-xl transition cursor-pointer disabled:opacity-50"
                   >
                     {updateStatusMutation.isPending && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                     <span>Marquer résolu</span>

@@ -241,7 +241,7 @@ const ProjectWorkspacePage: React.FC = () => {
   if (isPropositionsLoading) {
     return (
       <div className="flex h-64 flex-col items-center justify-center gap-3">
-        <Loader2 className="h-8 w-8 animate-spin text-brand-violet" />
+        <Loader2 className="h-8 w-8 animate-spin text-brand-violet dark:text-violet-300" />
         <p className="text-xs text-muted-foreground">
           Chargement de votre espace projet...
         </p>
@@ -252,10 +252,10 @@ const ProjectWorkspacePage: React.FC = () => {
   if (!activeProject) {
     return (
       <div className="mx-auto max-w-[1080px] py-16 text-center">
-        <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-brand-sand text-brand-violet">
+        <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-brand-sand dark:bg-muted text-brand-violet dark:text-violet-300">
           <Briefcase className="h-7 w-7" />
         </div>
-        <h2 className="font-heading text-base font-bold text-brand-ink">
+        <h2 className="font-heading text-base font-bold text-brand-ink dark:text-foreground">
           Aucun projet en cours de développement
         </h2>
         <p className="mx-auto mt-1.5 max-w-md text-[11.5px] text-muted-foreground leading-relaxed">
@@ -288,7 +288,7 @@ const ProjectWorkspacePage: React.FC = () => {
               {(!activeProject.mission_status ||
                 activeProject.mission_status === "IN_PROGRESS") && (
                 <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-2.5 py-0.5 text-[9.5px] font-semibold text-brand-green">
-                  <span className="h-1.5 w-1.5 rounded-full bg-brand-peach animate-pulse" />{" "}
+                  <span className="h-1.5 w-1.5 rounded-full bg-brand-peach dark:bg-brand-peach/10 animate-pulse" />{" "}
                   En cours de développement
                 </span>
               )}
@@ -299,7 +299,7 @@ const ProjectWorkspacePage: React.FC = () => {
                 </span>
               )}
               {activeProject.mission_status === "COMPLETED" && (
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-brand-peach/20 px-2.5 py-0.5 text-[9.5px] font-bold text-brand-green border border-brand-peach/30">
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-brand-peach/20 dark:bg-brand-peach/10 px-2.5 py-0.5 text-[9.5px] font-bold text-brand-green border border-brand-peach/30">
                   <CheckCircle2 className="h-3 w-3" /> Mission terminée
                 </span>
               )}
@@ -315,7 +315,7 @@ const ProjectWorkspacePage: React.FC = () => {
                   className="text-[11px] font-medium border border-white/15 rounded-lg px-2 py-0.5 bg-white/10 text-white outline-none"
                 >
                   {acceptedProjects.map((p) => (
-                    <option key={p.id} value={p.id} className="text-brand-ink">
+                    <option key={p.id} value={p.id} className="text-brand-ink dark:text-foreground">
                       {p.mission_title}
                     </option>
                   ))}
@@ -332,7 +332,7 @@ const ProjectWorkspacePage: React.FC = () => {
               onClick={() =>
                 (window.location.href = "/espace/paiements-effectues")
               }
-              className="inline-flex items-center gap-1.5 rounded-2xl bg-brand-green hover:bg-brand-green-hover px-4 py-2 text-[11px] font-bold text-brand-ink transition-colors shrink-0"
+              className="inline-flex items-center gap-1.5 rounded-2xl bg-brand-green hover:bg-brand-green-hover px-4 py-2 text-[11px] font-bold text-brand-ink dark:text-primary-foreground transition-colors shrink-0"
             >
               <ShieldCheck className="h-4 w-4 text-brand-green" /> Validation
               livraison & paiement
@@ -394,7 +394,7 @@ const ProjectWorkspacePage: React.FC = () => {
               }).toString();
               navigate(`/espace/messages?${query}`);
             }}
-            className="ml-auto inline-flex items-center gap-1.5 rounded-xl bg-brand-peach hover:bg-brand-peach px-3.5 py-2 text-[10.5px] font-bold text-brand-ink transition-colors"
+            className="ml-auto inline-flex items-center gap-1.5 rounded-xl bg-brand-peach dark:bg-brand-peach/10 hover:bg-brand-peach dark:hover:bg-brand-peach/20 px-3.5 py-2 text-[10.5px] font-bold text-brand-ink dark:text-foreground transition-colors"
             title="Ouvrir la messagerie pour ce projet"
           >
             <MessageSquare className="h-3.5 w-3.5" /> Discuter
@@ -407,35 +407,35 @@ const ProjectWorkspacePage: React.FC = () => {
         {/* Colonne calendrier & statut (2/3) */}
         <div className="lg:col-span-2 space-y-5">
           {/* Calendrier */}
-          <div className="rounded-[28px] border border-brand-ink/8 bg-white p-6">
+          <div className="rounded-[28px] border border-brand-ink/8 dark:border-border bg-white dark:bg-card p-6">
             <div className="mb-4 flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <h3 className="font-heading text-sm font-bold text-brand-ink">
+                <h3 className="font-heading text-sm font-bold text-brand-ink dark:text-foreground">
                   {MONTHS_FR[month]} {year}
                 </h3>
-                <div className="flex items-center gap-1 rounded-xl border border-brand-ink/10 p-0.5 bg-brand-sand/60">
+                <div className="flex items-center gap-1 rounded-xl border border-brand-ink/10 dark:border-border p-0.5 bg-brand-sand/60 dark:bg-muted/60">
                   <button
                     onClick={() => setCurrentDate(new Date(year, month - 1, 1))}
-                    className="p-1 rounded-lg hover:bg-white text-muted-foreground transition-colors"
+                    className="p-1 rounded-lg hover:bg-white dark:hover:bg-card text-muted-foreground transition-colors"
                   >
                     <ChevronLeft className="h-3.5 w-3.5" />
                   </button>
                   <button
                     onClick={() => setCurrentDate(new Date(year, month + 1, 1))}
-                    className="p-1 rounded-lg hover:bg-white text-muted-foreground transition-colors"
+                    className="p-1 rounded-lg hover:bg-white dark:hover:bg-card text-muted-foreground transition-colors"
                   >
                     <ChevronRight className="h-3.5 w-3.5" />
                   </button>
                 </div>
               </div>
 
-              <div className="flex items-center gap-1 rounded-xl bg-brand-sand/60 p-1 text-[10px] font-semibold text-muted-foreground">
+              <div className="flex items-center gap-1 rounded-xl bg-brand-sand/60 dark:bg-muted/60 p-1 text-[10px] font-semibold text-muted-foreground">
                 <button
                   onClick={() => setCalendarView("month")}
                   className={`px-2.5 py-1 rounded-lg transition-all ${
                     calendarView === "month"
-                      ? "bg-white text-brand-ink shadow-2xs"
-                      : "hover:text-brand-ink"
+                      ? "bg-white dark:bg-card text-brand-ink dark:text-foreground shadow-2xs"
+                      : "hover:text-brand-ink dark:hover:text-foreground"
                   }`}
                 >
                   Mois
@@ -444,8 +444,8 @@ const ProjectWorkspacePage: React.FC = () => {
                   onClick={() => setCalendarView("week")}
                   className={`px-2.5 py-1 rounded-lg transition-all ${
                     calendarView === "week"
-                      ? "bg-white text-brand-ink shadow-2xs"
-                      : "hover:text-brand-ink"
+                      ? "bg-white dark:bg-card text-brand-ink dark:text-foreground shadow-2xs"
+                      : "hover:text-brand-ink dark:hover:text-foreground"
                   }`}
                 >
                   Semaine
@@ -474,9 +474,9 @@ const ProjectWorkspacePage: React.FC = () => {
                     key={idx}
                     className={`min-h-[64px] rounded-xl border p-1.5 transition-all flex flex-col justify-between ${
                       cell.isCurrentMonth
-                        ? "border-brand-ink/6 bg-white text-brand-ink"
-                        : "border-transparent bg-brand-sand/30 text-muted-foreground"
-                    } ${isStart ? "ring-2 ring-brand-ink" : ""} ${isEnd ? "ring-2 ring-brand-green" : ""}`}
+                        ? "border-brand-ink/6 dark:border-border bg-white dark:bg-card text-brand-ink dark:text-foreground"
+                        : "border-transparent bg-brand-sand/30 dark:bg-muted/30 text-muted-foreground"
+                    } ${isStart ? "ring-2 ring-brand-ink dark:ring-border" : ""} ${isEnd ? "ring-2 ring-brand-green" : ""}`}
                   >
                     <div className="flex items-center justify-between">
                       <span
@@ -497,7 +497,7 @@ const ProjectWorkspacePage: React.FC = () => {
                       )}
                       {isEnd && (
                         <div
-                          className="rounded bg-brand-green px-1 py-0.5 text-[8px] font-bold text-brand-ink truncate"
+                          className="rounded bg-brand-green px-1 py-0.5 text-[8px] font-bold text-brand-ink dark:text-primary-foreground truncate"
                           title="Livraison prévue"
                         >
                           Livraison
@@ -509,10 +509,10 @@ const ProjectWorkspacePage: React.FC = () => {
                           href={m.link}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="rounded bg-brand-sand border border-brand-peach/40 px-1 py-0.5 text-[8px] font-semibold text-brand-ink/80 truncate flex items-center gap-0.5 hover:bg-brand-peach/30 transition-colors"
+                          className="rounded bg-brand-sand dark:bg-muted border border-brand-peach/40 px-1 py-0.5 text-[8px] font-semibold text-brand-ink/80 dark:text-foreground/80 truncate flex items-center gap-0.5 hover:bg-brand-peach/30 dark:hover:bg-brand-peach/20 transition-colors"
                           title={`Visio: ${m.title} à ${m.time}`}
                         >
-                          <Video className="h-2 w-2 shrink-0 text-brand-violet" />{" "}
+                          <Video className="h-2 w-2 shrink-0 text-brand-violet dark:text-violet-300" />{" "}
                           {m.time.substring(0, 5)}
                         </a>
                       ))}
@@ -524,17 +524,17 @@ const ProjectWorkspacePage: React.FC = () => {
           </div>
 
           {/* Statut réel de la mission — un seul indicateur honnête, plus de fausses sous-étapes */}
-          <div className="rounded-[24px] border border-brand-ink/8 bg-white p-6">
-            <div className="mb-5 flex items-center justify-between border-b border-brand-ink/6 pb-2.5">
-              <h4 className="font-heading text-xs font-bold text-brand-ink flex items-center gap-1.5">
-                <CheckCircle2 className="h-3.5 w-3.5 text-brand-violet" /> Statut
+          <div className="rounded-[24px] border border-brand-ink/8 dark:border-border bg-white dark:bg-card p-6">
+            <div className="mb-5 flex items-center justify-between border-b border-brand-ink/6 dark:border-border pb-2.5">
+              <h4 className="font-heading text-xs font-bold text-brand-ink dark:text-foreground flex items-center gap-1.5">
+                <CheckCircle2 className="h-3.5 w-3.5 text-brand-violet dark:text-violet-300" /> Statut
                 de la mission
               </h4>
             </div>
 
             {isClosed ? (
               <div className="flex items-center gap-2 text-[11px] text-muted-foreground">
-                <span className="h-2 w-2 rounded-full bg-brand-ink/30" /> Cette
+                <span className="h-2 w-2 rounded-full bg-brand-ink/30 dark:bg-foreground/30" /> Cette
                 mission a été clôturée.
               </div>
             ) : (
@@ -548,10 +548,10 @@ const ProjectWorkspacePage: React.FC = () => {
                         <div
                           className={`flex h-7 w-7 items-center justify-center rounded-full border-2 text-[10px] font-bold shrink-0 ${
                             done
-                              ? "bg-brand-ink border-brand-ink text-white"
+                              ? "bg-brand-ink border-brand-ink dark:border-border text-white"
                               : active
-                                ? "bg-brand-peach/20 border-brand-peach text-brand-ink"
-                                : "bg-white border-brand-ink/15 text-muted-foreground"
+                                ? "bg-brand-peach/20 dark:bg-brand-peach/10 border-brand-peach text-brand-ink dark:text-foreground"
+                                : "bg-white dark:bg-card border-brand-ink/15 dark:border-border text-muted-foreground"
                           }`}
                         >
                           {done ? (
@@ -563,7 +563,7 @@ const ProjectWorkspacePage: React.FC = () => {
                         <span
                           className={`text-[9.5px] font-semibold leading-tight ${
                             done || active
-                              ? "text-brand-ink/75"
+                              ? "text-brand-ink/75 dark:text-foreground/75"
                               : "text-muted-foreground"
                           }`}
                         >
@@ -575,7 +575,7 @@ const ProjectWorkspacePage: React.FC = () => {
                           className={`h-0.5 flex-1 rounded-full ${
                             i < currentStepIndex
                               ? "bg-brand-ink"
-                              : "bg-brand-ink/10"
+                              : "bg-brand-ink/10 dark:bg-foreground/10"
                           }`}
                         />
                       )}
@@ -590,7 +590,7 @@ const ProjectWorkspacePage: React.FC = () => {
         {/* Colonne vue d'ensemble, meet, activités (1/3) */}
         <div className="space-y-5">
           {/* Vue d'ensemble : statut, budget, timeline et prochaine échéance réelle */}
-          <div className="rounded-[24px] border border-brand-ink/8 bg-white p-6">
+          <div className="rounded-[24px] border border-brand-ink/8 dark:border-border bg-white dark:bg-card p-6">
             <h3 className="font-heading text-[10px] font-bold text-muted-foreground mb-3 uppercase tracking-wider">
               Vue d'ensemble
             </h3>
@@ -599,7 +599,7 @@ const ProjectWorkspacePage: React.FC = () => {
               <span className="text-[11px] text-muted-foreground">
                 Budget prévu
               </span>
-              <span className="text-sm font-bold text-brand-ink">
+              <span className="text-sm font-bold text-brand-ink dark:text-foreground">
                 {formatBudget(activeProject.mission_budget || 0)}
               </span>
             </div>
@@ -607,11 +607,11 @@ const ProjectWorkspacePage: React.FC = () => {
             <div className="mb-4">
               <div className="flex items-center justify-between mb-1 text-[11px]">
                 <span className="text-muted-foreground">Avancement du temps</span>
-                <span className="font-semibold text-brand-ink/80">
+                <span className="font-semibold text-brand-ink/80 dark:text-foreground/80">
                   {timelinePercent}%
                 </span>
               </div>
-              <div className="h-2 w-full rounded-full bg-brand-sand overflow-hidden">
+              <div className="h-2 w-full rounded-full bg-brand-sand dark:bg-muted overflow-hidden">
                 <div
                   className="h-full bg-brand-green transition-all duration-500 rounded-full"
                   style={{ width: `${timelinePercent}%` }}
@@ -623,13 +623,13 @@ const ProjectWorkspacePage: React.FC = () => {
               </div>
             </div>
 
-            <div className="border-t border-brand-ink/6 pt-3 space-y-1.5 text-[10.5px]">
+            <div className="border-t border-brand-ink/6 dark:border-border pt-3 space-y-1.5 text-[10.5px]">
               <div className="flex items-center gap-1.5 text-muted-foreground">
-                <Clock className="h-3 w-3 text-brand-violet shrink-0" />
+                <Clock className="h-3 w-3 text-brand-violet dark:text-violet-300 shrink-0" />
                 {nextMeeting ? (
                   <span>
                     Prochaine réunion :{" "}
-                    <span className="font-semibold text-brand-ink">
+                    <span className="font-semibold text-brand-ink dark:text-foreground">
                       {nextMeeting.date} à {nextMeeting.time.substring(0, 5)}
                     </span>
                   </span>
@@ -669,19 +669,19 @@ const ProjectWorkspacePage: React.FC = () => {
 
             <button
               onClick={() => setIsMeetModalOpen(true)}
-              className="mt-4 flex w-full items-center justify-center gap-2 rounded-2xl bg-brand-green hover:bg-brand-green-hover py-2.5 text-[11px] font-bold text-brand-ink transition-colors"
+              className="mt-4 flex w-full items-center justify-center gap-2 rounded-2xl bg-brand-green hover:bg-brand-green-hover py-2.5 text-[11px] font-bold text-brand-ink dark:text-primary-foreground transition-colors"
             >
               <Plus className="h-4 w-4" /> Planifier un meet
             </button>
           </div>
 
           {/* Activités & réunions */}
-          <div className="rounded-[24px] border border-brand-ink/8 bg-white p-6">
-            <div className="flex items-center justify-between border-b border-brand-ink/6 pb-2.5 mb-3">
-              <h3 className="font-heading text-xs font-bold text-brand-ink">
+          <div className="rounded-[24px] border border-brand-ink/8 dark:border-border bg-white dark:bg-card p-6">
+            <div className="flex items-center justify-between border-b border-brand-ink/6 dark:border-border pb-2.5 mb-3">
+              <h3 className="font-heading text-xs font-bold text-brand-ink dark:text-foreground">
                 Activités & réunions ({meetings.length})
               </h3>
-              <span className="flex items-center gap-1 text-[9px] text-brand-violet font-bold">
+              <span className="flex items-center gap-1 text-[9px] text-brand-violet dark:text-violet-300 font-bold">
                 <span className="h-1.5 w-1.5 rounded-full bg-brand-green animate-ping" />{" "}
                 Temps réel
               </span>
@@ -696,11 +696,11 @@ const ProjectWorkspacePage: React.FC = () => {
                 {meetings.map((m) => (
                   <div
                     key={m.id}
-                    className="flex items-start gap-2.5 text-[11px] border-b border-brand-ink/6 pb-2.5 last:border-0 last:pb-0"
+                    className="flex items-start gap-2.5 text-[11px] border-b border-brand-ink/6 dark:border-border pb-2.5 last:border-0 last:pb-0"
                   >
                     <div className="mt-0.5 h-2 w-2 rounded-full bg-brand-green shrink-0" />
                     <div className="flex-1 min-w-0">
-                      <p className="font-semibold text-brand-ink leading-tight">
+                      <p className="font-semibold text-brand-ink dark:text-foreground leading-tight">
                         {m.title}
                       </p>
                       <p className="text-[10px] text-muted-foreground">
@@ -712,7 +712,7 @@ const ProjectWorkspacePage: React.FC = () => {
                           type="button"
                           onClick={() => handleJoinCall(m.id)}
                           disabled={isJoiningCall}
-                          className="mt-1.5 inline-flex items-center gap-1.5 rounded-lg bg-brand-ink px-2.5 py-1 text-[9.5px] font-bold text-white hover:bg-brand-ink/85 transition-colors disabled:opacity-50"
+                          className="mt-1.5 inline-flex items-center gap-1.5 rounded-lg bg-brand-ink px-2.5 py-1 text-[9.5px] font-bold text-white hover:bg-brand-ink/85 dark:hover:bg-black/65 transition-colors disabled:opacity-50"
                         >
                           {isJoiningCall ? (
                             <Loader2 className="h-3 w-3 animate-spin" />
@@ -734,22 +734,22 @@ const ProjectWorkspacePage: React.FC = () => {
       {/* ── MODAL : PLANIFIER UN MEET ── */}
       {isMeetModalOpen && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-brand-ink/50 p-4 backdrop-blur-sm"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-brand-ink/50 dark:bg-black/65 p-4 backdrop-blur-sm"
           onClick={() => setIsMeetModalOpen(false)}
         >
           <div
-            className="relative w-full max-w-md rounded-[28px] bg-white p-6 shadow-2xl"
+            className="relative w-full max-w-md rounded-[28px] bg-white dark:bg-card p-6 shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
             <button
               onClick={() => setIsMeetModalOpen(false)}
-              className="absolute right-4 top-4 rounded-lg p-1 text-muted-foreground hover:bg-brand-sand"
+              className="absolute right-4 top-4 rounded-lg p-1 text-muted-foreground hover:bg-brand-sand dark:hover:bg-muted"
             >
               <X className="h-4 w-4" />
             </button>
 
             <div className="mb-4">
-              <h3 className="font-heading text-base font-bold text-brand-ink">
+              <h3 className="font-heading text-base font-bold text-brand-ink dark:text-foreground">
                 Planifier un meet
               </h3>
               <p className="text-[11px] text-muted-foreground">
@@ -769,7 +769,7 @@ const ProjectWorkspacePage: React.FC = () => {
                   value={newMeetTitle}
                   onChange={(e) => setNewMeetTitle(e.target.value)}
                   placeholder="ex : point d'avancement & recette"
-                  className="w-full rounded-xl border border-brand-ink/15 px-3 py-2 outline-none focus:border-brand-green"
+                  className="w-full rounded-xl border border-brand-ink/15 dark:border-border px-3 py-2 outline-none focus:border-brand-green"
                 />
               </div>
 
@@ -783,7 +783,7 @@ const ProjectWorkspacePage: React.FC = () => {
                     required
                     value={newMeetDate}
                     onChange={(e) => setNewMeetDate(e.target.value)}
-                    className="w-full rounded-xl border border-brand-ink/15 px-3 py-2 outline-none focus:border-brand-green"
+                    className="w-full rounded-xl border border-brand-ink/15 dark:border-border px-3 py-2 outline-none focus:border-brand-green"
                   />
                 </div>
                 <div>
@@ -795,7 +795,7 @@ const ProjectWorkspacePage: React.FC = () => {
                     required
                     value={newMeetTime}
                     onChange={(e) => setNewMeetTime(e.target.value)}
-                    className="w-full rounded-xl border border-brand-ink/15 px-3 py-2 outline-none focus:border-brand-green"
+                    className="w-full rounded-xl border border-brand-ink/15 dark:border-border px-3 py-2 outline-none focus:border-brand-green"
                   />
                 </div>
               </div>
@@ -804,14 +804,14 @@ const ProjectWorkspacePage: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setIsMeetModalOpen(false)}
-                  className="flex-1 rounded-xl border border-brand-ink/15 py-2 font-semibold text-muted-foreground hover:bg-brand-sand/60"
+                  className="flex-1 rounded-xl border border-brand-ink/15 dark:border-border py-2 font-semibold text-muted-foreground hover:bg-brand-sand/60 dark:hover:bg-muted/60"
                 >
                   Annuler
                 </button>
                 <button
                   type="submit"
                   disabled={createMeetingMutation.isPending}
-                  className="flex-1 rounded-xl bg-brand-ink py-2 font-semibold text-white hover:bg-brand-ink/85 disabled:opacity-50 flex items-center justify-center gap-1.5"
+                  className="flex-1 rounded-xl bg-brand-ink py-2 font-semibold text-white hover:bg-brand-ink/85 dark:hover:bg-black/65 disabled:opacity-50 flex items-center justify-center gap-1.5"
                 >
                   {createMeetingMutation.isPending ? (
                     <Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -829,26 +829,26 @@ const ProjectWorkspacePage: React.FC = () => {
       {/* ── MODAL : SALLE D'APPEL ACTIVE ── */}
       {activeCall && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-brand-ink/70 p-4 backdrop-blur-md"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-brand-ink/70 dark:bg-black/65 p-4 backdrop-blur-md"
           onClick={() => setActiveCall(null)}
         >
           <div
-            className="relative w-full max-w-xl rounded-[28px] bg-white p-6 shadow-2xl border border-brand-ink/8"
+            className="relative w-full max-w-xl rounded-[28px] bg-white dark:bg-card p-6 shadow-2xl border border-brand-ink/8 dark:border-border"
             onClick={(e) => e.stopPropagation()}
           >
             <button
               onClick={() => setActiveCall(null)}
-              className="absolute right-4 top-4 rounded-lg p-1 text-muted-foreground hover:bg-brand-sand"
+              className="absolute right-4 top-4 rounded-lg p-1 text-muted-foreground hover:bg-brand-sand dark:hover:bg-muted"
             >
               <X className="h-5 w-5" />
             </button>
 
             <div className="mb-4 flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-sand text-brand-violet">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-sand dark:bg-muted text-brand-violet dark:text-violet-300">
                 <Video className="h-5 w-5" />
               </div>
               <div>
-                <h3 className="font-heading text-base font-bold text-brand-ink">
+                <h3 className="font-heading text-base font-bold text-brand-ink dark:text-foreground">
                   Salon de visioconférence
                 </h3>
                 <p className="text-[11px] font-semibold text-muted-foreground">
@@ -861,7 +861,7 @@ const ProjectWorkspacePage: React.FC = () => {
             <div className="mb-5 space-y-3 rounded-[24px] bg-brand-ink p-5 text-white">
               <div className="flex items-center justify-between">
                 <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1 text-[10px] font-bold text-brand-green border border-white/10">
-                  <span className="h-2 w-2 rounded-full bg-brand-peach animate-ping" />{" "}
+                  <span className="h-2 w-2 rounded-full bg-brand-peach dark:bg-brand-peach/10 animate-ping" />{" "}
                   Connexion authentifiée
                 </span>
                 <span className="text-[10px] text-white/75">
@@ -885,7 +885,7 @@ const ProjectWorkspacePage: React.FC = () => {
                   href={`https://meet.livekit.io/custom?liveKitUrl=${encodeURIComponent(activeCall.url)}&token=${encodeURIComponent(activeCall.token)}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex-1 inline-flex items-center justify-center gap-2 rounded-2xl bg-brand-green hover:bg-brand-green-hover px-4 py-2.5 text-[11px] font-bold text-brand-ink transition-colors"
+                  className="flex-1 inline-flex items-center justify-center gap-2 rounded-2xl bg-brand-green hover:bg-brand-green-hover px-4 py-2.5 text-[11px] font-bold text-brand-ink dark:text-primary-foreground transition-colors"
                 >
                   <Video className="h-4 w-4" /> Rejoindre la visioconférence
                 </a>
@@ -895,7 +895,7 @@ const ProjectWorkspacePage: React.FC = () => {
             <div className="flex justify-end">
               <button
                 onClick={() => setActiveCall(null)}
-                className="rounded-xl border border-brand-ink/15 px-4 py-1.5 text-[11px] font-semibold text-muted-foreground hover:bg-brand-sand/60"
+                className="rounded-xl border border-brand-ink/15 dark:border-border px-4 py-1.5 text-[11px] font-semibold text-muted-foreground hover:bg-brand-sand/60 dark:hover:bg-muted/60"
               >
                 Fermer
               </button>

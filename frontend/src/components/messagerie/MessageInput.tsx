@@ -140,8 +140,8 @@ const MessageInput: React.FC<MessageInputProps> = ({
 
   if (disabled) {
     return (
-      <div className="px-4 py-3 bg-brand-canvas border-t border-border/80 shrink-0">
-        <div className="flex items-center justify-center gap-2 py-2 px-3 bg-amber-500/10 border border-amber-500/20 rounded-xl text-amber-700 text-[12px]">
+      <div className="px-4 py-3 bg-brand-canvas dark:bg-background border-t border-border/80 shrink-0">
+        <div className="flex items-center justify-center gap-2 py-2 px-3 bg-amber-500/10 border border-amber-500/20 rounded-xl text-amber-700 dark:text-amber-300 text-[12px]">
           <span className="font-medium">
             L'envoi de message est désactivé car aucune mission active ne vous lie à cet utilisateur.
           </span>
@@ -151,10 +151,10 @@ const MessageInput: React.FC<MessageInputProps> = ({
   }
 
   return (
-    <div className="px-4 py-3 bg-white border-t border-border shrink-0">
+    <div className="px-4 py-3 bg-white dark:bg-card border-t border-border shrink-0">
       {isRecording ? (
         /* ── Audio Recording UI ── */
-        <div className="flex items-center gap-3 bg-red-50/80 border border-red-200 rounded-2xl px-4 py-2">
+        <div className="flex items-center gap-3 bg-red-50/80 dark:bg-red-500/10 border border-red-200 dark:border-red-500/30 rounded-2xl px-4 py-2">
           {/* Pulsing red dot */}
           <div className="relative flex items-center justify-center shrink-0">
             <span className="absolute w-3 h-3 bg-red-500 rounded-full animate-ping opacity-75" />
@@ -162,7 +162,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
           </div>
 
           {/* Recording timer */}
-          <span className="text-[12px] font-mono font-bold text-red-700 shrink-0">
+          <span className="text-[12px] font-mono font-bold text-red-700 dark:text-red-300 shrink-0">
             {formatRecordingTime(recordingSeconds)}
           </span>
 
@@ -184,7 +184,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
           <button
             type="button"
             onClick={cancelRecording}
-            className="p-1.5 rounded-full text-muted-foreground hover:text-red-600 hover:bg-red-100 transition-colors cursor-pointer shrink-0"
+            className="p-1.5 rounded-full text-muted-foreground hover:text-red-600 dark:hover:text-red-300 hover:bg-red-100 dark:hover:bg-red-500/10 transition-colors cursor-pointer shrink-0"
             title="Annuler l'enregistrement"
           >
             <Trash2 className="w-4 h-4" />
@@ -203,7 +203,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
       ) : (
         /* ── Standard Text Input UI ── */
         <div className="flex items-end gap-2">
-          <div className="flex-1 flex items-end bg-brand-canvas/80 border border-border/80 rounded-2xl px-3.5 py-1.5 transition-all focus-within:border-brand-violet/30 focus-within:ring-1.5 focus-within:ring-brand-violet/10">
+          <div className="flex-1 flex items-end bg-brand-canvas/80 dark:bg-background/80 border border-border/80 rounded-2xl px-3.5 py-1.5 transition-all focus-within:border-brand-violet/30 dark:focus-within:border-violet-300/40 focus-within:ring-1.5 focus-within:ring-brand-violet/10 dark:focus-within:ring-violet-300/40">
             <textarea
               ref={textareaRef}
               value={message}
@@ -212,13 +212,13 @@ const MessageInput: React.FC<MessageInputProps> = ({
               placeholder="Ecrivez votre message..."
               rows={1}
               disabled={disabled}
-              className="flex-1 bg-transparent text-[12.5px] text-brand-ink placeholder:text-muted-foreground resize-none focus:outline-none min-h-[28px] max-h-[120px] py-1 leading-snug"
+              className="flex-1 bg-transparent text-[12.5px] text-brand-ink dark:text-foreground placeholder:text-muted-foreground resize-none focus:outline-none min-h-[28px] max-h-[120px] py-1 leading-snug"
             />
 
             {/* Emoji button */}
             <button
               type="button"
-              className="p-1 text-muted-foreground hover:text-neutral-600 transition-colors cursor-pointer shrink-0 mb-0.5"
+              className="p-1 text-muted-foreground hover:text-neutral-600 dark:hover:text-muted-foreground transition-colors cursor-pointer shrink-0 mb-0.5"
               title="Emoji"
             >
               <Smile className="w-4.5 h-4.5" strokeWidth={1.6} />
@@ -244,8 +244,8 @@ const MessageInput: React.FC<MessageInputProps> = ({
               className={`
                 w-9 h-9 rounded-full flex items-center justify-center transition-all duration-200 shrink-0 cursor-pointer
                 ${canSend
-                  ? 'bg-brand-green hover:bg-brand-green-hover text-brand-ink shadow-md shadow-brand-green/20 hover:shadow-lg hover:shadow-brand-green/30 active:scale-95'
-                  : 'bg-neutral-200 text-muted-foreground cursor-not-allowed'
+                  ? 'bg-brand-green hover:bg-brand-green-hover text-brand-ink dark:text-primary-foreground shadow-md shadow-brand-green/20 hover:shadow-lg hover:shadow-brand-green/30 active:scale-95'
+                  : 'bg-neutral-200 dark:bg-muted text-muted-foreground cursor-not-allowed'
                 }
               `}
               title="Envoyer"

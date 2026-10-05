@@ -67,17 +67,17 @@ export const ExperienceTab: React.FC = () => {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <Loader2 className="h-6 w-6 animate-spin text-brand-ink" />
+        <Loader2 className="h-6 w-6 animate-spin text-brand-ink dark:text-foreground" />
       </div>
     );
   }
 
   return (
-    <div className="rounded-2xl border border-brand-sand bg-white p-6 sm:p-8 shadow-xs max-w-3xl space-y-6 text-[11px]">
-      <div className="flex items-center justify-between border-b border-brand-sand pb-4">
+    <div className="rounded-2xl border border-brand-sand dark:border-border bg-white dark:bg-card p-6 sm:p-8 shadow-xs max-w-3xl space-y-6 text-[11px]">
+      <div className="flex items-center justify-between border-b border-brand-sand dark:border-border pb-4">
         <div>
-          <h3 className="font-heading text-xs font-bold text-brand-ink flex items-center gap-1.5">
-            <Briefcase className="h-3.5 w-3.5 text-brand-ink" /> Parcours & Expériences Professionnelles
+          <h3 className="font-heading text-xs font-bold text-brand-ink dark:text-foreground flex items-center gap-1.5">
+            <Briefcase className="h-3.5 w-3.5 text-brand-ink dark:text-foreground" /> Parcours & Expériences Professionnelles
           </h3>
           <p className="text-muted-foreground mt-0.5">
             Vos expériences enregistrées en base de données backend.
@@ -94,58 +94,58 @@ export const ExperienceTab: React.FC = () => {
       </div>
 
       {successMsg && (
-        <div className="flex items-center gap-2 rounded-lg bg-emerald-50 border border-emerald-200 p-3 font-semibold text-emerald-700">
-          <CheckCircle className="h-4 w-4 text-emerald-600" />
+        <div className="flex items-center gap-2 rounded-lg bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/30 p-3 font-semibold text-emerald-700 dark:text-emerald-300">
+          <CheckCircle className="h-4 w-4 text-emerald-600 dark:text-emerald-300" />
           {successMsg}
         </div>
       )}
 
       {isAdding && (
-        <form onSubmit={handleAdd} className="rounded-xl bg-brand-canvas border border-border p-4 space-y-3">
+        <form onSubmit={handleAdd} className="rounded-xl bg-brand-canvas dark:bg-background border border-border p-4 space-y-3">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label className="block font-semibold text-neutral-600 mb-1">Poste / Intitulé *</label>
+              <label className="block font-semibold text-neutral-600 dark:text-muted-foreground mb-1">Poste / Intitulé *</label>
               <input
                 type="text"
                 required
                 value={poste}
                 onChange={(e) => setPoste(e.target.value)}
                 placeholder="ex: Développeur Fullstack React & Django"
-                className="w-full rounded-md border border-border bg-white p-2 outline-none focus:border-brand-violet"
+                className="w-full rounded-md border border-border bg-white dark:bg-card p-2 outline-none focus:border-brand-violet dark:focus:border-violet-300"
               />
             </div>
             <div>
-              <label className="block font-semibold text-neutral-600 mb-1">Entreprise / Organisation *</label>
+              <label className="block font-semibold text-neutral-600 dark:text-muted-foreground mb-1">Entreprise / Organisation *</label>
               <input
                 type="text"
                 required
                 value={entreprise}
                 onChange={(e) => setEntreprise(e.target.value)}
                 placeholder="ex: Jokko Tech"
-                className="w-full rounded-md border border-border bg-white p-2 outline-none focus:border-brand-violet"
+                className="w-full rounded-md border border-border bg-white dark:bg-card p-2 outline-none focus:border-brand-violet dark:focus:border-violet-300"
               />
             </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label className="block font-semibold text-neutral-600 mb-1">Date de début *</label>
+              <label className="block font-semibold text-neutral-600 dark:text-muted-foreground mb-1">Date de début *</label>
               <input
                 type="date"
                 required
                 value={startDate}
                 onChange={(e) => setStartDate(e.target.value)}
-                className="w-full rounded-md border border-border bg-white p-2 outline-none focus:border-brand-violet"
+                className="w-full rounded-md border border-border bg-white dark:bg-card p-2 outline-none focus:border-brand-violet dark:focus:border-violet-300"
               />
             </div>
             <div>
-              <label className="block font-semibold text-neutral-600 mb-1">Date de fin</label>
+              <label className="block font-semibold text-neutral-600 dark:text-muted-foreground mb-1">Date de fin</label>
               <input
                 type="date"
                 disabled={current}
                 value={endDate}
                 onChange={(e) => setEndDate(e.target.value)}
-                className="w-full rounded-md border border-border bg-white p-2 outline-none focus:border-brand-violet disabled:bg-neutral-100"
+                className="w-full rounded-md border border-border bg-white dark:bg-card p-2 outline-none focus:border-brand-violet dark:focus:border-violet-300 disabled:bg-neutral-100 dark:disabled:bg-muted"
               />
             </div>
           </div>
@@ -158,19 +158,19 @@ export const ExperienceTab: React.FC = () => {
               onChange={(e) => setCurrent(e.target.checked)}
               className="rounded border-border"
             />
-            <label htmlFor="currentExp" className="text-[11px] font-medium text-brand-ink cursor-pointer">
+            <label htmlFor="currentExp" className="text-[11px] font-medium text-brand-ink dark:text-foreground cursor-pointer">
               Poste actuel (en cours)
             </label>
           </div>
 
           <div>
-            <label className="block font-semibold text-neutral-600 mb-1">Description des missions</label>
+            <label className="block font-semibold text-neutral-600 dark:text-muted-foreground mb-1">Description des missions</label>
             <textarea
               rows={3}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Décrivez vos accomplissements clés..."
-              className="w-full rounded-md border border-border bg-white p-2 outline-none focus:border-brand-violet"
+              className="w-full rounded-md border border-border bg-white dark:bg-card p-2 outline-none focus:border-brand-violet dark:focus:border-violet-300"
             />
           </div>
 
@@ -178,7 +178,7 @@ export const ExperienceTab: React.FC = () => {
             <button
               type="button"
               onClick={() => setIsAdding(false)}
-              className="rounded-md border border-neutral-300 px-3.5 py-1.5 font-semibold text-neutral-600 cursor-pointer"
+              className="rounded-md border border-neutral-300 dark:border-border px-3.5 py-1.5 font-semibold text-neutral-600 dark:text-muted-foreground cursor-pointer"
             >
               Annuler
             </button>
@@ -204,11 +204,11 @@ export const ExperienceTab: React.FC = () => {
           {experiences.map((exp) => (
             <div
               key={exp.id}
-              className="flex items-start justify-between rounded-xl border border-brand-sand bg-brand-canvas p-4"
+              className="flex items-start justify-between rounded-xl border border-brand-sand dark:border-border bg-brand-canvas dark:bg-background p-4"
             >
               <div className="space-y-1">
-                <h4 className="font-heading text-xs font-bold text-brand-ink">{exp.poste}</h4>
-                <p className="font-semibold text-brand-ink">{exp.entreprise}</p>
+                <h4 className="font-heading text-xs font-bold text-brand-ink dark:text-foreground">{exp.poste}</h4>
+                <p className="font-semibold text-brand-ink dark:text-foreground">{exp.entreprise}</p>
                 <div className="flex items-center gap-3 text-[10px] text-muted-foreground">
                   <span className="flex items-center gap-1">
                     <Calendar className="h-3 w-3" />
@@ -216,7 +216,7 @@ export const ExperienceTab: React.FC = () => {
                   </span>
                 </div>
                 {exp.description && (
-                  <p className="mt-2 text-neutral-600 text-[10.5px] leading-relaxed whitespace-pre-line">
+                  <p className="mt-2 text-neutral-600 dark:text-muted-foreground text-[10.5px] leading-relaxed whitespace-pre-line">
                     {exp.description}
                   </p>
                 )}
@@ -226,7 +226,7 @@ export const ExperienceTab: React.FC = () => {
                 type="button"
                 disabled={deleteMutation.isPending}
                 onClick={() => deleteMutation.mutate(exp.id)}
-                className="text-muted-foreground hover:text-red-500 cursor-pointer p-1"
+                className="text-muted-foreground hover:text-red-500 dark:hover:text-red-300 cursor-pointer p-1"
                 title="Supprimer"
               >
                 <Trash2 className="h-4 w-4" />

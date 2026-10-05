@@ -20,7 +20,7 @@ const ProfilePage: React.FC = () => {
   if (isLoading) {
     return (
       <div className="flex h-64 flex-col items-center justify-center gap-3">
-        <Loader2 className="h-8 w-8 animate-spin text-brand-violet" />
+        <Loader2 className="h-8 w-8 animate-spin text-brand-violet dark:text-violet-300" />
         <p className="text-xs text-muted-foreground">Chargement de votre profil...</p>
       </div>
     );
@@ -34,7 +34,7 @@ const ProfilePage: React.FC = () => {
         <span className="text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
           Compte › Mon profil
         </span>
-        <h1 className="font-heading text-xl font-bold tracking-tight text-brand-ink mt-0.5">
+        <h1 className="font-heading text-xl font-bold tracking-tight text-brand-ink dark:text-foreground mt-0.5">
           Mon profil
         </h1>
       </div>
