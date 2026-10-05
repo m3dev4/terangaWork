@@ -33,6 +33,7 @@ import {
   MissionTitleValidation,
   type MissionFormErrors,
 } from "../../validations/missionValidation";
+import { omIcon, waveIcon } from "@/assets/images";
 
 const initialForm: MissionPayload = {
   title: "",
@@ -56,11 +57,16 @@ const MissionFormPage: React.FC = () => {
   const [error, setError] = useState("");
   const [fieldErrors, setFieldErrors] = useState<MissionFormErrors>({});
 
-  const fieldError = (field: keyof MissionFormErrors) => fieldErrors[field] ? (
-    <p id={`${field}-error`} role="alert" className="mt-1 text-[11px] text-red-600 dark:text-red-300">
-      {fieldErrors[field]}
-    </p>
-  ) : null;
+  const fieldError = (field: keyof MissionFormErrors) =>
+    fieldErrors[field] ? (
+      <p
+        id={`${field}-error`}
+        role="alert"
+        className="mt-1 text-[11px] text-red-600 dark:text-red-300"
+      >
+        {fieldErrors[field]}
+      </p>
+    ) : null;
 
   const fieldAccessibility = (field: keyof MissionFormErrors) => ({
     "aria-invalid": Boolean(fieldErrors[field]),
@@ -151,7 +157,8 @@ const MissionFormPage: React.FC = () => {
 
   const submit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (createMutation.isPending || generateDescriptionMutation.isPending) return;
+    if (createMutation.isPending || generateDescriptionMutation.isPending)
+      return;
     setError("");
     const result = MissionValidation.safeParse({
       ...form,
@@ -201,7 +208,8 @@ const MissionFormPage: React.FC = () => {
         <div className="space-y-5 px-5 py-6 sm:px-7">
           <label className="block">
             <span className="mb-1.5 block text-[11px] font-semibold text-brand-ink dark:text-foreground">
-              Titre de l'annonce <span className="text-brand-violet dark:text-violet-300">*</span>
+              Titre de l'annonce{" "}
+              <span className="text-brand-violet dark:text-violet-300">*</span>
             </span>
             <input
               {...fieldAccessibility("title")}
@@ -217,7 +225,10 @@ const MissionFormPage: React.FC = () => {
           <label className="block">
             <div className="mb-1.5 flex flex-wrap items-center justify-between gap-2">
               <span className="text-[11px] font-semibold text-brand-ink dark:text-foreground">
-                Description <span className="text-brand-violet dark:text-violet-300">*</span>
+                Description{" "}
+                <span className="text-brand-violet dark:text-violet-300">
+                  *
+                </span>
               </span>
               <div className="flex items-center gap-3">
                 <button
@@ -276,7 +287,10 @@ const MissionFormPage: React.FC = () => {
           <div className="grid gap-4 sm:grid-cols-2">
             <label className="block">
               <span className="mb-1.5 block text-[11px] font-semibold text-brand-ink dark:text-foreground">
-                Budget estimé <span className="text-brand-violet dark:text-violet-300">*</span>
+                Budget estimé{" "}
+                <span className="text-brand-violet dark:text-violet-300">
+                  *
+                </span>
               </span>
               <div className="relative">
                 <input
@@ -299,7 +313,10 @@ const MissionFormPage: React.FC = () => {
             </label>
             <label className="block">
               <span className="mb-1.5 block text-[11px] font-semibold text-brand-ink dark:text-foreground">
-                Date limite <span className="text-brand-violet dark:text-violet-300">*</span>
+                Date limite{" "}
+                <span className="text-brand-violet dark:text-violet-300">
+                  *
+                </span>
               </span>
               <div className="relative">
                 <input
@@ -322,7 +339,10 @@ const MissionFormPage: React.FC = () => {
           <div>
             <div className="mb-2 flex items-center justify-between">
               <span className="text-[11px] font-semibold text-brand-ink dark:text-foreground">
-                Service requis <span className="text-brand-violet dark:text-violet-300">*</span>
+                Service requis{" "}
+                <span className="text-brand-violet dark:text-violet-300">
+                  *
+                </span>
               </span>
               <span className="text-[10px] text-muted-foreground">
                 Un service par annonce
@@ -418,7 +438,11 @@ const MissionFormPage: React.FC = () => {
               {(
                 [
                   ["WAVE", "Wave", "bg-brand-canvas dark:bg-background"],
-                  ["OM", "Orange Money", "bg-brand-peach dark:bg-brand-peach/10"],
+                  [
+                    "OM",
+                    "Orange Money",
+                    "bg-brand-peach dark:bg-brand-peach/10",
+                  ],
                 ] as const
               ).map(([value, label, color]) => (
                 <button
@@ -438,9 +462,21 @@ const MissionFormPage: React.FC = () => {
                   }`}
                 >
                   <span
-                    className={`flex h-8 w-8 items-center justify-center rounded-full ${color}`}
+                    className={`flex h-8 w-8 items-center justify-center relative rounded-full ${color}`}
                   >
-                    <WalletCards className="h-4 w-4 text-brand-ink dark:text-foreground" />
+                    {value === "WAVE" ? (
+                      <img
+                        src={waveIcon}
+                        alt={label}
+                        className="h-full w-full object-contain"
+                      />
+                    ) : value === "OM" ? (
+                      <img
+                        src={omIcon}
+                        alt={label}
+                        className="h-full w-full object-contain"
+                      />
+                    ) : null}
                   </span>
                   <span className="text-[11px] font-semibold text-brand-ink dark:text-foreground">
                     {label}
@@ -455,7 +491,10 @@ const MissionFormPage: React.FC = () => {
           </div>
 
           {(error || servicesQuery.isError) && (
-            <p role="alert" className="rounded-md bg-red-50 dark:bg-red-500/10 px-3 py-2 text-[11px] text-red-600 dark:text-red-300">
+            <p
+              role="alert"
+              className="rounded-md bg-red-50 dark:bg-red-500/10 px-3 py-2 text-[11px] text-red-600 dark:text-red-300"
+            >
               {error || "Impossible de charger les services."}
             </p>
           )}
@@ -470,7 +509,9 @@ const MissionFormPage: React.FC = () => {
             Annuler
           </button>
           <button
-            disabled={createMutation.isPending || generateDescriptionMutation.isPending}
+            disabled={
+              createMutation.isPending || generateDescriptionMutation.isPending
+            }
             className="inline-flex items-center justify-center gap-2 rounded-md bg-brand-green px-5 py-2.5 text-[11px] font-semibold text-brand-ink dark:text-primary-foreground shadow-sm transition hover:bg-brand-green-hover disabled:cursor-not-allowed disabled:opacity-60 cursor-pointer"
           >
             {createMutation.isPending && (

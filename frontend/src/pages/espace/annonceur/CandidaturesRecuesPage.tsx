@@ -94,7 +94,7 @@ function MatchScoreBadge({
       }`}
     >
       <span
-        className={`rounded-full bg-brand-peach dark:bg-brand-peach/10 ${isSmall ? "h-1.5 w-1.5" : "h-2 w-2"}`}
+        className={`rounded-full bg-brand-peach ${isSmall ? "h-1.5 w-1.5" : "h-2 w-2"}`}
       />
       {pct}% pertinence
     </span>

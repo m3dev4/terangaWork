@@ -24,7 +24,7 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({ user, missionTitle }) => {
             />
           ) : (
             <div className="w-full h-full bg-gradient-to-br from-brand-green to-brand-green flex items-center justify-center">
-              <span className="text-white text-xs font-semibold">{initials}</span>
+              <span className="text-primary-foreground text-xs font-semibold">{initials}</span>
             </div>
           )}
         </div>

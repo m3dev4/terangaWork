@@ -288,7 +288,7 @@ const ProjectWorkspacePage: React.FC = () => {
               {(!activeProject.mission_status ||
                 activeProject.mission_status === "IN_PROGRESS") && (
                 <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-2.5 py-0.5 text-[9.5px] font-semibold text-brand-green">
-                  <span className="h-1.5 w-1.5 rounded-full bg-brand-peach dark:bg-brand-peach/10 animate-pulse" />{" "}
+                  <span className="h-1.5 w-1.5 rounded-full bg-brand-peach animate-pulse" />{" "}
                   En cours de développement
                 </span>
               )}
@@ -315,7 +315,7 @@ const ProjectWorkspacePage: React.FC = () => {
                   className="text-[11px] font-medium border border-white/15 rounded-lg px-2 py-0.5 bg-white/10 text-white outline-none"
                 >
                   {acceptedProjects.map((p) => (
-                    <option key={p.id} value={p.id} className="text-brand-ink dark:text-foreground">
+                    <option key={p.id} value={p.id} className="bg-card text-card-foreground">
                       {p.mission_title}
                     </option>
                   ))}
@@ -861,7 +861,7 @@ const ProjectWorkspacePage: React.FC = () => {
             <div className="mb-5 space-y-3 rounded-[24px] bg-brand-ink p-5 text-white">
               <div className="flex items-center justify-between">
                 <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1 text-[10px] font-bold text-brand-green border border-white/10">
-                  <span className="h-2 w-2 rounded-full bg-brand-peach dark:bg-brand-peach/10 animate-ping" />{" "}
+                  <span className="h-2 w-2 rounded-full bg-brand-peach animate-ping" />{" "}
                   Connexion authentifiée
                 </span>
                 <span className="text-[10px] text-white/75">

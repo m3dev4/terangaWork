@@ -32,7 +32,7 @@ const formatDate = (value: string | null) =>
 // candidatures reçues) : pas de dégradé arc-en-ciel, une seule couleur de marque.
 const MatchScoreBadge: React.FC<{ score: number }> = ({ score }) => (
   <span className="inline-flex items-center gap-1 rounded-full bg-brand-ink px-2.5 py-1 text-[10px] font-bold text-white">
-    <span className="h-1.5 w-1.5 rounded-full bg-brand-peach dark:bg-brand-peach/10" />
+    <span className="h-1.5 w-1.5 rounded-full bg-brand-peach" />
     {Math.round(score * 100)}% pertinence
   </span>
 );
@@ -64,6 +64,8 @@ const FreelanceMissionsPage: React.FC = () => {
   const missionsQuery = useQuery({
     queryKey: ["available-missions"],
     queryFn: getMissions,
+    staleTime: 0,
+    gcTime: 10 * 60 * 1000,
   });
 
   const matchingMutation = useMutation({
@@ -73,8 +75,8 @@ const FreelanceMissionsPage: React.FC = () => {
   const compatibilityQuery = useQuery({
     queryKey: ["missions-compatibilite"],
     queryFn: getMissionsCompatibilite,
-    refetchOnMount: "always",
-    gcTime: 0,
+    staleTime: 0,
+    gcTime: 5 * 60 * 1000,
   });
   const isLoading = missionsQuery.isLoading || compatibilityQuery.isLoading || compatibilityQuery.isFetching;
   const canMatch = !isLoading && !compatibilityQuery.isError && !missionsQuery.isError;
@@ -123,6 +125,17 @@ const FreelanceMissionsPage: React.FC = () => {
           </p>
         </div>
         <div className="flex items-center gap-2">
+          <button
+            type="button"
+            disabled={missionsQuery.isFetching || compatibilityQuery.isFetching}
+            onClick={() => {
+              void Promise.all([missionsQuery.refetch(), compatibilityQuery.refetch()]);
+            }}
+            className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1.5 text-[11px] font-semibold text-foreground hover:bg-muted disabled:opacity-50 disabled:cursor-wait"
+          >
+            <RefreshCw className={`h-3.5 w-3.5 ${missionsQuery.isFetching || compatibilityQuery.isFetching ? "animate-spin motion-reduce:animate-none" : ""}`} />
+            Actualiser
+          </button>
           {isMatchingActive && (
             <button
               onClick={() => matchingMutation.reset()}

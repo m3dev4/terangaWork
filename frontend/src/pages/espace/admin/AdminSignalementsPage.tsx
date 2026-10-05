@@ -173,13 +173,13 @@ export const AdminSignalementsPage: React.FC = () => {
 
           <div className="space-y-3 mt-4">
             <div className="h-2.5 w-full bg-white/10 rounded-full overflow-hidden flex gap-0.5">
-              <div style={{ width: `${(pendingCount / totalCount) * 100}%` }} className="h-full bg-brand-peach dark:bg-brand-peach/10" />
+              <div style={{ width: `${(pendingCount / totalCount) * 100}%` }} className="h-full bg-brand-peach" />
               <div style={{ width: `${(resolvedCount / totalCount) * 100}%` }} className="h-full bg-brand-green" />
               <div style={{ width: `${(dismissedCount / totalCount) * 100}%` }} className="h-full bg-white/25" />
             </div>
             <div className="space-y-1.5 text-xs">
               <div className="flex items-center justify-between text-white/70">
-                <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-brand-peach dark:bg-brand-peach/10" /> En attente</span>
+                <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-brand-peach" /> En attente</span>
                 <span className="font-bold text-white">{pendingCount}</span>
               </div>
               <div className="flex items-center justify-between text-white/70">

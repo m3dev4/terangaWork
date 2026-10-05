@@ -177,7 +177,7 @@ export const AdminDashboardPage: React.FC = () => {
               Espace administrateur
             </span>
             <span className="flex items-center gap-1 text-[10px] text-white/75 font-semibold bg-white/10 px-2 py-0.5 rounded-full">
-              <span className="w-1.5 h-1.5 rounded-full bg-brand-peach dark:bg-brand-peach/10 animate-pulse" />
+              <span className="w-1.5 h-1.5 rounded-full bg-brand-peach animate-pulse" />
               Données temps réel
             </span>
           </div>
@@ -343,7 +343,7 @@ export const AdminDashboardPage: React.FC = () => {
                 />
                 <div
                   style={{ width: `${Math.max(adminPct, 2)}%` }}
-                  className="h-full bg-brand-peach dark:bg-brand-peach/10 rounded-r-full transition-all duration-500"
+                  className="h-full bg-brand-peach rounded-r-full transition-all duration-500"
                   title={`Admins: ${adminPct}%`}
                 />
               </div>
@@ -381,7 +381,7 @@ export const AdminDashboardPage: React.FC = () => {
 
                 <div className="p-2.5 bg-brand-sand/50 dark:bg-muted/50 rounded-xl border border-brand-ink/6 dark:border-border">
                   <div className="flex items-center gap-1.5 text-muted-foreground font-medium text-[11px]">
-                    <span className="w-2.5 h-2.5 rounded-full bg-brand-peach dark:bg-brand-peach/10" />
+                    <span className="w-2.5 h-2.5 rounded-full bg-brand-peach" />
                     <span>Admins</span>
                   </div>
                   <div className="mt-1 flex items-baseline justify-between">

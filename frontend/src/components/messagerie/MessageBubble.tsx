@@ -43,7 +43,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
                 ? 'bg-gradient-to-br from-brand-green to-brand-green' 
                 : 'bg-gradient-to-br from-brand-violet to-brand-violet'
             }`}>
-              <span className="text-white text-[9px] font-semibold">{initials}</span>
+              <span className={`text-[9px] font-semibold ${isMine ? 'text-primary-foreground' : 'text-white'}`}>{initials}</span>
             </div>
           )}
         </div>

@@ -9,5 +9,7 @@ import chatIcon from "./chat.png";
 import awardIcon from "./award.png";
 import moonIcon from "./moon.png";
 import sunIcon from "./sun.png";
+import waveIcon from "./wave.png";
+import omIcon from "./om.png";
 
-export { TWLogo, HeroTerangaWork, terangaWorkIllust, workIcon, cashIcon, notifIcon, userIcon, chatIcon, awardIcon, moonIcon, sunIcon };
+export { TWLogo, HeroTerangaWork, terangaWorkIllust, workIcon, cashIcon, notifIcon, userIcon, chatIcon, awardIcon, moonIcon, sunIcon, waveIcon, omIcon };
