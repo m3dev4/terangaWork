@@ -226,12 +226,12 @@ const OnboardingForm: React.FC = () => {
       case "service":
         return (
           <StepServices
-            initialServiceId={completedData.service?.service_id}
+            initialServiceIds={completedData.service?.service_ids || []}
             stepNumber={stepNum}
             totalSteps={total}
             onBack={handleBack}
-            onSubmit={(serviceId) =>
-              handleStepSubmit({ service_id: serviceId })
+            onSubmit={(serviceIds) =>
+              handleStepSubmit({ service_ids: serviceIds })
             }
             isLoading={isPending}
           />

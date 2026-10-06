@@ -17,6 +17,7 @@ class Notification(models.Model):
         ('PAIEMENT_REUSSI', 'Paiement réussi'),
         ('PAIEMENT_ECHOUE', 'Paiement échoué'),
         ('NOUVEAU_MESSAGE', 'Nouveau message'),
+        ('MISSION_RECOMMANDEE', 'Mission recommandée'),
     ]
     
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

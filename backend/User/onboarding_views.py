@@ -185,8 +185,11 @@ def _collect_completed_data(user: User, steps: List[str]) -> Dict[str, Any]:
 
         elif step_name == "service":
             freelance = _get_freelance(user)
-            if freelance and freelance.service_id:
-                data["service"] = {"service_id": freelance.service_id}
+            if freelance:
+                service_ids = list(freelance.services.values_list("pk", flat=True))
+                # Compatibilité arrière : pour le frontend existant
+                if service_ids:
+                    data["service"] = {"service_ids": service_ids, "service_id": service_ids[0]}
 
         elif step_name == "technologies":
             freelance = _get_freelance(user)
@@ -330,13 +333,15 @@ def _save_presentation(user: User, validated_data: Dict[str, Any]) -> None:
 
 
 def _save_service(user: User, validated_data: Dict[str, Any]) -> None:
-    """Sauvegarde le service choisi."""
+    """Sauvegarde les services choisis (1 à 3 services)."""
     freelance = _get_freelance(user)
     if not freelance:
         return
-    service = Service.objects.get(pk=validated_data["service_id"])
-    freelance.service = service
-    freelance.save(update_fields=["service"])
+    service_ids = validated_data.get("service_ids")
+    if not service_ids and "service_id" in validated_data:
+        service_ids = [validated_data["service_id"]]
+    services = Service.objects.filter(pk__in=service_ids)
+    freelance.services.set(services)
 
 
 def _save_technologies(user: User, validated_data: Dict[str, Any]) -> None:

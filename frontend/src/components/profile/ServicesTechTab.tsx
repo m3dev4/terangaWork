@@ -36,7 +36,7 @@ export const ServicesTechTab: React.FC<ServicesTechTabProps> = () => {
   });
 
   // ─── Local Form State initialized from DB ────
-  const [selectedServiceId, setSelectedServiceId] = useState<number | null>(null);
+  const [selectedServiceIds, setSelectedServiceIds] = useState<number[]>([]);
   const [selectedTechIds, setSelectedTechIds] = useState<number[]>([]);
   const [customServiceName, setCustomServiceName] = useState('');
   const [customTechName, setCustomTechName] = useState('');
@@ -46,8 +46,10 @@ export const ServicesTechTab: React.FC<ServicesTechTabProps> = () => {
 
   useEffect(() => {
     if (profile) {
-      if (profile.service) {
-        setSelectedServiceId(profile.service);
+      if (profile.services && profile.services.length > 0) {
+        setSelectedServiceIds(profile.services);
+      } else if (profile.service) { // Compatibilité ascendante
+        setSelectedServiceIds([profile.service]);
       }
       if (profile.technologies) {
         setSelectedTechIds(profile.technologies);
@@ -59,7 +61,7 @@ export const ServicesTechTab: React.FC<ServicesTechTabProps> = () => {
   const saveMutation = useMutation({
     mutationFn: () =>
       updateFreelanceProfile({
-        service: selectedServiceId,
+        services: selectedServiceIds,
         technologies: selectedTechIds,
       }),
     onSuccess: () => {
@@ -168,14 +170,41 @@ export const ServicesTechTab: React.FC<ServicesTechTabProps> = () => {
           </form>
         )}
 
+        <div className="mb-3">
+          <div className="text-xs text-muted-foreground mb-2">
+            {selectedServiceIds.length === 0 ? (
+              <span className="text-orange-500">Sélectionnez entre 1 et 3 services</span>
+            ) : (
+              <span>{selectedServiceIds.length} / 3 services sélectionnés</span>
+            )}
+          </div>
+        </div>
+
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
           {availableServices.map((service) => {
-            const isSelected = selectedServiceId === service.id;
+            const isSelected = selectedServiceIds.includes(service.id);
+            const selectionIndex = isSelected ? selectedServiceIds.indexOf(service.id) + 1 : 0;
+
+            const handleServiceClick = () => {
+              if (selectedServiceIds.includes(service.id)) {
+                // Désélectionner
+                setSelectedServiceIds(selectedServiceIds.filter(id => id !== service.id));
+              } else {
+                // Vérifier la limite de 3 services
+                if (selectedServiceIds.length >= 3) {
+                  alert("Vous ne pouvez pas sélectionner plus de 3 services. Désélectionnez d'abord un service.");
+                  return;
+                }
+                // Sélectionner
+                setSelectedServiceIds([...selectedServiceIds, service.id]);
+              }
+            };
+
             return (
               <button
                 type="button"
                 key={service.id}
-                onClick={() => setSelectedServiceId(service.id)}
+                onClick={handleServiceClick}
                 className={`flex items-center justify-between text-left p-3 rounded-xl border transition-all cursor-pointer ${
                   isSelected
                     ? 'border-brand-violet dark:border-violet-300 bg-brand-sand dark:bg-muted text-brand-ink dark:text-foreground font-bold shadow-xs'
@@ -188,7 +217,14 @@ export const ServicesTechTab: React.FC<ServicesTechTabProps> = () => {
                     <div className="text-[9.5px] text-muted-foreground font-normal line-clamp-1">{service.description}</div>
                   )}
                 </div>
-                {isSelected && <CheckCircle className="h-4 w-4 text-brand-ink dark:text-foreground shrink-0" />}
+                {isSelected && (
+                  <div className="flex items-center gap-1">
+                    <span className="w-5 h-5 rounded-full bg-brand-violet text-white text-[10px] flex items-center justify-center">
+                      {selectionIndex}
+                    </span>
+                    <CheckCircle className="h-4 w-4 text-brand-ink dark:text-foreground shrink-0" />
+                  </div>
+                )}
               </button>
             );
           })}

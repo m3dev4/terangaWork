@@ -30,7 +30,7 @@ class CandidatsRecommandesView(APIView):
     def post(self, request, mission_id: int) -> Response:
         mission = (
             Mission.objects.filter(pk=mission_id)
-            .select_related("annonceur", "annonceur__user", "service")
+            .select_related("annonceur", "annonceur__user")
             .prefetch_related("technologies")
             .first()
         )
@@ -75,7 +75,7 @@ class MissionsRecommandeesView(APIView):
     def _get_results(self, request, *, scoring_only) -> Response:
         freelance = (
             Freelancee.objects.filter(user=request.user)
-            .select_related("user", "service")
+            .select_related("user")
             .prefetch_related("technologies", "experiences")
             .first()
         )

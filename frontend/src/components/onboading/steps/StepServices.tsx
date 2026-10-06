@@ -5,16 +5,16 @@ import { Button } from "../../ui/button";
 
 
 interface StepServicesProps {
-  initialServiceId?: number;
+  initialServiceIds?: number[];
   stepNumber: number;
   totalSteps: number;
   onBack: () => void;
-  onSubmit: (serviceId: number) => void;
+  onSubmit: (serviceIds: number[]) => void;
   isLoading?: boolean;
 }
 
 export const StepServices: React.FC<StepServicesProps> = ({
-  initialServiceId,
+  initialServiceIds = [],
   stepNumber,
   totalSteps,
   onBack,
@@ -22,9 +22,7 @@ export const StepServices: React.FC<StepServicesProps> = ({
   isLoading = false,
 }) => {
   const { data: rawServices, isLoading: isServicesLoading } = useServices();
-  const [selectedId, setSelectedId] = useState<number | null>(
-    initialServiceId || null
-  );
+  const [selectedIds, setSelectedIds] = useState<number[]>(initialServiceIds);
   const [error, setError] = useState("");
 
   const servicesList = React.useMemo(() => {
@@ -41,21 +39,39 @@ export const StepServices: React.FC<StepServicesProps> = ({
   }, [rawServices]);
 
   useEffect(() => {
-    if (initialServiceId) {
-      setSelectedId(initialServiceId);
-    } else if (servicesList.length > 0 && selectedId === null) {
-      setSelectedId(servicesList[0].id);
+    if (initialServiceIds && initialServiceIds.length > 0) {
+      setSelectedIds(initialServiceIds);
     }
-  }, [initialServiceId, servicesList, selectedId]);
+  }, [initialServiceIds]);
+
+  const handleSelectService = (serviceId: number) => {
+    if (selectedIds.includes(serviceId)) {
+      // Désélectionner
+      setSelectedIds(selectedIds.filter(id => id !== serviceId));
+    } else {
+      // Vérifier que l'utilisateur ne peut pas sélectionner plus de 3 services
+      if (selectedIds.length >= 3) {
+        setError("Vous ne pouvez pas sélectionner plus de 3 services.");
+        return;
+      }
+      // Sélectionner
+      setSelectedIds([...selectedIds, serviceId]);
+    }
+    setError("");
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!selectedId) {
-      setError("Veuillez sélectionner un service parmi ceux disponibles.");
+    if (selectedIds.length === 0) {
+      setError("Veuillez sélectionner au moins un service parmi ceux disponibles.");
+      return;
+    }
+    if (selectedIds.length > 3) {
+      setError("Vous ne pouvez pas sélectionner plus de 3 services.");
       return;
     }
     setError("");
-    onSubmit(selectedId);
+    onSubmit(selectedIds);
   };
 
   return (
@@ -99,12 +115,12 @@ export const StepServices: React.FC<StepServicesProps> = ({
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 max-h-[300px] overflow-y-auto p-1">
             {servicesList.map(
               (service: { id: number; name: string; description?: string }) => {
-                const isSelected = selectedId === service.id;
+                const isSelected = selectedIds.includes(service.id);
 
                 return (
                   <div
                     key={service.id}
-                    onClick={() => setSelectedId(service.id)}
+                    onClick={() => handleSelectService(service.id)}
                     className={`relative p-4 rounded-2xl cursor-pointer flex flex-col items-start justify-between min-h-[95px] transition-all duration-150 ${
                       isSelected
                         ? "border-2 border-brand-ink bg-brand-sand/50"
@@ -112,7 +128,9 @@ export const StepServices: React.FC<StepServicesProps> = ({
                     }`}
                   >
                     {isSelected && (
-                      <span className="absolute top-3 right-3 w-2 h-2 rounded-full bg-brand-green" />
+                      <span className="absolute top-3 right-3 w-5 h-5 rounded-full bg-brand-green flex items-center justify-center text-white text-[10px] font-bold">
+                        {selectedIds.indexOf(service.id) + 1}
+                      </span>
                     )}
 
                     <div

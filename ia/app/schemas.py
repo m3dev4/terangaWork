@@ -4,21 +4,21 @@ from pydantic import BaseModel, Field
 
 
 class CandidatSchema(BaseModel):
-    id: int  # id de la Proposition ou de la Mission côté Django
-    technologies: list[str]
-    service: str
-    annees_experience: int | None = None
-    texte_libre: str  # lettre de motivation + description, concaténés, pour l'étage 2
+    id: int  # id de la Proposition, du Freelance ou de la Mission côté Django
+    technologies: list[str] = Field(default_factory=list)
+    service: str | None = ""
+    annees_experience: int | float | None = None
+    texte_libre: str | None = ""
 
 
 class MatchingRequestSchema(BaseModel):
-    type_matching: Literal["candidatures", "missions"] = "candidatures"
+    type_matching: str = "candidatures"
     scoring_only: bool = False
     min_technology_score: float = Field(default=0.0, ge=0.0, le=1.0)
-    contexte: str  # description complète de la mission ou du profil freelance
-    technologies: list[str]  # technologies cibles (obligatoires)
-    service: str  # service cible (obligatoire)
-    candidats: list[CandidatSchema]
+    contexte: str = ""  # description complète de la mission ou du profil freelance
+    technologies: list[str] = Field(default_factory=list)  # technologies cibles (obligatoires)
+    service: str | None = ""  # service cible (obligatoire)
+    candidats: list[CandidatSchema] = Field(default_factory=list)
     top_n: int = 8
 
 

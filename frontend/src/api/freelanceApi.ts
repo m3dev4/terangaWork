@@ -49,13 +49,16 @@ export interface FreelanceProfileData {
   description: string;
   githubUrl?: string;
   linkedinUrl?: string;
-  service?: number | null;
-  service_detail?: ServiceData | null;
+  services: number[];
+  services_detail?: ServiceData[];
   technologies: number[];
   technologies_detail?: TechnologieData[];
   experiences: ExperienceData[];
   educations: EducationData[];
   realisations: RealisationData[];
+  // Compatibilité ascendante
+  service?: number | null;
+  service_detail?: ServiceData | null;
 }
 
 // ─── Freelance Profile ──────────────
@@ -70,8 +73,10 @@ export async function updateFreelanceProfile(
     description: string;
     githubUrl: string;
     linkedinUrl: string;
-    service: number | null;
+    services: number[];
     technologies: number[];
+    // Compatibilité ascendante
+    service?: number | null;
   }>
 ): Promise<FreelanceProfileData> {
   const response = await instance.patch<FreelanceProfileData>('freelance/me/', data);

@@ -12,27 +12,31 @@ def min_max_experience_score(annees_experience: int | None) -> float | None:
     return min(float(annees_experience) / 5.0, 1.0)
 
 
-def calculate_service_score(candidat_service: str, target_service: str) -> float:
+def calculate_service_score(candidat_service: str | None, target_service: str | None) -> float:
     """
     Correspondance binaire (1..1) entre le service du candidat et le service cible.
     """
-    if candidat_service.strip().lower() == target_service.strip().lower():
+    c_serv = (candidat_service or "").strip().lower()
+    t_serv = (target_service or "").strip().lower()
+    if not t_serv:
+        return 1.0
+    if c_serv == t_serv:
         return 1.0
     return 0.0
 
 
 def calculate_technologies_score(
-    candidat_techs: list[str], target_techs: list[str]
+    candidat_techs: list[str] | None, target_techs: list[str] | None
 ) -> float:
     """
     Chevauchement des technologies (ratio d'intersection par rapport au besoin cible).
     """
-    normalized_target = {t.strip().lower() for t in target_techs if t.strip()}
+    normalized_target = {t.strip().lower() for t in (target_techs or []) if t and t.strip()}
     if not normalized_target:
         # Aucune exigence technique : aucune compétence manquante.
         return 1.0
 
-    normalized_candidat = {t.strip().lower() for t in candidat_techs if t.strip()}
+    normalized_candidat = {t.strip().lower() for t in (candidat_techs or []) if t and t.strip()}
     common = normalized_candidat & normalized_target
     return len(common) / len(normalized_target)
 
