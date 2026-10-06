@@ -803,8 +803,9 @@ class DeleteProfileSerializer(serializers.Serializer):
 
 class MeSerializer(serializers.ModelSerializer):
     """Sérialiseur pour l'endpoint /api/v1/me/"""
+
     profile_picture = serializers.ImageField(read_only=True, allow_null=True)
-    
+
     class Meta:
         model = User
         fields = [
@@ -814,7 +815,3 @@ class MeSerializer(serializers.ModelSerializer):
             "last_name",
         ]
         read_only_fields = fields
-
-
-
-

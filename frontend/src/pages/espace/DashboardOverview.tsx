@@ -16,8 +16,8 @@ export const DashboardOverview: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[400px] text-neutral-400 gap-3">
-        <Loader2 className="w-8 h-8 animate-spin text-orange-500" />
+      <div className="flex flex-col items-center justify-center min-h-[400px] text-muted-foreground gap-3">
+        <Loader2 className="w-8 h-8 animate-spin text-orange-500 dark:text-orange-300" />
         <p className="text-xs font-semibold">Chargement de votre tableau de bord...</p>
       </div>
     );

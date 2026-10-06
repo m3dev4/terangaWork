@@ -67,19 +67,19 @@ export const ExperienceTab: React.FC = () => {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <Loader2 className="h-6 w-6 animate-spin text-[#1b4b6b]" />
+        <Loader2 className="h-6 w-6 animate-spin text-brand-ink dark:text-foreground" />
       </div>
     );
   }
 
   return (
-    <div className="rounded-2xl border border-[#ebe8e2] bg-white p-6 sm:p-8 shadow-xs max-w-3xl space-y-6 text-[11px]">
-      <div className="flex items-center justify-between border-b border-[#f0ede8] pb-4">
+    <div className="rounded-2xl border border-brand-sand dark:border-border bg-white dark:bg-card p-6 sm:p-8 shadow-xs max-w-3xl space-y-6 text-[11px]">
+      <div className="flex items-center justify-between border-b border-brand-sand dark:border-border pb-4">
         <div>
-          <h3 className="font-heading text-xs font-bold text-neutral-900 flex items-center gap-1.5">
-            <Briefcase className="h-3.5 w-3.5 text-[#1b4b6b]" /> Parcours & Expériences Professionnelles
+          <h3 className="font-heading text-xs font-bold text-brand-ink dark:text-foreground flex items-center gap-1.5">
+            <Briefcase className="h-3.5 w-3.5 text-brand-ink dark:text-foreground" /> Parcours & Expériences Professionnelles
           </h3>
-          <p className="text-neutral-500 mt-0.5">
+          <p className="text-muted-foreground mt-0.5">
             Vos expériences enregistrées en base de données backend.
           </p>
         </div>
@@ -87,65 +87,65 @@ export const ExperienceTab: React.FC = () => {
         <button
           type="button"
           onClick={() => setIsAdding(!isAdding)}
-          className="inline-flex items-center gap-1.5 rounded-lg bg-[#1b4b6b] px-3.5 py-2 text-[11px] font-semibold text-white hover:bg-[#143952] cursor-pointer"
+          className="inline-flex items-center gap-1.5 rounded-lg bg-brand-violet px-3.5 py-2 text-[11px] font-semibold text-white hover:bg-brand-violet cursor-pointer"
         >
           <Plus className="h-3.5 w-3.5" /> Ajouter une expérience
         </button>
       </div>
 
       {successMsg && (
-        <div className="flex items-center gap-2 rounded-lg bg-emerald-50 border border-emerald-200 p-3 font-semibold text-emerald-700">
-          <CheckCircle className="h-4 w-4 text-emerald-600" />
+        <div className="flex items-center gap-2 rounded-lg bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/30 p-3 font-semibold text-emerald-700 dark:text-emerald-300">
+          <CheckCircle className="h-4 w-4 text-emerald-600 dark:text-emerald-300" />
           {successMsg}
         </div>
       )}
 
       {isAdding && (
-        <form onSubmit={handleAdd} className="rounded-xl bg-[#FAF9F6] border border-[#e7e3dc] p-4 space-y-3">
+        <form onSubmit={handleAdd} className="rounded-xl bg-brand-canvas dark:bg-background border border-border p-4 space-y-3">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label className="block font-semibold text-neutral-600 mb-1">Poste / Intitulé *</label>
+              <label className="block font-semibold text-neutral-600 dark:text-muted-foreground mb-1">Poste / Intitulé *</label>
               <input
                 type="text"
                 required
                 value={poste}
                 onChange={(e) => setPoste(e.target.value)}
                 placeholder="ex: Développeur Fullstack React & Django"
-                className="w-full rounded-md border border-[#e7e3dc] bg-white p-2 outline-none focus:border-[#1b4b6b]"
+                className="w-full rounded-md border border-border bg-white dark:bg-card p-2 outline-none focus:border-brand-violet dark:focus:border-violet-300"
               />
             </div>
             <div>
-              <label className="block font-semibold text-neutral-600 mb-1">Entreprise / Organisation *</label>
+              <label className="block font-semibold text-neutral-600 dark:text-muted-foreground mb-1">Entreprise / Organisation *</label>
               <input
                 type="text"
                 required
                 value={entreprise}
                 onChange={(e) => setEntreprise(e.target.value)}
                 placeholder="ex: Jokko Tech"
-                className="w-full rounded-md border border-[#e7e3dc] bg-white p-2 outline-none focus:border-[#1b4b6b]"
+                className="w-full rounded-md border border-border bg-white dark:bg-card p-2 outline-none focus:border-brand-violet dark:focus:border-violet-300"
               />
             </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label className="block font-semibold text-neutral-600 mb-1">Date de début *</label>
+              <label className="block font-semibold text-neutral-600 dark:text-muted-foreground mb-1">Date de début *</label>
               <input
                 type="date"
                 required
                 value={startDate}
                 onChange={(e) => setStartDate(e.target.value)}
-                className="w-full rounded-md border border-[#e7e3dc] bg-white p-2 outline-none focus:border-[#1b4b6b]"
+                className="w-full rounded-md border border-border bg-white dark:bg-card p-2 outline-none focus:border-brand-violet dark:focus:border-violet-300"
               />
             </div>
             <div>
-              <label className="block font-semibold text-neutral-600 mb-1">Date de fin</label>
+              <label className="block font-semibold text-neutral-600 dark:text-muted-foreground mb-1">Date de fin</label>
               <input
                 type="date"
                 disabled={current}
                 value={endDate}
                 onChange={(e) => setEndDate(e.target.value)}
-                className="w-full rounded-md border border-[#e7e3dc] bg-white p-2 outline-none focus:border-[#1b4b6b] disabled:bg-neutral-100"
+                className="w-full rounded-md border border-border bg-white dark:bg-card p-2 outline-none focus:border-brand-violet dark:focus:border-violet-300 disabled:bg-neutral-100 dark:disabled:bg-muted"
               />
             </div>
           </div>
@@ -156,21 +156,21 @@ export const ExperienceTab: React.FC = () => {
               id="currentExp"
               checked={current}
               onChange={(e) => setCurrent(e.target.checked)}
-              className="rounded border-[#e7e3dc]"
+              className="rounded border-border"
             />
-            <label htmlFor="currentExp" className="text-[11px] font-medium text-neutral-700 cursor-pointer">
+            <label htmlFor="currentExp" className="text-[11px] font-medium text-brand-ink dark:text-foreground cursor-pointer">
               Poste actuel (en cours)
             </label>
           </div>
 
           <div>
-            <label className="block font-semibold text-neutral-600 mb-1">Description des missions</label>
+            <label className="block font-semibold text-neutral-600 dark:text-muted-foreground mb-1">Description des missions</label>
             <textarea
               rows={3}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Décrivez vos accomplissements clés..."
-              className="w-full rounded-md border border-[#e7e3dc] bg-white p-2 outline-none focus:border-[#1b4b6b]"
+              className="w-full rounded-md border border-border bg-white dark:bg-card p-2 outline-none focus:border-brand-violet dark:focus:border-violet-300"
             />
           </div>
 
@@ -178,14 +178,14 @@ export const ExperienceTab: React.FC = () => {
             <button
               type="button"
               onClick={() => setIsAdding(false)}
-              className="rounded-md border border-neutral-300 px-3.5 py-1.5 font-semibold text-neutral-600 cursor-pointer"
+              className="rounded-md border border-neutral-300 dark:border-border px-3.5 py-1.5 font-semibold text-neutral-600 dark:text-muted-foreground cursor-pointer"
             >
               Annuler
             </button>
             <button
               type="submit"
               disabled={createMutation.isPending}
-              className="inline-flex items-center gap-1.5 rounded-md bg-[#1b4b6b] px-4 py-1.5 font-semibold text-white hover:bg-[#143952] cursor-pointer disabled:opacity-50"
+              className="inline-flex items-center gap-1.5 rounded-md bg-brand-violet px-4 py-1.5 font-semibold text-white hover:bg-brand-violet cursor-pointer disabled:opacity-50"
             >
               {createMutation.isPending && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
               Enregistrer
@@ -196,7 +196,7 @@ export const ExperienceTab: React.FC = () => {
 
       {/* List from DB */}
       {experiences.length === 0 ? (
-        <div className="py-8 text-center text-neutral-400">
+        <div className="py-8 text-center text-muted-foreground">
           Aucune expérience enregistrée. Cliquez sur "Ajouter une expérience" pour commencer.
         </div>
       ) : (
@@ -204,19 +204,19 @@ export const ExperienceTab: React.FC = () => {
           {experiences.map((exp) => (
             <div
               key={exp.id}
-              className="flex items-start justify-between rounded-xl border border-[#ebe8e2] bg-[#faf9f7] p-4"
+              className="flex items-start justify-between rounded-xl border border-brand-sand dark:border-border bg-brand-canvas dark:bg-background p-4"
             >
               <div className="space-y-1">
-                <h4 className="font-heading text-xs font-bold text-neutral-900">{exp.poste}</h4>
-                <p className="font-semibold text-[#1b4b6b]">{exp.entreprise}</p>
-                <div className="flex items-center gap-3 text-[10px] text-neutral-400">
+                <h4 className="font-heading text-xs font-bold text-brand-ink dark:text-foreground">{exp.poste}</h4>
+                <p className="font-semibold text-brand-ink dark:text-foreground">{exp.entreprise}</p>
+                <div className="flex items-center gap-3 text-[10px] text-muted-foreground">
                   <span className="flex items-center gap-1">
                     <Calendar className="h-3 w-3" />
                     {exp.startDate} {exp.current ? ' - Présent' : exp.endDate ? ` à ${exp.endDate}` : ''}
                   </span>
                 </div>
                 {exp.description && (
-                  <p className="mt-2 text-neutral-600 text-[10.5px] leading-relaxed whitespace-pre-line">
+                  <p className="mt-2 text-neutral-600 dark:text-muted-foreground text-[10.5px] leading-relaxed whitespace-pre-line">
                     {exp.description}
                   </p>
                 )}
@@ -226,7 +226,7 @@ export const ExperienceTab: React.FC = () => {
                 type="button"
                 disabled={deleteMutation.isPending}
                 onClick={() => deleteMutation.mutate(exp.id)}
-                className="text-neutral-400 hover:text-red-500 cursor-pointer p-1"
+                className="text-muted-foreground hover:text-red-500 dark:hover:text-red-300 cursor-pointer p-1"
                 title="Supprimer"
               >
                 <Trash2 className="h-4 w-4" />

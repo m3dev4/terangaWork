@@ -60,45 +60,45 @@ export const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({
       onClick={onClose}
     >
       <div
-        className="relative w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl"
+        className="relative w-full max-w-md rounded-2xl bg-white dark:bg-card p-6 shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         <button
           onClick={onClose}
-          className="absolute right-4 top-4 rounded-md p-1 text-neutral-400 hover:bg-neutral-100"
+          className="absolute right-4 top-4 rounded-md p-1 text-muted-foreground hover:bg-neutral-100 dark:hover:bg-muted"
         >
           <X className="h-4 w-4" />
         </button>
 
-        <div className="mb-5 flex items-center gap-3 border-b border-[#f0ede8] pb-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#f0f4f8] text-[#1b4b6b]">
+        <div className="mb-5 flex items-center gap-3 border-b border-brand-sand dark:border-border pb-3">
+          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-sand dark:bg-muted text-brand-ink dark:text-foreground">
             <Lock className="h-5 w-5" />
           </div>
           <div>
-            <h3 className="font-heading text-base font-bold text-neutral-900">
+            <h3 className="font-heading text-base font-bold text-brand-ink dark:text-foreground">
               Modifier le mot de passe
             </h3>
-            <p className="text-[11px] text-neutral-500">
+            <p className="text-[11px] text-muted-foreground">
               Choisissez un nouveau mot de passe sécurisé pour votre compte.
             </p>
           </div>
         </div>
 
         {success ? (
-          <div className="flex flex-col items-center justify-center py-6 text-center text-emerald-600">
+          <div className="flex flex-col items-center justify-center py-6 text-center text-emerald-600 dark:text-emerald-300">
             <CheckCircle2 className="mb-2 h-10 w-10 animate-bounce" />
             <p className="text-sm font-bold">Mot de passe modifié avec succès !</p>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="space-y-4 text-[11px]">
             {error && (
-              <div className="rounded-md bg-red-50 p-2.5 text-red-600 border border-red-200">
+              <div className="rounded-md bg-red-50 dark:bg-red-500/10 p-2.5 text-red-600 dark:text-red-300 border border-red-200 dark:border-red-500/30">
                 {error}
               </div>
             )}
 
             <div>
-              <label className="mb-1 block font-semibold uppercase text-[10px] tracking-wider text-neutral-500">
+              <label className="mb-1 block font-semibold uppercase text-[10px] tracking-wider text-muted-foreground">
                 Mot de passe actuel
               </label>
               <input
@@ -106,12 +106,12 @@ export const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({
                 required
                 value={oldPassword}
                 onChange={(e) => setOldPassword(e.target.value)}
-                className="w-full rounded-md border border-[#e7e3dc] bg-white p-2.5 outline-none focus:border-[#1b4b6b]"
+                className="w-full rounded-md border border-border bg-white dark:bg-card p-2.5 outline-none focus:border-brand-violet dark:focus:border-violet-300"
               />
             </div>
 
             <div>
-              <label className="mb-1 block font-semibold uppercase text-[10px] tracking-wider text-neutral-500">
+              <label className="mb-1 block font-semibold uppercase text-[10px] tracking-wider text-muted-foreground">
                 Nouveau mot de passe
               </label>
               <input
@@ -119,12 +119,12 @@ export const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({
                 required
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
-                className="w-full rounded-md border border-[#e7e3dc] bg-white p-2.5 outline-none focus:border-[#1b4b6b]"
+                className="w-full rounded-md border border-border bg-white dark:bg-card p-2.5 outline-none focus:border-brand-violet dark:focus:border-violet-300"
               />
             </div>
 
             <div>
-              <label className="mb-1 block font-semibold uppercase text-[10px] tracking-wider text-neutral-500">
+              <label className="mb-1 block font-semibold uppercase text-[10px] tracking-wider text-muted-foreground">
                 Confirmer le nouveau mot de passe
               </label>
               <input
@@ -132,7 +132,7 @@ export const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({
                 required
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                className="w-full rounded-md border border-[#e7e3dc] bg-white p-2.5 outline-none focus:border-[#1b4b6b]"
+                className="w-full rounded-md border border-border bg-white dark:bg-card p-2.5 outline-none focus:border-brand-violet dark:focus:border-violet-300"
               />
             </div>
 
@@ -140,14 +140,14 @@ export const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({
               <button
                 type="button"
                 onClick={onClose}
-                className="flex-1 rounded-md border border-neutral-300 py-2.5 font-semibold text-neutral-600 hover:bg-neutral-50 cursor-pointer"
+                className="flex-1 rounded-md border border-neutral-300 dark:border-border py-2.5 font-semibold text-neutral-600 dark:text-muted-foreground hover:bg-brand-canvas dark:hover:bg-background cursor-pointer"
               >
                 Annuler
               </button>
               <button
                 type="submit"
                 disabled={isLoading}
-                className="flex-1 rounded-md bg-[#1b4b6b] py-2.5 font-semibold text-white hover:bg-[#143952] disabled:opacity-50 flex items-center justify-center gap-1.5 cursor-pointer"
+                className="flex-1 rounded-md bg-brand-violet py-2.5 font-semibold text-white hover:bg-brand-violet disabled:opacity-50 flex items-center justify-center gap-1.5 cursor-pointer"
               >
                 {isLoading && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
                 Valider

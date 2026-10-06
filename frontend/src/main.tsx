@@ -33,6 +33,7 @@ import AdminServicesPage from "./pages/espace/admin/AdminServicesPage.tsx";
 import AdminTechnologiesPage from "./pages/espace/admin/AdminTechnologiesPage.tsx";
 import AdminSignalementsPage from "./pages/espace/admin/AdminSignalementsPage.tsx";
 import AssistantPage from "./pages/espace/AssistantPage.tsx";
+import { ThemeProvider } from "./components/theme-provider.tsx";
 
 const router = createBrowserRouter([
   {
@@ -163,7 +164,9 @@ createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
       <Toaster>
-        <RouterProvider router={router} />
+        <ThemeProvider>
+          <RouterProvider router={router} />
+        </ThemeProvider>
         <ReactQueryDevtools initialIsOpen={false} />
       </Toaster>
     </QueryClientProvider>

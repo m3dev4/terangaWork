@@ -7,13 +7,13 @@ export default function MobileSidebar() {
   const [open, setOpen] = useState(false);
   return (
     <Drawer open={open} onOpenChange={setOpen} swipeDirection="left">
-      <DrawerTrigger className="flex size-11 shrink-0 items-center justify-center rounded-lg text-[#1b4b6b] hover:bg-neutral-100" aria-label="Ouvrir le menu de navigation">
+      <DrawerTrigger className="flex size-11 shrink-0 items-center justify-center rounded-lg text-foreground hover:bg-muted" aria-label="Ouvrir le menu de navigation">
         <Menu className="size-5" />
       </DrawerTrigger>
       <DrawerContent className="h-dvh! w-[min(20rem,calc(100vw-2rem))]!">
-        <div className="flex shrink-0 items-center justify-between border-b border-[#EFECE6] px-4 py-2">
+        <div className="flex shrink-0 items-center justify-between border-b border-border px-4 py-2">
           <DrawerTitle>Menu de navigation</DrawerTitle>
-          <DrawerClose className="flex size-11 items-center justify-center rounded-lg hover:bg-neutral-100" aria-label="Fermer le menu">
+          <DrawerClose className="flex size-11 items-center justify-center rounded-lg hover:bg-muted" aria-label="Fermer le menu">
             <X className="size-5" />
           </DrawerClose>
         </div>

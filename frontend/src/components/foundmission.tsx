@@ -11,11 +11,11 @@ import { FILTERS, MISSIONS } from '../constants/utils';
 
 const Foundmission = () => {
   return (
-    <div className="flex w-full flex-col items-center bg-[#1d1d1d] px-6 py-8 sm:px-10 sm:py-10 lg:px-24">
+    <div className="flex w-full flex-col items-center bg-brand-ink px-6 py-8 sm:px-10 sm:py-10 lg:px-24">
       {/* Toggle rôle */}
       <div className="mb-10 flex justify-center">
-        <div className="inline-flex items-center gap-1 rounded-full bg-[#202023] p-1 outline-1 -outline-offset-1 outline-white/5">
-          <button className="flex items-center gap-2 rounded-full bg-[#f59a3d] px-5 py-2.5 sm:px-7">
+        <div className="inline-flex items-center gap-1 rounded-full bg-brand-ink p-1 outline-1 -outline-offset-1 outline-white/5">
+          <button className="flex items-center gap-2 rounded-full bg-brand-green px-5 py-2.5 sm:px-7">
             <BriefcaseBusiness className="h-3.5 w-3.5 text-stone-950" />
             <span className="whitespace-nowrap font-sans text-xs font-bold leading-5 text-stone-950 sm:text-sm">
               Je cherche une mission
@@ -23,7 +23,7 @@ const Foundmission = () => {
           </button>
           <button className="flex items-center gap-2 rounded-full px-5 py-2.5 sm:px-7">
             <span className="h-3.5 w-3 rounded-sm bg-gray-400" />
-            <span className="whitespace-nowrap font-sans text-xs font-bold leading-5 text-gray-400 sm:text-sm">
+            <span className="whitespace-nowrap font-sans text-xs font-bold leading-5 text-muted-foreground sm:text-sm">
               Je cherche un freelance
             </span>
           </button>
@@ -32,14 +32,14 @@ const Foundmission = () => {
 
       {/* Barre de recherche + filtres */}
       <div className="mb-10 flex w-full max-w-3xl flex-col items-center">
-        <div className="relative flex w-full items-center gap-3 rounded-xl bg-[#202023] py-2 pl-10 pr-2 outline-1 -outline-offset-1 outline-white/10 sm:pl-11">
-          <Search className="pointer-events-none absolute left-3.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-[#f59a3d]" />
+        <div className="relative flex w-full items-center gap-3 rounded-xl bg-brand-ink py-2 pl-10 pr-2 outline-1 -outline-offset-1 outline-white/10 sm:pl-11">
+          <Search className="pointer-events-none absolute left-3.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-brand-violet" />
           <input
             type="text"
             placeholder="ex. développement d'une application mobile"
-            className="min-w-0 flex-1 bg-transparent font-sans text-xs text-gray-300 placeholder:text-gray-500 focus:outline-none sm:text-sm"
+            className="min-w-0 flex-1 bg-transparent font-sans text-xs text-gray-300 placeholder:text-muted-foreground focus:outline-none sm:text-sm"
           />
-          <button className="flex-none whitespace-nowrap rounded-lg bg-[#f59a3d] px-5 py-2.5 font-sans text-xs font-black tracking-tight text-stone-950 sm:px-7 sm:text-sm">
+          <button className="flex-none whitespace-nowrap rounded-lg bg-brand-green px-5 py-2.5 font-sans text-xs font-black tracking-tight text-stone-950 sm:px-7 sm:text-sm">
             Rechercher
           </button>
         </div>
@@ -49,7 +49,7 @@ const Foundmission = () => {
           {FILTERS.map((filter) => (
             <div
               key={filter.label}
-              className="flex min-w-36 flex-1 items-center gap-1.5 rounded-md bg-[#202023] px-2.5 py-2.5 outline-1 -outline-offset-1 outline-white/5 sm:min-w-0 sm:flex-none"
+              className="flex min-w-36 flex-1 items-center gap-1.5 rounded-md bg-brand-ink px-2.5 py-2.5 outline-1 -outline-offset-1 outline-white/5 sm:min-w-0 sm:flex-none"
             >
               <span className="flex-none font-sans text-[10px] font-bold leading-4 text-orange-400 sm:text-xs">
                 {filter.label}
@@ -57,7 +57,7 @@ const Foundmission = () => {
               <span className="flex-1 truncate font-sans text-[10px] leading-4 text-gray-300 sm:text-xs">
                 {filter.value}
               </span>
-              <ChevronDown className="h-3 w-3 flex-none text-gray-400/60" />
+              <ChevronDown className="h-3 w-3 flex-none text-muted-foreground/60" />
             </div>
           ))}
 
@@ -80,7 +80,7 @@ const Foundmission = () => {
                 MISSIONS DISPONIBLES
               </h2>
             </div>
-            <p className="font-sans text-xs font-normal leading-5 text-gray-400 sm:text-sm">
+            <p className="font-sans text-xs font-normal leading-5 text-muted-foreground sm:text-sm">
               Découvrez des opportunités qui correspondent à votre profil
             </p>
           </div>
@@ -88,7 +88,7 @@ const Foundmission = () => {
             <span className="font-heading text-lg font-black tracking-tight text-orange-400 sm:text-xl">
               124
             </span>
-            <span className="font-sans text-[9px] font-bold uppercase tracking-wider text-gray-500">
+            <span className="font-sans text-[9px] font-bold uppercase tracking-wider text-muted-foreground">
               Résultats trouvés
             </span>
           </div>
@@ -112,7 +112,7 @@ const Foundmission = () => {
                     </span>
                   ))}
                 </div>
-                <span className="flex-none rounded-md bg-white/5 p-1.5 text-gray-400/70">
+                <span className="flex-none rounded-md bg-white/5 p-1.5 text-muted-foreground/70">
                   <Bookmark className="h-3.5 w-3.5" />
                 </span>
               </div>
@@ -121,7 +121,7 @@ const Foundmission = () => {
                 <h3 className="font-heading text-sm font-bold leading-4 text-white sm:text-base">
                   {mission.title}
                 </h3>
-                <div className="flex items-center gap-1.5 font-sans text-[10px] leading-4 text-gray-400">
+                <div className="flex items-center gap-1.5 font-sans text-[10px] leading-4 text-muted-foreground">
                   <MapPin className="h-3 w-3 text-orange-400" />
                   {mission.location}
                 </div>
@@ -140,7 +140,7 @@ const Foundmission = () => {
 
               <div className="flex items-center justify-between gap-3 rounded-lg bg-white/5 p-2.5">
                 <div className="flex flex-col">
-                  <span className="font-sans text-[8px] font-bold uppercase tracking-wide text-gray-500">
+                  <span className="font-sans text-[8px] font-bold uppercase tracking-wide text-muted-foreground">
                     {mission.budgetLabel}
                   </span>
                   <span className="whitespace-nowrap font-heading text-sm font-black leading-5 text-orange-400">

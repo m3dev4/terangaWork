@@ -69,21 +69,21 @@ export const StepPresentation: React.FC<StepPresentationProps> = ({
     <div className="w-full max-w-xl mx-auto flex flex-col justify-center">
       {/* Badge d'étape */}
       <div className="mb-4">
-        <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-[#F3EBDD] text-[#111118]/70">
+        <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-brand-sand text-muted-foreground">
           Étape {stepNumber} sur {totalSteps}
         </span>
       </div>
 
       {/* En-tête */}
-      <h1 className="text-2xl sm:text-3xl font-bold text-[#111118] tracking-tight mb-2">
+      <h1 className="text-2xl sm:text-3xl font-bold text-brand-ink tracking-tight mb-2">
         Parlez-nous de vous
       </h1>
-      <p className="text-[#111118]/50 text-sm sm:text-base mb-8">
+      <p className="text-muted-foreground text-sm sm:text-base mb-8">
         Présentez votre activité en quelques mots pour attirer les annonceurs.
       </p>
 
       {error && (
-        <div className="mb-6 p-3.5 rounded-xl bg-[#D95C38]/10 border border-[#D95C38]/25 text-[#c14f2f] text-sm">
+        <div className="mb-6 p-3.5 rounded-xl bg-brand-green/10 border border-brand-green/25 text-brand-violet text-sm">
           {error}
         </div>
       )}
@@ -91,7 +91,7 @@ export const StepPresentation: React.FC<StepPresentationProps> = ({
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Titre du profil */}
         <div>
-          <label className="block text-sm font-semibold text-[#111118]/80 mb-2">
+          <label className="block text-sm font-semibold text-brand-ink/80 mb-2">
             Titre du profil
           </label>
           <Input
@@ -99,7 +99,7 @@ export const StepPresentation: React.FC<StepPresentationProps> = ({
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="ex : Designer produit senior"
-            className="w-full px-4 py-3 rounded-xl border border-[#111118]/12 focus:outline-none focus:ring-2 focus:ring-[#D95C38]/15 focus:border-[#D95C38] transition-all placeholder:text-[#111118]/25 text-[#111118] text-sm"
+            className="w-full px-4 py-3 rounded-xl border border-brand-ink/12 focus:outline-none focus:ring-2 focus:ring-brand-green/15 focus:border-brand-green transition-all placeholder:text-muted-foreground text-brand-ink text-sm"
             required
           />
         </div>
@@ -107,10 +107,10 @@ export const StepPresentation: React.FC<StepPresentationProps> = ({
         {/* Description */}
         <div>
           <div className="flex items-center justify-between mb-2">
-            <label className="block text-sm font-semibold text-[#111118]/80">
+            <label className="block text-sm font-semibold text-brand-ink/80">
               Description
             </label>
-            <span className="text-[11px] font-semibold text-[#111118]/35">
+            <span className="text-[11px] font-semibold text-muted-foreground">
               Min. 100 caractères
             </span>
           </div>
@@ -120,11 +120,11 @@ export const StepPresentation: React.FC<StepPresentationProps> = ({
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Décrivez votre parcours, vos points forts et ce que vous pouvez apporter à vos futurs clients..."
-              className="w-full px-4 py-3 rounded-xl border border-[#111118]/12 focus:outline-none focus:ring-2 focus:ring-[#D95C38]/15 focus:border-[#D95C38] transition-all placeholder:text-[#111118]/25 text-[#111118] text-sm resize-none"
+              className="w-full px-4 py-3 rounded-xl border border-brand-ink/12 focus:outline-none focus:ring-2 focus:ring-brand-green/15 focus:border-brand-green transition-all placeholder:text-muted-foreground text-brand-ink text-sm resize-none"
               maxLength={2000}
               required
             />
-            <div className="absolute bottom-3 right-3 text-xs text-[#111118]/35">
+            <div className="absolute bottom-3 right-3 text-xs text-muted-foreground">
               {description.length} / 2000
             </div>
           </div>
@@ -135,7 +135,7 @@ export const StepPresentation: React.FC<StepPresentationProps> = ({
           <Button
             type="button"
             onClick={onBack}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-[#111118]/12 bg-white text-[#111118]/70 font-medium hover:bg-[#F3EBDD]/60 transition-colors cursor-pointer text-sm"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-brand-ink/12 bg-white text-muted-foreground font-medium hover:bg-brand-sand/60 transition-colors cursor-pointer text-sm"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>Retour</span>
@@ -144,7 +144,7 @@ export const StepPresentation: React.FC<StepPresentationProps> = ({
           <Button
             type="submit"
             disabled={isLoading}
-            className="inline-flex items-center gap-2 px-7 py-3 rounded-xl bg-[#D95C38] hover:bg-[#c14f2f] text-white font-medium transition-all duration-150 disabled:opacity-50 cursor-pointer text-sm"
+            className="inline-flex items-center gap-2 px-7 py-3 rounded-xl bg-brand-green hover:bg-brand-green-hover text-brand-ink font-medium transition-all duration-150 disabled:opacity-50 cursor-pointer text-sm"
           >
             {isLoading ? (
               <>
@@ -161,15 +161,15 @@ export const StepPresentation: React.FC<StepPresentationProps> = ({
         </div>
 
         {/* Conseil d'expert */}
-        <div className="mt-8 p-4 rounded-2xl bg-[#F3EBDD]/50 border border-[#111118]/8 flex items-center gap-3.5">
-          <div className="w-9 h-9 rounded-full bg-white flex items-center justify-center text-[#D95C38] shrink-0">
+        <div className="mt-8 p-4 rounded-2xl bg-brand-sand/50 border border-brand-ink/8 flex items-center gap-3.5">
+          <div className="w-9 h-9 rounded-full bg-white flex items-center justify-center text-brand-violet shrink-0">
             <Lightbulb className="w-5 h-5" />
           </div>
           <div>
-            <h4 className="text-xs font-semibold text-[#111118]">
+            <h4 className="text-xs font-semibold text-brand-ink">
               Conseil d'expert
             </h4>
-            <p className="text-xs text-[#111118]/50">
+            <p className="text-xs text-muted-foreground">
               Les profils avec une description détaillée et un titre précis
               reçoivent en moyenne 4x plus de propositions directes.
             </p>

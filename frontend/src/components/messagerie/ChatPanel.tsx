@@ -64,7 +64,7 @@ const ChatPanel: React.FC<ChatPanelProps> = ({ conversation, currentUser }) => {
   };
 
   return (
-    <div className="flex-1 flex flex-col h-full bg-[#FAFAF8]">
+    <div className="flex-1 flex flex-col h-full bg-brand-canvas dark:bg-background">
       <ChatHeader
         user={conversation.autre_utlisateur}
         missionTitle={conversation.mission_titre}

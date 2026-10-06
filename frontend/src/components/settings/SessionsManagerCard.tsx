@@ -103,11 +103,11 @@ export const SessionsManagerCard: React.FC = () => {
   const getIcon = (type: string) => {
     switch (type) {
       case 'mobile':
-        return <Smartphone className="h-5 w-5 text-neutral-600" />;
+        return <Smartphone className="h-5 w-5 text-neutral-600 dark:text-muted-foreground" />;
       case 'desktop':
-        return <Monitor className="h-5 w-5 text-neutral-600" />;
+        return <Monitor className="h-5 w-5 text-neutral-600 dark:text-muted-foreground" />;
       default:
-        return <Laptop className="h-5 w-5 text-neutral-600" />;
+        return <Laptop className="h-5 w-5 text-neutral-600 dark:text-muted-foreground" />;
     }
   };
 
@@ -115,26 +115,26 @@ export const SessionsManagerCard: React.FC = () => {
   const currentRefreshToken = localStorage.getItem('refresh_token');
 
   return (
-    <div className="rounded-2xl border border-[#ebe8e2] bg-white p-6 sm:p-7 shadow-xs">
-      <div className="mb-5 border-b border-[#f0ede8] pb-4">
-        <h2 className="font-heading text-sm font-bold text-neutral-900">
+    <div className="rounded-2xl border border-brand-sand dark:border-border bg-white dark:bg-card p-6 sm:p-7 shadow-xs">
+      <div className="mb-5 border-b border-brand-sand dark:border-border pb-4">
+        <h2 className="font-heading text-sm font-bold text-brand-ink dark:text-foreground">
           Gérer ses sessions ouvertes
         </h2>
-        <p className="mt-1 text-[11px] text-neutral-500">
+        <p className="mt-1 text-[11px] text-muted-foreground">
           Consultez et gérez les appareils connectés à votre compte.
         </p>
       </div>
 
       {isLoading ? (
         <div className="flex items-center justify-center py-8">
-          <Loader2 className="h-6 w-6 animate-spin text-neutral-400" />
+          <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
         </div>
       ) : isError ? (
-        <div className="py-6 text-center text-[11px] text-red-500">
+        <div className="py-6 text-center text-[11px] text-red-500 dark:text-red-300">
           Impossible de charger les sessions.
         </div>
       ) : sessions.length === 0 ? (
-        <div className="py-6 text-center text-[11px] text-neutral-400">
+        <div className="py-6 text-center text-[11px] text-muted-foreground">
           Aucune session active.
         </div>
       ) : (
@@ -150,25 +150,25 @@ export const SessionsManagerCard: React.FC = () => {
               return (
                 <div
                   key={s.id}
-                  className="flex flex-col gap-3 rounded-xl border border-[#e7e3dc] bg-white p-4 sm:flex-row sm:items-center sm:justify-between"
+                  className="flex flex-col gap-3 rounded-xl border border-border bg-white dark:bg-card p-4 sm:flex-row sm:items-center sm:justify-between"
                 >
                   <div className="flex items-center gap-3.5">
-                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#FAF9F6] border border-[#e2ded6]">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-brand-canvas dark:bg-background border border-border">
                       {getIcon(iconType)}
                     </div>
 
                     <div>
                       <div className="flex items-center gap-2">
-                        <span className="font-heading text-[12px] font-bold text-neutral-900">
+                        <span className="font-heading text-[12px] font-bold text-brand-ink dark:text-foreground">
                           {deviceLabel} • {browser}
                         </span>
                         {isCurrent && (
-                          <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-[8.5px] font-bold text-emerald-700 uppercase tracking-wide">
+                          <span className="rounded-full bg-emerald-100 dark:bg-emerald-500/10 px-2 py-0.5 text-[8.5px] font-bold text-emerald-700 dark:text-emerald-300 uppercase tracking-wide">
                             CET APPAREIL
                           </span>
                         )}
                       </div>
-                      <p className="text-[10.5px] text-neutral-500">
+                      <p className="text-[10.5px] text-muted-foreground">
                         {s.location || 'Localisation inconnue'} •{' '}
                         {formatLastActive(s.date_last_used, isCurrent)}
                       </p>
@@ -180,7 +180,7 @@ export const SessionsManagerCard: React.FC = () => {
                       type="button"
                       disabled={revokeMutation.isPending}
                       onClick={() => revokeMutation.mutate(s.id)}
-                      className="text-[11px] font-semibold text-red-500 hover:text-red-700 cursor-pointer self-start sm:self-auto disabled:opacity-50"
+                      className="text-[11px] font-semibold text-red-500 dark:text-red-300 hover:text-red-700 dark:hover:text-red-300 cursor-pointer self-start sm:self-auto disabled:opacity-50"
                     >
                       Déconnecter
                     </button>
@@ -197,7 +197,7 @@ export const SessionsManagerCard: React.FC = () => {
                 type="button"
                 disabled={revokeAllMutation.isPending}
                 onClick={() => revokeAllMutation.mutate()}
-                className="text-[11px] font-semibold text-[#1b4b6b] hover:underline cursor-pointer disabled:opacity-50 inline-flex items-center gap-1.5"
+                className="text-[11px] font-semibold text-brand-ink dark:text-foreground hover:underline cursor-pointer disabled:opacity-50 inline-flex items-center gap-1.5"
               >
                 {revokeAllMutation.isPending && (
                   <Loader2 className="h-3 w-3 animate-spin" />

@@ -170,8 +170,8 @@ const OnboardingForm: React.FC = () => {
 
   if (isStatusLoading) {
     return (
-      <div className="flex h-screen w-full items-center justify-center bg-[#F3EBDD]/40">
-        <Loader2 className="w-10 h-10 animate-spin text-[#D95C38]" />
+      <div className="flex h-screen w-full items-center justify-center bg-brand-sand/40">
+        <Loader2 className="w-10 h-10 animate-spin text-brand-violet" />
       </div>
     );
   }
@@ -226,12 +226,12 @@ const OnboardingForm: React.FC = () => {
       case "service":
         return (
           <StepServices
-            initialServiceId={completedData.service?.service_id}
+            initialServiceIds={completedData.service?.service_ids || []}
             stepNumber={stepNum}
             totalSteps={total}
             onBack={handleBack}
-            onSubmit={(serviceId) =>
-              handleStepSubmit({ service_id: serviceId })
+            onSubmit={(serviceIds) =>
+              handleStepSubmit({ service_ids: serviceIds })
             }
             isLoading={isPending}
           />
@@ -346,12 +346,12 @@ const OnboardingForm: React.FC = () => {
       default:
         return (
           <div className="text-center">
-            <h2 className="text-xl font-semibold mb-2 text-[#111118]">
+            <h2 className="text-xl font-semibold mb-2 text-brand-ink">
               Étape en cours de chargement...
             </h2>
             <Button
               onClick={() => setCurrentStepKey("identite")}
-              className="text-sm text-[#D95C38] underline"
+              className="text-sm text-brand-violet underline"
             >
               Revenir au début
             </Button>
@@ -362,13 +362,13 @@ const OnboardingForm: React.FC = () => {
 
   return (
     <div className="flex h-screen max-h-screen w-full bg-white overflow-hidden">
-      <aside className="w-80 lg:w-84 shrink-0 h-full max-h-screen bg-[#F3EBDD]/50 border-r border-[#111118]/8 px-6 py-6 lg:py-8 flex flex-col justify-start overflow-hidden select-none">
+      <aside className="w-80 lg:w-84 shrink-0 h-full max-h-screen bg-brand-sand/50 border-r border-brand-ink/8 px-6 py-6 lg:py-8 flex flex-col justify-start overflow-hidden select-none">
         <div className="flex flex-col items-start mb-6">
           <BrandLogo className="mb-4 w-44" />
-          <h2 className="font-heading font-semibold text-xl lg:text-2xl text-[#111118] tracking-tight">
+          <h2 className="font-heading font-semibold text-xl lg:text-2xl text-brand-ink tracking-tight">
             Configurons votre profil{" "}
             {activeRole && (
-              <span className="text-[#D95C38]">
+              <span className="text-brand-violet">
                 {activeRole === "freelance" ? "freelance" : "annonceur"}
               </span>
             )}

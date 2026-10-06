@@ -40,7 +40,7 @@ function getNotificationIcon(type: NotificationType) {
     case "MISSION_COMPLETEE":
       return <Briefcase className="w-4 h-4 text-indigo-500" />;
     case "MISSION_ANNULEE":
-      return <XCircle className="w-4 h-4 text-neutral-400" />;
+      return <XCircle className="w-4 h-4 text-muted-foreground" />;
     case "MISSION_LITIGE":
       return <AlertTriangle className="w-4 h-4 text-amber-500" />;
     case "PAIEMENT_REUSSI":
@@ -99,12 +99,12 @@ export const NotificationDropdown: React.FC = () => {
       <button
         type="button"
         onClick={() => setIsOpen((prev) => !prev)}
-        className="relative size-11 sm:size-auto flex items-center justify-center p-1.5 rounded-lg text-neutral-500 hover:bg-neutral-100 hover:text-neutral-800 transition-colors cursor-pointer focus-visible:outline-2 focus-visible:outline-[#1b4b6b]"
+        className="relative size-11 sm:size-auto flex items-center justify-center p-1.5 rounded-lg text-muted-foreground hover:bg-muted hover:text-foreground transition-colors cursor-pointer focus-visible:outline-2 focus-visible:outline-brand-violet"
         title="Notifications"
       >
         <Bell className="w-4 h-4" strokeWidth={1.8} />
         {unreadCount > 0 && (
-          <span className="absolute -top-0.5 -right-0.5 min-w-[16px] h-[16px] px-1 rounded-full bg-[#f2994a] text-white text-[9px] font-bold flex items-center justify-center border-2 border-white animate-pulse">
+          <span className="absolute -top-0.5 -right-0.5 min-w-[16px] h-[16px] px-1 rounded-full bg-brand-green text-brand-ink text-[9px] font-bold flex items-center justify-center border-2 border-popover animate-pulse">
             {unreadCount > 99 ? "99+" : unreadCount}
           </span>
         )}
@@ -112,11 +112,11 @@ export const NotificationDropdown: React.FC = () => {
 
       {/* Dropdown panel */}
       {isOpen && (
-        <div className="fixed inset-x-3 top-14 sm:absolute sm:inset-x-auto sm:top-auto sm:right-0 sm:mt-2 sm:w-96 bg-white rounded-xl shadow-xl border border-neutral-100 z-50 overflow-hidden text-xs">
+        <div className="fixed inset-x-3 top-18 sm:absolute sm:inset-x-auto sm:top-auto sm:right-0 sm:mt-2 sm:w-96 bg-popover rounded-xl shadow-xl border border-border z-50 overflow-hidden text-xs">
           {/* Header */}
-          <div className="p-3.5 border-b border-neutral-100 flex flex-wrap gap-2 items-center justify-between bg-neutral-50/50">
+          <div className="p-3.5 border-b border-border flex flex-wrap gap-2 items-center justify-between bg-muted/50">
             <div className="flex items-center gap-2">
-              <span className="font-semibold text-neutral-800 text-sm">
+              <span className="font-semibold text-foreground text-sm">
                 Notifications
               </span>
               {unreadCount > 0 && (
@@ -129,7 +129,7 @@ export const NotificationDropdown: React.FC = () => {
               <button
                 type="button"
                 onClick={() => markAllRead()}
-                className="text-[11px] text-[#1b4b6b] hover:text-[#133750] font-medium flex items-center gap-1 transition-colors"
+                className="text-[11px] text-foreground hover:text-foreground font-medium flex items-center gap-1 transition-colors"
               >
                 <CheckCheck className="w-3.5 h-3.5" />
                 Tout marquer lu
@@ -138,13 +138,13 @@ export const NotificationDropdown: React.FC = () => {
           </div>
 
           {/* Body */}
-          <div className="max-h-[min(380px,calc(100dvh-180px))] overflow-y-auto divide-y divide-neutral-100/60">
+          <div className="max-h-[min(380px,calc(100dvh-180px))] overflow-y-auto divide-y divide-border">
             {isLoading && notifications.length === 0 ? (
-              <div className="p-6 text-center text-neutral-400">
+              <div className="p-6 text-center text-muted-foreground">
                 Chargement...
               </div>
             ) : notifications.length === 0 ? (
-              <div className="p-8 text-center flex flex-col items-center gap-2 text-neutral-400">
+              <div className="p-8 text-center flex flex-col items-center gap-2 text-muted-foreground">
                 <Bell className="w-8 h-8 stroke-1 text-neutral-300" />
                 <p className="text-xs">Aucune notification pour le moment.</p>
               </div>
@@ -154,11 +154,11 @@ export const NotificationDropdown: React.FC = () => {
                   key={notif.id}
                   onClick={() => handleNotificationClick(notif)}
                   className={`p-3.5 flex items-start gap-3 cursor-pointer transition-colors group relative ${
-                    !notif.lue ? "bg-amber-50/30 hover:bg-amber-50/60" : "hover:bg-neutral-50"
+                    !notif.lue ? "bg-primary/5 hover:bg-primary/10" : "hover:bg-muted/50"
                   }`}
                 >
                   {/* Type Icon */}
-                  <div className="p-2 rounded-lg bg-neutral-100 shrink-0 mt-0.5">
+                  <div className="p-2 rounded-lg bg-muted shrink-0 mt-0.5">
                     {getNotificationIcon(notif.type)}
                   </div>
 
@@ -168,17 +168,17 @@ export const NotificationDropdown: React.FC = () => {
                       <p
                         className={`text-xs truncate ${
                           !notif.lue
-                            ? "font-semibold text-neutral-900"
-                            : "font-medium text-neutral-700"
+                            ? "font-semibold text-foreground"
+                            : "font-medium text-foreground"
                         }`}
                       >
                         {notif.titre}
                       </p>
                     </div>
-                    <p className="text-[11px] text-neutral-500 line-clamp-2 leading-relaxed mb-1">
+                    <p className="text-[11px] text-muted-foreground line-clamp-2 leading-relaxed mb-1">
                       {notif.message}
                     </p>
-                    <span className="text-[10px] text-neutral-400">
+                    <span className="text-[10px] text-muted-foreground">
                       {formatRelativeTime(notif.date_creation)}
                     </span>
                   </div>
@@ -186,7 +186,7 @@ export const NotificationDropdown: React.FC = () => {
                   {/* Actions / Unread dot */}
                   <div className="flex flex-col items-end gap-2 shrink-0">
                     {!notif.lue && (
-                      <span className="w-2 h-2 rounded-full bg-[#f2994a]" />
+                      <span className="w-2 h-2 rounded-full bg-brand-green" />
                     )}
                     <button
                       type="button"
@@ -194,7 +194,7 @@ export const NotificationDropdown: React.FC = () => {
                         e.stopPropagation();
                         deleteNotif(notif.id);
                       }}
-                      className="sm:opacity-0 sm:group-hover:opacity-100 focus:opacity-100 p-1 text-neutral-400 hover:text-rose-500 transition-opacity"
+                      className="sm:opacity-0 sm:group-hover:opacity-100 focus:opacity-100 p-1 text-muted-foreground hover:text-rose-500 transition-opacity"
                       title="Supprimer"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
@@ -207,8 +207,8 @@ export const NotificationDropdown: React.FC = () => {
 
           {/* Footer */}
           {notifications.length > 0 && (
-            <div className="p-2 text-center border-t border-neutral-100 bg-neutral-50/40">
-              <span className="text-[10px] text-neutral-400">
+            <div className="p-2 text-center border-t border-border bg-muted/40">
+              <span className="text-[10px] text-muted-foreground">
                 Temps réel activé • Teranga Work Notifications
               </span>
             </div>

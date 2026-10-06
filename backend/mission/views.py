@@ -80,7 +80,7 @@ class MissionViewSet(viewsets.ModelViewSet):
         return [IsAuthenticated()]
 
     def get_queryset(self):
-        queryset = Mission.objects.select_related("service", "annonceur").prefetch_related("technologies")
+        queryset = Mission.objects.select_related("annonceur").prefetch_related("technologies", "service")
         user = self.request.user
         if not user or not user.is_authenticated:
             return queryset.filter(status=MissionStatus.OPEN)

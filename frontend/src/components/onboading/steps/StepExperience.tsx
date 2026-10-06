@@ -89,25 +89,25 @@ export const StepExperience: React.FC<StepExperienceProps> = ({
   return (
     <div className="w-full max-w-xl mx-auto flex flex-col justify-center">
       <div className="mb-4">
-        <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-[#F3EBDD] text-[#111118]/70">
+        <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-brand-sand text-muted-foreground">
           Étape {stepNumber} sur {totalSteps}
         </span>
       </div>
 
       <div className="flex items-start justify-between mb-2">
-        <h1 className="text-2xl sm:text-3xl font-bold text-[#111118] tracking-tight">
+        <h1 className="text-2xl sm:text-3xl font-bold text-brand-ink tracking-tight">
           Expérience professionnelle
         </h1>
         <Button
           type="button"
           variant="secondary"
           onClick={onSkip}
-          className="text-xs font-semibold text-[#111118]/40 hover:text-[#111118] underline cursor-pointer mt-1"
+          className="text-xs font-semibold text-muted-foreground hover:text-brand-ink underline cursor-pointer mt-1"
         >
           Passer
         </Button>
       </div>
-      <p className="text-[#111118]/50 text-sm mb-6">
+      <p className="text-muted-foreground text-sm mb-6">
         Renseignez vos postes marquants ou sautez cette étape.
       </p>
 
@@ -116,13 +116,13 @@ export const StepExperience: React.FC<StepExperienceProps> = ({
           {experiences.map((exp, index) => (
             <div
               key={index}
-              className="p-4 rounded-2xl border border-[#111118]/12 bg-white space-y-3 relative"
+              className="p-4 rounded-2xl border border-brand-ink/12 bg-white space-y-3 relative"
             >
               {experiences.length > 1 && (
                 <Button
                   type="button"
                   onClick={() => removeExperience(index)}
-                  className="absolute top-3 right-3 text-[#111118]/35 hover:text-[#D95C38]"
+                  className="absolute top-3 right-3 text-muted-foreground hover:text-brand-violet"
                 >
                   <Trash2 className="w-4 h-4" />
                 </Button>
@@ -130,7 +130,7 @@ export const StepExperience: React.FC<StepExperienceProps> = ({
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-semibold text-[#111118]/70 mb-1">
+                  <label className="block text-xs font-semibold text-muted-foreground mb-1">
                     Entreprise
                   </label>
                   <input
@@ -140,11 +140,11 @@ export const StepExperience: React.FC<StepExperienceProps> = ({
                       updateExperience(index, "entreprise", e.target.value)
                     }
                     placeholder="ex : Google, Freelance..."
-                    className="w-full px-3 py-2 text-sm rounded-xl border border-[#111118]/12 focus:outline-none focus:border-[#D95C38]"
+                    className="w-full px-3 py-2 text-sm rounded-xl border border-brand-ink/12 focus:outline-none focus:border-brand-green"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-[#111118]/70 mb-1">
+                  <label className="block text-xs font-semibold text-muted-foreground mb-1">
                     Poste
                   </label>
                   <input
@@ -154,14 +154,14 @@ export const StepExperience: React.FC<StepExperienceProps> = ({
                       updateExperience(index, "poste", e.target.value)
                     }
                     placeholder="ex : Développeur frontend senior"
-                    className="w-full px-3 py-2 text-sm rounded-xl border border-[#111118]/12 focus:outline-none focus:border-[#D95C38]"
+                    className="w-full px-3 py-2 text-sm rounded-xl border border-brand-ink/12 focus:outline-none focus:border-brand-green"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-semibold text-[#111118]/70 mb-1">
+                  <label className="block text-xs font-semibold text-muted-foreground mb-1">
                     Date de début
                   </label>
                   <input
@@ -170,11 +170,11 @@ export const StepExperience: React.FC<StepExperienceProps> = ({
                     onChange={(e) =>
                       updateExperience(index, "startDate", e.target.value)
                     }
-                    className="w-full px-3 py-2 text-sm rounded-xl border border-[#111118]/12 focus:outline-none focus:border-[#D95C38]"
+                    className="w-full px-3 py-2 text-sm rounded-xl border border-brand-ink/12 focus:outline-none focus:border-brand-green"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-[#111118]/70 mb-1">
+                  <label className="block text-xs font-semibold text-muted-foreground mb-1">
                     Date de fin
                   </label>
                   <input
@@ -184,7 +184,7 @@ export const StepExperience: React.FC<StepExperienceProps> = ({
                     onChange={(e) =>
                       updateExperience(index, "endDate", e.target.value)
                     }
-                    className="w-full px-3 py-2 text-sm rounded-xl border border-[#111118]/12 focus:outline-none focus:border-[#D95C38] disabled:bg-[#F3EBDD]/40 disabled:opacity-60"
+                    className="w-full px-3 py-2 text-sm rounded-xl border border-brand-ink/12 focus:outline-none focus:border-brand-green disabled:bg-brand-sand/40 disabled:opacity-60"
                   />
                 </div>
               </div>
@@ -197,11 +197,11 @@ export const StepExperience: React.FC<StepExperienceProps> = ({
                   onChange={(e) =>
                     updateExperience(index, "current", e.target.checked)
                   }
-                  className="rounded text-[#D95C38] focus:ring-[#D95C38]/30"
+                  className="rounded text-brand-violet focus:ring-brand-green/30"
                 />
                 <label
                   htmlFor={`current-${index}`}
-                  className="text-xs text-[#111118]/60"
+                  className="text-xs text-muted-foreground"
                 >
                   Poste actuel
                 </label>
@@ -214,7 +214,7 @@ export const StepExperience: React.FC<StepExperienceProps> = ({
           type="button"
           variant="outline"
           onClick={addExperience}
-          className="w-full py-2.5 rounded-xl border border-dashed border-[#111118]/20 text-[#111118]/60 hover:text-[#111118] hover:border-[#111118]/35 text-xs font-medium flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+          className="w-full py-2.5 rounded-xl border border-dashed border-brand-ink/20 text-muted-foreground hover:text-brand-ink hover:border-brand-ink/35 text-xs font-medium flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
         >
           <Plus className="w-4 h-4" />
           <span>Ajouter une autre expérience</span>
@@ -224,7 +224,7 @@ export const StepExperience: React.FC<StepExperienceProps> = ({
           <Button
             type="button"
             onClick={onBack}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-[#111118]/12 bg-white text-[#111118]/70 font-medium hover:bg-[#F3EBDD]/60 transition-colors cursor-pointer text-sm"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-brand-ink/12 bg-white text-muted-foreground font-medium hover:bg-brand-sand/60 transition-colors cursor-pointer text-sm"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>Retour</span>
@@ -233,7 +233,7 @@ export const StepExperience: React.FC<StepExperienceProps> = ({
           <Button
             type="submit"
             disabled={isLoading}
-            className="inline-flex items-center gap-2 px-7 py-3 rounded-xl bg-[#D95C38] hover:bg-[#c14f2f] text-white font-medium transition-all duration-150 disabled:opacity-50 cursor-pointer text-sm"
+            className="inline-flex items-center gap-2 px-7 py-3 rounded-xl bg-brand-green hover:bg-brand-green-hover text-brand-ink font-medium transition-all duration-150 disabled:opacity-50 cursor-pointer text-sm"
           >
             {isLoading ? (
               <>

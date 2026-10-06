@@ -12,7 +12,13 @@ from freelance.models import Experience, Freelancee
 from mission.models import Mission, MissionStatus
 from proposition.models import Proposition
 from matching.models import ResultatMatching
-from matching.services import MatchingServiceUnavailableError, get_freelance_experience_years
+from matching.services import (
+    MatchingServiceUnavailableError,
+    evaluer_matching_proactif,
+    get_freelance_experience_years,
+    lancer_matching_proactif_async,
+)
+from notification.models import Notification
 
 
 class MatchingTests(TestCase):
@@ -205,3 +211,164 @@ class MatchingTests(TestCase):
 
         assert res.status_code == status.HTTP_503_SERVICE_UNAVAILABLE
         assert res.json()["detail"] == "Matching temporairement indisponible."
+
+    @patch("matching.services.call_fastapi_matching")
+    def test_initial_compatibility_is_read_only_and_not_limited_to_top_four(self, mock_fastapi):
+        for i in range(5):
+            Mission.objects.create(title=f"Mission {i}", description="Test", budget=100,
+                                   service=self.service_backend, annonceur=self.announcer1,
+                                   status=MissionStatus.OPEN)
+        self.client.force_authenticate(user=self.user_freelance)
+        for coverage, compatible in [(0, False), (.49, False), (.5, True), (1, True)]:
+            mock_fastapi.return_value = {"etage_2_reussi": False, "resultats": [{
+                "candidat_id": self.mission.id, "score": .5 + coverage / 2,
+                "score_technologies": coverage, "score_service": 1,
+            }]}
+            response = self.client.get("/api/matching/missions-compatibilite/")
+            assert response.status_code == 200
+            assert response.json()["resultats"][0]["compatible"] is compatible
+            payload = mock_fastapi.call_args.args[0]
+            assert payload["type_matching"] == "missions"
+            assert payload["scoring_only"] is True
+            assert payload["top_n"] == 6
+            assert payload["min_technology_score"] == 0
+        assert not ResultatMatching.objects.exists()
+
+    def test_initial_compatibility_requires_freelance(self):
+        url = "/api/matching/missions-compatibilite/"
+        assert self.client.get(url).status_code == 401
+        self.client.force_authenticate(user=self.user_announcer1)
+        assert self.client.get(url).status_code == 403
+
+    @patch("notification.services.get_channel_layer")
+    @patch("matching.services.call_fastapi_matching")
+    def test_evaluer_matching_proactif_single_grouped_llm_and_no_duplication(
+        self, mock_fastapi, mock_channel_layer
+    ):
+        # Création d'un second freelance (David) qui aura un score < 80%
+        user_freelance2 = User.objects.create_user(
+            email="freelance2@jefly.com",
+            password="Password123!",
+            first_name="David",
+            last_name="Junior",
+            number_phone="0102030408",
+            role=UserRole.FREELANCE,
+            onboarding_completed=True,
+        )
+        freelance2 = Freelancee.objects.create(
+            user=user_freelance2,
+            title="Junior Dev",
+            description="Débutant",
+            service=self.service_backend,
+        )
+
+        # Mock pour Étage 1 (scoring_only=True) et Étage 2 (scoring_only=False)
+        stage1_response = {
+            "etage_2_reussi": False,
+            "resultats": [
+                {
+                    "candidat_id": self.freelance.id,
+                    "score": 0.85,
+                    "score_technologies": 1.0,
+                    "score_service": 1.0,
+                    "score_experience": 0.4,
+                    "justification_ia": None,
+                },
+                {
+                    "candidat_id": freelance2.id,
+                    "score": 0.50,
+                    "score_technologies": 0.5,
+                    "score_service": 1.0,
+                    "score_experience": 0.0,
+                    "justification_ia": None,
+                },
+            ],
+        }
+
+        stage2_response = {
+            "etage_2_reussi": True,
+            "resultats": [
+                {
+                    "candidat_id": self.freelance.id,
+                    "score": 0.88,
+                    "score_technologies": 1.0,
+                    "score_service": 1.0,
+                    "score_experience": 0.4,
+                    "justification_ia": "Profil FastAPI très pertinent pour ce projet.",
+                }
+            ],
+        }
+
+        mock_fastapi.side_effect = [stage1_response, stage2_response]
+
+        # 1er Appel du matching proactif
+        evaluer_matching_proactif(self.mission.id)
+
+        # Vérifier qu'il y a eu exactement 2 appels à FastAPI (1 scoring Stage 1 + 1 seul appel LLM groupé Stage 2)
+        assert mock_fastapi.call_count == 2
+
+        # Vérifier le payload du 1er appel (Stage 1)
+        stage1_call_payload = mock_fastapi.call_args_list[0][0][0]
+        assert stage1_call_payload["type_matching"] == "proactif"
+        assert stage1_call_payload["scoring_only"] is True
+        assert len(stage1_call_payload["candidats"]) == 2
+
+        # Vérifier le payload du 2nd appel (Stage 2 - un seul appel groupé pour les freelances > 80%)
+        stage2_call_payload = mock_fastapi.call_args_list[1][0][0]
+        assert stage2_call_payload["type_matching"] == "proactif"
+        assert stage2_call_payload["scoring_only"] is False
+        assert len(stage2_call_payload["candidats"]) == 1
+        assert stage2_call_payload["candidats"][0]["id"] == self.freelance.id
+
+        # Vérifier la création de la notification
+        notifs = Notification.objects.filter(type="MISSION_RECOMMANDEE")
+        assert notifs.count() == 1
+
+        notif = notifs.first()
+        assert notif.utilisateur == self.user_freelance
+        assert notif.mission == self.mission
+        assert notif.titre == "Une mission vous correspond à 88%"
+        assert notif.message == "Profil FastAPI très pertinent pour ce projet."
+
+        # Vérification Anti-doublon : réexécution de la tâche sur la même mission
+        mock_fastapi.side_effect = [stage1_response, stage2_response]
+        evaluer_matching_proactif(self.mission.id)
+
+        # Le nombre de notifications reste 1 (aucun doublon créé)
+        assert Notification.objects.filter(type="MISSION_RECOMMANDEE").count() == 1
+
+    @patch("matching.services.call_fastapi_matching")
+    def test_evaluer_matching_proactif_no_qualifying_stops_at_stage1(self, mock_fastapi):
+        mock_fastapi.return_value = {
+            "etage_2_reussi": False,
+            "resultats": [
+                {
+                    "candidat_id": self.freelance.id,
+                    "score": 0.65,
+                    "score_technologies": 0.5,
+                    "score_service": 1.0,
+                    "score_experience": 0.4,
+                    "justification_ia": None,
+                }
+            ],
+        }
+
+        evaluer_matching_proactif(self.mission.id)
+
+        # Uniquement Stage 1 appelé, Stage 2 non appelé car score < 80%
+        assert mock_fastapi.call_count == 1
+        assert Notification.objects.filter(type="MISSION_RECOMMANDEE").count() == 0
+
+    @patch("matching.services.lancer_matching_proactif_async")
+    def test_mission_approval_triggers_proactive_matching(self, mock_lancer_async):
+        self.mission.status = MissionStatus.PENDING_MODERATION
+        self.mission.save()
+
+        url = f"/api/missions/{self.mission.id}/moderation/"
+        res = self.client.patch(url, {"decision": "approuver"}, format="json")
+
+        assert res.status_code == status.HTTP_200_OK
+        self.mission.refresh_from_db()
+        assert self.mission.status == MissionStatus.OPEN
+        mock_lancer_async.assert_called_once_with(self.mission.id)
+

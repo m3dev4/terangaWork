@@ -1,18 +1,8 @@
-import React from 'react';
-import AuthTitleDesc from '../../../components/auth/authTitleDesc';
-import RegisterComponent from '../../../components/auth/register';
+import { Link } from "react-router-dom";
+import AuthTitleDesc from "../../../components/auth/authTitleDesc";
+import RegisterComponent from "../../../components/auth/register";
 
-const Register = () => {
-  return (
-    <div className="flex flex-col space-y-2 justify-start items-start w-full">
-      <AuthTitleDesc
-        title="Créer votre"
-        span="compte"
-        description="Rejoignez la communauté Teranga Work dès aujourd'hui"
-      />
-      <RegisterComponent />
-    </div>
-  );
-};
-
-export default Register;
+export default function Register() {
+  return <><AuthTitleDesc title="Créez votre" span="compte"
+    description={<>Déjà un compte ? <Link to="/login">Se connecter</Link></>} /><RegisterComponent /></>;
+}

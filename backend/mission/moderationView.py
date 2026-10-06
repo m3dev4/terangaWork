@@ -43,6 +43,14 @@ class MissionModerationView(APIView):
             mission.status = MissionStatus.OPEN
             mission.save(update_fields=["status", "updated_at"])
             logger.info(f"Mission #{mission.id} approuvée et publiée avec succès.")
+
+            # Déclenchement du matching proactif en arrière-plan
+            try:
+                from matching.services import lancer_matching_proactif_async
+                lancer_matching_proactif_async(mission.id)
+            except Exception as e:
+                logger.error(f"Échec du déclenchement du matching proactif pour mission #{mission.id}: {e}")
+
             return Response(
                 {
                     "detail": "Mission approuvée et publiée avec succès.",

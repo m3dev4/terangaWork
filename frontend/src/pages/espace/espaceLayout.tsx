@@ -14,6 +14,8 @@ import MobileSidebar from '../../components/MobileSidebar';
 import useMediaQuery from '../../hooks/useMediaQuery';
 import { NotificationDropdown } from '../../components/notification/NotificationDropdown';
 import { useWebSocket, useWebSocketQuerySync } from '../../hooks/useWebSocket';
+import ThemeToggle from '../../components/ThemeToggle';
+import '../../components/dashboard/dashboard-glass.css';
 
 const EspaceLayout: React.FC = () => {
   const navigate = useNavigate();
@@ -69,21 +71,21 @@ const EspaceLayout: React.FC = () => {
   }, [location.pathname, user?.role]);
 
   return (
-    <div className="flex h-dvh max-h-dvh w-full bg-[#FAF9F6] overflow-hidden">
+    <div className={`espace-shell ${/^\/espace\/?$/.test(location.pathname) ? 'espace-shell--dashboard' : ''} flex h-dvh max-h-dvh w-full overflow-hidden`}>
       {/* Sidebar */}
       {isDesktop && <Sidebar collapsed={collapsed} onToggleCollapse={() => setCollapsed(!collapsed)} />}
 
       {/* Main Viewport */}
       <div className="flex-1 h-full flex flex-col overflow-hidden min-w-0">
         {/* Top Header matching Image 2 */}
-        <header className="h-12 bg-white border-b border-[#EFECE6] px-2 sm:px-4 lg:px-5 gap-2 flex items-center justify-between shrink-0 select-none z-20">
+        <header className="espace-header h-16 px-2 sm:px-4 lg:px-6 gap-2 flex items-center justify-between shrink-0 select-none z-20">
           {/* Left: Breadcrumb */}
           <div className="flex min-w-0 items-center gap-2">
             {!isDesktop && <MobileSidebar key={location.key} />}
             <div className="flex min-w-0 items-center gap-1.5 text-[11px]">
-              <span className="hidden sm:inline text-neutral-400 font-normal">{breadcrumb.section}</span>
-              <span className="hidden sm:inline text-neutral-300 font-normal">›</span>
-              <span className="truncate text-[#1b4b6b] font-semibold tracking-tight">
+              <span className="hidden sm:inline text-muted-foreground font-normal">{breadcrumb.section}</span>
+              <span className="hidden sm:inline text-neutral-300 dark:text-muted-foreground font-normal">›</span>
+              <span className="truncate text-foreground font-semibold tracking-tight">
                 {breadcrumb.label}
               </span>
             </div>
@@ -91,14 +93,15 @@ const EspaceLayout: React.FC = () => {
 
           {/* Right: Notifications & User Profile */}
           <div className="flex shrink-0 items-center gap-1 sm:gap-2.5">
+            <ThemeToggle />
             {/* Notification Dropdown */}
             <NotificationDropdown />
 
-            <div className="h-3.5 w-px bg-neutral-200" />
+            <div className="h-5 w-px bg-border" />
 
             {/* User Profile Card */}
             <div className="flex items-center gap-2">
-              <div className="w-6 h-6 rounded-full bg-neutral-100 border border-neutral-200 flex items-center justify-center overflow-hidden shrink-0">
+              <div className="w-8 h-8 rounded-full bg-muted border border-border flex items-center justify-center overflow-hidden shrink-0">
                 {user?.profile_picture ? (
                   <img
                     src={getMediaUrl(user.profile_picture)}
@@ -106,15 +109,15 @@ const EspaceLayout: React.FC = () => {
                     className="w-full h-full object-cover"
                   />
                 ) : (
-                  <UserIcon className="w-3 h-3 text-neutral-500" />
+                  <UserIcon className="w-3 h-3 text-muted-foreground" />
                 )}
               </div>
 
               <div className="hidden sm:flex max-w-32 flex-col text-left">
-                <span className="truncate text-[11px] font-semibold text-neutral-900 leading-tight">
+                <span className="truncate text-[11px] font-semibold text-foreground leading-tight">
                   {user?.first_name ? `${user.first_name} ${user.last_name || ''}`.trim() : 'Mon Compte'}
                 </span>
-                <span className="text-[9.5px] text-neutral-400 capitalize leading-tight">
+                <span className="text-[9.5px] text-muted-foreground capitalize leading-tight">
                   {user?.role === 'freelance'
                     ? 'Développeur freelance'
                     : user?.role === 'annonceur'
@@ -128,7 +131,7 @@ const EspaceLayout: React.FC = () => {
             <button
               type="button"
               onClick={handleLogout}
-              className="size-11 sm:size-auto flex items-center justify-center p-1 rounded-md text-neutral-400 hover:bg-red-50 hover:text-red-600 transition-colors cursor-pointer ml-1"
+              className="size-11 sm:size-auto flex items-center justify-center p-1 rounded-md text-muted-foreground hover:bg-red-50 dark:hover:bg-red-500/10 hover:text-red-600 dark:hover:text-red-300 transition-colors cursor-pointer ml-1"
               title="Se déconnecter"
             >
               <LogOut className="w-3.5 h-3.5" strokeWidth={1.7} />

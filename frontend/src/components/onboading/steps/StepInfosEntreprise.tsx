@@ -50,15 +50,15 @@ export const StepInfosEntreprise: React.FC<StepInfosEntrepriseProps> = ({
   return (
     <div className="w-full max-w-xl mx-auto flex flex-col justify-center">
       <div className="mb-4">
-        <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider bg-orange-50 text-[#f2994a] border border-orange-100">
+        <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider bg-orange-50 text-brand-violet border border-orange-100">
           Étape {stepNumber} sur {totalSteps}
         </span>
       </div>
 
-      <h1 className="text-2xl sm:text-3xl font-bold text-neutral-900 tracking-tight mb-2">
+      <h1 className="text-2xl sm:text-3xl font-bold text-brand-ink tracking-tight mb-2">
         Informations sur votre entreprise
       </h1>
-      <p className="text-neutral-500 text-sm sm:text-base mb-8">
+      <p className="text-muted-foreground text-sm sm:text-base mb-8">
         Présentez brièvement votre structure pour donner confiance aux freelances.
       </p>
 
@@ -70,7 +70,7 @@ export const StepInfosEntreprise: React.FC<StepInfosEntrepriseProps> = ({
 
       <form onSubmit={handleSubmit} className="space-y-5">
         <div>
-          <label className="block text-sm font-semibold text-neutral-800 mb-2">
+          <label className="block text-sm font-semibold text-brand-ink mb-2">
             Nom de l'entreprise / structure
           </label>
           <input
@@ -78,13 +78,13 @@ export const StepInfosEntreprise: React.FC<StepInfosEntrepriseProps> = ({
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="Ex: Teranga Work Studio SAS"
-            className="w-full px-4 py-3 rounded-xl border border-neutral-200 focus:outline-none focus:ring-2 focus:ring-[#1b4b6b]/20 focus:border-[#1b4b6b] transition-all placeholder:text-neutral-300 text-neutral-900 text-sm"
+            className="w-full px-4 py-3 rounded-xl border border-border focus:outline-none focus:ring-2 focus:ring-brand-violet/20 focus:border-brand-violet transition-all placeholder:text-neutral-300 text-brand-ink text-sm"
             required
           />
         </div>
 
         <div>
-          <label className="block text-sm font-semibold text-neutral-800 mb-2">
+          <label className="block text-sm font-semibold text-brand-ink mb-2">
             Secteur d'activité
           </label>
           <input
@@ -92,14 +92,14 @@ export const StepInfosEntreprise: React.FC<StepInfosEntrepriseProps> = ({
             value={secteur}
             onChange={(e) => setSecteur(e.target.value)}
             placeholder="Ex: Tech, E-commerce, Santé, Finance..."
-            className="w-full px-4 py-3 rounded-xl border border-neutral-200 focus:outline-none focus:ring-2 focus:ring-[#1b4b6b]/20 focus:border-[#1b4b6b] transition-all placeholder:text-neutral-300 text-neutral-900 text-sm"
+            className="w-full px-4 py-3 rounded-xl border border-border focus:outline-none focus:ring-2 focus:ring-brand-violet/20 focus:border-brand-violet transition-all placeholder:text-neutral-300 text-brand-ink text-sm"
             required
           />
         </div>
 
         <div>
-          <label className="block text-sm font-semibold text-neutral-800 mb-2 flex items-center gap-1.5">
-            <Globe className="w-4 h-4 text-neutral-500" />
+          <label className="block text-sm font-semibold text-brand-ink mb-2 flex items-center gap-1.5">
+            <Globe className="w-4 h-4 text-muted-foreground" />
             <span>Site internet de l'entreprise (optionnel)</span>
           </label>
           <input
@@ -107,7 +107,7 @@ export const StepInfosEntreprise: React.FC<StepInfosEntrepriseProps> = ({
             value={website}
             onChange={(e) => setWebsite(e.target.value)}
             placeholder="https://mon-entreprise.com"
-            className="w-full px-4 py-3 rounded-xl border border-neutral-200 focus:outline-none focus:ring-2 focus:ring-[#1b4b6b]/20 focus:border-[#1b4b6b] transition-all placeholder:text-neutral-300 text-neutral-900 text-sm"
+            className="w-full px-4 py-3 rounded-xl border border-border focus:outline-none focus:ring-2 focus:ring-brand-violet/20 focus:border-brand-violet transition-all placeholder:text-neutral-300 text-brand-ink text-sm"
           />
         </div>
 
@@ -115,7 +115,7 @@ export const StepInfosEntreprise: React.FC<StepInfosEntrepriseProps> = ({
           <button
             type="button"
             onClick={onBack}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-neutral-200 bg-white text-neutral-700 font-medium hover:bg-neutral-50 transition-colors cursor-pointer text-sm"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-border bg-white text-brand-ink font-medium hover:bg-brand-canvas transition-colors cursor-pointer text-sm"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>Retour</span>
@@ -124,7 +124,7 @@ export const StepInfosEntreprise: React.FC<StepInfosEntrepriseProps> = ({
           <button
             type="submit"
             disabled={isLoading}
-            className="inline-flex items-center gap-2 px-7 py-3 rounded-xl bg-[#f2994a] hover:bg-[#e0893a] text-white font-medium shadow-sm transition-all duration-150 disabled:opacity-50 cursor-pointer text-sm"
+            className="inline-flex items-center gap-2 px-7 py-3 rounded-xl bg-brand-green hover:bg-brand-green-hover text-brand-ink font-medium shadow-sm transition-all duration-150 disabled:opacity-50 cursor-pointer text-sm"
           >
             {isLoading ? (
               <>

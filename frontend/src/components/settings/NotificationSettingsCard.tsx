@@ -44,12 +44,12 @@ export const NotificationSettingsCard: React.FC = () => {
   };
 
   return (
-    <div className="rounded-2xl border border-[#ebe8e2] bg-white p-6 sm:p-7 shadow-xs">
-      <div className="mb-5 border-b border-[#f0ede8] pb-4">
-        <h2 className="font-heading text-sm font-bold text-neutral-900">
+    <div className="rounded-2xl border border-brand-sand dark:border-border bg-white dark:bg-card p-6 sm:p-7 shadow-xs">
+      <div className="mb-5 border-b border-brand-sand dark:border-border pb-4">
+        <h2 className="font-heading text-sm font-bold text-brand-ink dark:text-foreground">
           Gérer les notifications
         </h2>
-        <p className="mt-1 text-[11px] text-neutral-500">
+        <p className="mt-1 text-[11px] text-muted-foreground">
           Choisissez les alertes que vous souhaitez recevoir par email.
         </p>
       </div>
@@ -58,13 +58,13 @@ export const NotificationSettingsCard: React.FC = () => {
         {options.map((opt) => (
           <div
             key={opt.id}
-            className="flex items-center justify-between border-b border-[#f3f0eb] pb-3.5 last:border-0 last:pb-0"
+            className="flex items-center justify-between border-b border-[#f3f0eb] dark:border-border pb-3.5 last:border-0 last:pb-0"
           >
             <div className="pr-4">
-              <h4 className="font-heading text-[11.5px] font-bold text-neutral-900">
+              <h4 className="font-heading text-[11.5px] font-bold text-brand-ink dark:text-foreground">
                 {opt.title}
               </h4>
-              <p className="mt-0.5 text-[10.5px] text-neutral-500 leading-relaxed">
+              <p className="mt-0.5 text-[10.5px] text-muted-foreground leading-relaxed">
                 {opt.description}
               </p>
             </div>
@@ -73,7 +73,7 @@ export const NotificationSettingsCard: React.FC = () => {
             <button
               type="button"
               onClick={() => toggleOption(opt.id)}
-              className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out outline-none ${opt.enabled ? 'bg-[#1b4b6b]' : 'bg-neutral-200'
+              className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out outline-none ${opt.enabled ? 'bg-brand-violet' : 'bg-neutral-200 dark:bg-muted'
                 }`}
             >
               <span

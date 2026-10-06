@@ -66,34 +66,34 @@ export const StepTechnologies: React.FC<StepTechnologiesProps> = ({
     <div className="w-full max-w-xl mx-auto flex flex-col justify-center">
       {/* Badge d'étape */}
       <div className="mb-4">
-        <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-[#F3EBDD] text-[#111118]/70">
+        <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-brand-sand text-muted-foreground">
           Étape {stepNumber} sur {totalSteps}
         </span>
       </div>
 
-      <h1 className="text-2xl sm:text-3xl font-bold text-[#111118] tracking-tight mb-2">
+      <h1 className="text-2xl sm:text-3xl font-bold text-brand-ink tracking-tight mb-2">
         Quelles technologies maîtrisez-vous ?
       </h1>
-      <p className="text-[#111118]/50 text-sm sm:text-base mb-6">
+      <p className="text-muted-foreground text-sm sm:text-base mb-6">
         Sélectionnez dans le catalogue les outils et frameworks que vous
         maîtrisez (sélection multiple).
       </p>
 
       {error && (
-        <div className="mb-4 p-3 rounded-xl bg-[#D95C38]/10 border border-[#D95C38]/25 text-[#c14f2f] text-sm">
+        <div className="mb-4 p-3 rounded-xl bg-brand-green/10 border border-brand-green/25 text-brand-violet text-sm">
           {error}
         </div>
       )}
 
       {isTechLoading ? (
-        <div className="flex flex-col items-center justify-center py-12 gap-2 text-[#111118]/40">
-          <Loader2 className="w-8 h-8 animate-spin text-[#D95C38]" />
+        <div className="flex flex-col items-center justify-center py-12 gap-2 text-muted-foreground">
+          <Loader2 className="w-8 h-8 animate-spin text-brand-violet" />
           <span className="text-xs">
             Chargement des technologies depuis la base de données...
           </span>
         </div>
       ) : techList.length === 0 ? (
-        <div className="p-6 rounded-2xl bg-[#F3EBDD]/40 border border-[#111118]/8 text-center text-[#111118]/50 text-sm">
+        <div className="p-6 rounded-2xl bg-brand-sand/40 border border-brand-ink/8 text-center text-muted-foreground text-sm">
           Aucune technologie disponible dans le catalogue pour le moment.
         </div>
       ) : (
@@ -108,12 +108,12 @@ export const StepTechnologies: React.FC<StepTechnologiesProps> = ({
                     onClick={() => toggleTech(tech.id)}
                     className={`p-3 rounded-2xl cursor-pointer flex items-center gap-3 transition-all duration-150 select-none ${
                       isSelected
-                        ? "border-2 border-[#111118] bg-[#F3EBDD]/50"
-                        : "border border-[#111118]/12 bg-white hover:border-[#111118]/25"
+                        ? "border-2 border-brand-ink bg-brand-sand/50"
+                        : "border border-brand-ink/12 bg-white hover:border-brand-ink/25"
                     }`}
                   >
                     {/* Logo / icône technologie */}
-                    <div className="w-8 h-8 rounded-lg bg-[#F3EBDD]/60 flex items-center justify-center shrink-0 overflow-hidden">
+                    <div className="w-8 h-8 rounded-lg bg-brand-sand/60 flex items-center justify-center shrink-0 overflow-hidden">
                       {tech.imgUrl ? (
                         <img
                           src={tech.imgUrl}
@@ -125,22 +125,22 @@ export const StepTechnologies: React.FC<StepTechnologiesProps> = ({
                           }}
                         />
                       ) : (
-                        <Code2 className="w-4 h-4 text-[#111118]/40" />
+                        <Code2 className="w-4 h-4 text-muted-foreground" />
                       )}
                     </div>
 
                     <span
                       className={`text-xs sm:text-sm tracking-tight flex-1 truncate ${
                         isSelected
-                          ? "font-bold text-[#111118]"
-                          : "font-medium text-[#111118]/70"
+                          ? "font-bold text-brand-ink"
+                          : "font-medium text-muted-foreground"
                       }`}
                     >
                       {tech.name}
                     </span>
 
                     {isSelected && (
-                      <div className="w-4 h-4 rounded-full bg-[#111118] text-[#E7B84B] flex items-center justify-center shrink-0">
+                      <div className="w-4 h-4 rounded-full bg-brand-ink text-brand-green flex items-center justify-center shrink-0">
                         <Check className="w-2.5 h-2.5 stroke-[3]" />
                       </div>
                     )}
@@ -154,7 +154,7 @@ export const StepTechnologies: React.FC<StepTechnologiesProps> = ({
             <Button
               type="button"
               onClick={onBack}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-[#111118]/12 bg-white text-[#111118]/70 font-medium hover:bg-[#F3EBDD]/60 transition-colors cursor-pointer text-sm"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-brand-ink/12 bg-white text-muted-foreground font-medium hover:bg-brand-sand/60 transition-colors cursor-pointer text-sm"
             >
               <ArrowLeft className="w-4 h-4" />
               <span>Retour</span>
@@ -163,7 +163,7 @@ export const StepTechnologies: React.FC<StepTechnologiesProps> = ({
             <Button
               type="submit"
               disabled={isLoading || selectedIds.length === 0}
-              className="inline-flex items-center gap-2 px-7 py-3 rounded-xl bg-[#D95C38] hover:bg-[#c14f2f] text-white font-medium transition-all duration-150 disabled:opacity-50 cursor-pointer text-sm"
+              className="inline-flex items-center gap-2 px-7 py-3 rounded-xl bg-brand-green hover:bg-brand-green-hover text-brand-ink font-medium transition-all duration-150 disabled:opacity-50 cursor-pointer text-sm"
             >
               {isLoading ? (
                 <>

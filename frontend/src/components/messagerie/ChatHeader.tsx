@@ -12,7 +12,7 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({ user, missionTitle }) => {
   const initials = `${user.first_name?.[0] ?? ''}${user.last_name?.[0] ?? ''}`.toUpperCase();
 
   return (
-    <div className="h-14 px-3 sm:px-4 gap-2 flex items-center justify-between border-b border-neutral-200/80 bg-[#1b4b6b] shrink-0">
+    <div className="h-14 px-3 sm:px-4 gap-2 flex items-center justify-between border-b border-border/80 bg-brand-violet shrink-0">
       {/* Left: User info */}
       <div className="flex items-center gap-3 min-w-0">
         <div className="w-9 h-9 rounded-full overflow-hidden shrink-0 ring-2 ring-white/20">
@@ -23,8 +23,8 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({ user, missionTitle }) => {
               className="w-full h-full object-cover"
             />
           ) : (
-            <div className="w-full h-full bg-gradient-to-br from-[#f2994a] to-[#e87b2d] flex items-center justify-center">
-              <span className="text-white text-xs font-semibold">{initials}</span>
+            <div className="w-full h-full bg-gradient-to-br from-brand-green to-brand-green flex items-center justify-center">
+              <span className="text-primary-foreground text-xs font-semibold">{initials}</span>
             </div>
           )}
         </div>
@@ -33,7 +33,7 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({ user, missionTitle }) => {
           <h3 className="text-[13px] font-semibold text-white truncate">
             {user.first_name} {user.last_name}
           </h3>
-          <p className="text-[10.5px] text-white/60 truncate">
+          <p className="text-[10.5px] text-white/75 truncate">
             {missionTitle}
           </p>
         </div>

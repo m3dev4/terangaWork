@@ -48,17 +48,17 @@ export const StepFinalisation: React.FC<StepFinalisationProps> = ({
   return (
     <div className="w-full max-w-xl mx-auto flex flex-col justify-center">
       <div className="mb-4">
-        <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider bg-orange-50 text-[#f2994a] border border-orange-100">
+        <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider bg-orange-50 text-brand-violet border border-orange-100">
           Étape {stepNumber} sur {totalSteps}
         </span>
       </div>
 
-      <h1 className="text-2xl sm:text-3xl font-bold text-neutral-900 tracking-tight mb-2">
+      <h1 className="text-2xl sm:text-3xl font-bold text-brand-ink tracking-tight mb-2">
         {role === 'annonceur'
           ? 'Dernière étape : logo ou photo'
           : 'Dernière étape : votre photo de profil'}
       </h1>
-      <p className="text-neutral-500 text-sm sm:text-base mb-8">
+      <p className="text-muted-foreground text-sm sm:text-base mb-8">
         {role === 'annonceur'
           ? 'Ajoutez le logo de votre entreprise ou votre photo de profil pour inspirer confiance aux freelances.'
           : 'Ajoutez une photo professionnelle pour humaniser vos échanges sur la plateforme.'}
@@ -66,12 +66,12 @@ export const StepFinalisation: React.FC<StepFinalisationProps> = ({
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Photo Upload Card */}
-        <div className="flex flex-col sm:flex-row items-center gap-6 p-6 rounded-2xl border border-neutral-200 bg-white">
-          <div className="relative w-24 h-24 rounded-full overflow-hidden bg-neutral-100 border-2 border-neutral-200 flex items-center justify-center shrink-0">
+        <div className="flex flex-col sm:flex-row items-center gap-6 p-6 rounded-2xl border border-border bg-white">
+          <div className="relative w-24 h-24 rounded-full overflow-hidden bg-neutral-100 border-2 border-border flex items-center justify-center shrink-0">
             {previewUrl ? (
               <img src={previewUrl} alt="Aperçu profil" className="w-full h-full object-cover" />
             ) : (
-              <UserIcon className="w-10 h-10 text-neutral-400" />
+              <UserIcon className="w-10 h-10 text-muted-foreground" />
             )}
           </div>
 
@@ -86,19 +86,19 @@ export const StepFinalisation: React.FC<StepFinalisationProps> = ({
             <button
               type="button"
               onClick={() => fileInputRef.current?.click()}
-              className="px-4 py-2 rounded-xl bg-neutral-100 hover:bg-neutral-200 text-neutral-800 text-xs font-semibold flex items-center gap-2 transition-colors cursor-pointer"
+              className="px-4 py-2 rounded-xl bg-neutral-100 hover:bg-neutral-200 text-brand-ink text-xs font-semibold flex items-center gap-2 transition-colors cursor-pointer"
             >
               <Upload className="w-3.5 h-3.5" />
               <span>{previewUrl ? 'Changer la photo' : 'Importer une photo'}</span>
             </button>
-            <p className="text-xs text-neutral-400">JPG, PNG ou WEBP. Max 5 Mo.</p>
+            <p className="text-xs text-muted-foreground">JPG, PNG ou WEBP. Max 5 Mo.</p>
           </div>
         </div>
 
         {/* GitHub link for Freelance */}
         {role === 'freelance' && (
           <div>
-            <label className="block text-sm font-semibold text-neutral-800 mb-2">
+            <label className="block text-sm font-semibold text-brand-ink mb-2">
               Lien GitHub / Portfolio (optionnel)
             </label>
             <input
@@ -106,7 +106,7 @@ export const StepFinalisation: React.FC<StepFinalisationProps> = ({
               value={githubUrl}
               onChange={(e) => setGithubUrl(e.target.value)}
               placeholder="https://github.com/mon-profil"
-              className="w-full px-4 py-3 rounded-xl border border-neutral-200 focus:outline-none focus:ring-2 focus:ring-[#1b4b6b]/20 focus:border-[#1b4b6b] transition-all placeholder:text-neutral-300 text-neutral-900 text-sm"
+              className="w-full px-4 py-3 rounded-xl border border-border focus:outline-none focus:ring-2 focus:ring-brand-violet/20 focus:border-brand-violet transition-all placeholder:text-neutral-300 text-brand-ink text-sm"
             />
           </div>
         )}
@@ -115,7 +115,7 @@ export const StepFinalisation: React.FC<StepFinalisationProps> = ({
           <button
             type="button"
             onClick={onBack}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-neutral-200 bg-white text-neutral-700 font-medium hover:bg-neutral-50 transition-colors cursor-pointer text-sm"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-border bg-white text-brand-ink font-medium hover:bg-brand-canvas transition-colors cursor-pointer text-sm"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>Retour</span>
@@ -124,7 +124,7 @@ export const StepFinalisation: React.FC<StepFinalisationProps> = ({
           <button
             type="submit"
             disabled={isLoading}
-            className="inline-flex items-center gap-2 px-7 py-3 rounded-xl bg-[#f2994a] hover:bg-[#e0893a] text-white font-medium shadow-sm transition-all duration-150 disabled:opacity-50 cursor-pointer text-sm"
+            className="inline-flex items-center gap-2 px-7 py-3 rounded-xl bg-brand-green hover:bg-brand-green-hover text-brand-ink font-medium shadow-sm transition-all duration-150 disabled:opacity-50 cursor-pointer text-sm"
           >
             {isLoading ? (
               <>

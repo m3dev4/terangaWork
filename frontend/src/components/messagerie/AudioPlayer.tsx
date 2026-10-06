@@ -70,7 +70,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioUrl, isMine }) => {
   const progressPercent = duration > 0 ? (currentTime / duration) * 100 : 0;
 
   return (
-    <div className={`flex items-center gap-2 py-1 min-w-0 w-[min(200px,100%)] sm:w-[260px] max-w-full ${isMine ? 'text-white' : 'text-neutral-800'}`}>
+    <div className={`flex items-center gap-2 py-1 min-w-0 w-[min(200px,100%)] sm:w-[260px] max-w-full ${isMine ? 'text-white' : 'text-brand-ink dark:text-foreground'}`}>
       <audio ref={audioRef} src={audioUrl} preload="metadata" />
 
       {/* Play/Pause Button */}
@@ -81,7 +81,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioUrl, isMine }) => {
           w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-transform active:scale-95 cursor-pointer
           ${isMine
             ? 'bg-white/20 hover:bg-white/30 text-white'
-            : 'bg-[#1b4b6b] hover:bg-[#143952] text-white'
+            : 'bg-brand-violet hover:bg-brand-violet text-white'
           }
         `}
       >
@@ -106,7 +106,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioUrl, isMine }) => {
                   className={`flex-1 rounded-full transition-colors ${
                     isMine
                       ? isPassed ? 'bg-white' : 'bg-white/40'
-                      : isPassed ? 'bg-[#1b4b6b]' : 'bg-neutral-300'
+                      : isPassed ? 'bg-brand-violet' : 'bg-neutral-300 dark:bg-muted'
                   }`}
                   style={{ height: `${h}%` }}
                 />
@@ -127,7 +127,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioUrl, isMine }) => {
         </div>
 
         {/* Timer */}
-        <div className={`flex justify-between text-[9.5px] font-mono ${isMine ? 'text-white/70' : 'text-neutral-400'}`}>
+        <div className={`flex justify-between text-[9.5px] font-mono ${isMine ? 'text-white/70' : 'text-muted-foreground'}`}>
           <span>{formatTime(currentTime)}</span>
           <span>{formatTime(duration)}</span>
         </div>

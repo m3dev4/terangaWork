@@ -76,7 +76,8 @@ class FreelancePropositionsDataView(APIView):
 
         qs = (
             Proposition.objects.filter(freelance=freelance)
-            .select_related("mission", "mission__service")
+            .select_related("mission")
+            .prefetch_related("mission__service")
             .order_by("-created_at")
         )
         data = PropositionFreelanceSerializer(qs, many=True).data
@@ -110,7 +111,7 @@ class FreelanceMissionsAccepteesDataView(APIView):
                 propositions__freelance=freelance,
                 propositions__proposition_status=PropositionStatus.ACCEPTED,
             )
-            .select_related("service")
+            .prefetch_related("technologies")
             .annotate(count_candidatures=Count("propositions"))
             .order_by("-created_at")
             .distinct()
@@ -139,7 +140,7 @@ class FreelanceProfilDataView(APIView):
             )
         freelance = (
             Freelancee.objects.filter(user=user)
-            .prefetch_related("technologies", "experiences", "service")
+            .prefetch_related("technologies", "experiences", "services")
             .first()
         )
         if not freelance:
@@ -171,7 +172,7 @@ class AnnonceurMissionsDataView(APIView):
 
         qs = (
             Mission.objects.filter(annonceur=announcer)
-            .select_related("service")
+            .prefetch_related("technologies")
             .annotate(count_candidatures=Count("propositions"))
             .order_by("-created_at")
         )
@@ -207,8 +208,8 @@ class AnnonceurMissionCandidaturesDataView(APIView):
 
         qs = (
             Proposition.objects.filter(mission=mission)
-            .select_related("freelance", "freelance__user", "freelance__service")
-            .prefetch_related("freelance__technologies", "freelance__experiences")
+            .select_related("freelance", "freelance__user")
+            .prefetch_related("freelance__technologies", "freelance__experiences", "freelance__services")
             .order_by("-created_at")
         )
         data = PropositionCandidatSerializer(qs, many=True).data
@@ -235,8 +236,8 @@ class AnnonceurMissionRecommandationsDataView(APIView):
         announcer = Announcer.objects.filter(user=user).first()
         mission = (
             Mission.objects.filter(pk=mission_id)
-            .select_related("annonceur", "annonceur__user", "service")
-            .prefetch_related("technologies")
+            .select_related("annonceur", "annonceur__user")
+            .prefetch_related("technologies", "service")
             .first()
         )
         if not mission:

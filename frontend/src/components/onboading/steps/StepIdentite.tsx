@@ -58,21 +58,21 @@ export const StepIdentite: React.FC<StepIdentiteProps> = ({
     <div className="w-full max-w-xl mx-auto flex flex-col justify-center">
       {/* Badge d'étape */}
       <div className="mb-4">
-        <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-[#F3EBDD] text-[#111118]/70">
+        <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-brand-sand text-muted-foreground">
           Étape {stepNumber} sur {totalSteps}
         </span>
       </div>
 
       {/* En-tête */}
-      <h1 className="text-2xl sm:text-3xl font-bold text-[#111118] tracking-tight mb-2">
+      <h1 className="text-2xl sm:text-3xl font-bold text-brand-ink tracking-tight mb-2">
         Commençons par faire connaissance
       </h1>
-      <p className="text-[#111118]/50 text-sm sm:text-base mb-8">
+      <p className="text-muted-foreground text-sm sm:text-base mb-8">
         Entrez vos informations personnelles pour créer votre compte.
       </p>
 
       {error && (
-        <div className="mb-6 p-3.5 rounded-xl bg-[#D95C38]/10 border border-[#D95C38]/25 text-[#c14f2f] text-sm">
+        <div className="mb-6 p-3.5 rounded-xl bg-brand-green/10 border border-brand-green/25 text-brand-violet text-sm">
           {error}
         </div>
       )}
@@ -81,7 +81,7 @@ export const StepIdentite: React.FC<StepIdentiteProps> = ({
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-semibold text-[#111118]/80 mb-2">
+            <label className="block text-sm font-semibold text-brand-ink/80 mb-2">
               Prénom
             </label>
             <input
@@ -89,12 +89,12 @@ export const StepIdentite: React.FC<StepIdentiteProps> = ({
               value={firstName}
               onChange={(e) => setFirstName(e.target.value)}
               placeholder="ex : Jean"
-              className="w-full px-4 py-3 rounded-xl border border-[#111118]/12 focus:outline-none focus:ring-2 focus:ring-[#D95C38]/15 focus:border-[#D95C38] transition-all placeholder:text-[#111118]/25 text-[#111118]"
+              className="w-full px-4 py-3 rounded-xl border border-brand-ink/12 focus:outline-none focus:ring-2 focus:ring-brand-green/15 focus:border-brand-green transition-all placeholder:text-muted-foreground text-brand-ink"
               required
             />
           </div>
           <div>
-            <label className="block text-sm font-semibold text-[#111118]/80 mb-2">
+            <label className="block text-sm font-semibold text-brand-ink/80 mb-2">
               Nom
             </label>
             <input
@@ -102,14 +102,14 @@ export const StepIdentite: React.FC<StepIdentiteProps> = ({
               value={lastName}
               onChange={(e) => setLastName(e.target.value)}
               placeholder="ex : Dupont"
-              className="w-full px-4 py-3 rounded-xl border border-[#111118]/12 focus:outline-none focus:ring-2 focus:ring-[#D95C38]/15 focus:border-[#D95C38] transition-all placeholder:text-[#111118]/25 text-[#111118]"
+              className="w-full px-4 py-3 rounded-xl border border-brand-ink/12 focus:outline-none focus:ring-2 focus:ring-brand-green/15 focus:border-brand-green transition-all placeholder:text-muted-foreground text-brand-ink"
               required
             />
           </div>
         </div>
 
         <div>
-          <label className="block text-sm font-semibold text-[#111118]/80 mb-2">
+          <label className="block text-sm font-semibold text-brand-ink/80 mb-2">
             Numéro de téléphone
           </label>
           <input
@@ -117,7 +117,7 @@ export const StepIdentite: React.FC<StepIdentiteProps> = ({
             value={phoneNumber}
             onChange={(e) => setPhoneNumber(e.target.value)}
             placeholder="ex : 07 12 34 56 78"
-            className="w-full px-4 py-3 rounded-xl border border-[#111118]/12 focus:outline-none focus:ring-2 focus:ring-[#D95C38]/15 focus:border-[#D95C38] transition-all placeholder:text-[#111118]/25 text-[#111118]"
+            className="w-full px-4 py-3 rounded-xl border border-brand-ink/12 focus:outline-none focus:ring-2 focus:ring-brand-green/15 focus:border-brand-green transition-all placeholder:text-muted-foreground text-brand-ink"
             required
           />
         </div>
@@ -126,7 +126,7 @@ export const StepIdentite: React.FC<StepIdentiteProps> = ({
           <Button
             type="submit"
             disabled={isLoading}
-            className="inline-flex items-center gap-2 px-7 py-3 rounded-xl bg-[#D95C38] hover:bg-[#c14f2f] text-white font-medium transition-all duration-150 disabled:opacity-50 cursor-pointer"
+            className="inline-flex items-center gap-2 px-7 py-3 rounded-xl bg-brand-green hover:bg-brand-green-hover text-brand-ink font-medium transition-all duration-150 disabled:opacity-50 cursor-pointer"
           >
             {isLoading ? (
               <>

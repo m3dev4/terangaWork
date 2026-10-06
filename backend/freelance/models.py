@@ -20,9 +20,11 @@ class Freelancee(models.Model):
         blank=True,
         related_name="freelance_profiles",
     )
-    service = models.ForeignKey(
-            "Service.Service", related_name="users", on_delete=models.PROTECT, null=True
-        )
+    services = models.ManyToManyField(
+        "Service.Service",
+        blank=True,
+        related_name="freelances",
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

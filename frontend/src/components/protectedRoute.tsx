@@ -30,8 +30,8 @@ export default function ProtectedRoute({
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#FAF9F6]">
-        <Loader2 className="animate-spin h-8 w-8 text-[#1b4b6b]" />
+      <div className="min-h-screen flex items-center justify-center bg-brand-canvas">
+        <Loader2 className="animate-spin h-8 w-8 text-brand-ink" />
       </div>
     );
   }

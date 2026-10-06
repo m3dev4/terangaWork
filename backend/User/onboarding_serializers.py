@@ -132,15 +132,29 @@ class FreelancePresentationSerializer(serializers.ModelSerializer):
 
 
 class FreelanceServiceSerializer(serializers.Serializer):
-    """Étape 4 Freelance : Service - Un seul service choisi (obligatoire)."""
+    """Étape 4 Freelance : Services - Entre 1 et 3 services choisis (obligatoire)."""
 
-    service_id = serializers.IntegerField(required=True)
+    service_ids = serializers.ListField(
+        child=serializers.IntegerField(),
+        required=True,
+        min_length=1,
+        max_length=3,
+        error_messages={
+            "required": "Au moins un service est obligatoire.",
+            "min_length": "Au moins un service doit être sélectionné.",
+            "max_length": "Vous ne pouvez pas sélectionner plus de 3 services.",
+        },
+    )
 
-    def validate_service_id(self, value: int) -> int:
-        try:
-            Service.objects.get(pk=value)
-        except Service.DoesNotExist:
-            raise serializers.ValidationError("Le service sélectionné n'existe pas.")
+    def validate_service_ids(self, value: List[int]) -> List[int]:
+        existing_ids = set(
+            Service.objects.filter(pk__in=value).values_list("pk", flat=True)
+        )
+        invalid_ids = set(value) - existing_ids
+        if invalid_ids:
+            raise serializers.ValidationError(
+                f"Services inexistants : {sorted(invalid_ids)}"
+            )
         return value
 
 

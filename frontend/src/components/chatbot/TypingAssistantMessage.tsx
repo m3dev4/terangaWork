@@ -34,7 +34,7 @@ const TypingAssistantMessage: React.FC<TypingAssistantMessageProps> = ({
     <div className="whitespace-pre-wrap break-words">
       {displayed}
       {displayed.length < fullText.length && (
-        <span className="ml-1 inline-block h-4 w-1 animate-pulse bg-[#D95C38]" />
+        <span className="ml-1 inline-block h-4 w-1 animate-pulse bg-brand-green" />
       )}
     </div>
   );

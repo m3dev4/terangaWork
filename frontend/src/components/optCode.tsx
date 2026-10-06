@@ -15,12 +15,14 @@ const OptCode = ({ index, inputRefs, onChange, onKeyDown }: OtpCodeProps) => {
         inputRefs.current[index] = el;
       }}
       id={`otp-${index}`}
+      aria-label={`Chiffre ${index + 1} du code de vérification`}
+      autoComplete={index === 0 ? 'one-time-code' : 'off'}
       type="text"
       inputMode="numeric"
       maxLength={1}
       onChange={(e) => onChange?.(e, index)}
       onKeyDown={(e) => onKeyDown(e, index)}
-      className="w-14 h-14 text-center font-bold text-text-terangawork border border-black/10 rounded-lg outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition caret-blue-500"
+      className="w-14 h-14 text-center font-bold text-brand-ink border border-border rounded-xl outline-none focus:border-brand-violet focus:ring-2 focus:ring-brand-violet/15 transition caret-brand-violet"
     />
   );
 };

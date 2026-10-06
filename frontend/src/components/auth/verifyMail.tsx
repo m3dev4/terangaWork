@@ -53,15 +53,17 @@ const VerifyMailComponent = () => {
       onSubmit={handleSubmit((data) => verifyMutation.mutate(data))}
     >
       <div className="w-full">
+        <label htmlFor="verification-email" className="sr-only">Adresse email à vérifier</label>
         <input
+          id="verification-email"
           type="email"
           placeholder="exemple@test.com"
-          className="w-full bg-neutral-50 border border-neutral-200 focus:border-[#1b4b6b] focus:bg-white text-xs sm:text-sm px-3.5 py-2.5 rounded-lg transition-colors placeholder:text-neutral-400"
+          className="auth-input"
           {...register("email", { required: "L'email est obligatoire." })}
         />
       </div>
       <input type="hidden" {...register("code")} />
-      <div className="flex justify-between gap-2 sm:gap-3 w-full max-w-sm">
+      <div className="otp-fields">
         {Array.from({ length: 6 }, (_, i) => i).map((i) => (
           <OptCode
             key={i}
@@ -73,23 +75,23 @@ const VerifyMailComponent = () => {
         ))}
       </div>
       <div className="flex flex-col items-center justify-center gap-2 text-xs">
-        <p className="text-neutral-400">Vous n'avez pas reçu de code ?</p>
+        <p className="text-muted-foreground">Vous n'avez pas reçu de code ?</p>
         <button
           type="button"
-          className="text-[#1b4b6b] font-semibold hover:underline cursor-pointer"
+          className="text-brand-ink font-semibold hover:underline cursor-pointer"
         >
           Renvoyer le code
         </button>
       </div>
       <Button
         type="submit"
-        className="w-full h-11 bg-secondary-terangawork hover:bg-[#e0893a] text-white font-semibold rounded-lg shadow-xs transition-colors cursor-pointer text-xs sm:text-sm"
+        className="auth-submit"
         disabled={
           verifyMutation.isPending || !email || otp.join("").length !== 6
         }
       >
         {verifyMutation.isPending ? (
-          <Loader2 className="w-4 h-4 animate-spin text-white" />
+          <Loader2 className="w-4 h-4 animate-spin" />
         ) : (
           "Vérifier"
         )}
@@ -97,7 +99,7 @@ const VerifyMailComponent = () => {
       <div className="flex items-center justify-center mt-4">
         <button
           type="button"
-          className="flex items-center gap-2 text-xs text-neutral-500 hover:text-neutral-800 transition-colors cursor-pointer p-2 rounded-lg hover:bg-neutral-100"
+          className="flex items-center gap-2 text-xs text-muted-foreground hover:text-brand-ink transition-colors cursor-pointer p-2 rounded-lg hover:bg-neutral-100"
           onClick={() => navigate("/login")}
         >
           <ArrowLeftIcon className="w-3.5 h-3.5" />

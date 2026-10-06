@@ -91,12 +91,12 @@ from Technologie.serializers import TechnologieSerializer
 class FreelanceeSerializer(serializers.ModelSerializer):
     """Crée ou met à jour l'unique profil freelance de l'utilisateur."""
 
-    service = serializers.PrimaryKeyRelatedField(
+    services = serializers.PrimaryKeyRelatedField(
         queryset=Service.objects.all(),
-        required=False,
-        allow_null=True,
+        many=True,
+        required=True,
     )
-    service_detail = ServiceSerialiser(source="service", read_only=True)
+    services_detail = ServiceSerialiser(source="services", many=True, read_only=True)
     technologies = serializers.PrimaryKeyRelatedField(
         many=True,
         required=False,
@@ -115,8 +115,8 @@ class FreelanceeSerializer(serializers.ModelSerializer):
             "description",
             "githubUrl",
             "linkedinUrl",
-            "service",
-            "service_detail",
+            "services",
+            "services_detail",
             "technologies",
             "technologies_detail",
             "experiences",
@@ -127,7 +127,7 @@ class FreelanceeSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = [
             "id",
-            "service_detail",
+            "services_detail",
             "technologies_detail",
             "experiences",
             "educations",
@@ -135,6 +135,12 @@ class FreelanceeSerializer(serializers.ModelSerializer):
             "created_at",
             "updated_at",
         ]
+
+    def validate_services(self, value):
+        """Valide que le freelance a entre 1 et 3 services."""
+        if value is not None and (len(value) < 1 or len(value) > 3):
+            raise serializers.ValidationError("Vous devez choisir entre 1 et 3 services.")
+        return value
 
     def validate_title(self, value: str) -> str:
         value = value.strip()
@@ -169,10 +175,21 @@ class FreelanceeSerializer(serializers.ModelSerializer):
                 "Seul un utilisateur ayant le rôle freelance peut modifier ce profil."
             )
         technologies = validated_data.pop("technologies", None)
+        services = validated_data.pop("services", None)
+
+        # Mettre à jour les champs simples
         for attribute, value in validated_data.items():
             setattr(instance, attribute, value)
+
         if validated_data:
             instance.save(update_fields=list(validated_data.keys()))
+
+        # Mettre à jour les technologies (ManyToManyField)
         if technologies is not None:
             instance.technologies.set(technologies)
+
+        # Mettre à jour les services (ManyToManyField)
+        if services is not None:
+            instance.services.set(services)
+
         return instance
