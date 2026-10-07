@@ -13,15 +13,18 @@ export const formatRelativeTime = (dateString: string): string => {
   const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
 
   if (diffDays === 0) {
-    return date.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+    return date.toLocaleTimeString("fr-FR", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
   }
   if (diffDays === 1) {
-    return 'Hier';
+    return "Hier";
   }
   if (diffDays < 7) {
-    return date.toLocaleDateString('fr-FR', { weekday: 'short' });
+    return date.toLocaleDateString("fr-FR", { weekday: "short" });
   }
-  return date.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' });
+  return date.toLocaleDateString("fr-FR", { day: "2-digit", month: "2-digit" });
 };
 
 /**
@@ -29,7 +32,10 @@ export const formatRelativeTime = (dateString: string): string => {
  */
 export const formatMessageTime = (dateString: string): string => {
   const date = new Date(dateString);
-  return date.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+  return date.toLocaleTimeString("fr-FR", {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
 };
 
 /**
@@ -42,12 +48,12 @@ export const formatDateSeparator = (dateString: string): string => {
   const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
 
   if (diffDays === 0) return "Aujourd'hui";
-  if (diffDays === 1) return 'Hier';
+  if (diffDays === 1) return "Hier";
 
-  return date.toLocaleDateString('fr-FR', {
-    weekday: 'long',
-    day: 'numeric',
-    month: 'long',
+  return date.toLocaleDateString("fr-FR", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
   });
 };
 
@@ -56,5 +62,5 @@ export const formatDateSeparator = (dateString: string): string => {
  */
 export const getDateKey = (dateString: string): string => {
   const date = new Date(dateString);
-  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
 };

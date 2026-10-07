@@ -11,5 +11,31 @@ import moonIcon from "./moon.png";
 import sunIcon from "./sun.png";
 import waveIcon from "./wave.png";
 import omIcon from "./om.png";
+import freelnaceIllust from "./freelanceIllust.jpg";
+import terangaWorkCon from "./terangaWorkCon.jpg";
+import collab from "./collab.jpg";
+import con from "./con.jpg";
+import free from "./free.jpg";
+import relation from "./relation.jpg";
 
-export { TWLogo, HeroTerangaWork, terangaWorkIllust, workIcon, cashIcon, notifIcon, userIcon, chatIcon, awardIcon, moonIcon, sunIcon, waveIcon, omIcon };
+export {
+  TWLogo,
+  HeroTerangaWork,
+  terangaWorkIllust,
+  workIcon,
+  cashIcon,
+  notifIcon,
+  userIcon,
+  chatIcon,
+  awardIcon,
+  moonIcon,
+  sunIcon,
+  waveIcon,
+  omIcon,
+  freelnaceIllust,
+  terangaWorkCon,
+  collab,
+  con,
+  free,
+  relation,
+};

@@ -1,51 +1,60 @@
-import React, { useState } from 'react';
-import { GraduationCap, Plus, Trash2, Loader2, CheckCircle, Calendar } from 'lucide-react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import React, { useState } from "react";
+import {
+  GraduationCap,
+  Plus,
+  Trash2,
+  Loader2,
+  CheckCircle,
+  Calendar,
+} from "lucide-react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   fetchEducations,
   createEducation,
   deleteEducation,
   type EducationData,
-} from '../../api/freelanceApi';
+} from "../../api/freelanceApi";
 
 export const FormationTab: React.FC = () => {
   const queryClient = useQueryClient();
 
   const { data: educations = [], isLoading } = useQuery<EducationData[]>({
-    queryKey: ['educations'],
+    queryKey: ["educations"],
     queryFn: fetchEducations,
   });
 
   const [isAdding, setIsAdding] = useState(false);
-  const [role, setRole] = useState<'UNIVERSITAIRE' | 'FORMATION_PROFESSIONNELLE' | 'EN_LIGNE'>('UNIVERSITAIRE');
-  const [nom, setNom] = useState('');
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
+  const [role, setRole] = useState<
+    "UNIVERSITAIRE" | "FORMATION_PROFESSIONNELLE" | "EN_LIGNE"
+  >("UNIVERSITAIRE");
+  const [nom, setNom] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
   const [current, setCurrent] = useState(false);
-  const [description, setDescription] = useState('');
-  const [successMsg, setSuccessMsg] = useState('');
+  const [description, setDescription] = useState("");
+  const [successMsg, setSuccessMsg] = useState("");
 
   const createMutation = useMutation({
-    mutationFn: (data: Omit<EducationData, 'id'>) => createEducation(data),
+    mutationFn: (data: Omit<EducationData, "id">) => createEducation(data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['educations'] });
-      queryClient.invalidateQueries({ queryKey: ['freelanceProfile'] });
-      setNom('');
-      setStartDate('');
-      setEndDate('');
+      queryClient.invalidateQueries({ queryKey: ["educations"] });
+      queryClient.invalidateQueries({ queryKey: ["freelanceProfile"] });
+      setNom("");
+      setStartDate("");
+      setEndDate("");
       setCurrent(false);
-      setDescription('');
+      setDescription("");
       setIsAdding(false);
-      setSuccessMsg('Formation ajoutée avec succès !');
-      setTimeout(() => setSuccessMsg(''), 3000);
+      setSuccessMsg("Formation ajoutée avec succès !");
+      setTimeout(() => setSuccessMsg(""), 3000);
     },
   });
 
   const deleteMutation = useMutation({
     mutationFn: (id: number) => deleteEducation(id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['educations'] });
-      queryClient.invalidateQueries({ queryKey: ['freelanceProfile'] });
+      queryClient.invalidateQueries({ queryKey: ["educations"] });
+      queryClient.invalidateQueries({ queryKey: ["freelanceProfile"] });
     },
   });
 
@@ -65,12 +74,12 @@ export const FormationTab: React.FC = () => {
 
   const getRoleLabel = (r: string) => {
     switch (r) {
-      case 'UNIVERSITAIRE':
-        return 'Cursus Universitaire';
-      case 'FORMATION_PROFESSIONNELLE':
-        return 'Formation Professionnelle';
-      case 'EN_LIGNE':
-        return 'Certification En Ligne';
+      case "UNIVERSITAIRE":
+        return "Cursus Universitaire";
+      case "FORMATION_PROFESSIONNELLE":
+        return "Formation Professionnelle";
+      case "EN_LIGNE":
+        return "Certification En Ligne";
       default:
         return r;
     }
@@ -89,7 +98,8 @@ export const FormationTab: React.FC = () => {
       <div className="flex items-center justify-between border-b border-brand-sand dark:border-border pb-4">
         <div>
           <h3 className="font-heading text-xs font-bold text-brand-ink dark:text-foreground flex items-center gap-1.5">
-            <GraduationCap className="h-4 w-4 text-brand-ink dark:text-foreground" /> Formations & Diplômes
+            <GraduationCap className="h-4 w-4 text-brand-ink dark:text-foreground" />{" "}
+            Formations & Diplômes
           </h3>
           <p className="text-muted-foreground mt-0.5">
             Vos formations enregistrées en base de données backend.
@@ -113,22 +123,31 @@ export const FormationTab: React.FC = () => {
       )}
 
       {isAdding && (
-        <form onSubmit={handleAdd} className="rounded-xl bg-brand-canvas dark:bg-background border border-border p-4 space-y-3">
+        <form
+          onSubmit={handleAdd}
+          className="rounded-xl bg-brand-canvas dark:bg-background border border-border p-4 space-y-3"
+        >
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label className="block font-semibold text-neutral-600 dark:text-muted-foreground mb-1">Type de formation *</label>
+              <label className="block font-semibold text-neutral-600 dark:text-muted-foreground mb-1">
+                Type de formation *
+              </label>
               <select
                 value={role}
                 onChange={(e: any) => setRole(e.target.value)}
                 className="w-full rounded-md border border-border bg-white dark:bg-card p-2 outline-none focus:border-brand-violet dark:focus:border-violet-300"
               >
                 <option value="UNIVERSITAIRE">Universitaire</option>
-                <option value="FORMATION_PROFESSIONNELLE">Formation professionnelle</option>
+                <option value="FORMATION_PROFESSIONNELLE">
+                  Formation professionnelle
+                </option>
                 <option value="EN_LIGNE">En ligne / Certification</option>
               </select>
             </div>
             <div>
-              <label className="block font-semibold text-neutral-600 dark:text-muted-foreground mb-1">Intitulé / Diplôme *</label>
+              <label className="block font-semibold text-neutral-600 dark:text-muted-foreground mb-1">
+                Intitulé / Diplôme *
+              </label>
               <input
                 type="text"
                 required
@@ -142,7 +161,9 @@ export const FormationTab: React.FC = () => {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label className="block font-semibold text-neutral-600 dark:text-muted-foreground mb-1">Date de début *</label>
+              <label className="block font-semibold text-neutral-600 dark:text-muted-foreground mb-1">
+                Date de début *
+              </label>
               <input
                 type="date"
                 required
@@ -152,7 +173,9 @@ export const FormationTab: React.FC = () => {
               />
             </div>
             <div>
-              <label className="block font-semibold text-neutral-600 dark:text-muted-foreground mb-1">Date de fin</label>
+              <label className="block font-semibold text-neutral-600 dark:text-muted-foreground mb-1">
+                Date de fin
+              </label>
               <input
                 type="date"
                 disabled={current}
@@ -171,13 +194,18 @@ export const FormationTab: React.FC = () => {
               onChange={(e) => setCurrent(e.target.checked)}
               className="rounded border-border"
             />
-            <label htmlFor="currentEdu" className="text-[11px] font-medium text-brand-ink dark:text-foreground cursor-pointer">
+            <label
+              htmlFor="currentEdu"
+              className="text-[11px] font-medium text-brand-ink dark:text-foreground cursor-pointer"
+            >
               Formation en cours
             </label>
           </div>
 
           <div>
-            <label className="block font-semibold text-neutral-600 dark:text-muted-foreground mb-1">Description (optionnelle)</label>
+            <label className="block font-semibold text-neutral-600 dark:text-muted-foreground mb-1">
+              Description (optionnelle)
+            </label>
             <textarea
               rows={2}
               value={description}
@@ -200,7 +228,9 @@ export const FormationTab: React.FC = () => {
               disabled={createMutation.isPending}
               className="inline-flex items-center gap-1.5 rounded-md bg-brand-violet px-4 py-1.5 font-semibold text-white hover:bg-brand-violet cursor-pointer disabled:opacity-50"
             >
-              {createMutation.isPending && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
+              {createMutation.isPending && (
+                <Loader2 className="h-3.5 w-3.5 animate-spin" />
+              )}
               Enregistrer
             </button>
           </div>
@@ -210,7 +240,8 @@ export const FormationTab: React.FC = () => {
       {/* List from DB */}
       {educations.length === 0 ? (
         <div className="py-8 text-center text-muted-foreground">
-          Aucune formation enregistrée. Cliquez sur "Ajouter une formation" pour commencer.
+          Aucune formation enregistrée. Cliquez sur "Ajouter une formation" pour
+          commencer.
         </div>
       ) : (
         <div className="space-y-3">
@@ -224,16 +255,28 @@ export const FormationTab: React.FC = () => {
                   <GraduationCap className="h-5 w-5" />
                 </div>
                 <div>
-                  <h4 className="font-heading text-xs font-bold text-brand-ink dark:text-foreground">{item.nom}</h4>
+                  <h4 className="font-heading text-xs font-bold text-brand-ink dark:text-foreground">
+                    {item.nom}
+                  </h4>
                   <p className="text-muted-foreground">
-                    <span className="font-semibold text-brand-ink dark:text-foreground">{getRoleLabel(item.role)}</span> •{' '}
+                    <span className="font-semibold text-brand-ink dark:text-foreground">
+                      {getRoleLabel(item.role)}
+                    </span>{" "}
+                    •{" "}
                     <span className="inline-flex items-center gap-1 text-[10px]">
                       <Calendar className="h-3 w-3 text-muted-foreground" />
-                      {item.startDate} {item.current ? ' - En cours' : item.endDate ? ` à ${item.endDate}` : ''}
+                      {item.startDate}{" "}
+                      {item.current
+                        ? " - En cours"
+                        : item.endDate
+                          ? ` à ${item.endDate}`
+                          : ""}
                     </span>
                   </p>
                   {item.description && (
-                    <p className="mt-1 text-neutral-600 dark:text-muted-foreground text-[10.5px] leading-relaxed">{item.description}</p>
+                    <p className="mt-1 text-neutral-600 dark:text-muted-foreground text-[10.5px] leading-relaxed">
+                      {item.description}
+                    </p>
                   )}
                 </div>
               </div>

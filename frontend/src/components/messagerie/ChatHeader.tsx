@@ -1,7 +1,7 @@
-import React from 'react';
-import { Phone, Video, MoreVertical } from 'lucide-react';
+import React from "react";
+import { Phone, Video, MoreVertical } from "lucide-react";
 import { getMediaUrl } from "../../utils/getMediaUrl";
-import type { UserMinimal } from '../../api/message';
+import type { UserMinimal } from "../../api/message";
 
 interface ChatHeaderProps {
   user: UserMinimal;
@@ -9,7 +9,8 @@ interface ChatHeaderProps {
 }
 
 const ChatHeader: React.FC<ChatHeaderProps> = ({ user, missionTitle }) => {
-  const initials = `${user.first_name?.[0] ?? ''}${user.last_name?.[0] ?? ''}`.toUpperCase();
+  const initials =
+    `${user.first_name?.[0] ?? ""}${user.last_name?.[0] ?? ""}`.toUpperCase();
 
   return (
     <div className="h-14 px-3 sm:px-4 gap-2 flex items-center justify-between border-b border-border/80 bg-brand-violet shrink-0">
@@ -24,7 +25,9 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({ user, missionTitle }) => {
             />
           ) : (
             <div className="w-full h-full bg-gradient-to-br from-brand-green to-brand-green flex items-center justify-center">
-              <span className="text-primary-foreground text-xs font-semibold">{initials}</span>
+              <span className="text-primary-foreground text-xs font-semibold">
+                {initials}
+              </span>
             </div>
           )}
         </div>
@@ -33,9 +36,7 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({ user, missionTitle }) => {
           <h3 className="text-[13px] font-semibold text-white truncate">
             {user.first_name} {user.last_name}
           </h3>
-          <p className="text-[10.5px] text-white/75 truncate">
-            {missionTitle}
-          </p>
+          <p className="text-[10.5px] text-white/75 truncate">{missionTitle}</p>
         </div>
       </div>
 

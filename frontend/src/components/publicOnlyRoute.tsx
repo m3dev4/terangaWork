@@ -29,7 +29,10 @@ export default function PublicOnlyRoute({ children }: PublicOnlyRouteProps) {
 
   // If user is authenticated
   if (user) {
-    const isAdmin = user.role === 'admin' || (user as any).is_staff || (user as any).is_superuser;
+    const isAdmin =
+      user.role === "admin" ||
+      (user as any).is_staff ||
+      (user as any).is_superuser;
     if (isAdmin) {
       return <Navigate to="/espace/admin" replace />;
     }

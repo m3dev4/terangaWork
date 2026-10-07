@@ -204,7 +204,9 @@ function CandidateModal({
                   </p>
                 </div>
                 <div className="rounded-xl bg-white dark:bg-card p-2 border border-brand-ink/6 dark:border-border">
-                  <p className="text-[9px] text-muted-foreground">Service (45%)</p>
+                  <p className="text-[9px] text-muted-foreground">
+                    Service (45%)
+                  </p>
                   <p className="text-[11px] font-bold text-brand-ink dark:text-foreground">
                     {Math.round(matchingResult.score_service * 100)}%
                   </p>
@@ -247,7 +249,9 @@ function CandidateModal({
           <div className="flex items-center gap-2">
             <CalendarDays className="h-3.5 w-3.5 text-brand-violet dark:text-violet-300" />
             <div>
-              <p className="text-[9px] text-muted-foreground">Livraison proposée</p>
+              <p className="text-[9px] text-muted-foreground">
+                Livraison proposée
+              </p>
               <p className="text-[11px] font-semibold text-brand-ink dark:text-foreground">
                 {formatDate(proposition.date_livraison)}
               </p>
@@ -645,8 +649,8 @@ const CandidaturesRecuesPage: React.FC = () => {
       {/* loading */}
       {isLoading && (
         <div className="flex items-center justify-center gap-2 py-16 text-[11px] text-muted-foreground">
-          <Loader2 className="h-4 w-4 animate-spin text-brand-violet dark:text-violet-300" /> Chargement
-          des candidatures…
+          <Loader2 className="h-4 w-4 animate-spin text-brand-violet dark:text-violet-300" />{" "}
+          Chargement des candidatures…
         </div>
       )}
 

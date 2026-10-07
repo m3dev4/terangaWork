@@ -21,9 +21,12 @@ function formatRelativeTime(dateString: string) {
   const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
 
   if (diffInSeconds < 60) return "À l'instant";
-  if (diffInSeconds < 3600) return `Il y a ${Math.floor(diffInSeconds / 60)} min`;
-  if (diffInSeconds < 86400) return `Il y a ${Math.floor(diffInSeconds / 3600)} h`;
-  if (diffInSeconds < 604800) return `Il y a ${Math.floor(diffInSeconds / 86400)} j`;
+  if (diffInSeconds < 3600)
+    return `Il y a ${Math.floor(diffInSeconds / 60)} min`;
+  if (diffInSeconds < 86400)
+    return `Il y a ${Math.floor(diffInSeconds / 3600)} h`;
+  if (diffInSeconds < 604800)
+    return `Il y a ${Math.floor(diffInSeconds / 86400)} j`;
   return date.toLocaleDateString("fr-FR", { day: "numeric", month: "short" });
 }
 
@@ -154,7 +157,9 @@ export const NotificationDropdown: React.FC = () => {
                   key={notif.id}
                   onClick={() => handleNotificationClick(notif)}
                   className={`p-3.5 flex items-start gap-3 cursor-pointer transition-colors group relative ${
-                    !notif.lue ? "bg-primary/5 hover:bg-primary/10" : "hover:bg-muted/50"
+                    !notif.lue
+                      ? "bg-primary/5 hover:bg-primary/10"
+                      : "hover:bg-muted/50"
                   }`}
                 >
                   {/* Type Icon */}

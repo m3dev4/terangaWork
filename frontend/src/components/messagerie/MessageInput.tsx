@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Send, Smile, Mic, Trash2, Square } from 'lucide-react';
+import React, { useState, useRef, useEffect } from "react";
+import { Send, Smile, Mic, Trash2, Square } from "lucide-react";
 
 interface MessageInputProps {
   onSendMessage: (content: string) => void;
@@ -14,7 +14,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
   isSending,
   disabled = false,
 }) => {
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState("");
   const [isRecording, setIsRecording] = useState(false);
   const [recordingSeconds, setRecordingSeconds] = useState(0);
 
@@ -27,7 +27,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
   useEffect(() => {
     const textarea = textareaRef.current;
     if (textarea) {
-      textarea.style.height = 'auto';
+      textarea.style.height = "auto";
       textarea.style.height = `${Math.min(textarea.scrollHeight, 120)}px`;
     }
   }, [message]);
@@ -43,11 +43,11 @@ const MessageInput: React.FC<MessageInputProps> = ({
     const trimmed = message.trim();
     if (!trimmed || isSending || disabled) return;
     onSendMessage(trimmed);
-    setMessage('');
+    setMessage("");
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+    if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       handleSend();
     }
@@ -72,8 +72,10 @@ const MessageInput: React.FC<MessageInputProps> = ({
 
       mediaRecorder.onstop = () => {
         if (shouldSendRef.current) {
-          const mimeType = mediaRecorder.mimeType || 'audio/webm';
-          const audioBlob = new Blob(audioChunksRef.current, { type: mimeType });
+          const mimeType = mediaRecorder.mimeType || "audio/webm";
+          const audioBlob = new Blob(audioChunksRef.current, {
+            type: mimeType,
+          });
           const reader = new FileReader();
 
           reader.onloadend = () => {
@@ -112,7 +114,10 @@ const MessageInput: React.FC<MessageInputProps> = ({
     shouldSendRef.current = false;
     if (timerRef.current) clearInterval(timerRef.current);
 
-    if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
+    if (
+      mediaRecorderRef.current &&
+      mediaRecorderRef.current.state !== "inactive"
+    ) {
       mediaRecorderRef.current.stop();
     } else {
       setIsRecording(false);
@@ -125,7 +130,10 @@ const MessageInput: React.FC<MessageInputProps> = ({
     shouldSendRef.current = true;
     if (timerRef.current) clearInterval(timerRef.current);
 
-    if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
+    if (
+      mediaRecorderRef.current &&
+      mediaRecorderRef.current.state !== "inactive"
+    ) {
       mediaRecorderRef.current.stop();
     }
   };
@@ -133,7 +141,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
   const formatRecordingTime = (secs: number) => {
     const m = Math.floor(secs / 60);
     const s = secs % 60;
-    return `${m < 10 ? '0' : ''}${m}:${s < 10 ? '0' : ''}${s}`;
+    return `${m < 10 ? "0" : ""}${m}:${s < 10 ? "0" : ""}${s}`;
   };
 
   const canSend = message.trim().length > 0 && !isSending && !disabled;
@@ -143,7 +151,8 @@ const MessageInput: React.FC<MessageInputProps> = ({
       <div className="px-4 py-3 bg-brand-canvas dark:bg-background border-t border-border/80 shrink-0">
         <div className="flex items-center justify-center gap-2 py-2 px-3 bg-amber-500/10 border border-amber-500/20 rounded-xl text-amber-700 dark:text-amber-300 text-[12px]">
           <span className="font-medium">
-            L'envoi de message est désactivé car aucune mission active ne vous lie à cet utilisateur.
+            L'envoi de message est désactivé car aucune mission active ne vous
+            lie à cet utilisateur.
           </span>
         </div>
       </div>
@@ -168,16 +177,18 @@ const MessageInput: React.FC<MessageInputProps> = ({
 
           {/* Animated sound wave bars */}
           <div className="flex-1 flex items-center justify-center gap-1 h-5 px-2 overflow-hidden">
-            {[40, 80, 50, 90, 30, 70, 100, 60, 80, 40, 90, 50, 70, 30, 60].map((h, i) => (
-              <span
-                key={i}
-                className="w-1 bg-red-400/60 rounded-full animate-pulse"
-                style={{
-                  height: `${h}%`,
-                  animationDuration: `${0.4 + (i % 5) * 0.1}s`,
-                }}
-              />
-            ))}
+            {[40, 80, 50, 90, 30, 70, 100, 60, 80, 40, 90, 50, 70, 30, 60].map(
+              (h, i) => (
+                <span
+                  key={i}
+                  className="w-1 bg-red-400/60 rounded-full animate-pulse"
+                  style={{
+                    height: `${h}%`,
+                    animationDuration: `${0.4 + (i % 5) * 0.1}s`,
+                  }}
+                />
+              )
+            )}
           </div>
 
           {/* Cancel button */}
@@ -197,7 +208,10 @@ const MessageInput: React.FC<MessageInputProps> = ({
             className="w-8 h-8 rounded-full bg-red-600 hover:bg-red-700 text-white flex items-center justify-center transition-transform active:scale-95 cursor-pointer shrink-0"
             title="Envoyer le message vocal"
           >
-            <Send className="w-3.5 h-3.5" style={{ transform: 'translateX(1px)' }} />
+            <Send
+              className="w-3.5 h-3.5"
+              style={{ transform: "translateX(1px)" }}
+            />
           </button>
         </div>
       ) : (
@@ -243,14 +257,19 @@ const MessageInput: React.FC<MessageInputProps> = ({
               disabled={!canSend}
               className={`
                 w-9 h-9 rounded-full flex items-center justify-center transition-all duration-200 shrink-0 cursor-pointer
-                ${canSend
-                  ? 'bg-brand-green hover:bg-brand-green-hover text-brand-ink dark:text-primary-foreground shadow-md shadow-brand-green/20 hover:shadow-lg hover:shadow-brand-green/30 active:scale-95'
-                  : 'bg-neutral-200 dark:bg-muted text-muted-foreground cursor-not-allowed'
+                ${
+                  canSend
+                    ? "bg-brand-green hover:bg-brand-green-hover text-brand-ink dark:text-primary-foreground shadow-md shadow-brand-green/20 hover:shadow-lg hover:shadow-brand-green/30 active:scale-95"
+                    : "bg-neutral-200 dark:bg-muted text-muted-foreground cursor-not-allowed"
                 }
               `}
               title="Envoyer"
             >
-              <Send className="w-4 h-4" strokeWidth={2} style={{ transform: 'translateX(1px)' }} />
+              <Send
+                className="w-4 h-4"
+                strokeWidth={2}
+                style={{ transform: "translateX(1px)" }}
+              />
             </button>
           )}
         </div>

@@ -285,8 +285,12 @@ export function useWebSocketQuerySync() {
         queryClient.invalidateQueries({ queryKey: ["notifications"] });
         queryClient.invalidateQueries({ queryKey: ["notificationStats"] });
         queryClient.invalidateQueries({ queryKey: ["propositions"] });
-        queryClient.invalidateQueries({ queryKey: ["propositions-freelance-espace"] });
-        queryClient.invalidateQueries({ queryKey: ["propositions-announcer-espace"] });
+        queryClient.invalidateQueries({
+          queryKey: ["propositions-freelance-espace"],
+        });
+        queryClient.invalidateQueries({
+          queryKey: ["propositions-announcer-espace"],
+        });
         queryClient.invalidateQueries({ queryKey: ["missions"] });
         queryClient.invalidateQueries({ queryKey: ["available-missions"] });
       }

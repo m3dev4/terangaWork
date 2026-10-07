@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Play, Pause } from 'lucide-react';
+import React, { useState, useRef, useEffect } from "react";
+import { Play, Pause } from "lucide-react";
 
 interface AudioPlayerProps {
   audioUrl: string;
@@ -29,14 +29,14 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioUrl, isMine }) => {
       setCurrentTime(0);
     };
 
-    audio.addEventListener('loadedmetadata', onLoadedMetadata);
-    audio.addEventListener('timeupdate', onTimeUpdate);
-    audio.addEventListener('ended', onEnded);
+    audio.addEventListener("loadedmetadata", onLoadedMetadata);
+    audio.addEventListener("timeupdate", onTimeUpdate);
+    audio.addEventListener("ended", onEnded);
 
     return () => {
-      audio.removeEventListener('loadedmetadata', onLoadedMetadata);
-      audio.removeEventListener('timeupdate', onTimeUpdate);
-      audio.removeEventListener('ended', onEnded);
+      audio.removeEventListener("loadedmetadata", onLoadedMetadata);
+      audio.removeEventListener("timeupdate", onTimeUpdate);
+      audio.removeEventListener("ended", onEnded);
     };
   }, [audioUrl]);
 
@@ -48,7 +48,10 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioUrl, isMine }) => {
       audio.pause();
       setIsPlaying(false);
     } else {
-      audio.play().then(() => setIsPlaying(true)).catch(console.error);
+      audio
+        .play()
+        .then(() => setIsPlaying(true))
+        .catch(console.error);
     }
   };
 
@@ -61,16 +64,18 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioUrl, isMine }) => {
   };
 
   const formatTime = (secs: number) => {
-    if (isNaN(secs) || secs === Infinity) return '0:00';
+    if (isNaN(secs) || secs === Infinity) return "0:00";
     const m = Math.floor(secs / 60);
     const s = Math.floor(secs % 60);
-    return `${m}:${s < 10 ? '0' : ''}${s}`;
+    return `${m}:${s < 10 ? "0" : ""}${s}`;
   };
 
   const progressPercent = duration > 0 ? (currentTime / duration) * 100 : 0;
 
   return (
-    <div className={`flex items-center gap-2 py-1 min-w-0 w-[min(200px,100%)] sm:w-[260px] max-w-full ${isMine ? 'text-white' : 'text-brand-ink dark:text-foreground'}`}>
+    <div
+      className={`flex items-center gap-2 py-1 min-w-0 w-[min(200px,100%)] sm:w-[260px] max-w-full ${isMine ? "text-white" : "text-brand-ink dark:text-foreground"}`}
+    >
       <audio ref={audioRef} src={audioUrl} preload="metadata" />
 
       {/* Play/Pause Button */}
@@ -79,9 +84,10 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioUrl, isMine }) => {
         onClick={togglePlay}
         className={`
           w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-transform active:scale-95 cursor-pointer
-          ${isMine
-            ? 'bg-white/20 hover:bg-white/30 text-white'
-            : 'bg-brand-violet hover:bg-brand-violet text-white'
+          ${
+            isMine
+              ? "bg-white/20 hover:bg-white/30 text-white"
+              : "bg-brand-violet hover:bg-brand-violet text-white"
           }
         `}
       >
@@ -97,7 +103,10 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioUrl, isMine }) => {
         <div className="relative flex items-center h-4 group">
           {/* Waveform bars simulation */}
           <div className="absolute inset-0 flex items-center gap-0.5 pointer-events-none opacity-40">
-            {[40, 70, 30, 90, 60, 100, 50, 80, 40, 70, 90, 30, 60, 100, 50, 80, 40, 60].map((h, i) => {
+            {[
+              40, 70, 30, 90, 60, 100, 50, 80, 40, 70, 90, 30, 60, 100, 50, 80,
+              40, 60,
+            ].map((h, i) => {
               const barPercent = (i / 18) * 100;
               const isPassed = barPercent <= progressPercent;
               return (
@@ -105,8 +114,12 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioUrl, isMine }) => {
                   key={i}
                   className={`flex-1 rounded-full transition-colors ${
                     isMine
-                      ? isPassed ? 'bg-white' : 'bg-white/40'
-                      : isPassed ? 'bg-brand-violet' : 'bg-neutral-300 dark:bg-muted'
+                      ? isPassed
+                        ? "bg-white"
+                        : "bg-white/40"
+                      : isPassed
+                        ? "bg-brand-violet"
+                        : "bg-neutral-300 dark:bg-muted"
                   }`}
                   style={{ height: `${h}%` }}
                 />
@@ -127,7 +140,9 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioUrl, isMine }) => {
         </div>
 
         {/* Timer */}
-        <div className={`flex justify-between text-[9.5px] font-mono ${isMine ? 'text-white/70' : 'text-muted-foreground'}`}>
+        <div
+          className={`flex justify-between text-[9.5px] font-mono ${isMine ? "text-white/70" : "text-muted-foreground"}`}
+        >
           <span>{formatTime(currentTime)}</span>
           <span>{formatTime(duration)}</span>
         </div>

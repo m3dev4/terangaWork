@@ -10,13 +10,13 @@ const TypingAssistantMessage: React.FC<TypingAssistantMessageProps> = ({
   fullText,
   onComplete,
 }) => {
-  const [displayed, setDisplayed] = useState('');
+  const [displayed, setDisplayed] = useState("");
   const indexRef = useRef(0);
 
   useEffect(() => {
     if (!fullText) return;
     indexRef.current = 0;
-    setDisplayed('');
+    setDisplayed("");
     const timer = setInterval(() => {
       indexRef.current += 1;
       if (indexRef.current >= fullText.length) {
@@ -39,6 +39,5 @@ const TypingAssistantMessage: React.FC<TypingAssistantMessageProps> = ({
     </div>
   );
 };
-
 
 export default TypingAssistantMessage;

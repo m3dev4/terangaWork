@@ -22,9 +22,9 @@ interface FreelanceBentoDashboardProps {
   user: AuthUser | null | undefined;
 }
 
-export const FreelanceBentoDashboard: React.FC<FreelanceBentoDashboardProps> = ({
-  user,
-}) => {
+export const FreelanceBentoDashboard: React.FC<
+  FreelanceBentoDashboardProps
+> = ({ user }) => {
   const { data: propositions = [], isLoading: isPropsLoading } = useQuery<
     Proposition[]
   >({
@@ -35,12 +35,11 @@ export const FreelanceBentoDashboard: React.FC<FreelanceBentoDashboardProps> = (
   const { data: conversations = [], isLoading: isConvsLoading } =
     useConversions();
 
-  const { data: dashboardStats, isLoading: isStatsLoading } =
-    useQuery({
-      queryKey: ["dashboard-stats-freelance"],
-      queryFn: getDashboardStats,
-      select: (stats) => stats.role === "freelance" ? stats : undefined,
-    });
+  const { data: dashboardStats, isLoading: isStatsLoading } = useQuery({
+    queryKey: ["dashboard-stats-freelance"],
+    queryFn: getDashboardStats,
+    select: (stats) => (stats.role === "freelance" ? stats : undefined),
+  });
 
   const activeMissions = propositions.filter(
     (p) => p.proposition_status === "ACCEPTED"
@@ -294,7 +293,9 @@ export const FreelanceBentoDashboard: React.FC<FreelanceBentoDashboardProps> = (
                         </p>
                         <p className="text-xs text-muted-foreground">
                           {formatMoney(prop.montant_propose || 0)} · Livraison{" "}
-                          {new Date(`${prop.date_livraison}T00:00:00`).toLocaleDateString("fr-FR")}
+                          {new Date(
+                            `${prop.date_livraison}T00:00:00`
+                          ).toLocaleDateString("fr-FR")}
                         </p>
                       </div>
                     </div>
@@ -364,7 +365,9 @@ export const FreelanceBentoDashboard: React.FC<FreelanceBentoDashboardProps> = (
                       <div className="w-11 h-11 rounded-full bg-brand-ink/10 overflow-hidden shrink-0">
                         {conv.autre_utlisateur?.profile_picture ? (
                           <img
-                            src={getMediaUrl(conv.autre_utlisateur.profile_picture)}
+                            src={getMediaUrl(
+                              conv.autre_utlisateur.profile_picture
+                            )}
                             alt="Avatar"
                             className="w-full h-full object-cover"
                           />

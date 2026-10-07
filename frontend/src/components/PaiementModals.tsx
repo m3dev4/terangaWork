@@ -314,7 +314,9 @@ export const InitiatePaymentModal: React.FC<InitiatePaymentModalProps> = ({
 
         <p className="mb-5 text-[10.5px] leading-relaxed text-muted-foreground">
           En cliquant sur{" "}
-          <span className="font-bold text-brand-ink dark:text-foreground">« Payer maintenant »</span>
+          <span className="font-bold text-brand-ink dark:text-foreground">
+            « Payer maintenant »
+          </span>
           , vous serez redirigé vers la passerelle sécurisée PayDunya (Wave,
           Orange Money, Carte bancaire). Une fois le paiement confirmé, le
           montant net sera automatiquement reversé au freelance.
@@ -431,7 +433,8 @@ export const HistoriquePaiementModal: React.FC<
               </div>
               <div className="flex justify-between text-brand-ink dark:text-foreground">
                 <span>
-                  Commission Teranga Work ({parseFloat(paiement.taux_commission) * 100}
+                  Commission Teranga Work (
+                  {parseFloat(paiement.taux_commission) * 100}
                   %) :
                 </span>
                 <span className="font-semibold">

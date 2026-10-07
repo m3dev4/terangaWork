@@ -38,12 +38,11 @@ export const AnnonceurBentoDashboard: React.FC<
     queryFn: () => getPropositions(),
   });
 
-  const { data: dashboardStats, isLoading: isStatsLoading } =
-    useQuery({
-      queryKey: ["dashboard-stats-annonceur"],
-      queryFn: getDashboardStats,
-      select: (stats) => stats.role === "annonceur" ? stats : undefined,
-    });
+  const { data: dashboardStats, isLoading: isStatsLoading } = useQuery({
+    queryKey: ["dashboard-stats-annonceur"],
+    queryFn: getDashboardStats,
+    select: (stats) => (stats.role === "annonceur" ? stats : undefined),
+  });
 
   const activeMissionsCount = missions.filter(
     (m) => m.status === "IN_PROGRESS" || m.status === "OPEN"
@@ -161,7 +160,8 @@ export const AnnonceurBentoDashboard: React.FC<
                 )}
                 {commissionsPaid > 0 && (
                   <p className="text-xs text-muted-foreground mt-2">
-                    Commissions Teranga Work payées : {formatMoney(commissionsPaid)}
+                    Commissions Teranga Work payées :{" "}
+                    {formatMoney(commissionsPaid)}
                   </p>
                 )}
               </>

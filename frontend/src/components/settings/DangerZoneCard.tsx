@@ -1,37 +1,37 @@
-import React, { useState } from 'react';
-import { AlertTriangle, X, Trash2, Loader2 } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { deleteAccount } from '../../api/userApi';
+import React, { useState } from "react";
+import { AlertTriangle, X, Trash2, Loader2 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { deleteAccount } from "../../api/userApi";
 
 export const DangerZoneCard: React.FC = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [password, setPassword] = useState('');
+  const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
 
   const deleteMutation = useMutation({
     mutationFn: (pwd: string) => deleteAccount(pwd),
     onSuccess: () => {
-      localStorage.removeItem('access_token');
-      localStorage.removeItem('refresh_token');
+      localStorage.removeItem("access_token");
+      localStorage.removeItem("refresh_token");
       queryClient.clear();
-      navigate('/login');
+      navigate("/login");
     },
     onError: (err: any) => {
       const msg =
         err.response?.data?.password?.[0] ||
         err.response?.data?.error ||
         err.response?.data?.detail ||
-        'Erreur lors de la suppression du compte.';
-      setError(typeof msg === 'string' ? msg : JSON.stringify(msg));
+        "Erreur lors de la suppression du compte.";
+      setError(typeof msg === "string" ? msg : JSON.stringify(msg));
     },
   });
 
   const handleDeleteAccount = () => {
     if (!password) {
-      setError('Le mot de passe est requis.');
+      setError("Le mot de passe est requis.");
       return;
     }
     setError(null);
@@ -40,7 +40,7 @@ export const DangerZoneCard: React.FC = () => {
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
-    setPassword('');
+    setPassword("");
     setError(null);
   };
 
@@ -56,10 +56,16 @@ export const DangerZoneCard: React.FC = () => {
             Supprimer le compte
           </h3>
           <p className="mt-1 text-[11px] text-neutral-600 dark:text-muted-foreground leading-relaxed max-w-xl">
-            La suppression de votre compte est{' '}
-            <span className="font-bold text-red-600 dark:text-red-300">définitive</span> et entraînera la{' '}
-            <span className="font-bold text-red-600 dark:text-red-300">perte immédiate</span> de toutes vos
-            données, candidatures et historique de missions. Cette action ne peut pas être annulée.
+            La suppression de votre compte est{" "}
+            <span className="font-bold text-red-600 dark:text-red-300">
+              définitive
+            </span>{" "}
+            et entraînera la{" "}
+            <span className="font-bold text-red-600 dark:text-red-300">
+              perte immédiate
+            </span>{" "}
+            de toutes vos données, candidatures et historique de missions. Cette
+            action ne peut pas être annulée.
           </p>
 
           <button
@@ -97,8 +103,11 @@ export const DangerZoneCard: React.FC = () => {
                 Confirmer la suppression
               </h3>
               <p className="mt-1 text-[11px] text-muted-foreground">
-                Pour confirmer, saisissez votre{' '}
-                <span className="font-bold text-red-600 dark:text-red-300">mot de passe actuel</span> ci-dessous :
+                Pour confirmer, saisissez votre{" "}
+                <span className="font-bold text-red-600 dark:text-red-300">
+                  mot de passe actuel
+                </span>{" "}
+                ci-dessous :
               </p>
             </div>
 

@@ -1,9 +1,9 @@
-import React from 'react';
-import { Label } from '../ui/label';
-import { Input } from '../ui/input';
-import { Lock } from 'lucide-react';
-import { Button } from '../ui/button';
-import { useNavigate } from 'react-router-dom';
+import React from "react";
+import { Label } from "../ui/label";
+import { Input } from "../ui/input";
+import { Lock } from "lucide-react";
+import { Button } from "../ui/button";
+import { useNavigate } from "react-router-dom";
 
 const NewPasswordComponent = () => {
   const navigate = useNavigate();
@@ -19,9 +19,7 @@ const NewPasswordComponent = () => {
             Nouveau mot de passe
           </Label>
           <div className="relative">
-            <Lock
-              className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none"
-            />
+            <Lock className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
             <Input
               id="password"
               className="w-full bg-brand-canvas border border-border focus:border-brand-violet focus:bg-white text-xs sm:text-sm pl-9 pr-3 py-2.5 rounded-lg transition-colors placeholder:text-muted-foreground"
@@ -39,9 +37,7 @@ const NewPasswordComponent = () => {
             Confirmer le nouveau mot de passe
           </Label>
           <div className="relative">
-            <Lock
-              className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none"
-            />
+            <Lock className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
             <Input
               id="confirmPassword"
               className="w-full bg-brand-canvas border border-border focus:border-brand-violet focus:bg-white text-xs sm:text-sm pl-9 pr-3 py-2.5 rounded-lg transition-colors placeholder:text-muted-foreground"

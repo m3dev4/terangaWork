@@ -1,9 +1,9 @@
-import { instance } from './axios';
+import { instance } from "./axios";
 
 export interface OnboardingStepInfo {
   name: string;
   index: number;
-  status: 'pending' | 'current' | 'completed';
+  status: "pending" | "current" | "completed";
   is_skippable: boolean;
   is_mandatory: boolean;
 }
@@ -11,7 +11,7 @@ export interface OnboardingStepInfo {
 export interface OnboardingStatusResponse {
   onboarding_completed: boolean;
   onboarding_step: string;
-  role: 'freelance' | 'annonceur' | null;
+  role: "freelance" | "annonceur" | null;
   steps: OnboardingStepInfo[];
   completed_data: Record<string, any>;
 }
@@ -24,10 +24,12 @@ export interface OnboardingSubmitResponse {
   data?: Record<string, any>;
 }
 
-export const getOnboardingStatus = async (): Promise<OnboardingStatusResponse> => {
-  const response = await instance.get<OnboardingStatusResponse>('onboarding/status/');
-  return response.data;
-};
+export const getOnboardingStatus =
+  async (): Promise<OnboardingStatusResponse> => {
+    const response =
+      await instance.get<OnboardingStatusResponse>("onboarding/status/");
+    return response.data;
+  };
 
 export const submitOnboardingStep = async ({
   stepName,
@@ -43,7 +45,7 @@ export const submitOnboardingStep = async ({
     isFormData
       ? {
           headers: {
-            'Content-Type': 'multipart/form-data',
+            "Content-Type": "multipart/form-data",
           },
         }
       : undefined
@@ -61,12 +63,16 @@ export const skipOnboardingStep = async (stepName: string): Promise<any> => {
   return response.data;
 };
 
-export const getServices = async (): Promise<{ id: number; name: string; description?: string }[]> => {
-  const response = await instance.get('services/');
+export const getServices = async (): Promise<
+  { id: number; name: string; description?: string }[]
+> => {
+  const response = await instance.get("services/");
   return response.data;
 };
 
-export const getTechnologies = async (): Promise<{ id: number; name: string }[]> => {
-  const response = await instance.get('technologies/');
+export const getTechnologies = async (): Promise<
+  { id: number; name: string }[]
+> => {
+  const response = await instance.get("technologies/");
   return response.data;
 };

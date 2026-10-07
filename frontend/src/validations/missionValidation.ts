@@ -10,20 +10,26 @@ export const getTodayDate = () => {
   ].join("-");
 };
 
-export const MissionTitleValidation = z.string().trim()
+export const MissionTitleValidation = z
+  .string()
+  .trim()
   .min(1, "Le titre est obligatoire.")
   .max(100, "Le titre ne doit pas dépasser 100 caractères.");
 
 export const MissionValidation = z.object({
   title: MissionTitleValidation,
-  description: z.string().trim()
+  description: z
+    .string()
+    .trim()
     .min(1, "La description est obligatoire.")
     .max(1000, "La description ne doit pas dépasser 1000 caractères."),
-  date_deadline: z.iso.date("Veuillez saisir une date limite valide.")
+  date_deadline: z.iso
+    .date("Veuillez saisir une date limite valide.")
     .refine((value) => value >= getTodayDate(), {
       message: "La date limite ne peut pas être antérieure à aujourd'hui.",
     }),
-  budget: z.number("Veuillez saisir un budget valide.")
+  budget: z
+    .number("Veuillez saisir un budget valide.")
     .int("Le budget doit être un nombre entier en FCFA.")
     .positive("Le budget doit être supérieur à zéro.")
     .max(2147483647, "Le budget dépasse le montant maximal autorisé."),
@@ -34,4 +40,6 @@ export const MissionValidation = z.object({
   }),
 });
 
-export type MissionFormErrors = Partial<Record<keyof z.infer<typeof MissionValidation>, string>>;
+export type MissionFormErrors = Partial<
+  Record<keyof z.infer<typeof MissionValidation>, string>
+>;

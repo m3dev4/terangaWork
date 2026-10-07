@@ -1,23 +1,22 @@
-import axios from 'axios';
+import axios from "axios";
 
-const BASE_URL = 'http://localhost:8000/api/';
+const BASE_URL = "http://localhost:8000/api/";
 
 export const instance = axios.create({
   baseURL: BASE_URL,
   headers: {
-    'Content-Type': 'application/json',
-    Accept: 'application/json',
+    "Content-Type": "application/json",
+    Accept: "application/json",
   },
 });
 
-
 const PUBLIC_ENDPOINTS = [
-  'auth/login/',
-  'auth/register/',
-  'auth/verify-email/',
-  'auth/password-recovery/',
-  'auth/new-password/',
-  'auth/token/refresh/',
+  "auth/login/",
+  "auth/register/",
+  "auth/verify-email/",
+  "auth/password-recovery/",
+  "auth/new-password/",
+  "auth/token/refresh/",
 ];
 
 instance.interceptors.request.use((config) => {
@@ -25,7 +24,7 @@ instance.interceptors.request.use((config) => {
     config.url?.includes(endpoint)
   );
 
-  const accessToken = localStorage.getItem('access_token');
+  const accessToken = localStorage.getItem("access_token");
 
   if (accessToken && !isPublic) {
     config.headers.Authorization = `Bearer ${accessToken}`;
@@ -63,13 +62,17 @@ instance.interceptors.response.use(
       originalRequest?.url?.includes(endpoint)
     );
 
-    if (error.response?.status === 401 && !originalRequest?._retry && !isPublic) {
-      const refreshToken = localStorage.getItem('refresh_token');
+    if (
+      error.response?.status === 401 &&
+      !originalRequest?._retry &&
+      !isPublic
+    ) {
+      const refreshToken = localStorage.getItem("refresh_token");
 
       if (!refreshToken) {
         // No refresh token available, remove stale tokens to avoid deadlocks
-        localStorage.removeItem('access_token');
-        localStorage.removeItem('refresh_token');
+        localStorage.removeItem("access_token");
+        localStorage.removeItem("refresh_token");
         return Promise.reject(error);
       }
 
@@ -93,10 +96,10 @@ instance.interceptors.response.use(
         });
 
         const newAccessToken = response.data.access;
-        localStorage.setItem('access_token', newAccessToken);
+        localStorage.setItem("access_token", newAccessToken);
 
         if (response.data.refresh) {
-          localStorage.setItem('refresh_token', response.data.refresh);
+          localStorage.setItem("refresh_token", response.data.refresh);
         }
 
         instance.defaults.headers.common.Authorization = `Bearer ${newAccessToken}`;
@@ -107,8 +110,8 @@ instance.interceptors.response.use(
       } catch (refreshError) {
         processQueue(refreshError, null);
         // Refresh failed: clear invalid tokens completely
-        localStorage.removeItem('access_token');
-        localStorage.removeItem('refresh_token');
+        localStorage.removeItem("access_token");
+        localStorage.removeItem("refresh_token");
         return Promise.reject(refreshError);
       } finally {
         isRefreshing = false;

@@ -18,12 +18,17 @@ export const DashboardOverview: React.FC = () => {
     return (
       <div className="flex flex-col items-center justify-center min-h-[400px] text-muted-foreground gap-3">
         <Loader2 className="w-8 h-8 animate-spin text-orange-500 dark:text-orange-300" />
-        <p className="text-xs font-semibold">Chargement de votre tableau de bord...</p>
+        <p className="text-xs font-semibold">
+          Chargement de votre tableau de bord...
+        </p>
       </div>
     );
   }
 
-  const isAdmin = user?.role === "admin" || (user as any)?.is_staff || (user as any)?.is_superuser;
+  const isAdmin =
+    user?.role === "admin" ||
+    (user as any)?.is_staff ||
+    (user as any)?.is_superuser;
   const isFreelance = user?.role === "freelance";
 
   if (isAdmin) {

@@ -17,8 +17,18 @@ export default function ThemeToggle() {
       onClick={() => setTheme(dark ? "light" : "dark")}
     >
       <span className="theme-toggle-thumb" />
-      <img src={sunIcon} alt="" className="theme-toggle-sun" draggable={false} />
-      <img src={moonIcon} alt="" className="theme-toggle-moon" draggable={false} />
+      <img
+        src={sunIcon}
+        alt=""
+        className="theme-toggle-sun"
+        draggable={false}
+      />
+      <img
+        src={moonIcon}
+        alt=""
+        className="theme-toggle-moon"
+        draggable={false}
+      />
     </button>
   );
 }

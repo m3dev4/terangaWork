@@ -1,20 +1,20 @@
-import React from 'react';
-import { LogOut } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
-import { useQueryClient } from '@tanstack/react-query';
-import SessionsManagerCard from '../../components/settings/SessionsManagerCard';
-import NotificationSettingsCard from '../../components/settings/NotificationSettingsCard';
-import DangerZoneCard from '../../components/settings/DangerZoneCard';
+import React from "react";
+import { LogOut } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
+import SessionsManagerCard from "../../components/settings/SessionsManagerCard";
+import NotificationSettingsCard from "../../components/settings/NotificationSettingsCard";
+import DangerZoneCard from "../../components/settings/DangerZoneCard";
 
 const SettingsPage: React.FC = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
   const handleLogout = () => {
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('refresh_token');
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("refresh_token");
     queryClient.clear();
-    navigate('/login');
+    navigate("/login");
   };
 
   return (

@@ -1,4 +1,4 @@
-import { instance } from './axios';
+import { instance } from "./axios";
 
 export interface ProjectMeeting {
   id: number;
@@ -22,9 +22,13 @@ export interface CreateMeetingPayload {
   link?: string;
 }
 
-export const getProjectMeetings = async (missionId?: number): Promise<ProjectMeeting[]> => {
-  const url = missionId ? `meetings/?mission=${missionId}` : 'meetings/';
-  const response = await instance.get<ProjectMeeting[] | { results: ProjectMeeting[] }>(url);
+export const getProjectMeetings = async (
+  missionId?: number
+): Promise<ProjectMeeting[]> => {
+  const url = missionId ? `meetings/?mission=${missionId}` : "meetings/";
+  const response = await instance.get<
+    ProjectMeeting[] | { results: ProjectMeeting[] }
+  >(url);
   const data = response.data;
   return Array.isArray(data) ? data : data.results;
 };
@@ -32,7 +36,7 @@ export const getProjectMeetings = async (missionId?: number): Promise<ProjectMee
 export const createProjectMeeting = async (
   payload: CreateMeetingPayload
 ): Promise<ProjectMeeting> => {
-  const response = await instance.post<ProjectMeeting>('meetings/', payload);
+  const response = await instance.post<ProjectMeeting>("meetings/", payload);
   return response.data;
 };
 
@@ -43,7 +47,11 @@ export interface LiveKitTokenResponse {
   title: string;
 }
 
-export const getMeetingToken = async (meetingId: number): Promise<LiveKitTokenResponse> => {
-  const response = await instance.get<LiveKitTokenResponse>(`meetings/${meetingId}/token/`);
+export const getMeetingToken = async (
+  meetingId: number
+): Promise<LiveKitTokenResponse> => {
+  const response = await instance.get<LiveKitTokenResponse>(
+    `meetings/${meetingId}/token/`
+  );
   return response.data;
 };

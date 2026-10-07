@@ -51,5 +51,15 @@ services:
       - mysql_data:/var/lib/mysql
     restart: unless-stopped
 
+  frontend:
+    build: ../frontend
+    env_file: ../frontend/.env
+    environment:
+      VITE_BACKEND_URL: http://web:8000
+    ports:
+      - "5173:5173"
+    restart: unless-stopped
+    
 volumes:
   mysql_data:
+

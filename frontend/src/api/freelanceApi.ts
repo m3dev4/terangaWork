@@ -1,4 +1,4 @@
-import { instance } from './axios';
+import { instance } from "./axios";
 
 /**
  * Types matching the Django backend models (Service, Technologie, Freelancee, Experience, Education, Realisation)
@@ -28,7 +28,7 @@ export interface ExperienceData {
 
 export interface EducationData {
   id: number;
-  role: 'UNIVERSITAIRE' | 'FORMATION_PROFESSIONNELLE' | 'EN_LIGNE';
+  role: "UNIVERSITAIRE" | "FORMATION_PROFESSIONNELLE" | "EN_LIGNE";
   nom: string;
   startDate: string;
   endDate?: string | null;
@@ -63,7 +63,7 @@ export interface FreelanceProfileData {
 
 // ─── Freelance Profile ──────────────
 export async function fetchFreelanceProfile(): Promise<FreelanceProfileData> {
-  const response = await instance.get<FreelanceProfileData>('freelance/me/');
+  const response = await instance.get<FreelanceProfileData>("freelance/me/");
   return response.data;
 }
 
@@ -79,39 +79,50 @@ export async function updateFreelanceProfile(
     service?: number | null;
   }>
 ): Promise<FreelanceProfileData> {
-  const response = await instance.patch<FreelanceProfileData>('freelance/me/', data);
+  const response = await instance.patch<FreelanceProfileData>(
+    "freelance/me/",
+    data
+  );
   return response.data;
 }
 
 // ─── Global Catalogue (Services & Technologies) ──────────────
 export async function fetchServices(): Promise<ServiceData[]> {
-  const response = await instance.get<ServiceData[]>('services/');
+  const response = await instance.get<ServiceData[]>("services/");
   return response.data;
 }
 
-export async function proposeService(data: { name: string; description?: string }): Promise<ServiceData> {
-  const response = await instance.post<ServiceData>('services/', data);
+export async function proposeService(data: {
+  name: string;
+  description?: string;
+}): Promise<ServiceData> {
+  const response = await instance.post<ServiceData>("services/", data);
   return response.data;
 }
 
 export async function fetchTechnologies(): Promise<TechnologieData[]> {
-  const response = await instance.get<TechnologieData[]>('technologies/');
+  const response = await instance.get<TechnologieData[]>("technologies/");
   return response.data;
 }
 
-export async function addTechnology(data: { name: string; imgUrl?: string }): Promise<TechnologieData> {
-  const response = await instance.post<TechnologieData>('technologies/', data);
+export async function addTechnology(data: {
+  name: string;
+  imgUrl?: string;
+}): Promise<TechnologieData> {
+  const response = await instance.post<TechnologieData>("technologies/", data);
   return response.data;
 }
 
 // ─── Experiences ──────────────
 export async function fetchExperiences(): Promise<ExperienceData[]> {
-  const response = await instance.get<ExperienceData[]>('experiences/');
+  const response = await instance.get<ExperienceData[]>("experiences/");
   return response.data;
 }
 
-export async function createExperience(data: Omit<ExperienceData, 'id'>): Promise<ExperienceData> {
-  const response = await instance.post<ExperienceData>('experiences/', data);
+export async function createExperience(
+  data: Omit<ExperienceData, "id">
+): Promise<ExperienceData> {
+  const response = await instance.post<ExperienceData>("experiences/", data);
   return response.data;
 }
 
@@ -121,12 +132,14 @@ export async function deleteExperience(id: number): Promise<void> {
 
 // ─── Educations ──────────────
 export async function fetchEducations(): Promise<EducationData[]> {
-  const response = await instance.get<EducationData[]>('educations/');
+  const response = await instance.get<EducationData[]>("educations/");
   return response.data;
 }
 
-export async function createEducation(data: Omit<EducationData, 'id'>): Promise<EducationData> {
-  const response = await instance.post<EducationData>('educations/', data);
+export async function createEducation(
+  data: Omit<EducationData, "id">
+): Promise<EducationData> {
+  const response = await instance.post<EducationData>("educations/", data);
   return response.data;
 }
 
@@ -136,12 +149,14 @@ export async function deleteEducation(id: number): Promise<void> {
 
 // ─── Realisations ──────────────
 export async function fetchRealisations(): Promise<RealisationData[]> {
-  const response = await instance.get<RealisationData[]>('realisations/');
+  const response = await instance.get<RealisationData[]>("realisations/");
   return response.data;
 }
 
-export async function createRealisation(data: Omit<RealisationData, 'id'>): Promise<RealisationData> {
-  const response = await instance.post<RealisationData>('realisations/', data);
+export async function createRealisation(
+  data: Omit<RealisationData, "id">
+): Promise<RealisationData> {
+  const response = await instance.post<RealisationData>("realisations/", data);
   return response.data;
 }
 

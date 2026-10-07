@@ -30,7 +30,14 @@ interface modalProps {
   setOpen?: (open: boolean) => void;
 }
 
-export function Modal({ title, onClose, children, trigger, open, setOpen }: modalProps) {
+export function Modal({
+  title,
+  onClose,
+  children,
+  trigger,
+  open,
+  setOpen,
+}: modalProps) {
   const isDesktop = useMediaQuery({ query: "(min-width: 768px)" });
 
   if (isDesktop) {
@@ -61,6 +68,5 @@ export function Modal({ title, onClose, children, trigger, open, setOpen }: moda
 }
 
 function ProfileForm({ className }: React.ComponentProps<"form">) {
-  return <form className={cn("grid items-start gap-6", className)}>
-  </form>;
+  return <form className={cn("grid items-start gap-6", className)}></form>;
 }

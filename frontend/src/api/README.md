@@ -7,20 +7,25 @@ Le frontend utilise l'instance Axios exportée par `src/api/axios.ts`. Elle poin
 Les fonctions de `src/api/missionsApi.ts` couvrent le CRUD du backend :
 
 ```ts
-import { createMission, getMissions, updateMission, deleteMission } from './missionsApi';
+import {
+  createMission,
+  getMissions,
+  updateMission,
+  deleteMission,
+} from "./missionsApi";
 
 const missions = await getMissions();
 
 const created = await createMission({
-  title: 'Créer une application',
-  description: 'Développer une application web.',
-  date_deadline: '2026-12-31',
-  operateurMobileMoney: 'WAVE',
+  title: "Créer une application",
+  description: "Développer une application web.",
+  date_deadline: "2026-12-31",
+  operateurMobileMoney: "WAVE",
   budget: 500000,
   service: 1,
 });
 
-await updateMission({ id: created.id, payload: { title: 'Nouveau titre' } });
+await updateMission({ id: created.id, payload: { title: "Nouveau titre" } });
 await deleteMission(created.id);
 ```
 

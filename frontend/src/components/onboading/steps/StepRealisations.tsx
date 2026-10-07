@@ -1,5 +1,12 @@
-import React, { useState } from 'react';
-import { ArrowRight, ArrowLeft, Loader2, Plus, Trash2, Link as LinkIcon } from 'lucide-react';
+import React, { useState } from "react";
+import {
+  ArrowRight,
+  ArrowLeft,
+  Loader2,
+  Plus,
+  Trash2,
+  Link as LinkIcon,
+} from "lucide-react";
 
 interface RealisationItem {
   title: string;
@@ -31,9 +38,9 @@ export const StepRealisations: React.FC<StepRealisationsProps> = ({
       ? initialData
       : [
           {
-            title: '',
-            description: '',
-            link: '',
+            title: "",
+            description: "",
+            link: "",
           },
         ]
   );
@@ -42,9 +49,9 @@ export const StepRealisations: React.FC<StepRealisationsProps> = ({
     setRealisations((prev) => [
       ...prev,
       {
-        title: '',
-        description: '',
-        link: '',
+        title: "",
+        description: "",
+        link: "",
       },
     ]);
   };
@@ -53,7 +60,11 @@ export const StepRealisations: React.FC<StepRealisationsProps> = ({
     setRealisations((prev) => prev.filter((_, i) => i !== index));
   };
 
-  const updateRealisation = (index: number, field: keyof RealisationItem, value: string) => {
+  const updateRealisation = (
+    index: number,
+    field: keyof RealisationItem,
+    value: string
+  ) => {
     setRealisations((prev) => {
       const updated = [...prev];
       updated[index] = { ...updated[index], [field]: value };
@@ -63,7 +74,9 @@ export const StepRealisations: React.FC<StepRealisationsProps> = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const valid = realisations.filter((r) => r.title.trim() && r.description.trim());
+    const valid = realisations.filter(
+      (r) => r.title.trim() && r.description.trim()
+    );
     if (valid.length === 0) {
       onSkip();
       return;
@@ -119,7 +132,9 @@ export const StepRealisations: React.FC<StepRealisationsProps> = ({
                 <input
                   type="text"
                   value={item.title}
-                  onChange={(e) => updateRealisation(index, 'title', e.target.value)}
+                  onChange={(e) =>
+                    updateRealisation(index, "title", e.target.value)
+                  }
                   placeholder="Ex: Refonte SaaS Dashboard"
                   className="w-full px-3 py-2 text-sm rounded-xl border border-border focus:outline-none focus:border-brand-violet"
                 />
@@ -132,7 +147,9 @@ export const StepRealisations: React.FC<StepRealisationsProps> = ({
                 <textarea
                   rows={2}
                   value={item.description}
-                  onChange={(e) => updateRealisation(index, 'description', e.target.value)}
+                  onChange={(e) =>
+                    updateRealisation(index, "description", e.target.value)
+                  }
                   placeholder="Ce que vous avez apporté, technologies utilisées..."
                   className="w-full px-3 py-2 text-sm rounded-xl border border-border focus:outline-none focus:border-brand-violet resize-none"
                 />
@@ -145,8 +162,10 @@ export const StepRealisations: React.FC<StepRealisationsProps> = ({
                 </label>
                 <input
                   type="url"
-                  value={item.link || ''}
-                  onChange={(e) => updateRealisation(index, 'link', e.target.value)}
+                  value={item.link || ""}
+                  onChange={(e) =>
+                    updateRealisation(index, "link", e.target.value)
+                  }
                   placeholder="https://..."
                   className="w-full px-3 py-2 text-sm rounded-xl border border-border focus:outline-none focus:border-brand-violet"
                 />

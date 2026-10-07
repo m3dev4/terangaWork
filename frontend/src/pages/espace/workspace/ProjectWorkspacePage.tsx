@@ -315,7 +315,11 @@ const ProjectWorkspacePage: React.FC = () => {
                   className="text-[11px] font-medium border border-white/15 rounded-lg px-2 py-0.5 bg-white/10 text-white outline-none"
                 >
                   {acceptedProjects.map((p) => (
-                    <option key={p.id} value={p.id} className="bg-card text-card-foreground">
+                    <option
+                      key={p.id}
+                      value={p.id}
+                      className="bg-card text-card-foreground"
+                    >
                       {p.mission_title}
                     </option>
                   ))}
@@ -527,15 +531,15 @@ const ProjectWorkspacePage: React.FC = () => {
           <div className="rounded-[24px] border border-brand-ink/8 dark:border-border bg-white dark:bg-card p-6">
             <div className="mb-5 flex items-center justify-between border-b border-brand-ink/6 dark:border-border pb-2.5">
               <h4 className="font-heading text-xs font-bold text-brand-ink dark:text-foreground flex items-center gap-1.5">
-                <CheckCircle2 className="h-3.5 w-3.5 text-brand-violet dark:text-violet-300" /> Statut
-                de la mission
+                <CheckCircle2 className="h-3.5 w-3.5 text-brand-violet dark:text-violet-300" />{" "}
+                Statut de la mission
               </h4>
             </div>
 
             {isClosed ? (
               <div className="flex items-center gap-2 text-[11px] text-muted-foreground">
-                <span className="h-2 w-2 rounded-full bg-brand-ink/30 dark:bg-foreground/30" /> Cette
-                mission a été clôturée.
+                <span className="h-2 w-2 rounded-full bg-brand-ink/30 dark:bg-foreground/30" />{" "}
+                Cette mission a été clôturée.
               </div>
             ) : (
               <div className="flex items-center">
@@ -606,7 +610,9 @@ const ProjectWorkspacePage: React.FC = () => {
 
             <div className="mb-4">
               <div className="flex items-center justify-between mb-1 text-[11px]">
-                <span className="text-muted-foreground">Avancement du temps</span>
+                <span className="text-muted-foreground">
+                  Avancement du temps
+                </span>
                 <span className="font-semibold text-brand-ink/80 dark:text-foreground/80">
                   {timelinePercent}%
                 </span>

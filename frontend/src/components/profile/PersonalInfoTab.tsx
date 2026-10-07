@@ -53,7 +53,9 @@ export const PersonalInfoTab: React.FC<PersonalInfoTabProps> = ({ user }) => {
       setFirstName(user.first_name || "");
       setEmail(user.email || "");
       setPhone(user.number_phone || "");
-      setAvatarPreview(user.profile_picture ? getMediaUrl(user.profile_picture) : null);
+      setAvatarPreview(
+        user.profile_picture ? getMediaUrl(user.profile_picture) : null
+      );
     }
   }, [user]);
 

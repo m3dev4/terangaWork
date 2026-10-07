@@ -1,7 +1,11 @@
 import React from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { instance } from "../../../api/axios";
-import { getMissions, moderateMission, type Mission } from "../../../api/missionsApi";
+import {
+  getMissions,
+  moderateMission,
+  type Mission,
+} from "../../../api/missionsApi";
 import { toast } from "../../../components/ui/toast";
 import {
   Users,
@@ -105,15 +109,20 @@ export const AdminDashboardPage: React.FC = () => {
       queryClient.invalidateQueries({ queryKey: ["adminDashboardStats"] });
       queryClient.invalidateQueries({ queryKey: ["missions"] });
       toast.add({
-        title: variables.decision === "approuver" ? "Mission Approuvée" : "Mission Supprimée",
-        description: data.detail || `La mission #${variables.missionId} a été traitée.`,
+        title:
+          variables.decision === "approuver"
+            ? "Mission Approuvée"
+            : "Mission Supprimée",
+        description:
+          data.detail || `La mission #${variables.missionId} a été traitée.`,
         type: variables.decision === "approuver" ? "success" : "warning",
       });
     },
     onError: (err: any) => {
       toast.add({
         title: "Erreur de modération",
-        description: err?.response?.data?.detail || "Impossible de modérer cette mission.",
+        description:
+          err?.response?.data?.detail || "Impossible de modérer cette mission.",
         type: "error",
       });
     },
@@ -225,7 +234,8 @@ export const AdminDashboardPage: React.FC = () => {
                 )}
               </div>
               <p className="text-[11px] text-muted-foreground mt-0.5">
-                Validez les nouvelles offres pour les publier aux freelances ou supprimez-les directement d'un simple clic.
+                Validez les nouvelles offres pour les publier aux freelances ou
+                supprimez-les directement d'un simple clic.
               </p>
             </div>
           </div>
@@ -262,7 +272,12 @@ export const AdminDashboardPage: React.FC = () => {
                     {m.description}
                   </p>
                   <div className="mt-2 flex items-center gap-3 text-[10px] text-muted-foreground">
-                    <span>Budget : <strong>{new Intl.NumberFormat("fr-FR").format(m.budget)} FCFA</strong></span>
+                    <span>
+                      Budget :{" "}
+                      <strong>
+                        {new Intl.NumberFormat("fr-FR").format(m.budget)} FCFA
+                      </strong>
+                    </span>
                   </div>
                 </div>
 
@@ -291,7 +306,8 @@ export const AdminDashboardPage: React.FC = () => {
                     }
                     className="inline-flex items-center gap-1 rounded-xl bg-brand-ink px-3.5 py-1.5 text-[10px] font-bold text-white hover:bg-brand-ink/85 dark:hover:bg-black/65 transition cursor-pointer disabled:opacity-50 shadow-xs"
                   >
-                    <CheckCircle2 className="h-3 w-3 text-brand-green" /> Approuver & Publier
+                    <CheckCircle2 className="h-3 w-3 text-brand-green" />{" "}
+                    Approuver & Publier
                   </button>
                 </div>
               </div>
@@ -460,7 +476,9 @@ export const AdminDashboardPage: React.FC = () => {
 
           <div className="mt-3 pt-3 border-t border-brand-ink/6 dark:border-border flex items-center justify-between text-[11px] text-muted-foreground">
             <span>Pipeline de développement</span>
-            <span className="text-brand-violet dark:text-violet-300 font-semibold">Offre active</span>
+            <span className="text-brand-violet dark:text-violet-300 font-semibold">
+              Offre active
+            </span>
           </div>
         </div>
 
@@ -517,13 +535,13 @@ export const AdminDashboardPage: React.FC = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
             <div className="p-3 rounded-xl border border-brand-ink/6 dark:border-border bg-brand-sand/30 dark:bg-muted/30">
               <h4 className="text-xs font-bold text-muted-foreground mb-2 flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-brand-green" /> Collectes
-                d'annonceurs
+                <span className="w-2 h-2 rounded-full bg-brand-green" />{" "}
+                Collectes d'annonceurs
               </h4>
               <div className="flex items-center justify-between text-xs text-muted-foreground">
                 <span className="flex items-center gap-1 text-brand-ink dark:text-foreground font-medium">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-brand-violet dark:text-violet-300" /> Réussi
-                  : {stats.paiements.collecte.reussi}
+                  <CheckCircle2 className="w-3.5 h-3.5 text-brand-violet dark:text-violet-300" />{" "}
+                  Réussi : {stats.paiements.collecte.reussi}
                 </span>
                 <span className="flex items-center gap-1 text-brand-ink dark:text-foreground font-medium">
                   <Clock className="w-3.5 h-3.5" /> En attente :{" "}
@@ -543,8 +561,8 @@ export const AdminDashboardPage: React.FC = () => {
               </h4>
               <div className="flex items-center justify-between text-xs text-muted-foreground">
                 <span className="flex items-center gap-1 text-brand-ink dark:text-foreground font-medium">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-brand-violet dark:text-violet-300" /> Réussi
-                  : {stats.paiements.decaissement.reussi}
+                  <CheckCircle2 className="w-3.5 h-3.5 text-brand-violet dark:text-violet-300" />{" "}
+                  Réussi : {stats.paiements.decaissement.reussi}
                 </span>
                 <span className="flex items-center gap-1 text-brand-ink dark:text-foreground font-medium">
                   <Clock className="w-3.5 h-3.5" /> En attente :{" "}
@@ -632,8 +650,8 @@ export const AdminDashboardPage: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-3">
               <h4 className="text-xs font-bold text-muted-foreground flex items-center gap-1.5">
-                <Layers className="w-3.5 h-3.5 text-brand-violet dark:text-violet-300" /> Top services
-                les plus demandés
+                <Layers className="w-3.5 h-3.5 text-brand-violet dark:text-violet-300" />{" "}
+                Top services les plus demandés
               </h4>
               {stats.surplus.top_services.length === 0 ? (
                 <p className="text-xs text-muted-foreground italic">
@@ -665,8 +683,8 @@ export const AdminDashboardPage: React.FC = () => {
 
             <div className="space-y-3">
               <h4 className="text-xs font-bold text-muted-foreground flex items-center gap-1.5">
-                <Cpu className="w-3.5 h-3.5 text-brand-violet dark:text-violet-300" /> Top technologies
-                les plus utilisées
+                <Cpu className="w-3.5 h-3.5 text-brand-violet dark:text-violet-300" />{" "}
+                Top technologies les plus utilisées
               </h4>
               {stats.surplus.top_technologies.length === 0 ? (
                 <p className="text-xs text-muted-foreground italic">

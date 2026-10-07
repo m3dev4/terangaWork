@@ -1,5 +1,5 @@
-import AuthTitleDesc from '../../../components/auth/authTitleDesc';
-import VerifyMailComponent from '../../../components/auth/verifyMail';
+import AuthTitleDesc from "../../../components/auth/authTitleDesc";
+import VerifyMailComponent from "../../../components/auth/verifyMail";
 
 const VerifyMail = () => {
   return (

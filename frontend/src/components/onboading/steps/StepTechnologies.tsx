@@ -3,7 +3,6 @@ import { ArrowRight, ArrowLeft, Loader2, Code2, Check } from "lucide-react";
 import { useTechnologies } from "../../../hooks/useOnboarding";
 import { Button } from "../../ui/button";
 
-
 interface StepTechnologiesProps {
   initialTechIds?: number[];
   stepNumber: number;

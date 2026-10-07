@@ -29,14 +29,15 @@ export function ThemeProvider({
   storageKey = "terangaWork-theme",
   ...props
 }: ThemeProviderProps) {
-  const [theme, setTheme] = useState<Theme>(
-    () => {
-      const stored = localStorage.getItem(storageKey);
-      return stored === "dark" || stored === "light" || stored === "system" ? stored : defaultTheme;
-    }
-  );
+  const [theme, setTheme] = useState<Theme>(() => {
+    const stored = localStorage.getItem(storageKey);
+    return stored === "dark" || stored === "light" || stored === "system"
+      ? stored
+      : defaultTheme;
+  });
   const systemDark = useMediaQuery({ query: "(prefers-color-scheme: dark)" });
-  const resolvedTheme = theme === "system" ? (systemDark ? "dark" : "light") : theme;
+  const resolvedTheme =
+    theme === "system" ? (systemDark ? "dark" : "light") : theme;
 
   useEffect(() => {
     const root = window.document.documentElement;

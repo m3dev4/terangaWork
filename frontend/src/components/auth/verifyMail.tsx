@@ -53,7 +53,9 @@ const VerifyMailComponent = () => {
       onSubmit={handleSubmit((data) => verifyMutation.mutate(data))}
     >
       <div className="w-full">
-        <label htmlFor="verification-email" className="sr-only">Adresse email à vérifier</label>
+        <label htmlFor="verification-email" className="sr-only">
+          Adresse email à vérifier
+        </label>
         <input
           id="verification-email"
           type="email"
