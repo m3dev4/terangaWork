@@ -79,7 +79,9 @@ const AssistantConversationList: React.FC<AssistantConversationListProps> = ({
               <div
                 key={conv.id}
                 className={`group relative rounded-xl transition-colors ${
-                  isActive ? "bg-white dark:bg-card shadow-sm" : "hover:bg-white/70 dark:hover:bg-card/70"
+                  isActive
+                    ? "bg-white dark:bg-card shadow-sm"
+                    : "hover:bg-white/70 dark:hover:bg-card/70"
                 }`}
               >
                 <button
@@ -90,7 +92,9 @@ const AssistantConversationList: React.FC<AssistantConversationListProps> = ({
                   <div className="mb-1 flex min-w-0 items-center justify-between gap-2">
                     <span
                       className={`min-w-0 truncate text-sm font-medium ${
-                        isActive ? "text-brand-ink dark:text-foreground" : "text-brand-ink/75 dark:text-foreground/75"
+                        isActive
+                          ? "text-brand-ink dark:text-foreground"
+                          : "text-brand-ink/75 dark:text-foreground/75"
                       }`}
                     >
                       {truncate(conv.title || `Conversation #${conv.id}`, 32)}

@@ -1,26 +1,30 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import {
   useChatConversations,
   useCreateChatConversation,
   useDeleteChatConversation,
   useChatMessages,
   useSendChatMessage,
-} from '../../hooks/useChat';
-import type { ChatConversation, ChatMessage } from '../../api/chatApi';
+} from "../../hooks/useChat";
+import type { ChatConversation, ChatMessage } from "../../api/chatApi";
 
-import { toast } from '../../components/ui/toast';
-import AssistantConversationList from '../../components/chatbot/AssistantConversationList';
-import AssistantChatPanel from '../../components/chatbot/AssistantChatPanel';
-import EmptyAssistant from '../../components/chatbot/EmptyAssistant';
-
+import { toast } from "../../components/ui/toast";
+import AssistantConversationList from "../../components/chatbot/AssistantConversationList";
+import AssistantChatPanel from "../../components/chatbot/AssistantChatPanel";
+import EmptyAssistant from "../../components/chatbot/EmptyAssistant";
 
 // ── Page ──────────────────────────────────────────────────────────────────
 const AssistantPage: React.FC = () => {
-  const [activeConversationId, setActiveConversationId] = useState<number | null>(null);
+  const [activeConversationId, setActiveConversationId] = useState<
+    number | null
+  >(null);
   const [mobileShowChat, setMobileShowChat] = useState(false);
-  const [optimisticUserMessage, setOptimisticUserMessage] = useState<string | undefined>(undefined);
+  const [optimisticUserMessage, setOptimisticUserMessage] = useState<
+    string | undefined
+  >(undefined);
 
-  const { data: conversations = [], isLoading: isLoadingConversations } = useChatConversations();
+  const { data: conversations = [], isLoading: isLoadingConversations } =
+    useChatConversations();
   const {
     data: conversationDetail,
     isLoading: isLoadingMessages,
@@ -34,9 +38,9 @@ const AssistantPage: React.FC = () => {
   useEffect(() => {
     if (messagesError) {
       toast.add({
-        title: 'Conversation inaccessible',
-        description: 'Impossible de charger cette conversation.',
-        type: 'error',
+        title: "Conversation inaccessible",
+        description: "Impossible de charger cette conversation.",
+        type: "error",
       });
       setActiveConversationId(null);
       setMobileShowChat(false);
@@ -49,7 +53,11 @@ const AssistantPage: React.FC = () => {
       setActiveConversationId(conv.id);
       setMobileShowChat(true);
     } catch {
-      toast.add({ title: 'Erreur', description: 'Impossible de créer une conversation.', type: 'error' });
+      toast.add({
+        title: "Erreur",
+        description: "Impossible de créer une conversation.",
+        type: "error",
+      });
     }
   }, [createMutation]);
 
@@ -66,9 +74,13 @@ const AssistantPage: React.FC = () => {
           setActiveConversationId(null);
           setMobileShowChat(false);
         }
-        toast.add({ title: 'Conversation supprimée', type: 'success' });
+        toast.add({ title: "Conversation supprimée", type: "success" });
       } catch {
-        toast.add({ title: 'Erreur', description: 'Impossible de supprimer.', type: 'error' });
+        toast.add({
+          title: "Erreur",
+          description: "Impossible de supprimer.",
+          type: "error",
+        });
       }
     },
     [deleteMutation, activeConversationId]
@@ -84,10 +96,16 @@ const AssistantPage: React.FC = () => {
           payload: { content },
         });
         if (!res.assistant_message || (res as any).detail) {
-          throw new Error((res as any).detail || "L'assistant n'a pas pu répondre.");
+          throw new Error(
+            (res as any).detail || "L'assistant n'a pas pu répondre."
+          );
         }
       } catch (err: any) {
-        toast.add({ title: 'Échec', description: err?.message || "Erreur lors de l'envoi.", type: 'error' });
+        toast.add({
+          title: "Échec",
+          description: err?.message || "Erreur lors de l'envoi.",
+          type: "error",
+        });
       } finally {
         setOptimisticUserMessage(undefined);
       }
@@ -96,11 +114,10 @@ const AssistantPage: React.FC = () => {
   );
 
   return (
-
     <div className="flex h-full relative min-h-0 w-full overflow-hidden border border-brand-ink/8 dark:border-border bg-white dark:bg-card">
       <div
         className={`min-h-0 w-full shrink-0 flex justify-center items-center border-r border-brand-ink/8 dark:border-border md:w-[280px] lg:w-[320px] ${
-          mobileShowChat ? 'hidden md:flex' : 'flex'
+          mobileShowChat ? "hidden md:flex" : "flex"
         }`}
       >
         <AssistantConversationList
@@ -114,7 +131,9 @@ const AssistantPage: React.FC = () => {
         />
       </div>
 
-      <div className={`min-h-0 min-w-0 flex-1 ${!mobileShowChat ? 'hidden md:flex' : 'flex'}`}>
+      <div
+        className={`min-h-0 min-w-0 flex-1 ${!mobileShowChat ? "hidden md:flex" : "flex"}`}
+      >
         {activeConversationId ? (
           <AssistantChatPanel
             conversationId={activeConversationId}
@@ -128,7 +147,10 @@ const AssistantPage: React.FC = () => {
             optimisticMessage={optimisticUserMessage}
           />
         ) : (
-          <EmptyAssistant onCreate={handleCreate} isCreating={createMutation.isPending} />
+          <EmptyAssistant
+            onCreate={handleCreate}
+            isCreating={createMutation.isPending}
+          />
         )}
       </div>
     </div>

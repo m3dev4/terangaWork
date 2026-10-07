@@ -78,8 +78,12 @@ const FreelanceMissionsPage: React.FC = () => {
     staleTime: 0,
     gcTime: 5 * 60 * 1000,
   });
-  const isLoading = missionsQuery.isLoading || compatibilityQuery.isLoading || compatibilityQuery.isFetching;
-  const canMatch = !isLoading && !compatibilityQuery.isError && !missionsQuery.isError;
+  const isLoading =
+    missionsQuery.isLoading ||
+    compatibilityQuery.isLoading ||
+    compatibilityQuery.isFetching;
+  const canMatch =
+    !isLoading && !compatibilityQuery.isError && !missionsQuery.isError;
   const compatibilityMap = new Map(
     (compatibilityQuery.data?.resultats || []).map((r) => [r.mission_id, r])
   );
@@ -105,8 +109,11 @@ const FreelanceMissionsPage: React.FC = () => {
   const displayedMissions = [...regularMissions].sort((a, b) => {
     const scoreA = compatibilityMap.get(a.id);
     const scoreB = compatibilityMap.get(b.id);
-    return Number(Boolean(scoreB?.compatible)) - Number(Boolean(scoreA?.compatible))
-      || (scoreB?.score || 0) - (scoreA?.score || 0);
+    return (
+      Number(Boolean(scoreB?.compatible)) -
+        Number(Boolean(scoreA?.compatible)) ||
+      (scoreB?.score || 0) - (scoreA?.score || 0)
+    );
   });
 
   return (
@@ -129,11 +136,16 @@ const FreelanceMissionsPage: React.FC = () => {
             type="button"
             disabled={missionsQuery.isFetching || compatibilityQuery.isFetching}
             onClick={() => {
-              void Promise.all([missionsQuery.refetch(), compatibilityQuery.refetch()]);
+              void Promise.all([
+                missionsQuery.refetch(),
+                compatibilityQuery.refetch(),
+              ]);
             }}
             className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1.5 text-[11px] font-semibold text-foreground hover:bg-muted disabled:opacity-50 disabled:cursor-wait"
           >
-            <RefreshCw className={`h-3.5 w-3.5 ${missionsQuery.isFetching || compatibilityQuery.isFetching ? "animate-spin motion-reduce:animate-none" : ""}`} />
+            <RefreshCw
+              className={`h-3.5 w-3.5 ${missionsQuery.isFetching || compatibilityQuery.isFetching ? "animate-spin motion-reduce:animate-none" : ""}`}
+            />
             Actualiser
           </button>
           {isMatchingActive && (
@@ -164,14 +176,17 @@ const FreelanceMissionsPage: React.FC = () => {
             <div>
               <div className="flex items-center gap-2">
                 <p className="font-heading text-xs font-bold text-brand-ink dark:text-foreground">
-                  {matchingData?.etage_2_reussi ? "Analyse IA disponible" : "Classement par compatibilité"}
+                  {matchingData?.etage_2_reussi
+                    ? "Analyse IA disponible"
+                    : "Classement par compatibilité"}
                 </p>
                 <span className="rounded-full bg-brand-ink px-2 py-0.5 text-[9px] font-semibold text-brand-green">
                   Top {matchingResultsMap.size} Pertinents
                 </span>
               </div>
               <p className="text-[10px] text-muted-foreground">
-                Les recommandations détaillées complètent les scores de compatibilité.
+                Les recommandations détaillées complètent les scores de
+                compatibilité.
               </p>
             </div>
           </div>
@@ -189,18 +204,29 @@ const FreelanceMissionsPage: React.FC = () => {
       )}
 
       <p className="mb-4 text-[11px] text-muted-foreground">
-        Pour accéder à une mission, vous devez maîtriser au moins 50 % des technologies demandées.
-        Le score combine les technologies (50 %) et le service (50 %).
+        Pour accéder à une mission, vous devez maîtriser au moins 50 % des
+        technologies demandées. Le score combine les technologies (50 %) et le
+        service (50 %).
       </p>
       {compatibilityQuery.isError && (
-        <div role="alert" className="mb-4 rounded-2xl bg-brand-green/10 p-4 text-xs">
-          Impossible de vérifier la compatibilité. L’accès aux missions reste désactivé pendant cette indisponibilité.
-          <button onClick={() => compatibilityQuery.refetch()} className="ml-2 underline">Réessayer</button>
+        <div
+          role="alert"
+          className="mb-4 rounded-2xl bg-brand-green/10 p-4 text-xs"
+        >
+          Impossible de vérifier la compatibilité. L’accès aux missions reste
+          désactivé pendant cette indisponibilité.
+          <button
+            onClick={() => compatibilityQuery.refetch()}
+            className="ml-2 underline"
+          >
+            Réessayer
+          </button>
         </div>
       )}
       {matchingMutation.isSuccess && matchingData?.resultats.length === 0 && (
         <p role="status" className="mb-4 text-xs text-muted-foreground">
-          Aucune mission ne répond actuellement au minimum de compatibilité requis.
+          Aucune mission ne répond actuellement au minimum de compatibilité
+          requis.
         </p>
       )}
 
@@ -280,128 +306,138 @@ const FreelanceMissionsPage: React.FC = () => {
         )}
 
       {/* ── Liste globale des missions avec filtres disabled ── */}
-      {!isLoading &&
-        !missionsQuery.isError &&
-        displayedMissions.length > 0 && (
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-            {displayedMissions.map((mission) => {
-              const matchItem = compatibilityQuery.isError ? undefined : compatibilityMap.get(mission.id);
-              const recommendation = matchingResultsMap.get(mission.id);
-              const isRecommended = Boolean(recommendation && matchItem?.compatible);
-              const isDisabled = !matchItem?.compatible;
+      {!isLoading && !missionsQuery.isError && displayedMissions.length > 0 && (
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          {displayedMissions.map((mission) => {
+            const matchItem = compatibilityQuery.isError
+              ? undefined
+              : compatibilityMap.get(mission.id);
+            const recommendation = matchingResultsMap.get(mission.id);
+            const isRecommended = Boolean(
+              recommendation && matchItem?.compatible
+            );
+            const isDisabled = !matchItem?.compatible;
 
-              return (
-                <article
-                  key={mission.id}
-                  className={`relative flex min-h-[220px] flex-col rounded-2xl border transition ${
-                    isDisabled
-                      ? "border-brand-ink/10 dark:border-border bg-brand-canvas/80 dark:bg-background/80 opacity-60 grayscale"
-                      : isMatchingActive && isRecommended
-                        ? "border-brand-peach bg-white dark:bg-card shadow-md hover:-translate-y-0.5 ring-1 ring-brand-peach/40"
-                        : "border-brand-ink/8 dark:border-border bg-white dark:bg-card hover:-translate-y-0.5 hover:border-brand-ink/20 dark:hover:border-border hover:shadow-md"
-                  } p-4`}
-                >
-                  <div className="mb-3 flex items-center justify-between">
-                    {matchItem ? (
-                      matchItem.compatible ? (
-                        <MatchScoreBadge score={matchItem.score} />
-                      ) : (
-                        <span className="inline-flex items-center gap-1 rounded-full bg-brand-ink/10 dark:bg-foreground/10 px-2.5 py-1 text-[10px] font-semibold text-muted-foreground">
-                          Moins pertinent
-                        </span>
-                      )
+            return (
+              <article
+                key={mission.id}
+                className={`relative flex min-h-[220px] flex-col rounded-2xl border transition ${
+                  isDisabled
+                    ? "border-brand-ink/10 dark:border-border bg-brand-canvas/80 dark:bg-background/80 opacity-60 grayscale"
+                    : isMatchingActive && isRecommended
+                      ? "border-brand-peach bg-white dark:bg-card shadow-md hover:-translate-y-0.5 ring-1 ring-brand-peach/40"
+                      : "border-brand-ink/8 dark:border-border bg-white dark:bg-card hover:-translate-y-0.5 hover:border-brand-ink/20 dark:hover:border-border hover:shadow-md"
+                } p-4`}
+              >
+                <div className="mb-3 flex items-center justify-between">
+                  {matchItem ? (
+                    matchItem.compatible ? (
+                      <MatchScoreBadge score={matchItem.score} />
                     ) : (
-                      <span className="rounded-full bg-brand-sand dark:bg-muted px-2 py-1 text-[9px] font-semibold text-muted-foreground">
-                        Compatibilité indisponible
+                      <span className="inline-flex items-center gap-1 rounded-full bg-brand-ink/10 dark:bg-foreground/10 px-2.5 py-1 text-[10px] font-semibold text-muted-foreground">
+                        Moins pertinent
                       </span>
-                    )}
-                    <span className="text-[10px] font-medium text-muted-foreground">
-                      #{mission.id}
+                    )
+                  ) : (
+                    <span className="rounded-full bg-brand-sand dark:bg-muted px-2 py-1 text-[9px] font-semibold text-muted-foreground">
+                      Compatibilité indisponible
                     </span>
-                  </div>
-
-                  <h2 className="mb-2 line-clamp-2 font-heading text-[13px] font-semibold leading-snug text-brand-ink dark:text-foreground">
-                    {mission.title}
-                  </h2>
-                  <p className="line-clamp-3 text-[11px] leading-relaxed text-muted-foreground">
-                    {mission.description}
-                  </p>
-
-                  {/* Justification ou détails IA pour les cartes recommandées */}
-                  {matchItem && (
-                    <div className="my-2 rounded-xl border border-brand-peach/30 bg-brand-sand/40 dark:bg-muted/40 p-2 text-[9.5px]">
-                      <div className="flex justify-between text-muted-foreground mb-0.5">
-                        <span>Technologies (50%) :</span>
-                        <span className="font-semibold text-brand-ink dark:text-foreground">
-                          {Math.round(matchItem.score_technologies * 100)}%
-                        </span>
-                      </div>
-                      <div className="flex justify-between text-muted-foreground">
-                        <span>Service (50%) :</span>
-                        <span className="font-semibold text-brand-ink dark:text-foreground">
-                          {Math.round(matchItem.score_service * 100)}%
-                        </span>
-                      </div>
-                      {isRecommended && recommendation?.justification_ia && (
-                        <div className="mt-1.5 border-t border-brand-ink/6 dark:border-border pt-1 text-[9.5px] text-brand-ink/75 dark:text-foreground/75">
-                          <p className="font-semibold text-brand-ink dark:text-foreground">Avis IA :</p>
-                          <p className="line-clamp-2">{recommendation.justification_ia}</p>
-                        </div>
-                      )}
-                    </div>
                   )}
+                  <span className="text-[10px] font-medium text-muted-foreground">
+                    #{mission.id}
+                  </span>
+                </div>
 
-                  <div className="mt-auto pt-3 border-t border-brand-ink/6 dark:border-border">
-                    <div className="mb-3 flex flex-wrap gap-1.5">
-                      <span className="inline-flex items-center gap-1 rounded-full bg-brand-sand/60 dark:bg-muted/60 px-2 py-1 text-[9px] text-muted-foreground">
-                        <Clock3 className="h-2.5 w-2.5" />{" "}
-                        {formatDate(mission.date_deadline)}
+                <h2 className="mb-2 line-clamp-2 font-heading text-[13px] font-semibold leading-snug text-brand-ink dark:text-foreground">
+                  {mission.title}
+                </h2>
+                <p className="line-clamp-3 text-[11px] leading-relaxed text-muted-foreground">
+                  {mission.description}
+                </p>
+
+                {/* Justification ou détails IA pour les cartes recommandées */}
+                {matchItem && (
+                  <div className="my-2 rounded-xl border border-brand-peach/30 bg-brand-sand/40 dark:bg-muted/40 p-2 text-[9.5px]">
+                    <div className="flex justify-between text-muted-foreground mb-0.5">
+                      <span>Technologies (50%) :</span>
+                      <span className="font-semibold text-brand-ink dark:text-foreground">
+                        {Math.round(matchItem.score_technologies * 100)}%
                       </span>
-                      {mission.technologies_detail?.map((tech) => (
-                        <span
-                          key={tech.id}
-                          className="inline-flex items-center gap-1 rounded-full bg-brand-sand dark:bg-muted px-2 py-0.5 text-[9px] font-semibold text-muted-foreground"
-                        >
-                          {tech.name}
-                        </span>
-                      ))}
                     </div>
-
-                    <div className="flex items-end justify-between">
-                      <div>
-                        <p className="text-[8px] text-muted-foreground">
-                          Budget estimé
+                    <div className="flex justify-between text-muted-foreground">
+                      <span>Service (50%) :</span>
+                      <span className="font-semibold text-brand-ink dark:text-foreground">
+                        {Math.round(matchItem.score_service * 100)}%
+                      </span>
+                    </div>
+                    {isRecommended && recommendation?.justification_ia && (
+                      <div className="mt-1.5 border-t border-brand-ink/6 dark:border-border pt-1 text-[9.5px] text-brand-ink/75 dark:text-foreground/75">
+                        <p className="font-semibold text-brand-ink dark:text-foreground">
+                          Avis IA :
                         </p>
-                        <p className="mt-0.5 text-[11px] font-semibold text-brand-ink dark:text-foreground">
-                          {formatBudget(mission.budget)}
+                        <p className="line-clamp-2">
+                          {recommendation.justification_ia}
                         </p>
                       </div>
-
-                      <button
-                        type="button"
-                        disabled={isDisabled}
-                        onClick={() => navigate(`/espace/missions/${mission.id}`)}
-                        className={`inline-flex items-center gap-1 rounded-xl px-3 py-1.5 text-[10px] font-semibold transition ${
-                          isDisabled
-                            ? "bg-gray-200 dark:bg-muted text-muted-foreground cursor-not-allowed"
-                            : "bg-brand-ink text-white hover:bg-brand-ink/85 dark:hover:bg-black/65 cursor-pointer"
-                        }`}
-                      >
-                        {isDisabled ? (
-                          matchItem ? "Moins pertinent" : "Indisponible"
-                        ) : (
-                          <>
-                            Voir la mission <ArrowRight className="h-3 w-3" />
-                          </>
-                        )}
-                      </button>
-                    </div>
+                    )}
                   </div>
-                </article>
-              );
-            })}
-          </div>
-        )}
+                )}
+
+                <div className="mt-auto pt-3 border-t border-brand-ink/6 dark:border-border">
+                  <div className="mb-3 flex flex-wrap gap-1.5">
+                    <span className="inline-flex items-center gap-1 rounded-full bg-brand-sand/60 dark:bg-muted/60 px-2 py-1 text-[9px] text-muted-foreground">
+                      <Clock3 className="h-2.5 w-2.5" />{" "}
+                      {formatDate(mission.date_deadline)}
+                    </span>
+                    {mission.technologies_detail?.map((tech) => (
+                      <span
+                        key={tech.id}
+                        className="inline-flex items-center gap-1 rounded-full bg-brand-sand dark:bg-muted px-2 py-0.5 text-[9px] font-semibold text-muted-foreground"
+                      >
+                        {tech.name}
+                      </span>
+                    ))}
+                  </div>
+
+                  <div className="flex items-end justify-between">
+                    <div>
+                      <p className="text-[8px] text-muted-foreground">
+                        Budget estimé
+                      </p>
+                      <p className="mt-0.5 text-[11px] font-semibold text-brand-ink dark:text-foreground">
+                        {formatBudget(mission.budget)}
+                      </p>
+                    </div>
+
+                    <button
+                      type="button"
+                      disabled={isDisabled}
+                      onClick={() => navigate(`/espace/missions/${mission.id}`)}
+                      className={`inline-flex items-center gap-1 rounded-xl px-3 py-1.5 text-[10px] font-semibold transition ${
+                        isDisabled
+                          ? "bg-gray-200 dark:bg-muted text-muted-foreground cursor-not-allowed"
+                          : "bg-brand-ink text-white hover:bg-brand-ink/85 dark:hover:bg-black/65 cursor-pointer"
+                      }`}
+                    >
+                      {isDisabled ? (
+                        matchItem ? (
+                          "Moins pertinent"
+                        ) : (
+                          "Indisponible"
+                        )
+                      ) : (
+                        <>
+                          Voir la mission <ArrowRight className="h-3 w-3" />
+                        </>
+                      )}
+                    </button>
+                  </div>
+                </div>
+              </article>
+            );
+          })}
+        </div>
+      )}
 
       {/* ── Bouton flottant matching ── */}
       <div className="fixed bottom-6 right-6 z-40">

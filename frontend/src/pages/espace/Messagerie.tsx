@@ -1,25 +1,32 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { useSearchParams } from 'react-router-dom';
-import type { Conversation } from '../../api/message';
-import getCurrentUser from '../../utils/getUser';
-import { useConversions } from '../../hooks/useConversations';
-import { ConversationList, ChatPanel, EmptyChat } from '../../components/messagerie';
-import { ArrowLeft } from 'lucide-react';
+import React, { useState, useEffect, useCallback, useMemo } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useSearchParams } from "react-router-dom";
+import type { Conversation } from "../../api/message";
+import getCurrentUser from "../../utils/getUser";
+import { useConversions } from "../../hooks/useConversations";
+import {
+  ConversationList,
+  ChatPanel,
+  EmptyChat,
+} from "../../components/messagerie";
+import { ArrowLeft } from "lucide-react";
 
 const MessageriePage: React.FC = () => {
   const [searchParams] = useSearchParams();
-  const [activeConversation, setActiveConversation] = useState<Conversation | null>(null);
+  const [activeConversation, setActiveConversation] =
+    useState<Conversation | null>(null);
   const [mobileShowChat, setMobileShowChat] = useState(false);
-  const [syntheticConversation, setSyntheticConversation] = useState<Conversation | null>(null);
+  const [syntheticConversation, setSyntheticConversation] =
+    useState<Conversation | null>(null);
 
   const { data: user } = useQuery({
-    queryKey: ['currentUser'],
+    queryKey: ["currentUser"],
     queryFn: getCurrentUser,
     retry: false,
   });
 
-  const { data: fetchedConversations = [], isLoading: convLoading } = useConversions();
+  const { data: fetchedConversations = [], isLoading: convLoading } =
+    useConversions();
 
   // Combine fetched conversations with any synthetic conversation created via URL params
   const conversations = useMemo(() => {
@@ -33,7 +40,7 @@ const MessageriePage: React.FC = () => {
 
   // Handle URL query parameters (e.g. /espace/messages?mission=12&title=Design&user_id=5&first_name=Marc)
   useEffect(() => {
-    const missionId = searchParams.get('mission');
+    const missionId = searchParams.get("mission");
     if (!missionId) return;
 
     // 1. Check if conversation already exists in fetched list
@@ -46,11 +53,11 @@ const MessageriePage: React.FC = () => {
       setMobileShowChat(true);
     } else if (missionId) {
       // 2. Synthesize a conversation from URL params so user can initiate chat immediately
-      const title = searchParams.get('title') || 'Mission #' + missionId;
-      const userId = Number(searchParams.get('user_id') || 0);
-      const firstName = searchParams.get('first_name') || 'Collaborateur';
-      const lastName = searchParams.get('last_name') || '';
-      const profilePic = searchParams.get('profile_picture') || null;
+      const title = searchParams.get("title") || "Mission #" + missionId;
+      const userId = Number(searchParams.get("user_id") || 0);
+      const firstName = searchParams.get("first_name") || "Collaborateur";
+      const lastName = searchParams.get("last_name") || "";
+      const profilePic = searchParams.get("profile_picture") || null;
 
       const newConv: Conversation = {
         mission_id: String(missionId),
@@ -83,14 +90,12 @@ const MessageriePage: React.FC = () => {
   }, []);
 
   return (
-    <div
-      className="flex h-[calc(100dvh-48px)] overflow-hidden bg-white dark:bg-card shadow-sm -m-4 sm:-m-5 lg:-m-6"
-    >
+    <div className="flex h-[calc(100dvh-48px)] overflow-hidden bg-white dark:bg-card shadow-sm -m-4 sm:-m-5 lg:-m-6">
       {/* ─── Conversation List (left panel) ─── */}
       <div
         className={`
           w-full md:w-[280px] lg:w-[320px] shrink-0 border-r border-border/60
-          ${mobileShowChat ? 'hidden md:flex' : 'flex'}
+          ${mobileShowChat ? "hidden md:flex" : "flex"}
           flex-col
         `}
       >
@@ -106,7 +111,7 @@ const MessageriePage: React.FC = () => {
       <div
         className={`
           flex-1 min-w-0 flex flex-col
-          ${!mobileShowChat ? 'hidden md:flex' : 'flex'}
+          ${!mobileShowChat ? "hidden md:flex" : "flex"}
         `}
       >
         {/* Mobile back button */}
@@ -122,10 +127,7 @@ const MessageriePage: React.FC = () => {
         )}
 
         {activeConversation && user ? (
-          <ChatPanel
-            conversation={activeConversation}
-            currentUser={user}
-          />
+          <ChatPanel conversation={activeConversation} currentUser={user} />
         ) : (
           <EmptyChat />
         )}

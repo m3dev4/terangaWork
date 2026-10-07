@@ -32,23 +32,25 @@ const AssistantChatPanel: React.FC<AssistantChatPanelProps> = ({
   mobile,
   optimisticMessage,
 }) => {
-  const [input, setInput] = useState('');
+  const [input, setInput] = useState("");
   const [localTypingId, setLocalTypingId] = useState<number | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const { data: user } = useQuery({
-      queryKey: ["currentUser"],
-      queryFn: getCurrentUser,
-      retry: false,
-    });
+    queryKey: ["currentUser"],
+    queryFn: getCurrentUser,
+    retry: false,
+  });
 
-  const displayMessages: (ChatMessage & { _optimistic?: boolean })[] = [...messages];
+  const displayMessages: (ChatMessage & { _optimistic?: boolean })[] = [
+    ...messages,
+  ];
 
   if (optimisticMessage && isSending) {
     displayMessages.push({
       id: -1,
-      role: 'utilisateur',
+      role: "utilisateur",
       content: optimisticMessage,
       created_at: new Date().toISOString(),
       _optimistic: true,
@@ -63,7 +65,7 @@ const AssistantChatPanel: React.FC<AssistantChatPanelProps> = ({
 
   useEffect(() => {
     if (textareaRef.current) {
-      textareaRef.current.style.height = 'auto';
+      textareaRef.current.style.height = "auto";
       textareaRef.current.style.height = `${Math.min(textareaRef.current.scrollHeight, 120)}px`;
     }
   }, [input]);
@@ -71,7 +73,7 @@ const AssistantChatPanel: React.FC<AssistantChatPanelProps> = ({
   useEffect(() => {
     if (!isSending && messages.length > 0) {
       const last = messages[messages.length - 1];
-      if (last.role === 'assistant') {
+      if (last.role === "assistant") {
         setLocalTypingId(last.id);
       }
     }
@@ -82,27 +84,28 @@ const AssistantChatPanel: React.FC<AssistantChatPanelProps> = ({
     if (!trimmed || isSending) return;
     if (trimmed.length > 2000) {
       toast.add({
-        title: 'Message trop long',
-        description: 'Le message ne doit pas dépasser 2000 caractères.',
-        type: 'error',
+        title: "Message trop long",
+        description: "Le message ne doit pas dépasser 2000 caractères.",
+        type: "error",
       });
       return;
     }
     onSend(trimmed);
-    setInput('');
+    setInput("");
   }, [input, isSending, onSend]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     const isCoarsePointer =
-      typeof window !== 'undefined' && window.matchMedia?.('(pointer: coarse)').matches;
-    if (e.key === 'Enter' && !e.shiftKey && !isCoarsePointer) {
+      typeof window !== "undefined" &&
+      window.matchMedia?.("(pointer: coarse)").matches;
+    if (e.key === "Enter" && !e.shiftKey && !isCoarsePointer) {
       e.preventDefault();
       handleSubmit();
     }
   };
 
   const convTitle =
-    displayMessages.find((m) => m.role === 'utilisateur')?.content ||
+    displayMessages.find((m) => m.role === "utilisateur")?.content ||
     `Conversation #${conversationId}`;
 
   return (
@@ -123,14 +126,23 @@ const AssistantChatPanel: React.FC<AssistantChatPanelProps> = ({
           <Bot className="h-4.5 w-4.5 text-brand-green" />
         </div>
         <div className="min-w-0 flex-1">
-          <h3 className="truncate text-sm font-bold text-brand-ink dark:text-foreground">{truncate(convTitle, 60)}</h3>
+          <h3 className="truncate text-sm font-bold text-brand-ink dark:text-foreground">
+            {truncate(convTitle, 60)}
+          </h3>
           <p className="truncate text-xs text-muted-foreground">
-            {isSending ? 'Réflexion en cours…' : sendError ? 'Erreur' : 'Prêt à répondre'}
+            {isSending
+              ? "Réflexion en cours…"
+              : sendError
+                ? "Erreur"
+                : "Prêt à répondre"}
           </p>
         </div>
       </div>
 
-      <div ref={scrollRef} className="min-h-0 flex-1 space-y-4 overflow-y-auto px-4 py-5">
+      <div
+        ref={scrollRef}
+        className="min-h-0 flex-1 space-y-4 overflow-y-auto px-4 py-5"
+      >
         {isLoadingMessages ? (
           <div className="flex justify-center py-12">
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
@@ -143,16 +155,19 @@ const AssistantChatPanel: React.FC<AssistantChatPanelProps> = ({
             <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-sand dark:bg-muted">
               <Bot className="h-7 w-7 text-brand-violet dark:text-violet-300" />
             </div>
-            <h4 className="mb-2 text-base font-bold text-brand-ink dark:text-foreground">Assistant Malaw</h4>
+            <h4 className="mb-2 text-base font-bold text-brand-ink dark:text-foreground">
+              Assistant Malaw
+            </h4>
             <p className="mb-6 max-w-md text-sm text-muted-foreground">
-              Posez des questions sur vos candidatures, missions, paiements ou obtenez des conseils personnalisés.
+              Posez des questions sur vos candidatures, missions, paiements ou
+              obtenez des conseils personnalisés.
             </p>
             <div className="grid w-full max-w-lg grid-cols-1 gap-2 sm:grid-cols-2">
               {[
-                'Où en est ma candidature ?',
-                'Quelles sont mes missions en cours ?',
-                'Combien ai-je gagné ce mois-ci ?',
-                'Des conseils pour mon profil ?',
+                "Où en est ma candidature ?",
+                "Quelles sont mes missions en cours ?",
+                "Combien ai-je gagné ce mois-ci ?",
+                "Des conseils pour mon profil ?",
               ].map((sug, i) => (
                 <button
                   key={i}
@@ -167,7 +182,7 @@ const AssistantChatPanel: React.FC<AssistantChatPanelProps> = ({
           </div>
         ) : (
           displayMessages.map((msg, idx) => {
-            const isUser = msg.role === 'utilisateur';
+            const isUser = msg.role === "utilisateur";
             const showTypingAnimation =
               !isUser &&
               !isSending &&
@@ -176,8 +191,8 @@ const AssistantChatPanel: React.FC<AssistantChatPanelProps> = ({
 
             return (
               <div
-                key={msg.id + '-' + idx}
-                className={`flex items-start gap-2.5 ${isUser ? 'justify-end' : 'justify-start'}`}
+                key={msg.id + "-" + idx}
+                className={`flex items-start gap-2.5 ${isUser ? "justify-end" : "justify-start"}`}
               >
                 {!isUser && (
                   <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-brand-ink">
@@ -188,25 +203,35 @@ const AssistantChatPanel: React.FC<AssistantChatPanelProps> = ({
                 <div
                   className={`min-w-0 max-w-[85%] rounded-2xl px-3.5 py-2.5 text-sm sm:max-w-[75%] ${
                     isUser
-                      ? 'rounded-br-md bg-brand-ink text-white'
-                      : 'rounded-bl-md border border-brand-ink/8 dark:border-border bg-brand-sand/40 dark:bg-muted/40 text-brand-ink dark:text-foreground'
+                      ? "rounded-br-md bg-brand-ink text-white"
+                      : "rounded-bl-md border border-brand-ink/8 dark:border-border bg-brand-sand/40 dark:bg-muted/40 text-brand-ink dark:text-foreground"
                   }`}
                 >
                   {isUser ? (
-                    <div className="whitespace-pre-wrap break-words">{msg.content}</div>
+                    <div className="whitespace-pre-wrap break-words">
+                      {msg.content}
+                    </div>
                   ) : showTypingAnimation ? (
                     <TypingAssistantMessage fullText={msg.content} />
                   ) : (
-                    <div className="whitespace-pre-wrap break-words">{msg.content}</div>
+                    <div className="whitespace-pre-wrap break-words">
+                      {msg.content}
+                    </div>
                   )}
-                  <div className={`mt-1.5 text-xs ${isUser ? 'text-white/75' : 'text-muted-foreground'}`}>
+                  <div
+                    className={`mt-1.5 text-xs ${isUser ? "text-white/75" : "text-muted-foreground"}`}
+                  >
                     {formatDate(msg.created_at)}
                   </div>
                 </div>
 
                 {isUser && (
                   <div className="flex h-7 w-7 shrink-0 items-center relative overflow-hidden justify-center rounded-lg bg-brand-green">
-                    <img src={getMediaUrl(user.profile_picture)} alt={user.first_name} className="h-7 rounded-lg w-7 object-cover" />
+                    <img
+                      src={getMediaUrl(user.profile_picture)}
+                      alt={user.first_name}
+                      className="h-7 rounded-lg w-7 object-cover"
+                    />
                   </div>
                 )}
               </div>
@@ -244,7 +269,7 @@ const AssistantChatPanel: React.FC<AssistantChatPanelProps> = ({
 
       <div
         className="shrink-0 border-t border-brand-ink/8 dark:border-border bg-white dark:bg-card px-4 py-3"
-        style={{ paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))' }}
+        style={{ paddingBottom: "max(0.75rem, env(safe-area-inset-bottom))" }}
       >
         <div className="flex items-end gap-2">
           <textarea
@@ -256,7 +281,7 @@ const AssistantChatPanel: React.FC<AssistantChatPanelProps> = ({
             disabled={isSending}
             placeholder="Posez votre question…"
             className="min-w-0 flex-1 resize-none rounded-xl border border-brand-ink/12 dark:border-border bg-brand-sand/30 dark:bg-muted/30 px-3.5 py-2.5 text-sm text-brand-ink dark:text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-brand-green/15 focus:border-brand-green disabled:opacity-60"
-            style={{ minHeight: '44px', maxHeight: '120px' }}
+            style={{ minHeight: "44px", maxHeight: "120px" }}
           />
           <button
             type="button"
@@ -271,7 +296,9 @@ const AssistantChatPanel: React.FC<AssistantChatPanelProps> = ({
             )}
           </button>
         </div>
-        <p className="mt-2 text-center text-xs text-muted-foreground">{input.length}/2000 caractères</p>
+        <p className="mt-2 text-center text-xs text-muted-foreground">
+          {input.length}/2000 caractères
+        </p>
       </div>
     </div>
   );

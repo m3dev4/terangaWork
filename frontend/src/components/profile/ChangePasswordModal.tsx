@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { X, Lock, Loader2, CheckCircle2 } from 'lucide-react';
-import { changePassword } from '../../api/userApi';
+import React, { useState } from "react";
+import { X, Lock, Loader2, CheckCircle2 } from "lucide-react";
+import { changePassword } from "../../api/userApi";
 
 interface ChangePasswordModalProps {
   isOpen: boolean;
@@ -11,9 +11,9 @@ export const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({
   isOpen,
   onClose,
 }) => {
-  const [oldPassword, setOldPassword] = useState('');
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [oldPassword, setOldPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
@@ -25,12 +25,12 @@ export const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({
     setError(null);
 
     if (newPassword !== confirmPassword) {
-      setError('Les nouveaux mots de passe ne correspondent pas.');
+      setError("Les nouveaux mots de passe ne correspondent pas.");
       return;
     }
 
     if (newPassword.length < 6) {
-      setError('Le mot de passe doit contenir au moins 6 caractères.');
+      setError("Le mot de passe doit contenir au moins 6 caractères.");
       return;
     }
 
@@ -47,7 +47,8 @@ export const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({
       }, 1500);
     } catch (err: any) {
       setError(
-        err.response?.data?.message || 'Erreur lors du changement de mot de passe.'
+        err.response?.data?.message ||
+          "Erreur lors du changement de mot de passe."
       );
     } finally {
       setIsLoading(false);
@@ -87,7 +88,9 @@ export const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({
         {success ? (
           <div className="flex flex-col items-center justify-center py-6 text-center text-emerald-600 dark:text-emerald-300">
             <CheckCircle2 className="mb-2 h-10 w-10 animate-bounce" />
-            <p className="text-sm font-bold">Mot de passe modifié avec succès !</p>
+            <p className="text-sm font-bold">
+              Mot de passe modifié avec succès !
+            </p>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="space-y-4 text-[11px]">

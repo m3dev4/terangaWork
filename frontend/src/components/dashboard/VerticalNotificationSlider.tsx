@@ -20,7 +20,9 @@ export const VerticalNotificationSlider: React.FC = () => {
     useNotifications();
 
   const [currentIndex, setCurrentIndex] = useState(0);
-  const reducedMotion = useMediaQuery({ query: "(prefers-reduced-motion: reduce)" });
+  const reducedMotion = useMediaQuery({
+    query: "(prefers-reduced-motion: reduce)",
+  });
 
   useEffect(() => {
     if (notifications.length <= 1 || reducedMotion) return;
@@ -72,7 +74,9 @@ export const VerticalNotificationSlider: React.FC = () => {
   if (!notifications || notifications.length === 0) {
     return (
       <div className="flex flex-col justify-center items-center glass-card min-h-[340px] p-8 text-center">
-        <div className="mb-4"><DashboardIcon kind="notification" size="large" /></div>
+        <div className="mb-4">
+          <DashboardIcon kind="notification" size="large" />
+        </div>
         <h4 className="text-base font-bold text-foreground font-heading">
           Aucune notification
         </h4>
@@ -104,7 +108,8 @@ export const VerticalNotificationSlider: React.FC = () => {
               Flux d'activité
             </h3>
             <p className="text-[11px] text-muted-foreground mt-0.5">
-              {Math.min(currentIndex, notifications.length - 1) + 1} / {notifications.length} alerte
+              {Math.min(currentIndex, notifications.length - 1) + 1} /{" "}
+              {notifications.length} alerte
               {notifications.length > 1 ? "s" : ""}
             </p>
           </div>

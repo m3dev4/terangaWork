@@ -1,5 +1,5 @@
-import React from 'react';
-import { Input } from './ui/input';
+import React from "react";
+import { Input } from "./ui/input";
 
 interface OtpCodeProps {
   index: number;
@@ -16,7 +16,7 @@ const OptCode = ({ index, inputRefs, onChange, onKeyDown }: OtpCodeProps) => {
       }}
       id={`otp-${index}`}
       aria-label={`Chiffre ${index + 1} du code de vérification`}
-      autoComplete={index === 0 ? 'one-time-code' : 'off'}
+      autoComplete={index === 0 ? "one-time-code" : "off"}
       type="text"
       inputMode="numeric"
       maxLength={1}

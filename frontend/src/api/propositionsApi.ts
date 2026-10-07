@@ -1,4 +1,4 @@
-import { instance } from './axios';
+import { instance } from "./axios";
 
 export interface FreelanceInfo {
   id: number;
@@ -19,18 +19,19 @@ export interface Proposition {
   mission_title?: string;
   mission_budget?: number;
   mission_status?: string;
-  mission_operateur?: 'OM' | 'WAVE';
+  mission_operateur?: "OM" | "WAVE";
   numero_paiement_confirme?: boolean;
   numero_paiement?: string | null;
   freelance: number;
   freelance_info: FreelanceInfo;
-  proposition_status: 'PENDING' | 'ACCEPTED' | 'REJECTED' | 'DELIVERED';
+  proposition_status: "PENDING" | "ACCEPTED" | "REJECTED" | "DELIVERED";
   created_at: string;
   updated_at: string;
 
   has_paiement?: boolean;
-  paiement_statut_collecte?: 'EN_ATTENTE' | 'REUSSI' | 'ECHOUE' | null;
-  paiement_statut_decaissement?: 'NON_DECLENCHE' | 'EN_ATTENTE' | 'REUSSI' | 'ECHOUE' | null;
+  paiement_statut_collecte?: "EN_ATTENTE" | "REUSSI" | "ECHOUE" | null;
+  paiement_statut_decaissement?:
+    "NON_DECLENCHE" | "EN_ATTENTE" | "REUSSI" | "ECHOUE" | null;
   paiement_montant_brut?: number | null;
   paiement_montant_net?: number | null;
   paiement_date_collecte?: string | null;
@@ -43,9 +44,15 @@ export interface PropositionPayload {
   mission: number;
 }
 
-export const getPropositions = async (missionId?: number): Promise<Proposition[]> => {
-  const url = missionId ? `propositions/?mission=${missionId}` : 'propositions/';
-  const response = await instance.get<Proposition[] | { results: Proposition[] }>(url);
+export const getPropositions = async (
+  missionId?: number
+): Promise<Proposition[]> => {
+  const url = missionId
+    ? `propositions/?mission=${missionId}`
+    : "propositions/";
+  const response = await instance.get<
+    Proposition[] | { results: Proposition[] }
+  >(url);
   const data = response.data;
   return Array.isArray(data) ? data : data.results;
 };
@@ -53,7 +60,7 @@ export const getPropositions = async (missionId?: number): Promise<Proposition[]
 export const createProposition = async (
   payload: PropositionPayload
 ): Promise<Proposition> => {
-  const response = await instance.post<Proposition>('propositions/', payload);
+  const response = await instance.post<Proposition>("propositions/", payload);
   return response.data;
 };
 

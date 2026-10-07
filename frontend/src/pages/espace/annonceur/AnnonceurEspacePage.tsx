@@ -247,8 +247,8 @@ const AnnonceurEspacePage: React.FC = () => {
                   <div>
                     {missionStatus === "IN_PROGRESS" && (
                       <span className="mb-1 inline-flex items-center gap-1 rounded-full bg-brand-sand dark:bg-muted px-2.5 py-0.5 text-[9.5px] font-semibold text-muted-foreground">
-                        <Clock className="h-3 w-3 text-brand-violet dark:text-violet-300" /> En cours de
-                        réalisation par le freelance
+                        <Clock className="h-3 w-3 text-brand-violet dark:text-violet-300" />{" "}
+                        En cours de réalisation par le freelance
                       </span>
                     )}
                     {missionStatus === "DELIVERED" && (
@@ -366,8 +366,8 @@ const AnnonceurEspacePage: React.FC = () => {
                         }
                         className="inline-flex items-center gap-1.5 rounded-xl bg-brand-ink hover:bg-brand-ink/85 dark:hover:bg-black/65 px-4 py-2 text-[11px] font-bold text-white transition-all cursor-pointer"
                       >
-                        <CreditCard className="h-4 w-4 text-brand-green" /> Payer le
-                        freelance (PayDunya)
+                        <CreditCard className="h-4 w-4 text-brand-green" />{" "}
+                        Payer le freelance (PayDunya)
                       </button>
                     ))}
 

@@ -3,7 +3,6 @@ import { Layers, Star, ArrowRight, ArrowLeft, Loader2 } from "lucide-react";
 import { useServices } from "../../../hooks/useOnboarding";
 import { Button } from "../../ui/button";
 
-
 interface StepServicesProps {
   initialServiceIds?: number[];
   stepNumber: number;
@@ -47,7 +46,7 @@ export const StepServices: React.FC<StepServicesProps> = ({
   const handleSelectService = (serviceId: number) => {
     if (selectedIds.includes(serviceId)) {
       // Désélectionner
-      setSelectedIds(selectedIds.filter(id => id !== serviceId));
+      setSelectedIds(selectedIds.filter((id) => id !== serviceId));
     } else {
       // Vérifier que l'utilisateur ne peut pas sélectionner plus de 3 services
       if (selectedIds.length >= 3) {
@@ -63,7 +62,9 @@ export const StepServices: React.FC<StepServicesProps> = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (selectedIds.length === 0) {
-      setError("Veuillez sélectionner au moins un service parmi ceux disponibles.");
+      setError(
+        "Veuillez sélectionner au moins un service parmi ceux disponibles."
+      );
       return;
     }
     if (selectedIds.length > 3) {

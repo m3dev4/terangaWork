@@ -327,7 +327,10 @@ export const AdminServicesPage: React.FC = () => {
             <form onSubmit={handleSubmit} className="p-5 space-y-4">
               <div className="space-y-1.5">
                 <label className="text-xs font-semibold text-muted-foreground">
-                  Nom du service <span className="text-brand-violet dark:text-violet-300">*</span>
+                  Nom du service{" "}
+                  <span className="text-brand-violet dark:text-violet-300">
+                    *
+                  </span>
                 </label>
                 <input
                   type="text"

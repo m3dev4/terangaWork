@@ -1,60 +1,61 @@
-import React, { useState } from 'react';
-import { Outlet, useNavigate, useLocation } from 'react-router-dom';
+import React, { useState } from "react";
+import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import { getMediaUrl } from "../../utils/getMediaUrl";
 import Sidebar, {
   FREELANCE_SIDEBAR_SECTIONS,
   ANNONCEUR_SIDEBAR_SECTIONS,
   ADMIN_SIDEBAR_SECTIONS,
   FOOTER_ITEMS,
-} from '../../components/sidebar';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-import getCurrentUser from '../../utils/getUser';
-import { LogOut, User as UserIcon } from 'lucide-react';
-import MobileSidebar from '../../components/MobileSidebar';
-import useMediaQuery from '../../hooks/useMediaQuery';
-import { NotificationDropdown } from '../../components/notification/NotificationDropdown';
-import { useWebSocket, useWebSocketQuerySync } from '../../hooks/useWebSocket';
-import ThemeToggle from '../../components/ThemeToggle';
-import '../../components/dashboard/dashboard-glass.css';
+} from "../../components/sidebar";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import getCurrentUser from "../../utils/getUser";
+import { LogOut, User as UserIcon } from "lucide-react";
+import MobileSidebar from "../../components/MobileSidebar";
+import useMediaQuery from "../../hooks/useMediaQuery";
+import { NotificationDropdown } from "../../components/notification/NotificationDropdown";
+import { useWebSocket, useWebSocketQuerySync } from "../../hooks/useWebSocket";
+import ThemeToggle from "../../components/ThemeToggle";
+import "../../components/dashboard/dashboard-glass.css";
 
 const EspaceLayout: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const queryClient = useQueryClient();
   const [collapsed, setCollapsed] = useState(false);
-  const isDesktop = useMediaQuery({ query: '(min-width: 1024px)' });
+  const isDesktop = useMediaQuery({ query: "(min-width: 1024px)" });
 
   // Connect to the single shared WebSocket and sync events to React Query
   useWebSocket();
   useWebSocketQuerySync();
 
   const { data: user } = useQuery({
-    queryKey: ['currentUser'],
+    queryKey: ["currentUser"],
     queryFn: getCurrentUser,
     retry: false,
   });
 
   const handleLogout = () => {
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('refresh_token');
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("refresh_token");
     queryClient.clear();
-    navigate('/login');
+    navigate("/login");
   };
 
   const breadcrumb = React.useMemo(() => {
     const currentPath = location.pathname;
     const sections =
-      user?.role === 'annonceur'
+      user?.role === "annonceur"
         ? ANNONCEUR_SIDEBAR_SECTIONS
-        : user?.role === 'admin'
-        ? ADMIN_SIDEBAR_SECTIONS
-        : FREELANCE_SIDEBAR_SECTIONS;
+        : user?.role === "admin"
+          ? ADMIN_SIDEBAR_SECTIONS
+          : FREELANCE_SIDEBAR_SECTIONS;
 
     for (const section of sections) {
       for (const item of section.items) {
         if (
-          (item.url === '/espace' && (currentPath === '/espace' || currentPath === '/espace/')) ||
-          (item.url !== '/espace' && currentPath.startsWith(item.url))
+          (item.url === "/espace" &&
+            (currentPath === "/espace" || currentPath === "/espace/")) ||
+          (item.url !== "/espace" && currentPath.startsWith(item.url))
         ) {
           return { section: section.title, label: item.label };
         }
@@ -63,17 +64,24 @@ const EspaceLayout: React.FC = () => {
 
     for (const item of FOOTER_ITEMS) {
       if (currentPath.startsWith(item.url)) {
-        return { section: 'Support', label: item.label };
+        return { section: "Support", label: item.label };
       }
     }
 
-    return { section: 'Principal', label: 'Tableau de bord' };
+    return { section: "Principal", label: "Tableau de bord" };
   }, [location.pathname, user?.role]);
 
   return (
-    <div className={`espace-shell ${/^\/espace\/?$/.test(location.pathname) ? 'espace-shell--dashboard' : ''} flex h-dvh max-h-dvh w-full overflow-hidden`}>
+    <div
+      className={`espace-shell ${/^\/espace\/?$/.test(location.pathname) ? "espace-shell--dashboard" : ""} flex h-dvh max-h-dvh w-full overflow-hidden`}
+    >
       {/* Sidebar */}
-      {isDesktop && <Sidebar collapsed={collapsed} onToggleCollapse={() => setCollapsed(!collapsed)} />}
+      {isDesktop && (
+        <Sidebar
+          collapsed={collapsed}
+          onToggleCollapse={() => setCollapsed(!collapsed)}
+        />
+      )}
 
       {/* Main Viewport */}
       <div className="flex-1 h-full flex flex-col overflow-hidden min-w-0">
@@ -83,8 +91,12 @@ const EspaceLayout: React.FC = () => {
           <div className="flex min-w-0 items-center gap-2">
             {!isDesktop && <MobileSidebar key={location.key} />}
             <div className="flex min-w-0 items-center gap-1.5 text-[11px]">
-              <span className="hidden sm:inline text-muted-foreground font-normal">{breadcrumb.section}</span>
-              <span className="hidden sm:inline text-neutral-300 dark:text-muted-foreground font-normal">›</span>
+              <span className="hidden sm:inline text-muted-foreground font-normal">
+                {breadcrumb.section}
+              </span>
+              <span className="hidden sm:inline text-neutral-300 dark:text-muted-foreground font-normal">
+                ›
+              </span>
               <span className="truncate text-foreground font-semibold tracking-tight">
                 {breadcrumb.label}
               </span>
@@ -115,14 +127,16 @@ const EspaceLayout: React.FC = () => {
 
               <div className="hidden sm:flex max-w-32 flex-col text-left">
                 <span className="truncate text-[11px] font-semibold text-foreground leading-tight">
-                  {user?.first_name ? `${user.first_name} ${user.last_name || ''}`.trim() : 'Mon Compte'}
+                  {user?.first_name
+                    ? `${user.first_name} ${user.last_name || ""}`.trim()
+                    : "Mon Compte"}
                 </span>
                 <span className="text-[9.5px] text-muted-foreground capitalize leading-tight">
-                  {user?.role === 'freelance'
-                    ? 'Développeur freelance'
-                    : user?.role === 'annonceur'
-                    ? 'Annonceur'
-                    : user?.role || 'Membre'}
+                  {user?.role === "freelance"
+                    ? "Développeur freelance"
+                    : user?.role === "annonceur"
+                      ? "Annonceur"
+                      : user?.role || "Membre"}
                 </span>
               </div>
             </div>

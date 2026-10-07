@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   BriefcaseBusiness,
   ChevronDown,
@@ -6,8 +6,8 @@ import {
   MapPin,
   RotateCcw,
   Search,
-} from 'lucide-react';
-import { FILTERS, MISSIONS } from '../constants/utils';
+} from "lucide-react";
+import { FILTERS, MISSIONS } from "../constants/utils";
 
 const Foundmission = () => {
   return (

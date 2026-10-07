@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { ArrowRight, ArrowLeft, Loader2, Plus, Trash2 } from 'lucide-react';
+import React, { useState } from "react";
+import { ArrowRight, ArrowLeft, Loader2, Plus, Trash2 } from "lucide-react";
 
 interface FormationItem {
   nom: string;
-  role: 'universitaire' | 'formation_professionnelle' | 'en_ligne';
+  role: "universitaire" | "formation_professionnelle" | "en_ligne";
   etablissement?: string;
   intitule?: string;
   date_obtention: string;
@@ -37,12 +37,12 @@ export const StepFormation: React.FC<StepFormationProps> = ({
       ? initialData
       : [
           {
-            nom: '',
-            role: 'universitaire',
-            etablissement: '',
-            intitule: '',
-            date_obtention: '',
-            startDate: '',
+            nom: "",
+            role: "universitaire",
+            etablissement: "",
+            intitule: "",
+            date_obtention: "",
+            startDate: "",
             current: false,
           },
         ]
@@ -52,12 +52,12 @@ export const StepFormation: React.FC<StepFormationProps> = ({
     setFormations((prev) => [
       ...prev,
       {
-        nom: '',
-        role: 'universitaire',
-        etablissement: '',
-        intitule: '',
-        date_obtention: '',
-        startDate: '',
+        nom: "",
+        role: "universitaire",
+        etablissement: "",
+        intitule: "",
+        date_obtention: "",
+        startDate: "",
         current: false,
       },
     ]);
@@ -67,7 +67,11 @@ export const StepFormation: React.FC<StepFormationProps> = ({
     setFormations((prev) => prev.filter((_, i) => i !== index));
   };
 
-  const updateFormation = (index: number, field: keyof FormationItem, value: any) => {
+  const updateFormation = (
+    index: number,
+    field: keyof FormationItem,
+    value: any
+  ) => {
     setFormations((prev) => {
       const updated = [...prev];
       updated[index] = { ...updated[index], [field]: value };
@@ -132,11 +136,15 @@ export const StepFormation: React.FC<StepFormationProps> = ({
                 </label>
                 <select
                   value={item.role}
-                  onChange={(e) => updateFormation(index, 'role', e.target.value)}
+                  onChange={(e) =>
+                    updateFormation(index, "role", e.target.value)
+                  }
                   className="w-full px-3 py-2 text-sm rounded-xl border border-border focus:outline-none focus:border-brand-violet bg-white"
                 >
                   <option value="universitaire">Universitaire</option>
-                  <option value="formation_professionnelle">Formation Professionnelle</option>
+                  <option value="formation_professionnelle">
+                    Formation Professionnelle
+                  </option>
                   <option value="en_ligne">En ligne / Certification</option>
                 </select>
               </div>
@@ -150,8 +158,8 @@ export const StepFormation: React.FC<StepFormationProps> = ({
                     type="text"
                     value={item.nom}
                     onChange={(e) => {
-                      updateFormation(index, 'nom', e.target.value);
-                      updateFormation(index, 'intitule', e.target.value);
+                      updateFormation(index, "nom", e.target.value);
+                      updateFormation(index, "intitule", e.target.value);
                     }}
                     placeholder="Ex: Master Informatique"
                     className="w-full px-3 py-2 text-sm rounded-xl border border-border focus:outline-none focus:border-brand-violet"
@@ -163,8 +171,10 @@ export const StepFormation: React.FC<StepFormationProps> = ({
                   </label>
                   <input
                     type="text"
-                    value={item.etablissement || ''}
-                    onChange={(e) => updateFormation(index, 'etablissement', e.target.value)}
+                    value={item.etablissement || ""}
+                    onChange={(e) =>
+                      updateFormation(index, "etablissement", e.target.value)
+                    }
                     placeholder="Ex: Université de Paris"
                     className="w-full px-3 py-2 text-sm rounded-xl border border-border focus:outline-none focus:border-brand-violet"
                   />
@@ -178,8 +188,10 @@ export const StepFormation: React.FC<StepFormationProps> = ({
                   </label>
                   <input
                     type="date"
-                    value={item.startDate || ''}
-                    onChange={(e) => updateFormation(index, 'startDate', e.target.value)}
+                    value={item.startDate || ""}
+                    onChange={(e) =>
+                      updateFormation(index, "startDate", e.target.value)
+                    }
                     className="w-full px-3 py-2 text-sm rounded-xl border border-border focus:outline-none focus:border-brand-violet"
                   />
                 </div>
@@ -190,7 +202,9 @@ export const StepFormation: React.FC<StepFormationProps> = ({
                   <input
                     type="date"
                     value={item.date_obtention}
-                    onChange={(e) => updateFormation(index, 'date_obtention', e.target.value)}
+                    onChange={(e) =>
+                      updateFormation(index, "date_obtention", e.target.value)
+                    }
                     className="w-full px-3 py-2 text-sm rounded-xl border border-border focus:outline-none focus:border-brand-violet"
                   />
                 </div>

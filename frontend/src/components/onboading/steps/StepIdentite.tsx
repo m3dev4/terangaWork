@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import { ArrowRight, Loader2 } from "lucide-react";
 import { Button } from "../../ui/button";
 
-
-
 interface StepIdentiteProps {
   initialData?: {
     first_name?: string;

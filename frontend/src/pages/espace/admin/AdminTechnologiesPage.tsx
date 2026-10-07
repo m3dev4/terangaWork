@@ -361,7 +361,9 @@ export const AdminTechnologiesPage: React.FC = () => {
               <div className="space-y-1.5">
                 <label className="text-xs font-semibold text-muted-foreground">
                   Nom de la technologie{" "}
-                  <span className="text-brand-violet dark:text-violet-300">*</span>
+                  <span className="text-brand-violet dark:text-violet-300">
+                    *
+                  </span>
                 </label>
                 <input
                   type="text"

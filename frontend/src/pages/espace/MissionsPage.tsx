@@ -249,7 +249,9 @@ const MissionsPage: React.FC = () => {
                 <strong className="mr-1 text-[8px] text-muted-foreground">
                   Candidatures
                 </strong>
-                <b className="font-semibold text-brand-ink dark:text-foreground">--</b>
+                <b className="font-semibold text-brand-ink dark:text-foreground">
+                  --
+                </b>
               </span>
               <button
                 type="button"

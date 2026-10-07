@@ -1,4 +1,4 @@
-import { Hug, Power } from '../assets/icons';
+import { Hug, Power } from "../assets/icons";
 
 export default function MatchingAndComparison() {
   return (
@@ -20,7 +20,7 @@ export default function MatchingAndComparison() {
             </div>
 
             <h2 className="font-heading text-3xl font-black leading-tight text-brand-ink sm:text-5xl lg:text-6xl lg:leading-[75px]">
-              Un matching,{' '}
+              Un matching,{" "}
               <span className="text-orange-400">deux gagnants</span>
             </h2>
 
@@ -52,7 +52,7 @@ export default function MatchingAndComparison() {
                   </div>
                 </div>
                 <div className="flex flex-wrap items-center gap-2">
-                  {['React', 'UI Design', 'Framer'].map((tag) => (
+                  {["React", "UI Design", "Framer"].map((tag) => (
                     <span
                       key={tag}
                       className="rounded-full bg-white/5 px-3 py-1 font-sans text-[10px] leading-4 tracking-tight text-brand-ink outline outline-1 -outline-offset-1 outline-white/10"
@@ -148,7 +148,7 @@ export default function MatchingAndComparison() {
                   <span className="whitespace-nowrap text-right">
                     <b className="font-heading text-sm font-black leading-5 text-brand-ink">
                       98%
-                    </b>{' '}
+                    </b>{" "}
                     <span className="font-sans text-[10px] leading-4 tracking-tight text-zinc-500">
                       Match
                     </span>
@@ -168,7 +168,7 @@ export default function MatchingAndComparison() {
                   <span className="whitespace-nowrap text-right">
                     <b className="font-heading text-sm font-black leading-5 text-brand-ink">
                       94%
-                    </b>{' '}
+                    </b>{" "}
                     <span className="font-sans text-[10px] leading-4 tracking-tight text-zinc-500">
                       Match
                     </span>
@@ -211,9 +211,9 @@ export default function MatchingAndComparison() {
 
             <div className="flex flex-col gap-6">
               {[
-                'Matching par IA 100% pertinent',
-                'Paiements Mobile Money intégrés',
-                'Spécialisation Afrique Francophone',
+                "Matching par IA 100% pertinent",
+                "Paiements Mobile Money intégrés",
+                "Spécialisation Afrique Francophone",
               ].map((item) => (
                 <div key={item} className="flex items-center gap-4">
                   <span className="flex h-6 w-6 flex-none items-center justify-center rounded-full bg-orange-400/20 font-sans text-xs text-orange-400 outline outline-1 -outline-offset-1 outline-orange-400/40">
@@ -241,10 +241,10 @@ export default function MatchingAndComparison() {
               </div>
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-x-6 sm:gap-y-3">
                 {[
-                  'Matching IA réel',
-                  'Mobile Money Natif',
-                  'Spécialisation Afrique',
-                  'Comm. équitable',
+                  "Matching IA réel",
+                  "Mobile Money Natif",
+                  "Spécialisation Afrique",
+                  "Comm. équitable",
                 ].map((item) => (
                   <span
                     key={item}

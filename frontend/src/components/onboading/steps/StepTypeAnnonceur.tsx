@@ -1,12 +1,18 @@
-import React, { useState } from 'react';
-import { Building2, UserCircle, ArrowRight, ArrowLeft, Loader2 } from 'lucide-react';
+import React, { useState } from "react";
+import {
+  Building2,
+  UserCircle,
+  ArrowRight,
+  ArrowLeft,
+  Loader2,
+} from "lucide-react";
 
 interface StepTypeAnnonceurProps {
   initialType?: string;
   stepNumber: number;
   totalSteps: number;
   onBack: () => void;
-  onSubmit: (typeAnnonceur: 'Entreprise' | 'Particulier') => void;
+  onSubmit: (typeAnnonceur: "Entreprise" | "Particulier") => void;
   isLoading?: boolean;
 }
 
@@ -18,12 +24,12 @@ export const StepTypeAnnonceur: React.FC<StepTypeAnnonceurProps> = ({
   onSubmit,
   isLoading = false,
 }) => {
-  const [selectedType, setSelectedType] = useState<'Entreprise' | 'Particulier'>(
-    (initialType as 'Entreprise' | 'Particulier') || 'Entreprise'
-  );
+  const [selectedType, setSelectedType] = useState<
+    "Entreprise" | "Particulier"
+  >((initialType as "Entreprise" | "Particulier") || "Entreprise");
 
   React.useEffect(() => {
-    if (initialType === 'Entreprise' || initialType === 'Particulier') {
+    if (initialType === "Entreprise" || initialType === "Particulier") {
       setSelectedType(initialType);
     }
   }, [initialType]);
@@ -45,31 +51,34 @@ export const StepTypeAnnonceur: React.FC<StepTypeAnnonceurProps> = ({
         Quel type d'annonceur êtes-vous ?
       </h1>
       <p className="text-muted-foreground text-sm sm:text-base mb-8">
-        Précisez si vous recrutez au nom d'une structure ou pour un besoin personnel.
+        Précisez si vous recrutez au nom d'une structure ou pour un besoin
+        personnel.
       </p>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Entreprise */}
         <div
-          onClick={() => setSelectedType('Entreprise')}
+          onClick={() => setSelectedType("Entreprise")}
           className={`w-full p-5 rounded-2xl cursor-pointer flex items-center justify-between transition-all duration-200 ${
-            selectedType === 'Entreprise'
-              ? 'border-2 border-brand-violet bg-brand-canvas shadow-xs'
-              : 'border border-border bg-white hover:border-neutral-300'
+            selectedType === "Entreprise"
+              ? "border-2 border-brand-violet bg-brand-canvas shadow-xs"
+              : "border border-border bg-white hover:border-neutral-300"
           }`}
         >
           <div className="flex items-center gap-4">
             <div
               className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 ${
-                selectedType === 'Entreprise'
-                  ? 'bg-white text-brand-ink shadow-xs'
-                  : 'bg-neutral-100 text-muted-foreground'
+                selectedType === "Entreprise"
+                  ? "bg-white text-brand-ink shadow-xs"
+                  : "bg-neutral-100 text-muted-foreground"
               }`}
             >
               <Building2 className="w-6 h-6" />
             </div>
             <div>
-              <h3 className="font-bold text-brand-ink text-base mb-0.5">Entreprise / Agence</h3>
+              <h3 className="font-bold text-brand-ink text-base mb-0.5">
+                Entreprise / Agence
+              </h3>
               <p className="text-xs sm:text-sm text-muted-foreground">
                 PME, startup, grande entreprise ou agence.
               </p>
@@ -79,12 +88,12 @@ export const StepTypeAnnonceur: React.FC<StepTypeAnnonceurProps> = ({
           <div className="shrink-0 ml-3">
             <div
               className={`w-5 h-5 rounded-full flex items-center justify-center border-2 transition-all ${
-                selectedType === 'Entreprise'
-                  ? 'border-brand-violet'
-                  : 'border-neutral-300 bg-transparent'
+                selectedType === "Entreprise"
+                  ? "border-brand-violet"
+                  : "border-neutral-300 bg-transparent"
               }`}
             >
-              {selectedType === 'Entreprise' && (
+              {selectedType === "Entreprise" && (
                 <div className="w-2.5 h-2.5 rounded-full bg-brand-green" />
               )}
             </div>
@@ -93,25 +102,27 @@ export const StepTypeAnnonceur: React.FC<StepTypeAnnonceurProps> = ({
 
         {/* Particulier */}
         <div
-          onClick={() => setSelectedType('Particulier')}
+          onClick={() => setSelectedType("Particulier")}
           className={`w-full p-5 rounded-2xl cursor-pointer flex items-center justify-between transition-all duration-200 ${
-            selectedType === 'Particulier'
-              ? 'border-2 border-brand-violet bg-brand-canvas shadow-xs'
-              : 'border border-border bg-white hover:border-neutral-300'
+            selectedType === "Particulier"
+              ? "border-2 border-brand-violet bg-brand-canvas shadow-xs"
+              : "border border-border bg-white hover:border-neutral-300"
           }`}
         >
           <div className="flex items-center gap-4">
             <div
               className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 ${
-                selectedType === 'Particulier'
-                  ? 'bg-white text-brand-ink shadow-xs'
-                  : 'bg-neutral-100 text-muted-foreground'
+                selectedType === "Particulier"
+                  ? "bg-white text-brand-ink shadow-xs"
+                  : "bg-neutral-100 text-muted-foreground"
               }`}
             >
               <UserCircle className="w-6 h-6" />
             </div>
             <div>
-              <h3 className="font-bold text-brand-ink text-base mb-0.5">Particulier</h3>
+              <h3 className="font-bold text-brand-ink text-base mb-0.5">
+                Particulier
+              </h3>
               <p className="text-xs sm:text-sm text-muted-foreground">
                 Projet personnel, indépendant ou porteur de projet.
               </p>
@@ -121,12 +132,12 @@ export const StepTypeAnnonceur: React.FC<StepTypeAnnonceurProps> = ({
           <div className="shrink-0 ml-3">
             <div
               className={`w-5 h-5 rounded-full flex items-center justify-center border-2 transition-all ${
-                selectedType === 'Particulier'
-                  ? 'border-brand-violet'
-                  : 'border-neutral-300 bg-transparent'
+                selectedType === "Particulier"
+                  ? "border-brand-violet"
+                  : "border-neutral-300 bg-transparent"
               }`}
             >
-              {selectedType === 'Particulier' && (
+              {selectedType === "Particulier" && (
                 <div className="w-2.5 h-2.5 rounded-full bg-brand-green" />
               )}
             </div>

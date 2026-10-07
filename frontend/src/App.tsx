@@ -1,18 +1,18 @@
-import Cta from './components/cta';
-import Hero from './components/hero';
-import HowItWorks from './components/howItWork';
-import TrustSection from './components/TrustSection';
-import Footer from './components/layout/footer';
-import Header from './components/layout/Header';
-import { useQuery } from '@tanstack/react-query';
-import getCurrentUser from './utils/getUser';
-import { getLandingActions } from './utils/landingActions';
-import './App.css';
+import Cta from "./components/cta";
+import Hero from "./components/hero";
+import HowItWorks from "./components/howItWork";
+import TrustSection from "./components/TrustSection";
+import Footer from "./components/layout/footer";
+import Header from "./components/layout/Header";
+import { useQuery } from "@tanstack/react-query";
+import getCurrentUser from "./utils/getUser";
+import { getLandingActions } from "./utils/landingActions";
+import "./App.css";
 
 export default function App() {
-  const hasSession = Boolean(localStorage.getItem('access_token'));
+  const hasSession = Boolean(localStorage.getItem("access_token"));
   const { data: user } = useQuery({
-    queryKey: ['currentUser'],
+    queryKey: ["currentUser"],
     queryFn: getCurrentUser,
     enabled: hasSession,
     retry: false,

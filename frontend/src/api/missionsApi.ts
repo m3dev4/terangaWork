@@ -1,6 +1,6 @@
-import { instance } from './axios';
+import { instance } from "./axios";
 
-export type PaymentOperator = 'OM' | 'WAVE';
+export type PaymentOperator = "OM" | "WAVE";
 
 export interface ServiceOption {
   id: number;
@@ -26,7 +26,13 @@ export interface Mission {
   technologies?: number[];
   technologies_detail?: TechnologieOption[];
   annonceur: number;
-  status?: 'PENDING_MODERATION' | 'OPEN' | 'IN_PROGRESS' | 'DELIVERED' | 'COMPLETED' | 'CLOSED';
+  status?:
+    | "PENDING_MODERATION"
+    | "OPEN"
+    | "IN_PROGRESS"
+    | "DELIVERED"
+    | "COMPLETED"
+    | "CLOSED";
   created_at: string;
   updated_at: string;
 }
@@ -45,7 +51,9 @@ const unwrapList = <T>(data: T[] | { results: T[] }): T[] =>
   Array.isArray(data) ? data : data.results;
 
 export const getMissions = async (): Promise<Mission[]> => {
-  const response = await instance.get<Mission[] | { results: Mission[] }>('missions/');
+  const response = await instance.get<Mission[] | { results: Mission[] }>(
+    "missions/"
+  );
   return unwrapList(response.data);
 };
 
@@ -55,12 +63,16 @@ export const getMission = async (id: number): Promise<Mission> => {
 };
 
 export const getMissionServices = async (): Promise<ServiceOption[]> => {
-  const response = await instance.get<ServiceOption[] | { results: ServiceOption[] }>('services/');
+  const response = await instance.get<
+    ServiceOption[] | { results: ServiceOption[] }
+  >("services/");
   return unwrapList(response.data);
 };
 
-export const createMission = async (payload: MissionPayload): Promise<Mission> => {
-  const response = await instance.post<Mission>('missions/', payload);
+export const createMission = async (
+  payload: MissionPayload
+): Promise<Mission> => {
+  const response = await instance.post<Mission>("missions/", payload);
   return response.data;
 };
 
@@ -79,9 +91,11 @@ export const deleteMission = async (id: number): Promise<void> => {
   await instance.delete(`missions/${id}/`);
 };
 
-export const generateMissionDescription = async (title: string): Promise<string> => {
+export const generateMissionDescription = async (
+  title: string
+): Promise<string> => {
   const response = await instance.post<{ detail: string; description: string }>(
-    'missions/generate-description/',
+    "missions/generate-description/",
     { title }
   );
   return response.data.description;
@@ -92,7 +106,7 @@ export const moderateMission = async ({
   decision,
 }: {
   missionId: number;
-  decision: 'approuver' | 'supprimer';
+  decision: "approuver" | "supprimer";
 }): Promise<{ detail: string; status: string }> => {
   const response = await instance.patch<{ detail: string; status: string }>(
     `missions/${missionId}/moderation/`,

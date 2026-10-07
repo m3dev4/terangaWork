@@ -245,7 +245,9 @@ const MissionDetailPage: React.FC = () => {
               <div className="flex items-center gap-2.5">
                 <WalletCards className="h-4 w-4 text-brand-violet dark:text-violet-300" />
                 <div>
-                  <p className="text-[9px] text-muted-foreground">Budget estimé</p>
+                  <p className="text-[9px] text-muted-foreground">
+                    Budget estimé
+                  </p>
                   <p className="text-[12px] font-semibold text-brand-ink dark:text-foreground">
                     {formatBudget(mission.budget)}
                   </p>
@@ -254,7 +256,9 @@ const MissionDetailPage: React.FC = () => {
               <div className="flex items-center gap-2.5">
                 <CalendarDays className="h-4 w-4 text-brand-violet dark:text-violet-300" />
                 <div>
-                  <p className="text-[9px] text-muted-foreground">Date limite</p>
+                  <p className="text-[9px] text-muted-foreground">
+                    Date limite
+                  </p>
                   <p className="text-[12px] font-semibold text-brand-ink dark:text-foreground">
                     {formatDate(mission.date_deadline)}
                   </p>

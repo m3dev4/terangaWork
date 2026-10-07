@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 interface NotificationOption {
   id: string;
@@ -10,27 +10,31 @@ interface NotificationOption {
 export const NotificationSettingsCard: React.FC = () => {
   const [options, setOptions] = useState<NotificationOption[]>([
     {
-      id: 'messages',
-      title: 'Nouveau message',
-      description: 'Recevoir une notification lorsqu’un client vous envoie un message.',
+      id: "messages",
+      title: "Nouveau message",
+      description:
+        "Recevoir une notification lorsqu’un client vous envoie un message.",
       enabled: true,
     },
     {
-      id: 'candidatures',
-      title: 'Candidature acceptée/refusée',
-      description: 'Être alerté dès qu’une décision est prise sur l’une de vos candidatures.',
+      id: "candidatures",
+      title: "Candidature acceptée/refusée",
+      description:
+        "Être alerté dès qu’une décision est prise sur l’une de vos candidatures.",
       enabled: true,
     },
     {
-      id: 'paiements',
-      title: 'Paiement reçu',
-      description: 'Recevoir un justificatif dès qu’un versement est effectué sur votre compte.',
+      id: "paiements",
+      title: "Paiement reçu",
+      description:
+        "Recevoir un justificatif dès qu’un versement est effectué sur votre compte.",
       enabled: true,
     },
     {
-      id: 'missions',
-      title: 'Nouvelle mission',
-      description: 'Être prévenu lorsqu’une mission correspondant à votre profil est publiée.',
+      id: "missions",
+      title: "Nouvelle mission",
+      description:
+        "Être prévenu lorsqu’une mission correspondant à votre profil est publiée.",
       enabled: false,
     },
   ]);
@@ -73,12 +77,14 @@ export const NotificationSettingsCard: React.FC = () => {
             <button
               type="button"
               onClick={() => toggleOption(opt.id)}
-              className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out outline-none ${opt.enabled ? 'bg-brand-violet' : 'bg-neutral-200 dark:bg-muted'
-                }`}
+              className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out outline-none ${
+                opt.enabled ? "bg-brand-violet" : "bg-neutral-200 dark:bg-muted"
+              }`}
             >
               <span
-                className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-sm ring-0 transition duration-200 ease-in-out ${opt.enabled ? 'translate-x-5' : 'translate-x-0'
-                  }`}
+                className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-sm ring-0 transition duration-200 ease-in-out ${
+                  opt.enabled ? "translate-x-5" : "translate-x-0"
+                }`}
               />
             </button>
           </div>

@@ -1,4 +1,4 @@
-import { instance } from './axios';
+import { instance } from "./axios";
 
 export interface MatchingCandidatResult {
   candidat_id: number;
@@ -53,14 +53,18 @@ export const getCandidatsRecommandes = async (
   return response.data;
 };
 
-export const getMissionsRecommandees = async (): Promise<MatchingMissionsResponse> => {
-  const response = await instance.post<MatchingMissionsResponse>(
-    'matching/missions-recommandees/'
-  );
-  return response.data;
-};
+export const getMissionsRecommandees =
+  async (): Promise<MatchingMissionsResponse> => {
+    const response = await instance.post<MatchingMissionsResponse>(
+      "matching/missions-recommandees/"
+    );
+    return response.data;
+  };
 
-export const getMissionsCompatibilite = async (): Promise<MatchingMissionsResponse> => {
-  const response = await instance.get<MatchingMissionsResponse>('matching/missions-compatibilite/');
-  return response.data;
-};
+export const getMissionsCompatibilite =
+  async (): Promise<MatchingMissionsResponse> => {
+    const response = await instance.get<MatchingMissionsResponse>(
+      "matching/missions-compatibilite/"
+    );
+    return response.data;
+  };

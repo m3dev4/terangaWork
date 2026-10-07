@@ -1,6 +1,6 @@
-import React from 'react';
-import AuthTitleDesc from '../../../components/auth/authTitleDesc';
-import NewPasswordComponent from '../../../components/auth/NewPassword';
+import React from "react";
+import AuthTitleDesc from "../../../components/auth/authTitleDesc";
+import NewPasswordComponent from "../../../components/auth/NewPassword";
 
 const NewPassword = () => {
   return (

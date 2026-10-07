@@ -46,7 +46,9 @@ export const createConversation = async (): Promise<ChatConversation> => {
 export const getConversationMessages = async (
   conversationId: number
 ): Promise<ChatConversationDetail> => {
-  const response = await instance.get(`chat/conversations/${conversationId}/messages/`);
+  const response = await instance.get(
+    `chat/conversations/${conversationId}/messages/`
+  );
   return response.data;
 };
 

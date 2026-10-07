@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { ArrowRight, ArrowLeft, Loader2, Globe } from 'lucide-react';
+import React, { useState } from "react";
+import { ArrowRight, ArrowLeft, Loader2, Globe } from "lucide-react";
 
 interface StepInfosEntrepriseProps {
   initialData?: {
@@ -10,7 +10,11 @@ interface StepInfosEntrepriseProps {
   stepNumber: number;
   totalSteps: number;
   onBack: () => void;
-  onSubmit: (data: { company_name: string; company_secteur: string; company_website?: string }) => void;
+  onSubmit: (data: {
+    company_name: string;
+    company_secteur: string;
+    company_website?: string;
+  }) => void;
   isLoading?: boolean;
 }
 
@@ -22,10 +26,10 @@ export const StepInfosEntreprise: React.FC<StepInfosEntrepriseProps> = ({
   onSubmit,
   isLoading = false,
 }) => {
-  const [name, setName] = useState(initialData?.company_name || '');
-  const [secteur, setSecteur] = useState(initialData?.company_secteur || '');
-  const [website, setWebsite] = useState(initialData?.company_website || '');
-  const [error, setError] = useState('');
+  const [name, setName] = useState(initialData?.company_name || "");
+  const [secteur, setSecteur] = useState(initialData?.company_secteur || "");
+  const [website, setWebsite] = useState(initialData?.company_website || "");
+  const [error, setError] = useState("");
 
   React.useEffect(() => {
     if (initialData?.company_name) setName(initialData.company_name);
@@ -36,10 +40,10 @@ export const StepInfosEntreprise: React.FC<StepInfosEntrepriseProps> = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim() || !secteur.trim()) {
-      setError('Veuillez renseigner le nom et le secteur de votre entreprise.');
+      setError("Veuillez renseigner le nom et le secteur de votre entreprise.");
       return;
     }
-    setError('');
+    setError("");
     onSubmit({
       company_name: name.trim(),
       company_secteur: secteur.trim(),
@@ -59,7 +63,8 @@ export const StepInfosEntreprise: React.FC<StepInfosEntrepriseProps> = ({
         Informations sur votre entreprise
       </h1>
       <p className="text-muted-foreground text-sm sm:text-base mb-8">
-        Présentez brièvement votre structure pour donner confiance aux freelances.
+        Présentez brièvement votre structure pour donner confiance aux
+        freelances.
       </p>
 
       {error && (

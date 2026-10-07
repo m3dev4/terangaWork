@@ -64,7 +64,9 @@ export const markNotificationRead = async (
   return response.data;
 };
 
-export const markAllNotificationsRead = async (): Promise<{ message: string }> => {
+export const markAllNotificationsRead = async (): Promise<{
+  message: string;
+}> => {
   const response = await instance.post("notifications/mark_all_read/");
   return response.data;
 };

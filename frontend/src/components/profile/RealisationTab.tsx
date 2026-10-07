@@ -1,44 +1,51 @@
-import React, { useState } from 'react';
-import { ExternalLink, FolderGit2, Plus, Trash2, Loader2, CheckCircle } from 'lucide-react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import React, { useState } from "react";
+import {
+  ExternalLink,
+  FolderGit2,
+  Plus,
+  Trash2,
+  Loader2,
+  CheckCircle,
+} from "lucide-react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   fetchRealisations,
   createRealisation,
   deleteRealisation,
   type RealisationData,
-} from '../../api/freelanceApi';
+} from "../../api/freelanceApi";
 
 export const RealisationTab: React.FC = () => {
   const queryClient = useQueryClient();
 
   const { data: realisations = [], isLoading } = useQuery<RealisationData[]>({
-    queryKey: ['realisations'],
+    queryKey: ["realisations"],
     queryFn: fetchRealisations,
   });
 
   const [isAdding, setIsAdding] = useState(false);
-  const [title, setTitle] = useState('');
-  const [link, setLink] = useState('');
-  const [successMsg, setSuccessMsg] = useState('');
+  const [title, setTitle] = useState("");
+  const [link, setLink] = useState("");
+  const [successMsg, setSuccessMsg] = useState("");
 
   const createMutation = useMutation({
-    mutationFn: (data: Omit<RealisationData, 'id'>) => createRealisation(data),
+    mutationFn: (data: Omit<RealisationData, "id">) => createRealisation(data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['realisations'] });
-      queryClient.invalidateQueries({ queryKey: ['freelanceProfile'] });
-      setTitle('');
-      setLink('');
+      queryClient.invalidateQueries({ queryKey: ["realisations"] });
+      queryClient.invalidateQueries({ queryKey: ["freelanceProfile"] });
+      setTitle("");
+      setLink("");
       setIsAdding(false);
-      setSuccessMsg('Réalisation ajoutée avec succès !');
-      setTimeout(() => setSuccessMsg(''), 3000);
+      setSuccessMsg("Réalisation ajoutée avec succès !");
+      setTimeout(() => setSuccessMsg(""), 3000);
     },
   });
 
   const deleteMutation = useMutation({
     mutationFn: (id: number) => deleteRealisation(id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['realisations'] });
-      queryClient.invalidateQueries({ queryKey: ['freelanceProfile'] });
+      queryClient.invalidateQueries({ queryKey: ["realisations"] });
+      queryClient.invalidateQueries({ queryKey: ["freelanceProfile"] });
     },
   });
 
@@ -65,7 +72,8 @@ export const RealisationTab: React.FC = () => {
       <div className="flex items-center justify-between border-b border-brand-sand dark:border-border pb-4">
         <div>
           <h3 className="font-heading text-xs font-bold text-brand-ink dark:text-foreground flex items-center gap-1.5">
-            <FolderGit2 className="h-4 w-4 text-brand-ink dark:text-foreground" /> Portfolio & Réalisations
+            <FolderGit2 className="h-4 w-4 text-brand-ink dark:text-foreground" />{" "}
+            Portfolio & Réalisations
           </h3>
           <p className="text-muted-foreground mt-0.5">
             Vos projets et liens enregistrés en base de données backend.
@@ -89,10 +97,15 @@ export const RealisationTab: React.FC = () => {
       )}
 
       {isAdding && (
-        <form onSubmit={handleAdd} className="rounded-xl bg-brand-canvas dark:bg-background border border-border p-4 space-y-3">
+        <form
+          onSubmit={handleAdd}
+          className="rounded-xl bg-brand-canvas dark:bg-background border border-border p-4 space-y-3"
+        >
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label className="block font-semibold text-neutral-600 dark:text-muted-foreground mb-1">Titre du Projet *</label>
+              <label className="block font-semibold text-neutral-600 dark:text-muted-foreground mb-1">
+                Titre du Projet *
+              </label>
               <input
                 type="text"
                 required
@@ -103,7 +116,9 @@ export const RealisationTab: React.FC = () => {
               />
             </div>
             <div>
-              <label className="block font-semibold text-neutral-600 dark:text-muted-foreground mb-1">Lien Web / Démo</label>
+              <label className="block font-semibold text-neutral-600 dark:text-muted-foreground mb-1">
+                Lien Web / Démo
+              </label>
               <input
                 type="url"
                 value={link}
@@ -127,7 +142,9 @@ export const RealisationTab: React.FC = () => {
               disabled={createMutation.isPending}
               className="inline-flex items-center gap-1.5 rounded-md bg-brand-violet px-4 py-1.5 font-semibold text-white hover:bg-brand-violet cursor-pointer disabled:opacity-50"
             >
-              {createMutation.isPending && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
+              {createMutation.isPending && (
+                <Loader2 className="h-3.5 w-3.5 animate-spin" />
+              )}
               Enregistrer
             </button>
           </div>
@@ -137,7 +154,8 @@ export const RealisationTab: React.FC = () => {
       {/* List from DB */}
       {realisations.length === 0 ? (
         <div className="py-8 text-center text-muted-foreground">
-          Aucune réalisation enregistrée. Cliquez sur "Ajouter une réalisation" pour commencer.
+          Aucune réalisation enregistrée. Cliquez sur "Ajouter une réalisation"
+          pour commencer.
         </div>
       ) : (
         <div className="space-y-3">
@@ -149,7 +167,9 @@ export const RealisationTab: React.FC = () => {
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
                   <FolderGit2 className="h-4 w-4 text-brand-ink dark:text-foreground" />
-                  <h4 className="font-heading text-xs font-bold text-brand-ink dark:text-foreground">{item.title}</h4>
+                  <h4 className="font-heading text-xs font-bold text-brand-ink dark:text-foreground">
+                    {item.title}
+                  </h4>
                   {item.link && (
                     <a
                       href={item.link}

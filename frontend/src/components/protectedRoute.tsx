@@ -1,12 +1,12 @@
-import React from 'react';
-import { useQuery } from '@tanstack/react-query';
-import getCurrentUser from '../utils/getUser';
-import { Loader2 } from 'lucide-react';
-import { Navigate, useLocation } from 'react-router-dom';
+import React from "react";
+import { useQuery } from "@tanstack/react-query";
+import getCurrentUser from "../utils/getUser";
+import { Loader2 } from "lucide-react";
+import { Navigate, useLocation } from "react-router-dom";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
-  allowedStage?: 'onboarding' | 'espace' | 'all';
+  allowedStage?: "onboarding" | "espace" | "all";
 }
 
 export default function ProtectedRoute({
@@ -14,10 +14,10 @@ export default function ProtectedRoute({
   allowedStage,
 }: ProtectedRouteProps) {
   const location = useLocation();
-  const token = localStorage.getItem('access_token');
+  const token = localStorage.getItem("access_token");
 
   const { data: user, isLoading } = useQuery({
-    queryKey: ['currentUser'],
+    queryKey: ["currentUser"],
     queryFn: getCurrentUser,
     enabled: Boolean(token),
     retry: false,
@@ -40,9 +40,12 @@ export default function ProtectedRoute({
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  const isAdmin = user.role === 'admin' || (user as any).is_staff || (user as any).is_superuser;
-  const isOnboardingPath = location.pathname.startsWith('/onboarding');
-  const isEspacePath = location.pathname.startsWith('/espace');
+  const isAdmin =
+    user.role === "admin" ||
+    (user as any).is_staff ||
+    (user as any).is_superuser;
+  const isOnboardingPath = location.pathname.startsWith("/onboarding");
+  const isEspacePath = location.pathname.startsWith("/espace");
 
   // Admin users never undergo onboarding
   if (isAdmin) {
@@ -53,12 +56,18 @@ export default function ProtectedRoute({
   }
 
   // If user completed onboarding and tries to visit /onboarding -> redirect to /espace
-  if ((allowedStage === 'onboarding' || isOnboardingPath) && user.onboarding_completed) {
+  if (
+    (allowedStage === "onboarding" || isOnboardingPath) &&
+    user.onboarding_completed
+  ) {
     return <Navigate to="/espace" replace />;
   }
 
   // If user has NOT completed onboarding and tries to visit /espace -> redirect to /onboarding
-  if ((allowedStage === 'espace' || isEspacePath) && !user.onboarding_completed) {
+  if (
+    (allowedStage === "espace" || isEspacePath) &&
+    !user.onboarding_completed
+  ) {
     return <Navigate to="/onboarding" replace />;
   }
 

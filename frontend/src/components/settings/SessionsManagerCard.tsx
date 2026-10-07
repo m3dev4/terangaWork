@@ -1,12 +1,12 @@
-import React from 'react';
-import { Laptop, Smartphone, Monitor, Loader2 } from 'lucide-react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import React from "react";
+import { Laptop, Smartphone, Monitor, Loader2 } from "lucide-react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   fetchSessions,
   revokeSession,
   revokeAllOtherSessions,
   type SessionData,
-} from '../../api/userApi';
+} from "../../api/userApi";
 
 /**
  * Parses the raw User-Agent string to extract a human-readable device name
@@ -14,50 +14,52 @@ import {
  */
 function parseDevice(rawDevice: string): {
   label: string;
-  iconType: 'laptop' | 'mobile' | 'desktop';
+  iconType: "laptop" | "mobile" | "desktop";
 } {
   const ua = rawDevice.toLowerCase();
 
   if (/iphone|android|mobile/i.test(ua)) {
     const match = ua.match(/(iphone|samsung|pixel|xiaomi|huawei|android)/i);
     return {
-      label: match ? match[1].charAt(0).toUpperCase() + match[1].slice(1) : 'Mobile',
-      iconType: 'mobile',
+      label: match
+        ? match[1].charAt(0).toUpperCase() + match[1].slice(1)
+        : "Mobile",
+      iconType: "mobile",
     };
   }
 
   if (/macintosh|mac os/i.test(ua)) {
-    return { label: 'Mac', iconType: 'laptop' };
+    return { label: "Mac", iconType: "laptop" };
   }
 
   if (/windows/i.test(ua)) {
-    return { label: 'Windows PC', iconType: 'desktop' };
+    return { label: "Windows PC", iconType: "desktop" };
   }
 
   if (/linux/i.test(ua)) {
-    return { label: 'Linux PC', iconType: 'desktop' };
+    return { label: "Linux PC", iconType: "desktop" };
   }
 
-  return { label: 'Appareil inconnu', iconType: 'laptop' };
+  return { label: "Appareil inconnu", iconType: "laptop" };
 }
 
 /**
  * Extracts browser name from a User-Agent string.
  */
 function parseBrowser(rawDevice: string): string {
-  if (/edg/i.test(rawDevice)) return 'Edge';
-  if (/opr|opera/i.test(rawDevice)) return 'Opera';
-  if (/firefox/i.test(rawDevice)) return 'Firefox';
-  if (/safari/i.test(rawDevice) && !/chrome/i.test(rawDevice)) return 'Safari';
-  if (/chrome/i.test(rawDevice)) return 'Chrome';
-  return 'Navigateur';
+  if (/edg/i.test(rawDevice)) return "Edge";
+  if (/opr|opera/i.test(rawDevice)) return "Opera";
+  if (/firefox/i.test(rawDevice)) return "Firefox";
+  if (/safari/i.test(rawDevice) && !/chrome/i.test(rawDevice)) return "Safari";
+  if (/chrome/i.test(rawDevice)) return "Chrome";
+  return "Navigateur";
 }
 
 /**
  * Formats the last active date into a human-readable French string.
  */
 function formatLastActive(dateStr: string, isCurrent: boolean): string {
-  if (isCurrent) return 'Actif maintenant';
+  if (isCurrent) return "Actif maintenant";
 
   const date = new Date(dateStr);
   const now = new Date();
@@ -69,9 +71,9 @@ function formatLastActive(dateStr: string, isCurrent: boolean): string {
   if (diffMinutes < 1) return "À l'instant";
   if (diffMinutes < 60) return `Il y a ${diffMinutes} min`;
   if (diffHours < 24) return `Il y a ${diffHours}h`;
-  if (diffDays === 1) return 'Hier';
+  if (diffDays === 1) return "Hier";
   if (diffDays < 7) return `Il y a ${diffDays} jours`;
-  return date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' });
+  return date.toLocaleDateString("fr-FR", { day: "numeric", month: "short" });
 }
 
 export const SessionsManagerCard: React.FC = () => {
@@ -82,37 +84,43 @@ export const SessionsManagerCard: React.FC = () => {
     isLoading,
     isError,
   } = useQuery<SessionData[]>({
-    queryKey: ['sessions'],
+    queryKey: ["sessions"],
     queryFn: fetchSessions,
   });
 
   const revokeMutation = useMutation({
     mutationFn: (sessionId: number) => revokeSession(sessionId),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['sessions'] });
+      queryClient.invalidateQueries({ queryKey: ["sessions"] });
     },
   });
 
   const revokeAllMutation = useMutation({
     mutationFn: () => revokeAllOtherSessions(),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['sessions'] });
+      queryClient.invalidateQueries({ queryKey: ["sessions"] });
     },
   });
 
   const getIcon = (type: string) => {
     switch (type) {
-      case 'mobile':
-        return <Smartphone className="h-5 w-5 text-neutral-600 dark:text-muted-foreground" />;
-      case 'desktop':
-        return <Monitor className="h-5 w-5 text-neutral-600 dark:text-muted-foreground" />;
+      case "mobile":
+        return (
+          <Smartphone className="h-5 w-5 text-neutral-600 dark:text-muted-foreground" />
+        );
+      case "desktop":
+        return (
+          <Monitor className="h-5 w-5 text-neutral-600 dark:text-muted-foreground" />
+        );
       default:
-        return <Laptop className="h-5 w-5 text-neutral-600 dark:text-muted-foreground" />;
+        return (
+          <Laptop className="h-5 w-5 text-neutral-600 dark:text-muted-foreground" />
+        );
     }
   };
 
   // The first session (ordered by -date_last_used) with the current refresh token is the current one
-  const currentRefreshToken = localStorage.getItem('refresh_token');
+  const currentRefreshToken = localStorage.getItem("refresh_token");
 
   return (
     <div className="rounded-2xl border border-brand-sand dark:border-border bg-white dark:bg-card p-6 sm:p-7 shadow-xs">
@@ -142,8 +150,10 @@ export const SessionsManagerCard: React.FC = () => {
           {/* List matching Mockup */}
           <div className="space-y-3">
             {sessions.map((s, index) => {
-              const { label: deviceLabel, iconType } = parseDevice(s.device || '');
-              const browser = parseBrowser(s.device || '');
+              const { label: deviceLabel, iconType } = parseDevice(
+                s.device || ""
+              );
+              const browser = parseBrowser(s.device || "");
               // First session in the list (most recent) is considered "current"
               const isCurrent = index === 0;
 
@@ -169,7 +179,7 @@ export const SessionsManagerCard: React.FC = () => {
                         )}
                       </div>
                       <p className="text-[10.5px] text-muted-foreground">
-                        {s.location || 'Localisation inconnue'} •{' '}
+                        {s.location || "Localisation inconnue"} •{" "}
                         {formatLastActive(s.date_last_used, isCurrent)}
                       </p>
                     </div>
