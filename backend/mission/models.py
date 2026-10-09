@@ -1,5 +1,9 @@
 from random import choices
 from django.db import models
+from django.core.validators import MinValueValidator
+
+
+MIN_MISSION_BUDGET = 10000
 
 
 class OperateurMobileMoneyType(models.TextChoices):
@@ -22,7 +26,7 @@ class Mission(models.Model):
     description = models.TextField(max_length=1000)
     date_deadline = models.DateField(null=True, blank=True)
     operateurMobileMoney = models.CharField(max_length=50, choices=OperateurMobileMoneyType.choices)
-    budget = models.IntegerField()
+    budget = models.IntegerField(validators=[MinValueValidator(MIN_MISSION_BUDGET)])
     service = models.ForeignKey("Service.Service", on_delete=models.CASCADE)
     technologies = models.ManyToManyField(
         "Technologie.Technologie",

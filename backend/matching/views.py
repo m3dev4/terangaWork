@@ -76,7 +76,7 @@ class MissionsRecommandeesView(APIView):
         freelance = (
             Freelancee.objects.filter(user=request.user)
             .select_related("user")
-            .prefetch_related("technologies", "experiences")
+            .prefetch_related("technologies", "experiences", "services")
             .first()
         )
 

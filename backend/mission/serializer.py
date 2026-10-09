@@ -5,7 +5,7 @@ from Service.serialiser import ServiceSerialiser
 from Technologie.models import Technologie
 from Technologie.serializers import TechnologieSerializer
 
-from .models import Mission
+from .models import MIN_MISSION_BUDGET, Mission
 
 
 class MissionSerializer(ModelSerializer):
@@ -61,6 +61,6 @@ class MissionSerializer(ModelSerializer):
         return value
 
     def validate_budget(self, value):
-        if value <= 0:
-            raise serializers.ValidationError("Le budget doit être supérieur à zéro.")
+        if value < MIN_MISSION_BUDGET:
+            raise serializers.ValidationError("Le budget minimum est de 10 000 FCFA.")
         return value

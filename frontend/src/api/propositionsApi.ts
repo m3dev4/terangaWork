@@ -1,4 +1,5 @@
 import { instance } from "./axios";
+import type { FreelanceProfileData } from "./freelanceApi";
 
 export interface FreelanceInfo {
   id: number;
@@ -14,6 +15,7 @@ export interface Proposition {
   id: number;
   lettre_motivation: string;
   date_livraison: string; // ISO date string
+  currentDate: boolean;
   mission: number;
   montant_propose?: number;
   mission_title?: string;
@@ -38,11 +40,29 @@ export interface Proposition {
   paiement_date_decaissement?: string | null;
 }
 
-export interface PropositionPayload {
+export type PropositionPayload = {
   lettre_motivation: string;
-  date_livraison: string; // ISO date string (YYYY-MM-DD)
   mission: number;
+} & (
+  | { currentDate: true; date_livraison?: never }
+  | { currentDate: false; date_livraison: string }
+);
+
+export interface CandidateFreelanceProfile extends FreelanceProfileData {
+  first_name: string;
+  last_name: string;
+  profile_picture: string | null;
+  ville: string | null;
 }
+
+export const getCandidateFreelanceProfile = async (
+  propositionId: number
+): Promise<CandidateFreelanceProfile> => {
+  const response = await instance.get<CandidateFreelanceProfile>(
+    `propositions/${propositionId}/profil-freelance/`
+  );
+  return response.data;
+};
 
 export const getPropositions = async (
   missionId?: number

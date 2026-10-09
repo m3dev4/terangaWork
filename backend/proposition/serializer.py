@@ -1,7 +1,9 @@
 from django.core.exceptions import ValidationError
 from rest_framework import serializers
+from django.utils import timezone
 
 from paiement.models import NumeroPaiement
+from freelance.serializers import FreelanceeSerializer
 
 from .models import Proposition
 
@@ -24,10 +26,25 @@ class FreelanceInfoSerializer(serializers.Serializer):
         return list(obj.freelance.technologies.values("id", "name"))
 
 
+class PropositionFreelanceProfileSerializer(FreelanceeSerializer):
+    """Profil professionnel consultable par l'annonceur de la proposition."""
+
+    first_name = serializers.CharField(source="user.first_name", read_only=True)
+    last_name = serializers.CharField(source="user.last_name", read_only=True)
+    profile_picture = serializers.ImageField(source="user.profile_picture", read_only=True)
+    ville = serializers.CharField(source="user.ville", read_only=True)
+
+    class Meta(FreelanceeSerializer.Meta):
+        fields = FreelanceeSerializer.Meta.fields + [
+            "first_name", "last_name", "profile_picture", "ville",
+        ]
+
+
 class PropositionSerializer(serializers.ModelSerializer):
     """Valide une proposition d'un freelance sur une mission."""
 
     freelance_info = FreelanceInfoSerializer(source="*", read_only=True)
+    date_livraison = serializers.DateField(required=False)
     mission_title = serializers.CharField(source="mission.title", read_only=True)
     mission_budget = serializers.IntegerField(source="mission.budget", read_only=True)
     mission_status = serializers.CharField(source="mission.status", read_only=True)
@@ -51,6 +68,7 @@ class PropositionSerializer(serializers.ModelSerializer):
             "id",
             "lettre_motivation",
             "date_livraison",
+            "currentDate",
             "mission",
             "mission_title",
             "mission_budget",
@@ -149,16 +167,35 @@ class PropositionSerializer(serializers.ModelSerializer):
         return cleaned
 
     def validate(self, attrs):
-        mission = attrs.get("mission")
-        date_livraison = attrs.get("date_livraison")
+        mission = attrs.get("mission", getattr(self.instance, "mission", None))
+        schedule_changed = self.instance is None or any(
+            field in attrs for field in ("mission", "date_livraison", "currentDate")
+        )
+        if schedule_changed and mission:
+            current_date = attrs.get("currentDate", getattr(self.instance, "currentDate", False))
+            date_livraison = attrs.get("date_livraison", getattr(self.instance, "date_livraison", None))
+            if current_date:
+                if not mission.date_deadline:
+                    raise serializers.ValidationError({
+                        "currentDate": "Cette mission n'a pas de date limite à conserver. Choisissez une date de livraison."
+                    })
+                date_livraison = mission.date_deadline
+                attrs["date_livraison"] = date_livraison
+            elif not date_livraison or (
+                self.instance and self.instance.currentDate and "date_livraison" not in attrs
+            ):
+                raise serializers.ValidationError({"date_livraison": "Veuillez proposer une date de livraison."})
 
-        if mission and date_livraison and mission.date_deadline:
-            if date_livraison > mission.date_deadline:
+            if mission.date_deadline and date_livraison > mission.date_deadline:
                 raise serializers.ValidationError(
                     {
                         "date_livraison": "La date de livraison proposée ne peut pas dépasser la deadline de la mission."
                     }
                 )
+            if date_livraison < timezone.localdate():
+                raise serializers.ValidationError({
+                    "date_livraison": "La date de livraison ne peut pas être antérieure à aujourd'hui."
+                })
 
         if self.instance is None:
             freelance = getattr(self.context.get("request"), "user", None)

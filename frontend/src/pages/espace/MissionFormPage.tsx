@@ -12,7 +12,6 @@ import {
   Loader2,
   Plus,
   Sparkles,
-  WalletCards,
   X,
 } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -29,6 +28,7 @@ import { fetchTechnologies } from "../../api/freelanceApi";
 import { getErrorMessage } from "../../utils/errorMessage";
 import {
   getTodayDate,
+  MIN_MISSION_BUDGET,
   MissionValidation,
   MissionTitleValidation,
   type MissionFormErrors,
@@ -297,19 +297,22 @@ const MissionFormPage: React.FC = () => {
                   className={`${inputClass} pr-16`}
                   type="number"
                   {...fieldAccessibility("budget")}
-                  min="1"
+                  min={MIN_MISSION_BUDGET}
                   step="1"
                   value={form.budget || ""}
                   onChange={(event) =>
                     updateField("budget", Number(event.target.value))
                   }
-                  placeholder="0"
+                  placeholder="10 000"
                 />
                 <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-medium text-muted-foreground">
                   FCFA
                 </span>
               </div>
               {fieldError("budget")}
+              <p className="mt-1 text-[10px] text-muted-foreground">
+                Budget minimum : 10 000 FCFA.
+              </p>
             </label>
             <label className="block">
               <span className="mb-1.5 block text-[11px] font-semibold text-brand-ink dark:text-foreground">

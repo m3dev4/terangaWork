@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+export const MIN_MISSION_BUDGET = 10000;
+
 // Use the user's local calendar day, rather than a UTC date that may differ.
 export const getTodayDate = () => {
   const today = new Date();
@@ -31,7 +33,7 @@ export const MissionValidation = z.object({
   budget: z
     .number("Veuillez saisir un budget valide.")
     .int("Le budget doit être un nombre entier en FCFA.")
-    .positive("Le budget doit être supérieur à zéro.")
+    .min(MIN_MISSION_BUDGET, "Le budget minimum est de 10 000 FCFA.")
     .max(2147483647, "Le budget dépasse le montant maximal autorisé."),
   service: z.number().int().positive("Veuillez sélectionner un service."),
   technologies: z.array(z.number().int().positive()).default([]),

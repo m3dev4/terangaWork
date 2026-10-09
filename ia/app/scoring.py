@@ -12,17 +12,36 @@ def min_max_experience_score(annees_experience: int | None) -> float | None:
     return min(float(annees_experience) / 5.0, 1.0)
 
 
-def calculate_service_score(candidat_service: str | None, target_service: str | None) -> float:
+def calculate_service_score(
+    candidat_service: str | list[str] | None,
+    target_service: str | list[str] | None
+) -> float:
     """
-    Correspondance binaire (1..1) entre le service du candidat et le service cible.
+    Correspondance entre les services du candidat et le service cible.
+    - Si candidat a plusieurs services (list), renvoie 1.0 si AU MOINS UN correspond
+    - Si target a plusieurs services (list), renvoie 1.0 si AU MOINS UN est couvert
     """
-    c_serv = (candidat_service or "").strip().lower()
-    t_serv = (target_service or "").strip().lower()
-    if not t_serv:
+    # Normaliser en ensembles (lowercase, strip)
+    c_services = {
+        s.strip().lower()
+        for s in (candidat_service if isinstance(candidat_service, list) else [candidat_service])
+        if s and s.strip()
+    }
+    t_services = {
+        s.strip().lower()
+        for s in (target_service if isinstance(target_service, list) else [target_service])
+        if s and s.strip()
+    }
+
+    if not t_services:
+        # Aucun service cible : score maximum
         return 1.0
-    if c_serv == t_serv:
-        return 1.0
-    return 0.0
+    if not c_services:
+        # Pas de service candidat : score nul
+        return 0.0
+
+    # Score = 1.0 si AU MOINS UN service en commun (intersection non vide)
+    return 1.0 if bool(c_services & t_services) else 0.0
 
 
 def calculate_technologies_score(
@@ -61,7 +80,14 @@ def compute_stage_1(request: MatchingRequestSchema) -> list[ResultatCandidatSche
         score_tech = calculate_technologies_score(
             freelance_techs, mission_techs
         )
-        score_serv = calculate_service_score(candidat.service, request.service)
+        candidat_services = candidat.services or candidat.service
+        target_services = request.services or request.service
+        freelance_services, mission_services = (
+            (target_services, candidat_services)
+            if request.type_matching == "missions"
+            else (candidat_services, target_services)
+        )
+        score_serv = calculate_service_score(freelance_services, mission_services)
         if score_tech < request.min_technology_score:
             continue
         score_exp = min_max_experience_score(candidat.annees_experience)

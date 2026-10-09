@@ -15,7 +15,11 @@ from paiement.models import NumeroPaiement
 from paiement.serializer import NumeroPaiementSerializer
 
 from .models import ProjectMeeting, Proposition, PropositionStatus
-from .serializer import ProjectMeetingSerializer, PropositionSerializer
+from .serializer import (
+    ProjectMeetingSerializer,
+    PropositionFreelanceProfileSerializer,
+    PropositionSerializer,
+)
 
 
 class IsFreelance(BasePermission):
@@ -70,6 +74,18 @@ class PropositionViewSet(viewsets.ModelViewSet):
             raise PermissionDenied(
                 "Vous avez déjà déposé une proposition pour cette mission."
             )
+
+    @action(detail=True, methods=["get"], url_path="profil-freelance")
+    def profil_freelance(self, request, pk=None):
+        if request.user.role != UserRole.ANNONCEUR:
+            raise PermissionDenied("Seul l'annonceur de la mission peut consulter ce profil.")
+        proposition = self.get_object()
+        profile = Freelancee.objects.select_related("user").prefetch_related(
+            "services", "technologies", "experiences", "educations", "realisations"
+        ).get(pk=proposition.freelance_id)
+        return Response(PropositionFreelanceProfileSerializer(
+            profile, context=self.get_serializer_context()
+        ).data)
 
     def perform_update(self, serializer):
         instance = serializer.save()
