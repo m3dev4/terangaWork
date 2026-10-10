@@ -2,6 +2,17 @@ import { useEffect, useRef, useCallback, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 
 const getWsUrl = () => {
+  // 1. URL explicite fournie au build
+  const explicite = import.meta.env.VITE_WS_URL as string | undefined;
+  if (explicite) return explicite;
+
+  // 2. Déduite de l'URL de l'API (http -> ws, /api/ -> /ws/chat/)
+  const api = import.meta.env.VITE_API_URL as string | undefined;
+  if (api) {
+    return api.replace(/^http/, "ws").replace(/\/api\/?$/, "/ws/chat/");
+  }
+
+  // 3. Par défaut : même hôte que la page, port 8000
   const host =
     typeof window !== "undefined" && window.location.hostname
       ? window.location.hostname

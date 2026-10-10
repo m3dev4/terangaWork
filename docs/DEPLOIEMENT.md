@@ -9,7 +9,7 @@ Le fichier d'orchestration est `backend/docker-compose.yml`. Lancez les commande
 | `web` (Django) | `backend/` | `8000:8000` | `ia` en bonne santé | `GET /api/docs/` |
 | `ia` (FastAPI) | `ia/` | `127.0.0.1:8001:8000` (local uniquement) | — | `GET /health` |
 | `db` (MySQL 8.4) | image | non exposé | — | — (profil `local` uniquement) |
-| `frontend` | `frontend/` | `5173:5173` | — | — |
+| `frontend` (Nginx) | `frontend/` (multi-étapes : Node 22 + pnpm, puis Nginx) | `5173:80` | `web` | `GET /` |
 
 ```bash
 cd backend
@@ -28,7 +28,25 @@ Au démarrage, `backend/entrypoint.sh` :
 
 Volumes : `db.sqlite3` et `media/` sont montés depuis l'hôte ; les données MySQL vont dans le volume `mysql_data`.
 
-> **À vérifier :** Docker Compose construit le service `frontend` depuis `../frontend`, mais ce dossier ne contient pas de `Dockerfile` à ce jour. Ajoutez-en un, sur Node 22 avec `pnpm build` puis un serveur statique, ou servez `frontend/dist` derrière Nginx.
+### Image du frontend
+
+`frontend/Dockerfile` construit l'application en deux étapes :
+1. **Build** (`node:22-alpine`) : `pnpm install --frozen-lockfile`, puis `vite build`.
+2. **Service** (`nginx:1.27-alpine`) : sert `dist/`. Le routage SPA renvoie toujours `index.html`, les fichiers `assets/` sont mis en cache longtemps et la compression gzip est active (`frontend/nginx.conf`).
+
+L'URL de l'API est **figée au moment du build**, car Vite l'injecte dans le JavaScript. C'est l'URL vue par le navigateur, pas celle d'un conteneur :
+
+```bash
+# local (valeur par défaut)
+docker compose up --build frontend
+
+# production
+VITE_API_URL=https://api.terangawork.com/api/ docker compose build frontend
+```
+
+`VITE_WS_URL` est facultative. Par défaut, elle est déduite de `VITE_API_URL` (`https://…/api/` donne `wss://…/ws/chat/`).
+
+La vérification TypeScript ne bloque pas l'image : lancez `pnpm typecheck` en CI.
 
 ## Tâche planifiée obligatoire
 
@@ -60,7 +78,7 @@ Vous pouvez aussi utiliser un workflow n8n planifié qui exécute la même comma
 - [ ] `DEFAULT_FROM_EMAIL` sur un domaine vérifié chez Resend.
 
 **Frontend et IA**
-- [ ] URL de l'API lue depuis une variable d'environnement (voir [CONFIGURATION.md](CONFIGURATION.md#frontend-frontendenv)).
+- [ ] Image du frontend construite avec `VITE_API_URL` pointant vers l'API publique en HTTPS.
 - [ ] Versions du microservice IA figées.
 
 **Exploitation**

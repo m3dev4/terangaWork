@@ -52,12 +52,16 @@ services:
     restart: unless-stopped
 
   frontend:
-    build: ../frontend
-    env_file: ../frontend/.env
-    environment:
-      VITE_BACKEND_URL: http://web:8000
+    build:
+      context: ../frontend
+      args:
+        # URL vue par le navigateur, pas par les conteneurs
+        VITE_API_URL: ${VITE_API_URL:-http://localhost:8000/api/}
+        VITE_WS_URL: ${VITE_WS_URL:-}
+    depends_on:
+      - web
     ports:
-      - "5173:5173"
+      - "5173:80"
     restart: unless-stopped
     
 volumes:
