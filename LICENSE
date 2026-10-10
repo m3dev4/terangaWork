@@ -1,0 +1,61 @@
+LICENCE PROPRIÉTAIRE — TERANGAWORK
+
+Copyright (c) 2026 Mouhamed Lo. Tous droits réservés.
+
+1. Propriété
+
+Le logiciel TerangaWork, comprenant notamment son code source, son code
+objet, sa documentation, ses interfaces, ses éléments graphiques, ses logos,
+ses bases de données et ses modèles (ci-après « le Logiciel »), est la
+propriété exclusive de Mouhamed Lo (ci-après « le Titulaire »).
+
+Le Logiciel est protégé par les lois sur le droit d'auteur et la propriété
+intellectuelle applicables, notamment au Sénégal, ainsi que par les
+conventions internationales.
+
+2. Usage commercial
+
+Le Logiciel est destiné à une exploitation commerciale par le Titulaire ou
+par toute personne expressément autorisée par lui. Il n'est pas distribué
+sous licence libre ou open source.
+
+3. Interdictions
+
+Sauf accord écrit préalable du Titulaire, il est interdit de :
+
+  a) copier, reproduire ou dupliquer tout ou partie du Logiciel ;
+  b) modifier, adapter, traduire ou créer des œuvres dérivées du Logiciel ;
+  c) distribuer, publier, vendre, louer, prêter, sous-licencier ou mettre à
+     disposition le Logiciel, à titre gratuit ou onéreux ;
+  d) exploiter le Logiciel, ou un service fondé sur celui-ci, à des fins
+     commerciales ;
+  e) décompiler, désassembler ou procéder à de l'ingénierie inverse du
+     Logiciel, dans les limites prévues par la loi ;
+  f) supprimer ou altérer les mentions de propriété, de copyright ou de
+     marque.
+
+4. Accès au code source
+
+L'accès au dépôt est réservé aux personnes autorisées par le Titulaire
+(collaborateurs, évaluateurs, partenaires). Cet accès ne confère aucun
+droit d'utilisation, de reproduction ou d'exploitation au-delà de l'objet
+pour lequel il a été accordé, et le code doit être tenu confidentiel.
+
+5. Composants tiers
+
+Le Logiciel utilise des bibliothèques tierces (listées dans docs/PACKAGES.md)
+qui restent soumises à leurs propres licences. La présente licence ne
+s'applique qu'aux éléments dont le Titulaire est l'auteur.
+
+6. Absence de garantie
+
+Le Logiciel est fourni « en l'état ». Dans les limites permises par la loi,
+le Titulaire ne saurait être tenu responsable des dommages directs ou
+indirects résultant de son utilisation par une personne non autorisée.
+
+7. Licences commerciales
+
+Toute demande de licence, de partenariat ou d'exploitation commerciale doit
+être adressée au Titulaire.
+
+Contact : m3dev4@gmail.com
