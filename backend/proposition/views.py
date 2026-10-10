@@ -100,7 +100,11 @@ class PropositionViewSet(viewsets.ModelViewSet):
             notifier_proposition_acceptee(instance)
             
             # Notifier aussi le freelance du démarrage de la mission
-            notifier_mission_demarree(mission, instance.freelancee.user)
+            notifier_mission_demarree(mission, instance.freelance.user)
+
+            # Ouvrir la phase 1 (cadrage) de l'espace coworking
+            from suivi.services import ouvrir_phase_cadrage
+            ouvrir_phase_cadrage(mission)
             
             # Rejeter automatiquement toutes les autres propositions en attente
             rejected_propositions = Proposition.objects.filter(

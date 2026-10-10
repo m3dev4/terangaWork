@@ -81,6 +81,7 @@ INSTALLED_APPS = [
     "message",  # Messaging
     "notification",  # Notifications
     "chatbot",  # Assistant Conversationnel (distinct de l'app message P2P)
+    "suivi",  # Suivi de mission par phases (coworking)
 ]
 
 # PayDunya Configuration

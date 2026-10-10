@@ -18,6 +18,17 @@ class Notification(models.Model):
         ('PAIEMENT_ECHOUE', 'Paiement échoué'),
         ('NOUVEAU_MESSAGE', 'Nouveau message'),
         ('MISSION_RECOMMANDEE', 'Mission recommandée'),
+        # Suivi de mission par phases
+        ('CADRAGE_A_LIVRER', 'Cadrage à livrer'),
+        ('LIVRABLE_SOUMIS', 'Livrable soumis'),
+        ('LIVRABLE_VALIDE', 'Livrable validé'),
+        ('LIVRABLE_INVALIDE', 'Livrable invalidé'),
+        ('DEADLINE_REPOUSSEE', 'Deadline repoussée'),
+        ('RETARD_CADRAGE', 'Retard de cadrage'),
+        ('RETARD_VALIDATION', 'Livrable sans réponse'),
+        ('RELANCE_SUIVI', 'Relance'),
+        ('DEMANDE_ANNULATION', "Demande d'annulation"),
+        ('ANNULATION_REFUSEE', 'Annulation refusée'),
     ]
     
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

@@ -19,6 +19,7 @@ class MissionStatus(models.TextChoices):
     COMPLETED = ("COMPLETED", "Terminée")
     CLOSED = ("CLOSED", "Fermée")
     REJECTED = ("REJECTED", "Rejetée")
+    CANCELLED = ("CANCELLED", "Annulée")
 
 
 class Mission(models.Model):
