@@ -14,13 +14,14 @@ from suivi.services import detecter_retards
 
 
 class Command(BaseCommand):
-    help = "Notifie les retards de cadrage et les livrables sans réponse."
+    help = "Notifie les retards de cadrage, de livraison et les livrables sans réponse."
 
     def handle(self, *args, **options):
         resultat = detecter_retards()
         self.stdout.write(
             self.style.SUCCESS(
                 f"Retards de cadrage notifiés : {resultat['retards_cadrage']} | "
+                f"Retards de livraison notifiés : {resultat['retards_livraison']} | "
                 f"Livrables sans réponse notifiés : {resultat['retards_validation']}"
             )
         )

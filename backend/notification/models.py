@@ -25,6 +25,7 @@ class Notification(models.Model):
         ('LIVRABLE_INVALIDE', 'Livrable invalidé'),
         ('DEADLINE_REPOUSSEE', 'Deadline repoussée'),
         ('RETARD_CADRAGE', 'Retard de cadrage'),
+        ('RETARD_LIVRAISON', 'Livraison en retard'),
         ('RETARD_VALIDATION', 'Livrable sans réponse'),
         ('RELANCE_SUIVI', 'Relance'),
         ('DEMANDE_ANNULATION', "Demande d'annulation"),

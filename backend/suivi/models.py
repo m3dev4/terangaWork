@@ -8,9 +8,18 @@ Règle de base (BNF7) : le système détecte, notifie et trace.
 Il ne prend jamais de décision à la place de l'annonceur ou de l'admin.
 """
 
+import os
+import uuid
+
 from django.conf import settings
 from django.core.validators import FileExtensionValidator
 from django.db import models
+
+
+def chemin_vocal(instance, filename):
+    """Nom de fichier aléatoire : un vocal ne doit pas être devinable."""
+    ext = os.path.splitext(filename)[1].lower() or ".webm"
+    return f"suivi/vocaux/{uuid.uuid4().hex}{ext}"
 
 
 class TypePhase(models.TextChoices):
@@ -48,6 +57,7 @@ class ActionHistorique(models.TextChoices):
     LIVRABLE_INVALIDE = "LIVRABLE_INVALIDE", "Livrable invalidé"
     DEADLINE_REPOUSSEE = "DEADLINE_REPOUSSEE", "Deadline repoussée"
     RETARD_CADRAGE = "RETARD_CADRAGE", "Retard de cadrage détecté"
+    RETARD_LIVRAISON = "RETARD_LIVRAISON", "Retard de livraison détecté"
     RETARD_VALIDATION = "RETARD_VALIDATION", "Retard de validation détecté"
     RELANCE = "RELANCE", "Relance envoyée"
     ANNULATION_DEMANDEE = "ANNULATION_DEMANDEE", "Annulation demandée"
@@ -84,8 +94,13 @@ class Livrable(models.Model):
     phase = models.ForeignKey(
         Phase, related_name="livrables", on_delete=models.CASCADE
     )
+    # SET_NULL : le livrable reste dans l'historique même si le compte disparaît.
     freelance = models.ForeignKey(
-        "freelance.Freelancee", related_name="livrables", on_delete=models.CASCADE
+        "freelance.Freelancee",
+        related_name="livrables",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
     )
     titre = models.CharField(max_length=200)
     lien = models.URLField(max_length=500)
@@ -112,12 +127,14 @@ class CommentaireLivrable(models.Model):
     auteur = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         related_name="commentaires_livrables",
-        on_delete=models.CASCADE,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
     )
     type = models.CharField(max_length=10, choices=TypeCommentaire.choices)
     texte = models.TextField(max_length=3000, blank=True, default="")
     fichier_vocal = models.FileField(
-        upload_to="suivi/vocaux/",
+        upload_to=chemin_vocal,
         null=True,
         blank=True,
         validators=[
@@ -184,6 +201,14 @@ class DemandeAnnulation(models.Model):
 
     class Meta:
         ordering = ["-date_demande"]
+        constraints = [
+            # Une seule demande en attente par mission, même en cas d'appels simultanés.
+            models.UniqueConstraint(
+                fields=["mission"],
+                condition=models.Q(statut="EN_ATTENTE"),
+                name="une_demande_annulation_en_attente_par_mission",
+            )
+        ]
 
     def __str__(self):
         return f"Annulation mission #{self.mission_id} ({self.get_statut_display()})"

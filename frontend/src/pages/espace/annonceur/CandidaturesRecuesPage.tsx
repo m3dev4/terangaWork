@@ -378,10 +378,13 @@ function CandidateCard({
   proposition,
   missionTitle,
   matchingResult,
+  verrouillee = false,
 }: {
   proposition: Proposition;
   missionTitle: string;
   matchingResult?: MatchingCandidatResult;
+  /** Mission attribuée à un autre freelance : contact et candidature désactivés. */
+  verrouillee?: boolean;
 }) {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
@@ -393,6 +396,8 @@ function CandidateCard({
     <>
       <div
         className={`flex flex-wrap items-center gap-4 rounded-2xl border p-4 transition-all ${
+          verrouillee ? "opacity-60" : ""
+        } ${
           matchingResult
             ? "border-brand-peach/40 bg-brand-sand/40 dark:bg-muted/40"
             : "border-brand-ink/8 dark:border-border bg-white dark:bg-card"
@@ -468,7 +473,9 @@ function CandidateCard({
             </button>
             <button
               type="button"
+              disabled={verrouillee}
               onClick={() => {
+                if (verrouillee) return;
                 const query = new URLSearchParams({
                   mission: String(proposition.mission),
                   title: missionTitle,
@@ -479,14 +486,21 @@ function CandidateCard({
                 }).toString();
                 navigate(`/espace/messages?${query}`);
               }}
-              className="inline-flex items-center gap-1 rounded-lg border border-brand-ink/15 dark:border-border bg-white dark:bg-card px-2.5 py-1.5 text-[10px] font-semibold text-brand-ink dark:text-foreground hover:bg-brand-sand/60 dark:hover:bg-muted/60 transition-colors cursor-pointer"
-              title="Envoyer un message"
+              className="inline-flex items-center gap-1 rounded-lg border border-brand-ink/15 dark:border-border bg-white dark:bg-card px-2.5 py-1.5 text-[10px] font-semibold text-brand-ink dark:text-foreground hover:bg-brand-sand/60 dark:hover:bg-muted/60 transition-colors cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-white dark:disabled:hover:bg-card"
+              title={
+                verrouillee
+                  ? "Mission attribuée à un autre freelance"
+                  : "Envoyer un message"
+              }
             >
               <MessageSquare className="h-3 w-3" /> Contacter
             </button>
             <button
-              onClick={() => setOpen(true)}
-              className="inline-flex items-center gap-1 rounded-lg bg-brand-ink px-3 py-1.5 text-[10px] font-semibold text-white transition-colors hover:bg-brand-ink/85 dark:hover:bg-black/65 cursor-pointer"
+              type="button"
+              disabled={verrouillee}
+              onClick={() => !verrouillee && setOpen(true)}
+              title={verrouillee ? "Mission attribuée à un autre freelance" : undefined}
+              className="inline-flex items-center gap-1 rounded-lg bg-brand-ink px-3 py-1.5 text-[10px] font-semibold text-white transition-colors hover:bg-brand-ink/85 dark:hover:bg-black/65 cursor-pointer disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-brand-ink"
             >
               Candidature <ChevronRight className="h-3 w-3" />
             </button>
@@ -542,10 +556,18 @@ function MissionGroup({
     (p) => p.proposition_status === "PENDING"
   ).length;
 
+  // Une fois une candidature acceptée, la mission est attribuée : seul le
+  // freelance retenu reste joignable, les autres cartes sont désactivées.
+  const acceptee = propositions.find((p) => p.proposition_status === "ACCEPTED");
+
   const orderedPropositions = React.useMemo(() => {
-    if (!matchingResults) return propositions;
-    const scoreMap = new Map(matchingResults.map((r) => [r.proposition_id, r]));
+    const scoreMap = new Map(
+      (matchingResults ?? []).map((r) => [r.proposition_id, r])
+    );
     return [...propositions].sort((a, b) => {
+      const accepteeA = a.proposition_status === "ACCEPTED" ? 1 : 0;
+      const accepteeB = b.proposition_status === "ACCEPTED" ? 1 : 0;
+      if (accepteeA !== accepteeB) return accepteeB - accepteeA;
       const scoreA = scoreMap.get(a.id)?.score ?? -1;
       const scoreB = scoreMap.get(b.id)?.score ?? -1;
       return scoreB - scoreA;
@@ -579,10 +601,11 @@ function MissionGroup({
           <button
             type="button"
             onClick={() => matchingMutation.mutate()}
-            disabled={matchingMutation.isPending}
+            disabled={matchingMutation.isPending || Boolean(acceptee)}
+            title={acceptee ? "Mission déjà attribuée" : undefined}
             className="relative inline-flex items-center gap-1.5 rounded-xl bg-brand-ink px-3 py-1.5 text-[10px] font-semibold text-white transition-colors hover:bg-brand-ink/85 dark:hover:bg-black/65 disabled:opacity-60 cursor-pointer"
           >
-            {!matchingMutation.isPending && !matchingResults && (
+            {!matchingMutation.isPending && !matchingResults && !acceptee && (
               <span className="absolute -top-1 -right-1 h-2 w-2 rounded-full bg-brand-green">
                 <span className="absolute inset-0 rounded-full bg-brand-green animate-ping opacity-60" />
               </span>
@@ -615,6 +638,20 @@ function MissionGroup({
         </div>
       )}
 
+      {acceptee && (
+        <div className="flex items-center gap-1.5 border-b border-brand-ink/6 dark:border-border bg-brand-green/10 px-5 py-2 text-[10.5px] text-brand-ink dark:text-foreground">
+          <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-brand-green" />
+          <span>
+            Mission attribuée à{" "}
+            <span className="font-semibold">
+              {acceptee.freelance_info?.first_name}{" "}
+              {acceptee.freelance_info?.last_name}
+            </span>
+            . Les autres candidatures sont fermées.
+          </span>
+        </div>
+      )}
+
       {expanded && (
         <div className="space-y-2.5 bg-white dark:bg-card p-4">
           {orderedPropositions.map((p) => {
@@ -627,6 +664,7 @@ function MissionGroup({
                 proposition={p}
                 missionTitle={missionTitle}
                 matchingResult={matchRes}
+                verrouillee={acceptee !== undefined && p.id !== acceptee?.id}
               />
             );
           })}

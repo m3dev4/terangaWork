@@ -2,6 +2,7 @@ from django.core.exceptions import ValidationError
 from rest_framework import serializers
 from django.utils import timezone
 
+from mission.models import MissionStatus
 from paiement.models import NumeroPaiement
 from freelance.serializers import FreelanceeSerializer
 
@@ -197,6 +198,11 @@ class PropositionSerializer(serializers.ModelSerializer):
                     "date_livraison": "La date de livraison ne peut pas être antérieure à aujourd'hui."
                 })
 
+        if self.instance is None and mission and mission.status != MissionStatus.OPEN:
+            raise serializers.ValidationError(
+                "Cette mission n'accepte plus de candidatures."
+            )
+
         if self.instance is None:
             freelance = getattr(self.context.get("request"), "user", None)
             if freelance and freelance.is_authenticated:
@@ -260,7 +266,7 @@ class ProjectMeetingSerializer(serializers.ModelSerializer):
 
         if not validated_data.get("room_name"):
             import uuid
-            validated_data["room_name"] = f"jefly-livekit-{uuid.uuid4().hex[:8]}"
+            validated_data["room_name"] = f"terangawork-livekit-{uuid.uuid4().hex[:8]}"
         if not validated_data.get("link"):
             room = validated_data.get("room_name")
             validated_data["link"] = f"https://meet.livekit.io/{room}"

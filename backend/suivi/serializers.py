@@ -1,3 +1,5 @@
+import os
+
 from rest_framework import serializers
 
 from .models import CommentaireLivrable, DemandeAnnulation, Historique, Livrable, Phase
@@ -12,6 +14,8 @@ class CommentaireLivrableSerializer(serializers.ModelSerializer):
         read_only_fields = fields
 
     def get_auteur_nom(self, obj):
+        if obj.auteur is None:
+            return "Compte supprimé"
         return f"{obj.auteur.first_name} {obj.auteur.last_name}".strip()
 
 
@@ -56,8 +60,24 @@ class PhaseSerializer(serializers.ModelSerializer):
 class DecisionLivrableSerializer(serializers.Serializer):
     """Commentaire de l'annonceur : texte et/ou message vocal."""
 
+    EXTENSIONS_AUDIO = {".webm", ".ogg", ".mp3", ".m4a", ".wav", ".aac"}
+    TAILLE_MAX = 5 * 1024 * 1024  # 5 Mo, environ 5 minutes de vocal
+
     texte = serializers.CharField(required=False, allow_blank=True, max_length=3000)
     fichier_vocal = serializers.FileField(required=False, allow_null=True)
+
+    def validate_fichier_vocal(self, fichier):
+        if fichier is None:
+            return fichier
+        ext = os.path.splitext(fichier.name)[1].lower()
+        type_mime = (getattr(fichier, "content_type", "") or "").split(";")[0].strip()
+        if ext not in self.EXTENSIONS_AUDIO or not type_mime.startswith("audio/"):
+            raise serializers.ValidationError(
+                "Le message vocal doit être un fichier audio (webm, ogg, mp3, m4a, wav, aac)."
+            )
+        if fichier.size > self.TAILLE_MAX:
+            raise serializers.ValidationError("Le message vocal ne doit pas dépasser 5 Mo.")
+        return fichier
 
 
 class RepousserDeadlineSerializer(serializers.Serializer):

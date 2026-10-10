@@ -1,3 +1,4 @@
+import asyncio
 import json
 import logging
 import re
@@ -8,6 +9,7 @@ from app.config import settings
 from app.chat_schemas import ChatAskRequest, ChatAskResponse
 from app import django_client
 from app.huggingface_client import get_hf_client
+from app.groq_client import GroqIndisponible, appeler_groq
 
 logger = logging.getLogger(__name__)
 
@@ -229,16 +231,43 @@ RÈGLES STRICTES ANTI-HALLUCINATION — À RESPECTER EN TOUTE CIRCONSTANCE :
 async def _appeler_hf(messages: list[dict[str, str]]) -> str:
     client = get_hf_client()
     try:
-        completion = await client.chat.completions.create(
-            model=settings.HUGGINGFACE_MODEL,
-            messages=messages,
-            max_tokens=800,
-            temperature=0.2,
+        # Délai maximal : un Hugging Face qui ne répond pas bascule sur Groq.
+        completion = await asyncio.wait_for(
+            client.chat.completions.create(
+                model=settings.HUGGINGFACE_MODEL,
+                messages=messages,
+                max_tokens=800,
+                temperature=0.2,
+            ),
+            timeout=settings.HF_TIMEOUT,
         )
     except Exception as exc:  # noqa: BLE001
-        logger.exception(f"Échec appel HF: {exc}")
+        logger.warning(f"Échec appel HF: {exc!r}")
         raise
     return completion.choices[0].message.content or ""
+
+
+async def _appeler_llm(messages: list[dict[str, str]]) -> tuple[str, str]:
+    """
+    Hugging Face d'abord, Groq en relais.
+
+    Bascule sur Groq si HF lève une erreur, dépasse le délai ou répond vide.
+    Renvoie (réponse, fournisseur). Lève une exception si les deux échouent.
+    """
+    try:
+        reponse = await _appeler_hf(messages)
+        if reponse.strip():
+            return reponse, "huggingface"
+        logger.warning("Réponse HF vide : bascule sur Groq.")
+    except Exception:  # noqa: BLE001
+        logger.warning("Hugging Face indisponible : bascule sur Groq.")
+
+    try:
+        reponse = await appeler_groq(messages)
+    except GroqIndisponible as exc:
+        logger.error(f"Groq indisponible également: {exc}")
+        raise
+    return reponse, "groq"
 
 
 # ---------------------------------------------------------------------
@@ -329,16 +358,17 @@ Question de l'utilisateur :
         {"role": "user", "content": user_prompt},
     ]
 
-    # 7. Appel HF (avec fallback texte si indisponible)
+    # 7. Appel LLM : Hugging Face, puis Groq en relais (fallback texte si les deux échouent)
     try:
-        reponse_hf = await _appeler_hf(messages)
+        reponse_hf, fournisseur = await _appeler_llm(messages)
+        logger.info(f"Réponse assistant fournie par {fournisseur}")
         if not reponse_hf.strip():
             return ChatAskResponse(
                 reponse="Désolé, je n'ai pas obtenu de réponse exploitable de l'assistant. Pouvez-vous reformuler ?",
                 erreur="hf_vide",
             )
     except Exception as exc:  # noqa: BLE001
-        logger.error(f"Hugging Face indisponible: {exc}")
+        logger.error(f"Hugging Face et Groq indisponibles: {exc}")
         return ChatAskResponse(
             erreur="hf_indisponible",
             message_user_fr=(

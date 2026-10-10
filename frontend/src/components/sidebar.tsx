@@ -300,7 +300,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         >
           <NavLink
             to="/"
-            className="flex items-center rounded-lg dark:bg-white/95"
+            className="flex items-center"
           >
             <BrandLogo
               iconOnly={collapsed}

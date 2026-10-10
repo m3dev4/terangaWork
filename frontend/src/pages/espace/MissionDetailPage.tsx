@@ -11,6 +11,7 @@ import {
   WalletCards,
   PartyPopper,
   Loader2,
+  Lock,
 } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getMission, getMissionServices } from "../../api/missionsApi";
@@ -262,6 +263,9 @@ const MissionDetailPage: React.FC = () => {
   });
   const hasApplied = hasAppliedQuery.data ?? false;
   const mission = missionQuery.data;
+  // Une mission déjà attribuée (ou plus en ligne) n'accepte plus de candidatures.
+  const candidaturesOuvertes = !mission?.status || mission.status === "OPEN";
+  const postulerDesactive = hasApplied || !candidaturesOuvertes;
   const serviceName =
     servicesQuery.data?.find((service) => service.id === mission?.service)
       ?.name || "Service requis";
@@ -286,7 +290,7 @@ const MissionDetailPage: React.FC = () => {
           <div className="mb-4 rounded-[28px] border border-brand-ink/8 dark:border-border bg-white dark:bg-card p-5 sm:p-7">
             <div className="mb-4 flex flex-wrap items-center gap-2">
               <span className="rounded-full bg-brand-sand dark:bg-muted px-2.5 py-1 text-[9px] font-semibold text-muted-foreground">
-                Mission disponible
+                {candidaturesOuvertes ? "Mission disponible" : "Mission attribuée"}
               </span>
               <span className="text-[10px] text-muted-foreground">
                 Publié récemment
@@ -380,8 +384,9 @@ const MissionDetailPage: React.FC = () => {
                 Votre candidature
               </p>
               <p className="mb-5 text-[11px] leading-relaxed text-muted-foreground">
-                Cette mission correspond à votre profil ? Envoyez votre
-                proposition à l'annonceur.
+                {candidaturesOuvertes
+                  ? "Cette mission correspond à votre profil ? Envoyez votre proposition à l'annonceur."
+                  : "Cette mission a déjà été attribuée : les candidatures sont fermées."}
               </p>
               <Modal
                 title="Postuler à la mission"
@@ -390,11 +395,15 @@ const MissionDetailPage: React.FC = () => {
                 trigger={
                   <button
                     type="button"
-                    disabled={hasApplied}
-                    onClick={() => !hasApplied && setApplyOpen(true)}
+                    disabled={postulerDesactive}
+                    onClick={() => !postulerDesactive && setApplyOpen(true)}
                     className="mb-2 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-brand-green px-4 py-2.5 text-[11px] font-semibold text-brand-ink dark:text-primary-foreground transition-colors hover:bg-brand-green-hover disabled:cursor-not-allowed disabled:opacity-50"
                   >
-                    {hasApplied ? (
+                    {!candidaturesOuvertes ? (
+                      <>
+                        <Lock className="h-3.5 w-3.5" /> Candidatures fermées
+                      </>
+                    ) : hasApplied ? (
                       <>
                         <CheckCircle2 className="h-3.5 w-3.5" /> Déjà postulé
                       </>
@@ -412,7 +421,7 @@ const MissionDetailPage: React.FC = () => {
                   onSuccess={() => setApplyOpen(false)}
                 />
               </Modal>
-              {hasApplied && (
+              {hasApplied && candidaturesOuvertes && (
                 <p className="mb-2 flex items-center justify-center gap-1.5 text-[10px] font-medium text-brand-violet dark:text-violet-300">
                   <CheckCircle2 className="h-3 w-3" /> Votre candidature est en
                   cours d'examen

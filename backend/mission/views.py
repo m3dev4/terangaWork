@@ -119,6 +119,32 @@ class MissionViewSet(viewsets.ModelViewSet):
         )
         send_n8n_moderation_webhook(mission)
 
+    # Une mission attribuée ne peut plus être modifiée ni supprimée par
+    # l'annonceur : l'annulation passe par une demande examinée par l'admin.
+    STATUTS_MODIFIABLES = (
+        MissionStatus.PENDING_MODERATION,
+        MissionStatus.OPEN,
+        MissionStatus.REJECTED,
+        MissionStatus.CLOSED,
+    )
+
+    def _verifier_mission_modifiable(self, mission):
+        if mission.status not in self.STATUTS_MODIFIABLES or mission.propositions.filter(
+            proposition_status=PropositionStatus.ACCEPTED
+        ).exists():
+            raise PermissionDenied(
+                "Cette mission est attribuée à un freelance : elle ne peut plus être "
+                "modifiée ni supprimée. Pour l'arrêter, faites une demande d'annulation."
+            )
+
+    def perform_update(self, serializer):
+        self._verifier_mission_modifiable(serializer.instance)
+        serializer.save()
+
+    def perform_destroy(self, instance):
+        self._verifier_mission_modifiable(instance)
+        instance.delete()
+
     @action(detail=True, methods=["post"], url_path="marquer-livree")
     def marquer_livree(self, request, pk=None):
         """

@@ -42,6 +42,9 @@ class MissionSerializer(ModelSerializer):
         read_only_fields = [
             "id",
             "annonceur",
+            # Le statut ne change que via les actions dédiées (modération,
+            # acceptation, marquer-livree, valider-livraison, annulation admin).
+            "status",
             "service_detail",
             "technologies_detail",
             "created_at",

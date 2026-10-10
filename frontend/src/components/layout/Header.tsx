@@ -8,7 +8,7 @@ export default function Header({ actions }: { actions: LandingActions }) {
     <header className="landing-header">
       <div className="landing-container header-inner">
         <a className="header-brand" href="#top" aria-label="Accueil">
-          <BrandLogo className="landing-logo" />
+          <BrandLogo className="landing-logo" variant="light" />
         </a>
         <nav aria-label="Navigation principale">
           <a href="#comment-ca-marche">Comment ça marche</a>

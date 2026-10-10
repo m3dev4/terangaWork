@@ -96,6 +96,7 @@ PAYDUNYA_SIMULATE_DISBURSEMENT = config("PAYDUNYA_SIMULATE_DISBURSEMENT", defaul
 
 
 N8N_DESCRIPTION_WEBHOOK_URL="https://m3dev4.app.n8n.cloud/webhook-test/generate-description"
+N8N_MODERATION_SECRET = config("N8N_MODERATION_SECRET", default="")
 N8N_MODERATION_WEBHOOK_URL="https://m3dev4.app.n8n.cloud/webhook-test/terangawork/moderation"
 
 

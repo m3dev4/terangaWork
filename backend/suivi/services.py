@@ -12,7 +12,7 @@ from datetime import timedelta
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
-from django.db import transaction
+from django.db import IntegrityError, transaction
 from django.db.models import Q
 from django.utils import timezone
 
@@ -168,7 +168,13 @@ def soumettre_livrable(mission, user, titre, lien, description=""):
     if not est_freelance_de(user, mission):
         raise PermissionError("Seul le freelance assigné peut soumettre un livrable.")
 
-    phase = phase_en_cours(mission)
+    # Verrou sur la phase : deux soumissions simultanées ne passent pas toutes les deux.
+    phase = (
+        Phase.objects.select_for_update()
+        .filter(mission=mission, statut=StatutPhase.EN_COURS)
+        .order_by("-date_ouverture")
+        .first()
+    )
     if phase is None:
         raise SuiviError("Aucune phase n'est ouverte pour cette mission.")
 
@@ -202,6 +208,11 @@ def soumettre_livrable(mission, user, titre, lien, description=""):
     return livrable
 
 
+def _notifier_auteur_livrable(livrable, **kwargs):
+    if livrable.freelance is not None:
+        notifier(utilisateur=livrable.freelance.user, **kwargs)
+
+
 def _verrouiller_livrable_a_examiner(livrable, user):
     livrable = Livrable.objects.select_for_update().select_related(
         "phase__mission__annonceur__user", "freelance__user"
@@ -232,8 +243,8 @@ def valider_livrable(livrable, user, texte="", fichier_vocal=None):
         _ouvrir_phase_developpement(livrable.phase)
         message += " La phase de développement est ouverte."
 
-    notifier(
-        utilisateur=livrable.freelance.user,
+    _notifier_auteur_livrable(
+        livrable,
         type_notif="LIVRABLE_VALIDE",
         titre="Livrable validé",
         message=message,
@@ -270,8 +281,8 @@ def invalider_livrable(livrable, user, texte="", fichier_vocal=None):
     livrable.save(update_fields=["statut", "date_decision"])
     tracer(mission, ActionHistorique.LIVRABLE_INVALIDE, auteur=user, details=f'"{livrable.titre}"')
 
-    notifier(
-        utilisateur=livrable.freelance.user,
+    _notifier_auteur_livrable(
+        livrable,
         type_notif="LIVRABLE_INVALIDE",
         titre="Livrable à retravailler",
         message=(
@@ -370,7 +381,13 @@ def demander_annulation(mission, user):
     if mission.demandes_annulation.filter(statut=StatutDemandeAnnulation.EN_ATTENTE).exists():
         raise SuiviError("Une demande d'annulation est déjà en attente pour cette mission.")
 
-    demande = DemandeAnnulation.objects.create(mission=mission, annonceur=mission.annonceur)
+    try:
+        with transaction.atomic():
+            demande = DemandeAnnulation.objects.create(
+                mission=mission, annonceur=mission.annonceur
+            )
+    except IntegrityError:
+        raise SuiviError("Une demande d'annulation est déjà en attente pour cette mission.")
     tracer(mission, ActionHistorique.ANNULATION_DEMANDEE, auteur=user)
     for admin_user in admins().distinct():
         notifier(
@@ -439,7 +456,7 @@ def detecter_retards(aujourd_hui=None, maintenant=None):
     aujourd_hui = aujourd_hui or timezone.localdate()
     maintenant = maintenant or timezone.now()
     liste_admins = list(admins().distinct())
-    nb_cadrage = nb_validation = 0
+    nb_cadrage = nb_livraison = nb_validation = 0
 
     # 1. Cadrage non livré après la deadline -> admin + annonceur notifiés.
     phases = Phase.objects.select_related("mission__annonceur__user").filter(
@@ -476,7 +493,39 @@ def detecter_retards(aujourd_hui=None, maintenant=None):
                 )
         nb_cadrage += 1
 
-    # 2. Livrable sans réponse de l'annonceur -> admin notifié (il relance).
+    # 2. Phase de développement non terminée à la date de livraison prévue
+    #    -> admin + annonceur notifiés. Le freelance n'a pas encore marqué la mission livrée.
+    phases_dev = Phase.objects.select_related("mission__annonceur__user").filter(
+        type=TypePhase.DEVELOPPEMENT,
+        statut=StatutPhase.EN_COURS,
+        retard_notifie=False,
+        date_limite__lt=aujourd_hui,
+        mission__status=MissionStatus.IN_PROGRESS,
+    )
+    for phase in phases_dev:
+        mission = phase.mission
+        with transaction.atomic():
+            phase.retard_notifie = True
+            phase.save(update_fields=["retard_notifie"])
+            tracer(
+                mission,
+                ActionHistorique.RETARD_LIVRAISON,
+                details=f"Livraison prévue le {phase.date_limite:%d/%m/%Y} dépassée.",
+            )
+            for destinataire in liste_admins + [mission.annonceur.user]:
+                notifier(
+                    utilisateur=destinataire,
+                    type_notif="RETARD_LIVRAISON",
+                    titre="Livraison en retard",
+                    message=(
+                        f'La mission "{mission.title}" devait être livrée le '
+                        f"{phase.date_limite:%d/%m/%Y} et n'est pas encore marquée livrée."
+                    ),
+                    mission=mission,
+                )
+        nb_livraison += 1
+
+    # 3. Livrable sans réponse de l'annonceur -> admin notifié (il relance).
     limite = maintenant - timedelta(days=DELAI_VALIDATION_JOURS)
     livrables = Livrable.objects.select_related("phase__mission").filter(
         statut=StatutLivrable.A_VALIDER,
@@ -507,4 +556,8 @@ def detecter_retards(aujourd_hui=None, maintenant=None):
                 )
         nb_validation += 1
 
-    return {"retards_cadrage": nb_cadrage, "retards_validation": nb_validation}
+    return {
+        "retards_cadrage": nb_cadrage,
+        "retards_livraison": nb_livraison,
+        "retards_validation": nb_validation,
+    }

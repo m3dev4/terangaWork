@@ -143,7 +143,7 @@ const ProjectWorkspacePage: React.FC = () => {
     e.preventDefault();
     if (!newMeetTitle.trim() || !activeProject) return;
 
-    const room = `jefly-livekit-${Math.random().toString(36).substring(2, 9)}`;
+    const room = `terangawork-livekit-${Math.random().toString(36).substring(2, 9)}`;
     const livekitLink = `https://meet.livekit.io/${room}`;
 
     createMeetingMutation.mutate({

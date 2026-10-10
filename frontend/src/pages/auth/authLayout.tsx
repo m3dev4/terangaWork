@@ -1,5 +1,5 @@
 import { Outlet, Link, useLocation } from "react-router-dom";
-import JeflyWordmark from "../../components/JeflyWordmark";
+import BrandLogo from "../../components/BrandLogo";
 import "./auth.css";
 import ImageStreamHero from "@/components/authHeroImage";
 import {
@@ -52,13 +52,13 @@ export default function AuthLayout() {
           </div>
         </ImageStreamHero>
       )}
-      <section className="auth-card" aria-label="Votre compte Jëfly">
+      <section className="auth-card" aria-label="Votre compte TerangaWork">
         <Link
           className="auth-mobile-home"
           to="/"
-          aria-label="Jëfly, revenir à l’accueil"
+          aria-label="TerangaWork, revenir à l’accueil"
         >
-          <JeflyWordmark />
+          <BrandLogo className="w-32" />
         </Link>
         <div className="auth-content">
           <Outlet />

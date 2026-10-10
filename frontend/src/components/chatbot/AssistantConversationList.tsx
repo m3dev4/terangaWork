@@ -1,4 +1,5 @@
-import { Bot, Plus, Trash2 } from "lucide-react";
+import { Plus, Trash2 } from "lucide-react";
+import MalawAvatar from "./MalawAvatar";
 import type { ChatConversation } from "../../api/chatApi";
 import { formatDate, truncate } from "../../utils/formatDate";
 
@@ -25,9 +26,7 @@ const AssistantConversationList: React.FC<AssistantConversationListProps> = ({
     <div className="flex h-full min-h-0 flex-col w-full overflow-x-hidden bg-brand-sand/25 dark:bg-muted/25">
       <div className="shrink-0 border-b border-brand-ink/8 dark:border-border bg-white dark:bg-card p-4">
         <div className="mb-3 flex items-center gap-2.5">
-          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-brand-ink">
-            <Bot className="h-4.5 w-4.5 text-brand-green" strokeWidth={2} />
-          </div>
+          <MalawAvatar size="sm" />
           <div className="min-w-0">
             <h2 className="truncate text-sm font-bold text-brand-ink dark:text-foreground">
               Assistant Malaw
@@ -62,9 +61,7 @@ const AssistantConversationList: React.FC<AssistantConversationListProps> = ({
           </div>
         ) : conversations.length === 0 ? (
           <div className="flex h-full flex-col items-center justify-center px-4 py-8 text-center">
-            <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-brand-ink/5 dark:bg-foreground/5">
-              <Bot className="h-6 w-6 text-muted-foreground" />
-            </div>
+            <MalawAvatar size="md" className="mb-3 opacity-70 grayscale" />
             <p className="text-sm font-medium text-muted-foreground">
               Aucune conversation
             </p>

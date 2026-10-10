@@ -9,7 +9,7 @@ from Service.models import Service
 from User.models import User, UserRole
 from announcer.models import Announcer
 from freelance.models import Education, Experience, Freelancee, Realisation
-from mission.models import Mission
+from mission.models import Mission, MissionStatus
 from .models import Proposition
 
 
@@ -47,6 +47,7 @@ class PropositionViewSetTests(APITestCase):
             budget=500000,
             service=self.service,
             annonceur=self.announcer_profile,
+            status=MissionStatus.OPEN,  # seule une mission publiée accepte des candidatures
         )
         self.list_url = reverse("proposition-list")
 

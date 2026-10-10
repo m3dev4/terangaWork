@@ -26,7 +26,7 @@ export default function Footer({ actions }: { actions: LandingActions }) {
       <div className="landing-container footer-grid">
         <div className="footer-brand">
           <a className="footer-logo" href="#top" aria-label="Retour en haut">
-            <BrandLogo className="landing-logo" />
+            <BrandLogo className="landing-logo" variant="light" />
           </a>
           <p>Le matching intelligent au service du freelancing en Afrique.</p>
           <div className="footer-socials" aria-label="Réseaux sociaux">
@@ -77,7 +77,7 @@ export default function Footer({ actions }: { actions: LandingActions }) {
         </div>
       </div>
       <div className="footer-copyright">
-        © {new Date().getFullYear()} Jëfly. Tous droits réservés.
+        © {new Date().getFullYear()} TerangaWork. Tous droits réservés.
       </div>
     </footer>
   );

@@ -88,8 +88,35 @@ class PropositionViewSet(viewsets.ModelViewSet):
         ).data)
 
     def perform_update(self, serializer):
+        ancien_statut = serializer.instance.proposition_status
+        nouveau_statut = serializer.validated_data.get("proposition_status", ancien_statut)
+        mission = serializer.instance.mission
+
+        if nouveau_statut != ancien_statut:
+            # Seul l'annonceur de la mission décide d'une candidature.
+            if mission.annonceur.user_id != self.request.user.id:
+                raise PermissionDenied(
+                    "Seul l'annonceur de la mission peut accepter ou refuser une candidature."
+                )
+            if nouveau_statut == PropositionStatus.ACCEPTED:
+                if mission.status != MissionStatus.OPEN:
+                    raise PermissionDenied(
+                        "Cette mission n'est plus ouverte : impossible d'accepter une candidature."
+                    )
+                if Proposition.objects.filter(
+                    mission=mission, proposition_status=PropositionStatus.ACCEPTED
+                ).exclude(pk=serializer.instance.pk).exists():
+                    raise PermissionDenied("Une candidature a déjà été acceptée pour cette mission.")
+            if ancien_statut == PropositionStatus.ACCEPTED:
+                raise PermissionDenied("Une candidature acceptée ne peut plus changer de statut.")
+
         instance = serializer.save()
-        if instance.proposition_status == PropositionStatus.ACCEPTED:
+        # Les effets de l'acceptation ne se déclenchent qu'au passage à ACCEPTED,
+        # jamais sur une simple modification d'une proposition déjà acceptée.
+        if (
+            nouveau_statut == PropositionStatus.ACCEPTED
+            and ancien_statut != PropositionStatus.ACCEPTED
+        ):
             mission = instance.mission
             # Passer la mission en IN_PROGRESS
             mission.status = MissionStatus.IN_PROGRESS

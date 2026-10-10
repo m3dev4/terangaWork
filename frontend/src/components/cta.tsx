@@ -10,7 +10,7 @@ export default function Cta({ actions }: { actions: LandingActions }) {
           <h2 id="cta-title">Loy Xar ?</h2>
           <p>
             Que vous soyez un talent en quête de liberté ou une entreprise à la
-            recherche d’excellence, Jëfly est votre nouveau point de rencontre.
+            recherche d’excellence, TerangaWork est votre nouveau point de rencontre.
           </p>
           <div className="cta-actions">
             <Button

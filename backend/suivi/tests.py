@@ -28,7 +28,7 @@ from .models import (
 )
 
 
-class SuiviMissionTests(APITestCase):
+class BaseSuiviTestCase(APITestCase):
     def setUp(self):
         service = Service.objects.create(name="Développement web")
         self.annonceur_user = User.objects.create_user(
@@ -79,6 +79,8 @@ class SuiviMissionTests(APITestCase):
             format="json",
         )
 
+
+class SuiviMissionTests(BaseSuiviTestCase):
     # -- phase 1 -----------------------------------------------------------
 
     def test_acceptation_ouvre_le_cadrage_et_notifie_le_freelance(self):
@@ -267,3 +269,143 @@ class SuiviMissionTests(APITestCase):
         self.assertGreaterEqual(len(resp.data), 2)
         self.client.force_authenticate(self.autre_user)
         self.assertEqual(self.client.get(url).status_code, status.HTTP_403_FORBIDDEN)
+
+
+class AuditSecuriteTests(BaseSuiviTestCase):
+    """Régressions de l'audit : chaque test reproduit une faille corrigée."""
+
+    def test_freelance_ne_peut_pas_accepter_sa_candidature(self):
+        self.client.force_authenticate(self.freelance_user)
+        resp = self.client.patch(
+            reverse("proposition-detail", args=[self.proposition.id]),
+            {"proposition_status": PropositionStatus.ACCEPTED},
+            format="json",
+        )
+        self.assertEqual(resp.status_code, status.HTTP_403_FORBIDDEN)
+        self.mission.refresh_from_db()
+        self.assertEqual(self.mission.status, MissionStatus.OPEN)
+        self.assertFalse(Phase.objects.filter(mission=self.mission).exists())
+
+    def test_annonceur_ne_peut_pas_changer_le_statut_directement(self):
+        self.accepter_candidature()
+        self.client.force_authenticate(self.annonceur_user)
+        self.client.patch(
+            reverse("mission-detail", args=[self.mission.id]), {"status": "CANCELLED"}, format="json"
+        )
+        self.mission.refresh_from_db()
+        self.assertEqual(self.mission.status, MissionStatus.IN_PROGRESS)
+
+    def test_annonceur_ne_peut_pas_modifier_ni_supprimer_une_mission_attribuee(self):
+        self.accepter_candidature()
+        self.client.force_authenticate(self.annonceur_user)
+        url = reverse("mission-detail", args=[self.mission.id])
+        self.assertEqual(
+            self.client.patch(url, {"budget": 99999}, format="json").status_code,
+            status.HTTP_403_FORBIDDEN,
+        )
+        self.assertEqual(self.client.delete(url).status_code, status.HTTP_403_FORBIDDEN)
+        self.assertTrue(Mission.objects.filter(pk=self.mission.id).exists())
+
+    def test_mission_annulee_ne_redevient_pas_active(self):
+        self.accepter_candidature()
+        Mission.objects.filter(pk=self.mission.id).update(status=MissionStatus.CANCELLED)
+        self.client.force_authenticate(self.annonceur_user)
+        self.client.patch(
+            reverse("proposition-detail", args=[self.proposition.id]),
+            {"proposition_status": PropositionStatus.ACCEPTED},
+            format="json",
+        )
+        self.mission.refresh_from_db()
+        self.assertEqual(self.mission.status, MissionStatus.CANCELLED)
+
+    def test_une_seule_candidature_acceptee(self):
+        self.accepter_candidature()
+        autre = Freelancee.objects.create(user=self.autre_user, title="Dev", description="x")
+        p2 = Proposition.objects.create(
+            lettre_motivation="x", freelance=autre, mission=self.mission,
+            date_livraison=timezone.localdate() + timedelta(days=5),
+        )
+        self.client.force_authenticate(self.annonceur_user)
+        resp = self.client.patch(
+            reverse("proposition-detail", args=[p2.id]),
+            {"proposition_status": PropositionStatus.ACCEPTED},
+            format="json",
+        )
+        self.assertEqual(resp.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(
+            Proposition.objects.filter(mission=self.mission, proposition_status="ACCEPTED").count(), 1
+        )
+
+    def test_fichier_non_audio_refuse(self):
+        self.accepter_candidature()
+        livrable_id = self.soumettre().data["id"]
+        self.client.force_authenticate(self.annonceur_user)
+        piege = SimpleUploadedFile("x.html", b"<script>alert(1)</script>", content_type="text/html")
+        resp = self.client.post(
+            reverse("suivi-invalider-livrable", args=[livrable_id]),
+            {"fichier_vocal": piege},
+            format="multipart",
+        )
+        self.assertEqual(resp.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(Livrable.objects.get(pk=livrable_id).statut, StatutLivrable.A_VALIDER)
+
+    def test_nom_du_vocal_aleatoire(self):
+        self.accepter_candidature()
+        livrable_id = self.soumettre().data["id"]
+        self.client.force_authenticate(self.annonceur_user)
+        vocal = SimpleUploadedFile("commentaire.webm", b"audio", content_type="audio/webm")
+        resp = self.client.post(
+            reverse("suivi-invalider-livrable", args=[livrable_id]),
+            {"fichier_vocal": vocal},
+            format="multipart",
+        )
+        self.assertNotIn("commentaire", resp.data["commentaires"][0]["fichier_vocal"])
+
+    def test_retard_de_livraison_notifie(self):
+        self.accepter_candidature()
+        livrable_id = self.soumettre().data["id"]
+        self.client.force_authenticate(self.annonceur_user)
+        self.client.post(reverse("suivi-valider-livrable", args=[livrable_id]), {}, format="json")
+        Phase.objects.filter(mission=self.mission, type=TypePhase.DEVELOPPEMENT).update(
+            date_limite=timezone.localdate() - timedelta(days=1)
+        )
+        call_command("detecter_retards_suivi", stdout=open("/dev/null", "w"))
+        self.assertTrue(
+            Notification.objects.filter(type="RETARD_LIVRAISON", utilisateur=self.annonceur_user).exists()
+        )
+        self.mission.refresh_from_db()
+        self.assertEqual(self.mission.status, MissionStatus.IN_PROGRESS)
+
+    def test_moderation_protegee_par_secret(self):
+        url = reverse("mission-moderation", args=[self.mission.id])
+        with self.settings(N8N_MODERATION_SECRET="s3cret"):
+            self.client.force_authenticate(None)
+            self.assertEqual(
+                self.client.post(url, {"decision": "supprimer"}, format="json").status_code,
+                status.HTTP_403_FORBIDDEN,
+            )
+            self.assertTrue(Mission.objects.filter(pk=self.mission.id).exists())
+
+    def test_moderation_ne_touche_pas_une_mission_en_cours(self):
+        self.accepter_candidature()
+        self.client.force_authenticate(self.admin_user)
+        resp = self.client.post(
+            reverse("mission-moderation", args=[self.mission.id]), {"decision": "supprimer"}, format="json"
+        )
+        self.assertEqual(resp.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertTrue(Mission.objects.filter(pk=self.mission.id).exists())
+
+    def test_candidature_refusee_sur_mission_attribuee(self):
+        self.accepter_candidature()
+        self.client.force_authenticate(self.autre_user)
+        Freelancee.objects.create(user=self.autre_user, title="Dev", description="x")
+        resp = self.client.post(
+            reverse("proposition-list"),
+            {
+                "mission": self.mission.id,
+                "lettre_motivation": "Je suis très motivé par cette mission depuis le début.",
+                "date_livraison": (timezone.localdate() + timedelta(days=5)).isoformat(),
+            },
+            format="json",
+        )
+        self.assertEqual(resp.status_code, status.HTTP_400_BAD_REQUEST, resp.data)
