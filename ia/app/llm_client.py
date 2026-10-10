@@ -31,7 +31,7 @@ def build_llm_prompt(
             c_techs = ", ".join(c.technologies) if c.technologies else "Non spécifié"
             items_text += (
                 f"\n--- MISSION ID: {c.id} ---\n"
-                f"Service requis: {c.service or 'Non spécifié'}\n"
+                f"Service requis: {', '.join(c.services) or c.service or 'Non spécifié'}\n"
                 f"Technologies requises: {c_techs}\n"
                 f"Détails de la mission: {c.texte_libre or ''}\n"
             )
@@ -67,7 +67,7 @@ CONSIGNE STRICTE ANTI-HALLUCINATION ET FORMAT :
             c_techs = ", ".join(c.technologies) if c.technologies else "Non spécifié"
             items_text += (
                 f"\n--- FREELANCE ID: {c.id} ---\n"
-                f"Service: {c.service or 'Non spécifié'}\n"
+                f"Services: {', '.join(c.services) or c.service or 'Non spécifié'}\n"
                 f"Technologies maîtrisées: {c_techs}\n"
                 f"Années d'expérience: {c.annees_experience if c.annees_experience is not None else 'Non renseigné'}\n"
                 f"Profil Freelance: {c.texte_libre or ''}\n"
@@ -105,7 +105,7 @@ CONSIGNE STRICTE ANTI-HALLUCINATION ET PERSPECTIVE :
             c_techs = ", ".join(c.technologies) if c.technologies else "Non spécifié"
             items_text += (
                 f"\n--- CANDIDAT ID: {c.id} ---\n"
-                f"Service: {c.service or 'Non spécifié'}\n"
+                f"Services: {', '.join(c.services) or c.service or 'Non spécifié'}\n"
                 f"Technologies: {c_techs}\n"
                 f"Années d'expérience: {c.annees_experience if c.annees_experience is not None else 'Non renseigné'}\n"
                 f"Texte libre / Motivation: {c.texte_libre or ''}\n"

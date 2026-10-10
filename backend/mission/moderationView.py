@@ -1,3 +1,4 @@
+import hmac
 import logging
 from django.conf import settings
 from rest_framework.views import APIView
@@ -28,12 +29,33 @@ class MissionModerationView(APIView):
     def post(self, request, mission_id: int):
         return self._process_moderation(request, mission_id)
 
+    def _appelant_autorise(self, request) -> bool:
+        """Admin connecté (JWT) ou n8n avec le secret partagé (en-tête X-N8N-Secret)."""
+        user = request.user
+        if user and user.is_authenticated and (user.is_staff or user.is_superuser):
+            return True
+        secret = getattr(settings, "N8N_MODERATION_SECRET", "")
+        if not secret:
+            logger.warning(
+                "N8N_MODERATION_SECRET non configuré : appel de modération non authentifié accepté."
+            )
+            return True
+        return hmac.compare_digest(request.headers.get("X-N8N-Secret", ""), secret)
+
     def _process_moderation(self, request, mission_id: int):
+        if not self._appelant_autorise(request):
+            return Response({"detail": "Non autorisé."}, status=status.HTTP_403_FORBIDDEN)
+
         mission = Mission.objects.filter(pk=mission_id).first()
         if not mission:
             return Response(
                 {"detail": f"Mission #{mission_id} non trouvée ou déjà supprimée."},
                 status=status.HTTP_404_NOT_FOUND,
+            )
+        if mission.status != MissionStatus.PENDING_MODERATION:
+            return Response(
+                {"detail": "Seule une mission en attente de modération peut être approuvée ou supprimée."},
+                status=status.HTTP_400_BAD_REQUEST,
             )
 
         raw_decision = request.data.get("decision") or request.query_params.get("decision", "")

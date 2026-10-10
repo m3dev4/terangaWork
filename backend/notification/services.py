@@ -144,7 +144,7 @@ def notifier_proposition_acceptee(proposition):
     """
     ann_name = getattr(proposition.mission.annonceur, 'get_full_name', lambda: str(proposition.mission.annonceur))()
     return notifier(
-        utilisateur=proposition.freelancee,
+        utilisateur=proposition.freelance.user,
         type_notif='PROPOSITION_ACCEPTEE',
         titre='Proposition acceptée ! 🎉',
         message=f'Félicitations ! Votre proposition pour "{_get_mission_title(proposition.mission)}" a été acceptée par {ann_name}.',
@@ -164,7 +164,7 @@ def notifier_proposition_rejetee(proposition):
         Notification créée
     """
     return notifier(
-        utilisateur=proposition.freelancee,
+        utilisateur=proposition.freelance.user,
         type_notif='PROPOSITION_REJETEE',
         titre='Proposition non retenue',
         message=f'Votre proposition pour "{_get_mission_title(proposition.mission)}" n\'a pas été retenue cette fois-ci.',

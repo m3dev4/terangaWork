@@ -1,4 +1,5 @@
-import { AlertCircle, ArrowLeft, Bot, Send, UserIcon } from "lucide-react";
+import { AlertCircle, ArrowLeft, Send, UserIcon } from "lucide-react";
+import MalawAvatar from "./MalawAvatar";
 import { formatDate, truncate } from "../../utils/formatDate";
 import TypingAssistantMessage from "./TypingAssistantMessage";
 import { toast } from "../ui/toast";
@@ -7,6 +8,7 @@ import type { ChatMessage } from "../../api/chatApi";
 import { useQuery } from "@tanstack/react-query";
 import getCurrentUser from "../../utils/getUser";
 import { getMediaUrl } from "../../utils/getMediaUrl";
+import { malaw } from "@/assets/images";
 
 // ── Panneau de conversation ──────────────────────────────────────────────
 interface AssistantChatPanelProps {
@@ -123,7 +125,7 @@ const AssistantChatPanel: React.FC<AssistantChatPanelProps> = ({
 
       <div className="flex shrink-0 items-center gap-3 border-b border-brand-ink/8 dark:border-border bg-white dark:bg-card px-4 py-3">
         <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-brand-ink">
-          <Bot className="h-4.5 w-4.5 text-brand-green" />
+          <img src={malaw} alt="" className="h-full w-full object-cover" />
         </div>
         <div className="min-w-0 flex-1">
           <h3 className="truncate text-sm font-bold text-brand-ink dark:text-foreground">
@@ -153,7 +155,7 @@ const AssistantChatPanel: React.FC<AssistantChatPanelProps> = ({
         ) : displayMessages.length === 0 ? (
           <div className="flex h-full flex-col items-center justify-center px-2 text-center">
             <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-sand dark:bg-muted">
-              <Bot className="h-7 w-7 text-brand-violet dark:text-violet-300" />
+              <img src={malaw} alt="" className="h-full w-full object-cover" />
             </div>
             <h4 className="mb-2 text-base font-bold text-brand-ink dark:text-foreground">
               Assistant Malaw
@@ -195,9 +197,7 @@ const AssistantChatPanel: React.FC<AssistantChatPanelProps> = ({
                 className={`flex items-start gap-2.5 ${isUser ? "justify-end" : "justify-start"}`}
               >
                 {!isUser && (
-                  <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-brand-ink">
-                    <Bot className="h-3.5 w-3.5 text-brand-green" />
-                  </div>
+                  <MalawAvatar size="xs" />
                 )}
 
                 <div
@@ -241,9 +241,7 @@ const AssistantChatPanel: React.FC<AssistantChatPanelProps> = ({
 
         {isSending && !optimisticMessage && displayMessages.length > 0 && (
           <div className="flex items-start gap-2.5">
-            <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-brand-ink">
-              <Bot className="h-3.5 w-3.5 text-brand-green" />
-            </div>
+            <MalawAvatar size="xs" />
             <div className="rounded-2xl rounded-bl-md border border-brand-ink/8 dark:border-border bg-brand-sand/40 dark:bg-muted/40 px-4 py-3">
               <div className="flex items-center gap-1">
                 <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-brand-ink/30 dark:bg-foreground/30 [animation-delay:-0.3s]" />

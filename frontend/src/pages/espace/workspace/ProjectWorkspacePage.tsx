@@ -27,6 +27,7 @@ import {
   type LiveKitTokenResponse,
 } from "../../../api/meetingsApi";
 import getCurrentUser from "../../../utils/getUser";
+import { HistoriqueCard, SuiviPhasesCard } from "./SuiviProjet";
 
 // ── Palette commune au dashboard (annonceur / freelance) ────────────────────
 // Encre #111118 · Terracotta #D95C38 · Jaune #E7B84B · Crème #F3EBDD
@@ -142,7 +143,7 @@ const ProjectWorkspacePage: React.FC = () => {
     e.preventDefault();
     if (!newMeetTitle.trim() || !activeProject) return;
 
-    const room = `jefly-livekit-${Math.random().toString(36).substring(2, 9)}`;
+    const room = `terangawork-livekit-${Math.random().toString(36).substring(2, 9)}`;
     const livekitLink = `https://meet.livekit.io/${room}`;
 
     createMeetingMutation.mutate({
@@ -272,7 +273,7 @@ const ProjectWorkspacePage: React.FC = () => {
     : "Freelance";
 
   const missionStatus = activeProject.mission_status || "IN_PROGRESS";
-  const isClosed = missionStatus === "CLOSED";
+  const isClosed = missionStatus === "CLOSED" || missionStatus === "CANCELLED";
   // Index de l'étape atteinte dans le stepper honnête (CLOSED hérite de la position de COMPLETED)
   const currentStepIndex = STATUS_STEPS.findIndex(
     (s) => s.key === (isClosed ? "COMPLETED" : missionStatus)
@@ -301,6 +302,11 @@ const ProjectWorkspacePage: React.FC = () => {
               {activeProject.mission_status === "COMPLETED" && (
                 <span className="inline-flex items-center gap-1.5 rounded-full bg-brand-peach/20 dark:bg-brand-peach/10 px-2.5 py-0.5 text-[9.5px] font-bold text-brand-green border border-brand-peach/30">
                   <CheckCircle2 className="h-3 w-3" /> Mission terminée
+                </span>
+              )}
+              {activeProject.mission_status === "CANCELLED" && (
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-2.5 py-0.5 text-[9.5px] font-semibold text-brand-peach">
+                  Mission annulée
                 </span>
               )}
               {activeProject.mission_status === "CLOSED" && (
@@ -410,6 +416,12 @@ const ProjectWorkspacePage: React.FC = () => {
       <div className="grid gap-5 lg:grid-cols-3">
         {/* Colonne calendrier & statut (2/3) */}
         <div className="lg:col-span-2 space-y-5">
+          {/* Suivi par phases : cadrage puis développement */}
+          <SuiviPhasesCard
+            missionId={activeProject.mission}
+            role={user?.role}
+          />
+
           {/* Calendrier */}
           <div className="rounded-[28px] border border-brand-ink/8 dark:border-border bg-white dark:bg-card p-6">
             <div className="mb-4 flex items-center justify-between">
@@ -539,7 +551,9 @@ const ProjectWorkspacePage: React.FC = () => {
             {isClosed ? (
               <div className="flex items-center gap-2 text-[11px] text-muted-foreground">
                 <span className="h-2 w-2 rounded-full bg-brand-ink/30 dark:bg-foreground/30" />{" "}
-                Cette mission a été clôturée.
+                {missionStatus === "CANCELLED"
+                  ? "Cette mission a été annulée par l'administration."
+                  : "Cette mission a été clôturée."}
               </div>
             ) : (
               <div className="flex items-center">
@@ -653,6 +667,8 @@ const ProjectWorkspacePage: React.FC = () => {
               )}
             </div>
           </div>
+
+          <HistoriqueCard missionId={activeProject.mission} />
 
           {/* Planifier un meet */}
           <div className="rounded-[24px] bg-brand-ink p-6 text-white">

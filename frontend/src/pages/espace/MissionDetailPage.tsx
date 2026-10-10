@@ -11,6 +11,7 @@ import {
   WalletCards,
   PartyPopper,
   Loader2,
+  Lock,
 } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getMission, getMissionServices } from "../../api/missionsApi";
@@ -19,6 +20,9 @@ import {
   createProposition,
 } from "../../api/propositionsApi";
 import { Modal } from "../../components/modal";
+import { getTodayDate } from "../../validations/missionValidation";
+import { getErrorMessage } from "../../utils/errorMessage";
+import { getPropositionDateError } from "../../validations/propositionValidation";
 
 // ── Palette commune au produit (annonceur / freelance / admin / onboarding) ─
 // Encre #111118 · Terracotta #D95C38 · Jaune #E7B84B · Crème #F3EBDD
@@ -54,6 +58,7 @@ function ApplyForm({ missionId, deadlineDate, onSuccess }: ApplyFormProps) {
   const queryClient = useQueryClient();
   const [lettre, setLettre] = useState("");
   const [dateLivraison, setDateLivraison] = useState("");
+  const [currentDate, setCurrentDate] = useState(Boolean(deadlineDate));
   const [submitted, setSubmitted] = useState(false);
   const [fieldError, setFieldError] = useState<string | null>(null);
 
@@ -68,12 +73,16 @@ function ApplyForm({ missionId, deadlineDate, onSuccess }: ApplyFormProps) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (mutation.isPending) return;
     setFieldError(null);
 
-    if (deadlineDate && dateLivraison > deadlineDate) {
-      setFieldError(
-        `La date de livraison ne peut pas dépasser le ${formatDate(deadlineDate)}.`
-      );
+    const dateError = getPropositionDateError(
+      currentDate,
+      dateLivraison,
+      deadlineDate
+    );
+    if (dateError) {
+      setFieldError(dateError);
       return;
     }
     if (lettre.trim().length < 50) {
@@ -83,11 +92,15 @@ function ApplyForm({ missionId, deadlineDate, onSuccess }: ApplyFormProps) {
       return;
     }
 
-    mutation.mutate({
+    const payload = {
       mission: missionId,
       lettre_motivation: lettre,
-      date_livraison: dateLivraison,
-    });
+    };
+    mutation.mutate(
+      currentDate
+        ? { ...payload, currentDate: true }
+        : { ...payload, currentDate: false, date_livraison: dateLivraison }
+    );
   };
 
   if (submitted) {
@@ -110,11 +123,15 @@ function ApplyForm({ missionId, deadlineDate, onSuccess }: ApplyFormProps) {
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-5 px-1 pb-2">
       {(fieldError || mutation.isError) && (
-        <div className="rounded-xl border border-brand-green/25 bg-brand-green/10 px-4 py-3 text-[11px] text-brand-violet dark:text-violet-300">
+        <div
+          role="alert"
+          className="rounded-xl border border-brand-green/25 bg-brand-green/10 px-4 py-3 text-[11px] text-brand-violet dark:text-violet-300"
+        >
           {fieldError ||
-            (mutation.error instanceof Error
-              ? mutation.error.message
-              : "Une erreur est survenue. Veuillez réessayer.")}
+            getErrorMessage(
+              mutation.error,
+              "Une erreur est survenue. Veuillez réessayer."
+            )}
         </div>
       )}
 
@@ -145,26 +162,64 @@ function ApplyForm({ missionId, deadlineDate, onSuccess }: ApplyFormProps) {
 
       {/* Date de livraison */}
       <div className="flex flex-col gap-1.5">
-        <label
-          htmlFor="date_livraison"
-          className="text-[10px] font-semibold text-muted-foreground"
-        >
-          Date de livraison proposée
-        </label>
-        <input
-          id="date_livraison"
-          type="date"
-          required
-          min={new Date().toISOString().split("T")[0]}
-          max={deadlineDate ?? undefined}
-          value={dateLivraison}
-          onChange={(e) => setDateLivraison(e.target.value)}
-          className="w-full rounded-xl border border-brand-ink/12 dark:border-border bg-brand-sand/30 dark:bg-muted/30 px-3 py-2.5 text-[12px] text-brand-ink dark:text-foreground focus:border-brand-green focus:outline-none focus:ring-2 focus:ring-brand-green/12"
-        />
         {deadlineDate && (
-          <span className="text-[10px] text-muted-foreground">
-            Date limite de la mission : {formatDate(deadlineDate)}
-          </span>
+          <fieldset className="mb-2 space-y-2">
+            <legend className="mb-2 text-[10px] font-semibold text-muted-foreground">
+              Date de livraison
+            </legend>
+            <label className="flex cursor-pointer items-center gap-2 rounded-xl border border-border p-3 text-[12px]">
+              <input
+                type="radio"
+                name="delivery-choice"
+                checked={currentDate}
+                onChange={() => {
+                  setCurrentDate(true);
+                  setFieldError(null);
+                }}
+              />
+              Conserver la date de l'annonceur : {formatDate(deadlineDate)}
+            </label>
+            <label className="flex cursor-pointer items-center gap-2 rounded-xl border border-border p-3 text-[12px]">
+              <input
+                type="radio"
+                name="delivery-choice"
+                checked={!currentDate}
+                onChange={() => {
+                  setCurrentDate(false);
+                  setFieldError(null);
+                }}
+              />
+              Proposer une autre date
+            </label>
+          </fieldset>
+        )}
+        {!currentDate && (
+          <>
+            <label
+              htmlFor="date_livraison"
+              className="text-[10px] font-semibold text-muted-foreground"
+            >
+              Date de livraison proposée
+            </label>
+            <input
+              id="date_livraison"
+              type="date"
+              required
+              min={getTodayDate()}
+              max={deadlineDate ?? undefined}
+              value={dateLivraison}
+              onChange={(e) => {
+                setDateLivraison(e.target.value);
+                setFieldError(null);
+              }}
+              className="w-full rounded-xl border border-brand-ink/12 dark:border-border bg-brand-sand/30 dark:bg-muted/30 px-3 py-2.5 text-[12px] text-brand-ink dark:text-foreground focus:border-brand-green focus:outline-none focus:ring-2 focus:ring-brand-green/12"
+            />
+            {deadlineDate && (
+              <span className="text-[10px] text-muted-foreground">
+                Choisissez une date au plus tard le {formatDate(deadlineDate)}.
+              </span>
+            )}
+          </>
         )}
       </div>
 
@@ -208,6 +263,9 @@ const MissionDetailPage: React.FC = () => {
   });
   const hasApplied = hasAppliedQuery.data ?? false;
   const mission = missionQuery.data;
+  // Une mission déjà attribuée (ou plus en ligne) n'accepte plus de candidatures.
+  const candidaturesOuvertes = !mission?.status || mission.status === "OPEN";
+  const postulerDesactive = hasApplied || !candidaturesOuvertes;
   const serviceName =
     servicesQuery.data?.find((service) => service.id === mission?.service)
       ?.name || "Service requis";
@@ -232,7 +290,7 @@ const MissionDetailPage: React.FC = () => {
           <div className="mb-4 rounded-[28px] border border-brand-ink/8 dark:border-border bg-white dark:bg-card p-5 sm:p-7">
             <div className="mb-4 flex flex-wrap items-center gap-2">
               <span className="rounded-full bg-brand-sand dark:bg-muted px-2.5 py-1 text-[9px] font-semibold text-muted-foreground">
-                Mission disponible
+                {candidaturesOuvertes ? "Mission disponible" : "Mission attribuée"}
               </span>
               <span className="text-[10px] text-muted-foreground">
                 Publié récemment
@@ -326,8 +384,9 @@ const MissionDetailPage: React.FC = () => {
                 Votre candidature
               </p>
               <p className="mb-5 text-[11px] leading-relaxed text-muted-foreground">
-                Cette mission correspond à votre profil ? Envoyez votre
-                proposition à l'annonceur.
+                {candidaturesOuvertes
+                  ? "Cette mission correspond à votre profil ? Envoyez votre proposition à l'annonceur."
+                  : "Cette mission a déjà été attribuée : les candidatures sont fermées."}
               </p>
               <Modal
                 title="Postuler à la mission"
@@ -336,11 +395,15 @@ const MissionDetailPage: React.FC = () => {
                 trigger={
                   <button
                     type="button"
-                    disabled={hasApplied}
-                    onClick={() => !hasApplied && setApplyOpen(true)}
+                    disabled={postulerDesactive}
+                    onClick={() => !postulerDesactive && setApplyOpen(true)}
                     className="mb-2 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-brand-green px-4 py-2.5 text-[11px] font-semibold text-brand-ink dark:text-primary-foreground transition-colors hover:bg-brand-green-hover disabled:cursor-not-allowed disabled:opacity-50"
                   >
-                    {hasApplied ? (
+                    {!candidaturesOuvertes ? (
+                      <>
+                        <Lock className="h-3.5 w-3.5" /> Candidatures fermées
+                      </>
+                    ) : hasApplied ? (
                       <>
                         <CheckCircle2 className="h-3.5 w-3.5" /> Déjà postulé
                       </>
@@ -358,7 +421,7 @@ const MissionDetailPage: React.FC = () => {
                   onSuccess={() => setApplyOpen(false)}
                 />
               </Modal>
-              {hasApplied && (
+              {hasApplied && candidaturesOuvertes && (
                 <p className="mb-2 flex items-center justify-center gap-1.5 text-[10px] font-medium text-brand-violet dark:text-violet-300">
                   <CheckCircle2 className="h-3 w-3" /> Votre candidature est en
                   cours d'examen

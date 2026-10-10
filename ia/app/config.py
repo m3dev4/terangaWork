@@ -20,7 +20,12 @@ class Settings(BaseSettings):
     )
     # Modèle Hugging Face (chat completions via AsyncInferenceClient)
     HUGGINGFACE_MODEL: str = os.getenv("HUGGINGFACE_MODEL", "mistralai/Mistral-7B-Instruct-v0.3")
-    HF_TIMEOUT: float = 30.0
+    HF_TIMEOUT: float = float(os.getenv("HF_TIMEOUT", "30"))
+
+    # Groq — fournisseur de secours si Hugging Face échoue (API compatible OpenAI)
+    GROQ_API_KEY: str = os.getenv("GROQ_API_KEY", "")
+    GROQ_MODEL: str = os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile")
+    GROQ_TIMEOUT: float = float(os.getenv("GROQ_TIMEOUT", "20"))
 
     model_config = SettingsConfigDict(
         env_file=".env",

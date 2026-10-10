@@ -15,7 +15,11 @@ from paiement.models import NumeroPaiement
 from paiement.serializer import NumeroPaiementSerializer
 
 from .models import ProjectMeeting, Proposition, PropositionStatus
-from .serializer import ProjectMeetingSerializer, PropositionSerializer
+from .serializer import (
+    ProjectMeetingSerializer,
+    PropositionFreelanceProfileSerializer,
+    PropositionSerializer,
+)
 
 
 class IsFreelance(BasePermission):
@@ -71,9 +75,48 @@ class PropositionViewSet(viewsets.ModelViewSet):
                 "Vous avez déjà déposé une proposition pour cette mission."
             )
 
+    @action(detail=True, methods=["get"], url_path="profil-freelance")
+    def profil_freelance(self, request, pk=None):
+        if request.user.role != UserRole.ANNONCEUR:
+            raise PermissionDenied("Seul l'annonceur de la mission peut consulter ce profil.")
+        proposition = self.get_object()
+        profile = Freelancee.objects.select_related("user").prefetch_related(
+            "services", "technologies", "experiences", "educations", "realisations"
+        ).get(pk=proposition.freelance_id)
+        return Response(PropositionFreelanceProfileSerializer(
+            profile, context=self.get_serializer_context()
+        ).data)
+
     def perform_update(self, serializer):
+        ancien_statut = serializer.instance.proposition_status
+        nouveau_statut = serializer.validated_data.get("proposition_status", ancien_statut)
+        mission = serializer.instance.mission
+
+        if nouveau_statut != ancien_statut:
+            # Seul l'annonceur de la mission décide d'une candidature.
+            if mission.annonceur.user_id != self.request.user.id:
+                raise PermissionDenied(
+                    "Seul l'annonceur de la mission peut accepter ou refuser une candidature."
+                )
+            if nouveau_statut == PropositionStatus.ACCEPTED:
+                if mission.status != MissionStatus.OPEN:
+                    raise PermissionDenied(
+                        "Cette mission n'est plus ouverte : impossible d'accepter une candidature."
+                    )
+                if Proposition.objects.filter(
+                    mission=mission, proposition_status=PropositionStatus.ACCEPTED
+                ).exclude(pk=serializer.instance.pk).exists():
+                    raise PermissionDenied("Une candidature a déjà été acceptée pour cette mission.")
+            if ancien_statut == PropositionStatus.ACCEPTED:
+                raise PermissionDenied("Une candidature acceptée ne peut plus changer de statut.")
+
         instance = serializer.save()
-        if instance.proposition_status == PropositionStatus.ACCEPTED:
+        # Les effets de l'acceptation ne se déclenchent qu'au passage à ACCEPTED,
+        # jamais sur une simple modification d'une proposition déjà acceptée.
+        if (
+            nouveau_statut == PropositionStatus.ACCEPTED
+            and ancien_statut != PropositionStatus.ACCEPTED
+        ):
             mission = instance.mission
             # Passer la mission en IN_PROGRESS
             mission.status = MissionStatus.IN_PROGRESS
@@ -84,7 +127,11 @@ class PropositionViewSet(viewsets.ModelViewSet):
             notifier_proposition_acceptee(instance)
             
             # Notifier aussi le freelance du démarrage de la mission
-            notifier_mission_demarree(mission, instance.freelancee.user)
+            notifier_mission_demarree(mission, instance.freelance.user)
+
+            # Ouvrir la phase 1 (cadrage) de l'espace coworking
+            from suivi.services import ouvrir_phase_cadrage
+            ouvrir_phase_cadrage(mission)
             
             # Rejeter automatiquement toutes les autres propositions en attente
             rejected_propositions = Proposition.objects.filter(

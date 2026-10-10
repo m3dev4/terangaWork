@@ -1,6 +1,12 @@
+/* Un seul fond pour toute la page d'accueil : les sections se distinguent
+   par l'espacement et les cartes, pas par des aplats de couleur. */
 .landing-page {
+  --landing-bg: var(--color-brand-canvas);
+  /* La page d'accueil reste claire même si l'app est en thème sombre. */
+  --border: color-mix(in srgb, var(--color-brand-ink) 10%, transparent);
+  color-scheme: light;
   color: var(--color-brand-ink);
-  background: white;
+  background: var(--landing-bg);
   min-width: 0;
 }
 .landing-container {
@@ -14,7 +20,7 @@
   position: sticky;
   top: 0;
   z-index: 40;
-  background: white;
+  background: var(--landing-bg);
   border-bottom: 1px solid var(--border);
 }
 .header-inner {
@@ -97,7 +103,7 @@
   text-transform: uppercase;
 }
 .landing-hero {
-  background: var(--color-brand-canvas);
+  background: var(--landing-bg);
 }
 .hero-inner {
   display: grid;
@@ -305,7 +311,7 @@
   border-color: var(--color-brand-violet);
 }
 .landing-cta {
-  background: var(--color-brand-peach);
+  background: var(--landing-bg);
   padding-block: 144px;
 }
 .cta-panel {
@@ -341,8 +347,9 @@
   background: var(--color-brand-ink);
 }
 .landing-footer {
-  background: var(--color-brand-ink);
-  color: white;
+  background: var(--landing-bg);
+  color: var(--color-brand-ink);
+  border-top: 1px solid var(--border);
 }
 .footer-grid {
   display: grid;
@@ -358,9 +365,6 @@
 }
 .footer-logo {
   display: inline-flex;
-  padding: 14px 18px;
-  border-radius: 12px;
-  background: white;
 }
 .footer-logo .landing-logo {
   width: 144px;
@@ -384,7 +388,7 @@
 .footer-socials span {
   width: 40px;
   height: 40px;
-  border: 1px solid #ffffff40;
+  border: 1px solid color-mix(in srgb, var(--color-brand-ink) 18%, transparent);
   border-radius: 10px;
   display: grid;
   place-items: center;
@@ -413,14 +417,14 @@
 .footer-column li {
   font-size: 14px;
   line-height: 1.5;
-  color: #ffffffe0;
+  color: color-mix(in srgb, var(--color-brand-ink) 80%, transparent);
 }
 .footer-column a:hover {
   text-decoration: underline;
   text-underline-offset: 4px;
 }
 .footer-copyright {
-  border-top: 1px solid #ffffff26;
+  border-top: 1px solid var(--border);
   padding: 24px 0 48px;
   text-align: center;
   font-size: 13px;

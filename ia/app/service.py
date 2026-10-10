@@ -28,12 +28,12 @@ async def process_matching_request(
 
     # Étage 2
     target_techs = ", ".join(request.technologies) if request.technologies else "Non spécifié"
-    target_service = request.service or "Non spécifié"
+    target_service = ", ".join(request.services) or request.service or "Non spécifié"
 
     if request.type_matching == "missions":
         contexte_llm = (
             f"{request.contexte}\n"
-            f"Service cible : {target_service}\n"
+            f"Services du freelance : {target_service}\n"
             f"Technologies du freelance : {target_techs}\n"
             "N'attribue aucune compétence non déclarée au freelance. "
             "Les technologies d'une mission sont des exigences, pas des compétences du freelance."

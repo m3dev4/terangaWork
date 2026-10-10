@@ -101,7 +101,7 @@ def process_candidats_recommandes(mission: Mission) -> dict:
         prop_map[prop.id] = prop
         exp_years = get_freelance_experience_years(prop.freelance)
         cand_techs = [t.name for t in prop.freelance.technologies.all()]
-        cand_service = prop.freelance.service.name if prop.freelance.service else ""
+        cand_services = [s.name for s in prop.freelance.services.all()]
         texte_libre = (
             f"Lettre de motivation: {prop.lettre_motivation}\n"
             f"Profil Freelance: {prop.freelance.title} - {prop.freelance.description}"
@@ -111,7 +111,7 @@ def process_candidats_recommandes(mission: Mission) -> dict:
             {
                 "id": prop.id,
                 "technologies": cand_techs,
-                "service": cand_service,
+                "services": cand_services,
                 "annees_experience": exp_years,
                 "texte_libre": texte_libre,
             }
@@ -182,13 +182,12 @@ def process_missions_recommandees(freelance: Freelancee, *, scoring_only=False) 
     """
     contexte = f"Profil Freelance: {freelance.title}\nDescription: {freelance.description}"
     technologies = [t.name for t in freelance.technologies.all()]
-    #_compatibilité: prendre le premier service si disponible
-    services_list = list(freelance.services.all())
-    service = services_list[0].name if services_list else ""
+    services = [s.name for s in freelance.services.all()]
 
     missions = list(
         Mission.objects.filter(status=MissionStatus.OPEN)
         .exclude(propositions__proposition_status=PropositionStatus.ACCEPTED)
+        .select_related("service", "annonceur__user")
         .prefetch_related("technologies")
         .distinct()
     )
@@ -218,7 +217,7 @@ def process_missions_recommandees(freelance: Freelancee, *, scoring_only=False) 
     payload = {
         "contexte": contexte,
         "technologies": technologies,
-        "service": service,
+        "services": services,
         "candidats": candidats_payload,
         "top_n": len(missions) if scoring_only else 4,
         "type_matching": "missions",
@@ -320,14 +319,14 @@ def evaluer_matching_proactif(mission_id: int) -> None:
             freelance_map[f.id] = f
             exp_years = get_freelance_experience_years(f)
             cand_techs = [t.name for t in f.technologies.all()]
-            cand_service = services_list[0].name if services_list else ""
+            cand_services = [s.name for s in f.services.all()]
             texte_libre = f"Profil Freelance: {f.title} - {f.description}".strip()
 
             candidats_payload.append(
                 {
                     "id": f.id,
                     "technologies": cand_techs,
-                    "service": cand_service,
+                    "services": cand_services,
                     "annees_experience": exp_years,
                     "texte_libre": texte_libre,
                 }

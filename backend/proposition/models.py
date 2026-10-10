@@ -11,6 +11,7 @@ class PropositionStatus(models.TextChoices):
 class Proposition(models.Model):
     lettre_motivation = models.TextField(max_length=5000)
     date_livraison = models.DateField()
+    currentDate = models.BooleanField(default=False)
     freelance = models.ForeignKey(
         "freelance.Freelancee",
         related_name="propositions",
@@ -39,6 +40,11 @@ class Proposition(models.Model):
 
     def clean(self):
         super().clean()
+
+        if self.currentDate and self.mission_id:
+            if not self.mission.date_deadline:
+                raise ValidationError({"currentDate": "Cette mission n'a pas de date limite à conserver."})
+            self.date_livraison = self.mission.date_deadline
 
         if self.mission and self.mission.date_deadline and self.date_livraison:
             if self.date_livraison > self.mission.date_deadline:

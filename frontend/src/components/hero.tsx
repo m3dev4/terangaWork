@@ -15,7 +15,7 @@ export default function Hero({ actions }: { actions: LandingActions }) {
             sans perdre de temps.
           </h1>
           <p>
-            Jëfly connecte freelances et clients grâce à un matching intelligent
+            TerangaWork connecte freelances et clients grâce à un matching intelligent
             qui analyse compétences et besoins réels — fini les groupes WhatsApp
             et les dizaines de candidatures à trier à la main.
           </p>

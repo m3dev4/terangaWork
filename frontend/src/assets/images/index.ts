@@ -17,6 +17,12 @@ import collab from "./collab.jpg";
 import con from "./con.jpg";
 import free from "./free.jpg";
 import relation from "./relation.jpg";
+import malaw from "./malaw.jpg";
+import twBrand from "./tw-brand.png";
+import twBrandLight from "./tw-brand-light.png";
+import twBrandDark from "./tw-brand-dark.png";
+import twIconLight from "./tw-icon-light.png";
+import twIconDark from "./tw-icon-dark.png";
 
 export {
   TWLogo,
@@ -38,4 +44,10 @@ export {
   con,
   free,
   relation,
+  malaw,
+  twBrand,
+  twBrandLight,
+  twBrandDark,
+  twIconLight,
+  twIconDark,
 };

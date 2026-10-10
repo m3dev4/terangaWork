@@ -1,4 +1,5 @@
-import { Bot, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
+import MalawAvatar from "./MalawAvatar";
 
 // ── État vide (aucune conversation sélectionnée) ─────────────────────────
 interface EmptyAssistantProps {
@@ -12,9 +13,7 @@ const EmptyAssistant: React.FC<EmptyAssistantProps> = ({
 }) => {
   return (
     <div className="flex h-full min-h-0 flex-col items-center justify-center overflow-y-auto bg-white dark:bg-card px-6 py-12 text-center">
-      <div className="mb-5 flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-brand-ink">
-        <Bot className="h-8 w-8 text-brand-green" />
-      </div>
+      <MalawAvatar size="lg" className="mb-5" />
       <h2 className="mb-2 text-base font-bold text-brand-ink dark:text-foreground">
         Discutez avec votre assistant
       </h2>

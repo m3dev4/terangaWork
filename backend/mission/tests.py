@@ -1,4 +1,5 @@
 from django.urls import reverse
+from unittest.mock import patch
 from rest_framework import status
 from rest_framework.test import APITestCase
 
@@ -6,11 +7,14 @@ from Service.models import Service
 from User.models import User, UserRole
 from announcer.models import Announcer
 
-from .models import Mission
+from .models import Mission, MissionStatus
 
 
 class MissionViewSetTests(APITestCase):
     def setUp(self):
+        webhook = patch("mission.views.send_n8n_moderation_webhook")
+        webhook.start()
+        self.addCleanup(webhook.stop)
         self.service = Service.objects.create(name="Développement web")
         self.owner = User.objects.create_user(
             email="owner@example.com",
@@ -104,6 +108,7 @@ class MissionViewSetTests(APITestCase):
         payload["service"] = self.service
         mission = Mission.objects.create(
             annonceur=self.owner_profile,
+            status=MissionStatus.OPEN,
             **payload,
         )
         freelance = User.objects.create_user(
@@ -135,5 +140,25 @@ class MissionViewSetTests(APITestCase):
         response = self.client.delete(reverse("mission-detail", args=[mission.pk]))
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
+
+    def test_budget_minimum_on_creation(self):
+        self.client.force_authenticate(self.owner)
+        for budget in (-1, 0, 9999, 10000, 10001):
+            with self.subTest(budget=budget):
+                payload = {**self.mission_payload(), "budget": budget}
+                response = self.client.post(self.list_url, payload, format="json")
+                self.assertEqual(response.status_code, 400 if budget < 10000 else 201)
+                if budget < 10000:
+                    self.assertIn("budget", response.data)
+        self.assertEqual(Mission.objects.count(), 2)
+
+    def test_budget_cannot_be_lowered_below_minimum(self):
+        self.client.force_authenticate(self.owner)
+        response = self.client.post(self.list_url, self.mission_payload(), format="json")
+        url = reverse("mission-detail", args=[response.data["id"]])
+        response = self.client.patch(url, {"budget": 9999}, format="json")
+        self.assertEqual(response.status_code, 400)
+        self.assertIn("budget", response.data)
+        self.assertEqual(Mission.objects.get().budget, 500000)
 
 # Create your tests here.

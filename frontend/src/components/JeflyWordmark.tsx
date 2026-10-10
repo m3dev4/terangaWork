@@ -8,7 +8,7 @@ export default function JeflyWordmark({
       <span className="jefly-mark" aria-hidden="true">
         J
       </span>
-      {!iconOnly && <span>Jëfly</span>}
+      {!iconOnly && <span>TerangaWork</span>}
     </span>
   );
 }

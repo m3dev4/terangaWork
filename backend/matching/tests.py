@@ -1,5 +1,5 @@
 from datetime import date
-from unittest.mock import patch
+from unittest.mock import AsyncMock, patch
 from django.test import TestCase
 from rest_framework import status
 from rest_framework.test import APIClient
@@ -27,6 +27,7 @@ class MatchingTests(TestCase):
 
         # Service & Tech
         self.service_backend = Service.objects.create(name="Développement Backend")
+        self.service_design = Service.objects.create(name="Design UI/UX")
         self.tech_python = Technologie.objects.create(name="Python")
         self.tech_fastapi = Technologie.objects.create(name="FastAPI")
 
@@ -75,8 +76,8 @@ class MatchingTests(TestCase):
             user=self.user_freelance,
             title="Senior Dev Python",
             description="Expert Python et Django",
-            service=self.service_backend,
         )
+        self.freelance.services.add(self.service_design, self.service_backend)
         self.freelance.technologies.add(self.tech_python, self.tech_fastapi)
 
         # Expérience Freelance (2 ans)
@@ -168,6 +169,9 @@ class MatchingTests(TestCase):
         assert cand["candidat_id"] == self.proposition.id
         assert cand["freelance_nom"] == "Charlie Dev"
         assert cand["justification_ia"] == "Profil parfaitement adéquat"
+        payload = mock_fastapi.call_args.args[0]
+        assert payload["service"] == self.service_backend.name
+        assert payload["candidats"][0]["services"] == [self.service_design.name, self.service_backend.name]
 
         # Vérifier la persistance dans ResultatMatching
         assert ResultatMatching.objects.filter(mission=self.mission, proposition=self.proposition).exists()
@@ -200,6 +204,9 @@ class MatchingTests(TestCase):
         m = data["resultats"][0]
         assert m["mission_id"] == self.mission.id
         assert m["mission_title"] == "Mission FastAPI Backend"
+        payload = mock_fastapi.call_args.args[0]
+        assert payload["services"] == [self.service_design.name, self.service_backend.name]
+        assert payload["candidats"][0]["service"] == self.service_backend.name
 
     @patch("matching.services.call_fastapi_matching")
     def test_microservice_failure_returns_503(self, mock_fastapi):
@@ -232,7 +239,26 @@ class MatchingTests(TestCase):
             assert payload["scoring_only"] is True
             assert payload["top_n"] == 6
             assert payload["min_technology_score"] == 0
+            assert payload["services"] == [self.service_design.name, self.service_backend.name]
         assert not ResultatMatching.objects.exists()
+
+    @patch("matching.services.call_fastapi_matching")
+    def test_matching_supports_freelance_without_services(self, mock_fastapi):
+        self.freelance.services.clear()
+        mock_fastapi.return_value = {"resultats": [], "etage_2_reussi": False}
+        self.client.force_authenticate(user=self.user_freelance)
+        response = self.client.get("/api/matching/missions-compatibilite/")
+        assert response.status_code == 200
+        assert mock_fastapi.call_args.args[0]["services"] == []
+
+        self.client.force_authenticate(user=self.user_announcer1)
+        response = self.client.post(f"/api/matching/candidats-recommandes/{self.mission.id}/")
+        assert response.status_code == 200
+        assert mock_fastapi.call_args.args[0]["candidats"][0]["services"] == []
+
+        evaluer_matching_proactif(self.mission.id)
+        assert mock_fastapi.call_count == 3
+        assert mock_fastapi.call_args.args[0]["candidats"][0]["services"] == []
 
     def test_initial_compatibility_requires_freelance(self):
         url = "/api/matching/missions-compatibilite/"
@@ -245,6 +271,7 @@ class MatchingTests(TestCase):
     def test_evaluer_matching_proactif_single_grouped_llm_and_no_duplication(
         self, mock_fastapi, mock_channel_layer
     ):
+        mock_channel_layer.return_value.group_send = AsyncMock()
         # Création d'un second freelance (David) qui aura un score < 80%
         user_freelance2 = User.objects.create_user(
             email="freelance2@jefly.com",
@@ -259,8 +286,8 @@ class MatchingTests(TestCase):
             user=user_freelance2,
             title="Junior Dev",
             description="Débutant",
-            service=self.service_backend,
         )
+        freelance2.services.add(self.service_design)
 
         # Mock pour Étage 1 (scoring_only=True) et Étage 2 (scoring_only=False)
         stage1_response = {
@@ -312,6 +339,9 @@ class MatchingTests(TestCase):
         assert stage1_call_payload["type_matching"] == "proactif"
         assert stage1_call_payload["scoring_only"] is True
         assert len(stage1_call_payload["candidats"]) == 2
+        services_by_freelance = {c["id"]: c["services"] for c in stage1_call_payload["candidats"]}
+        assert services_by_freelance[self.freelance.id] == [self.service_design.name, self.service_backend.name]
+        assert services_by_freelance[freelance2.id] == [self.service_design.name]
 
         # Vérifier le payload du 2nd appel (Stage 2 - un seul appel groupé pour les freelances > 80%)
         stage2_call_payload = mock_fastapi.call_args_list[1][0][0]
@@ -319,6 +349,7 @@ class MatchingTests(TestCase):
         assert stage2_call_payload["scoring_only"] is False
         assert len(stage2_call_payload["candidats"]) == 1
         assert stage2_call_payload["candidats"][0]["id"] == self.freelance.id
+        assert stage2_call_payload["candidats"][0]["services"] == [self.service_design.name, self.service_backend.name]
 
         # Vérifier la création de la notification
         notifs = Notification.objects.filter(type="MISSION_RECOMMANDEE")
