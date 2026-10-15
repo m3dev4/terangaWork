@@ -34,7 +34,8 @@ class User(AbstractUser):
     first_name = models.CharField(max_length=30, blank=False, null=False)
     last_name = models.CharField(max_length=30, blank=False, null=False)
     email = models.EmailField(unique=True, blank=False, null=False)
-    password = models.CharField(max_length=64, blank=False, null=False)
+    # 128 = taille standard Django (un hash pbkdf2 fait ~90 caractères)
+    password = models.CharField(max_length=128, blank=False, null=False)
     number_phone = models.CharField(max_length=15, blank=False, null=False)
     profile_picture = models.ImageField(
         upload_to="profile_pictures/", blank=True, null=True
