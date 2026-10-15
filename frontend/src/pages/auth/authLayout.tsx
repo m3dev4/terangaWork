@@ -37,7 +37,7 @@ export default function AuthLayout() {
   const { pathname } = useLocation();
   const centered = pathname === "/verify-email";
   return (
-    <main className={`auth-layout ${centered ? "auth-layout-centered" : ""}`}>
+    <main className={`auth-layout force-light ${centered ? "auth-layout-centered" : ""}`}>
       {!centered && (
         <ImageStreamHero
           images={IMAGEAUTH}
@@ -58,7 +58,7 @@ export default function AuthLayout() {
           to="/"
           aria-label="TerangaWork, revenir à l’accueil"
         >
-          <BrandLogo className="w-32" />
+          <BrandLogo className="w-32" variant="light" />
         </Link>
         <div className="auth-content">
           <Outlet />

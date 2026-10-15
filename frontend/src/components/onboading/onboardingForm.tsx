@@ -364,7 +364,7 @@ const OnboardingForm: React.FC = () => {
     <div className="flex h-screen max-h-screen w-full bg-white overflow-hidden">
       <aside className="w-80 lg:w-84 shrink-0 h-full max-h-screen bg-brand-sand/50 border-r border-brand-ink/8 px-6 py-6 lg:py-8 flex flex-col justify-start overflow-hidden select-none">
         <div className="flex flex-col items-start mb-6">
-          <BrandLogo className="mb-4 w-44" />
+          <BrandLogo className="mb-4 w-44" variant="light" />
           <h2 className="font-heading font-semibold text-xl lg:text-2xl text-brand-ink tracking-tight">
             Configurons votre profil{" "}
             {activeRole && (

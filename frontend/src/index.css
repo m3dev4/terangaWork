@@ -4,7 +4,8 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
-@custom-variant dark (&:is(.dark *));
+/* .force-light : zone qui reste claire même en thème sombre (auth, onboarding) */
+@custom-variant dark (&:is(.dark *):not(:is(.force-light, .force-light *)));
 
 @theme inline {
   --font-heading: "Sora", sans-serif;
@@ -95,6 +96,47 @@
   --font-sora: "Sora", sans-serif;
   --font-sans: "Inter", sans-serif;
   --font-inter: "Inter", sans-serif;
+}
+
+.force-light {
+  color-scheme: light;
+  --background: #faf8f4;
+  --foreground: #094145;
+  --card: #fff;
+  --card-foreground: #094145;
+  --popover: #fff;
+  --popover-foreground: #094145;
+  --primary: #35d370;
+  --primary-foreground: #094145;
+  --secondary: #22177d;
+  --secondary-foreground: #fff;
+  --muted: #e9dece;
+  --muted-foreground: #536c6b;
+  --accent: #fed3bf;
+  --accent-foreground: #094145;
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: #e9dece;
+  --input: #c5c9bf;
+  --ring: #22177d;
+  --chart-1: #22177d;
+  --chart-2: #35d370;
+  --chart-3: #094145;
+  --chart-4: #fed3bf;
+  --chart-5: #e9dece;
+  --radius: 0.625rem;
+  --sidebar: #fff;
+  --sidebar-foreground: #094145;
+  --sidebar-primary: #22177d;
+  --sidebar-primary-foreground: #fff;
+  --sidebar-accent: #e9dece;
+  --sidebar-accent-foreground: #094145;
+  --sidebar-border: #e9dece;
+  --sidebar-ring: #22177d;
+  --font-heading: "Sora", sans-serif;
+  --font-sora: "Sora", sans-serif;
+  --font-sans: "Inter", sans-serif;
+  --font-inter: "Inter", sans-serif;
+  color: var(--foreground);
 }
 
 .dark {
