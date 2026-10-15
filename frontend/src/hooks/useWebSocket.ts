@@ -8,9 +8,11 @@ const getWsUrl = () => {
 
   // 2. Déduite de l'URL de l'API (http -> ws, /api/ -> /ws/chat/)
   const api = import.meta.env.VITE_API_URL as string | undefined;
-  if (api) {
+  if (api && /^https?:\/\//.test(api)) {
     return api.replace(/^http/, "ws").replace(/\/api\/?$/, "/ws/chat/");
   }
+  // API relative (proxy du frontend, ex. Vercel) : pas de WebSocket disponible
+  if (api) return null;
 
   // 3. Par défaut : même hôte que la page, port 8000
   const host =
@@ -75,11 +77,18 @@ class WebSocketManager {
       return;
     }
 
+    const base = getWsUrl();
+    if (!base) {
+      // Pas de WebSocket : les données sont rafraîchies périodiquement.
+      this.setStatus("disconnected");
+      return;
+    }
+
     this.token = token;
     this.cleanup();
     this.setStatus("connecting");
 
-    const wsUrl = `${getWsUrl()}?token=${token}`;
+    const wsUrl = `${base}?token=${token}`;
     const ws = new WebSocket(wsUrl);
 
     ws.onopen = () => {

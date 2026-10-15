@@ -11,6 +11,16 @@ export const getMediaUrl = (url: string | null | undefined): string => {
   if (!url) return "";
 
   // If it's already an absolute URL (starts with http://, https://, or data: for base64 images), return as is
+  // Page en HTTPS + média du backend en HTTP : on passe par le proxy (/media/...)
+  if (
+    url.startsWith("http://") &&
+    typeof window !== "undefined" &&
+    window.location.protocol === "https:"
+  ) {
+    const { pathname, search } = new URL(url);
+    if (pathname.startsWith("/media/")) return `${pathname}${search}`;
+  }
+
   if (
     url.startsWith("http://") ||
     url.startsWith("https://") ||
