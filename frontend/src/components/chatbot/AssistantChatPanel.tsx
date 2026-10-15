@@ -1,4 +1,4 @@
-import { AlertCircle, ArrowLeft, Send, UserIcon } from "lucide-react";
+import { AlertCircle, ArrowLeft, Send } from "lucide-react";
 import MalawAvatar from "./MalawAvatar";
 import { formatDate, truncate } from "../../utils/formatDate";
 import TypingAssistantMessage from "./TypingAssistantMessage";
@@ -225,7 +225,7 @@ const AssistantChatPanel: React.FC<AssistantChatPanelProps> = ({
                   </div>
                 </div>
 
-                {isUser && (
+                {isUser && user && (
                   <div className="flex h-7 w-7 shrink-0 items-center relative overflow-hidden justify-center rounded-lg bg-brand-green">
                     <img
                       src={getMediaUrl(user.profile_picture)}

@@ -1,12 +1,9 @@
-import React from "react";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { Lock } from "lucide-react";
 import { Button } from "../ui/button";
-import { useNavigate } from "react-router-dom";
 
 const NewPasswordComponent = () => {
-  const navigate = useNavigate();
 
   return (
     <div className="flex flex-col items-start justify-start w-full mt-4">

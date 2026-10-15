@@ -1,4 +1,4 @@
-import { Hug, Power } from "../assets/icons";
+import { Power } from "../assets/icons";
 
 export default function MatchingAndComparison() {
   return (

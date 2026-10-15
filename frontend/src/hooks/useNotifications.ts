@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback } from "react";
+import { useEffect, useRef } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   getNotifications,
@@ -6,7 +6,6 @@ import {
   markNotificationRead,
   markAllNotificationsRead,
   deleteNotification,
-  type Notification,
   type NotificationStats,
   type NotificationListResponse,
 } from "../api/notificationApi";

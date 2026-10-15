@@ -119,9 +119,6 @@ export const SessionsManagerCard: React.FC = () => {
     }
   };
 
-  // The first session (ordered by -date_last_used) with the current refresh token is the current one
-  const currentRefreshToken = localStorage.getItem("refresh_token");
-
   return (
     <div className="rounded-2xl border border-brand-sand dark:border-border bg-white dark:bg-card p-6 sm:p-7 shadow-xs">
       <div className="mb-5 border-b border-brand-sand dark:border-border pb-4">

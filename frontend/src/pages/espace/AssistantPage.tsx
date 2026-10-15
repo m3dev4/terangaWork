@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   useChatConversations,
   useCreateChatConversation,
@@ -6,7 +6,7 @@ import {
   useChatMessages,
   useSendChatMessage,
 } from "../../hooks/useChat";
-import type { ChatConversation, ChatMessage } from "../../api/chatApi";
+import type { ChatConversation } from "../../api/chatApi";
 
 import { toast } from "../../components/ui/toast";
 import AssistantConversationList from "../../components/chatbot/AssistantConversationList";

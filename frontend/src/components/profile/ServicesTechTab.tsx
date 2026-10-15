@@ -87,7 +87,9 @@ export const ServicesTechTab: React.FC<ServicesTechTabProps> = () => {
     mutationFn: (name: string) => proposeService({ name }),
     onSuccess: (newService: ServiceData) => {
       queryClient.invalidateQueries({ queryKey: ["servicesList"] });
-      setSelectedServiceId(newService.id);
+      setSelectedServiceIds((prev) =>
+        prev.includes(newService.id) || prev.length >= 3 ? prev : [...prev, newService.id],
+      );
       setCustomServiceName("");
       setShowProposeService(false);
     },

@@ -21,7 +21,6 @@ import {
   Clock,
   XCircle,
   Sparkles,
-  Check,
   Trash2,
 } from "lucide-react";
 

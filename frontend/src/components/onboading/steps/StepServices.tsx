@@ -173,7 +173,7 @@ export const StepServices: React.FC<StepServicesProps> = ({
 
             <Button
               type="submit"
-              disabled={isLoading || !selectedId}
+              disabled={isLoading || selectedIds.length === 0}
               className="inline-flex items-center gap-2 px-7 py-3 rounded-xl bg-brand-green hover:bg-brand-green-hover text-brand-ink font-medium transition-all duration-150 disabled:opacity-50 cursor-pointer text-sm"
             >
               {isLoading ? (

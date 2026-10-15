@@ -1,12 +1,9 @@
 "use client";
 
 import * as React from "react";
-import { cn } from "cn";
-import { Button } from "./ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -15,7 +12,6 @@ import useMediaQuery from "../hooks/useMediaQuery";
 import {
   Drawer,
   DrawerContent,
-  DrawerDescription,
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
@@ -25,14 +21,13 @@ interface modalProps {
   children: React.ReactNode;
   onClose?: () => void;
   title: string;
-  trigger: React.ReactNode;
+  trigger: React.ReactElement;
   open?: boolean;
   setOpen?: (open: boolean) => void;
 }
 
 export function Modal({
   title,
-  onClose,
   children,
   trigger,
   open,
@@ -65,8 +60,4 @@ export function Modal({
       </DrawerContent>
     </Drawer>
   );
-}
-
-function ProfileForm({ className }: React.ComponentProps<"form">) {
-  return <form className={cn("grid items-start gap-6", className)}></form>;
 }

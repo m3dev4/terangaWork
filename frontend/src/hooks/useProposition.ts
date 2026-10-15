@@ -1,15 +1,13 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useNavigate } from "react-router-dom";
 import { createProposition } from "../api/propositionsApi";
 import { toast } from "../components/ui/toast";
 
 export const useCreateProposition = () => {
-  const navigate = useNavigate();
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: createProposition,
-    onSuccess: (data, variables) => {
+    onSuccess: (_data, variables) => {
       // Invalidate mission queries to refetch if needed
       queryClient.invalidateQueries({ queryKey: ["missions"] });
       queryClient.invalidateQueries({

@@ -1,7 +1,6 @@
 import React, { useState, useRef } from "react";
 import {
   Upload,
-  ArrowRight,
   ArrowLeft,
   Loader2,
   CheckCircle2,

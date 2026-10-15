@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Send, Smile, Mic, Trash2, Square } from "lucide-react";
+import { Send, Smile, Mic, Trash2 } from "lucide-react";
 
 interface MessageInputProps {
   onSendMessage: (content: string) => void;
@@ -21,7 +21,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   // Auto-resize textarea
   useEffect(() => {
