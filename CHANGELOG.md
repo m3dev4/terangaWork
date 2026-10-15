@@ -19,6 +19,7 @@ Le format suit [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/), et le p
 - Nouveau logo TerangaWork, avec ses versions pour fond clair et fond sombre.
 - Support multi-service : un freelance peut proposer de 1 à 3 services.
 - Licence propriétaire et commerciale ; documentation complète (`docs/`).
+- **Frontend dockerisé** : build Node 22 + pnpm, service Nginx. URL de l'API et du WebSocket configurables au build (`VITE_API_URL`, `VITE_WS_URL`).
 
 ### Modifié
 - **Rebranding** : Jëfly devient TerangaWork dans toute l'interface.

@@ -78,9 +78,12 @@ Dans Docker, `INTERNAL_API_KEY` et `DJANGO_INTERNAL_API_KEY` sont injectées aut
 
 ## Frontend (`frontend/.env`)
 
-Le fichier est chargé par Docker Compose. Aujourd'hui, l'URL de l'API est écrite en dur dans `src/api/axios.ts` (`http://localhost:8000/api/`).
+Ces variables sont lues **au build** par Vite (modèle : `frontend/.env.example`). Avec Docker, elles sont passées en arguments de build par `docker-compose.yml`.
 
-`VITE_BACKEND_URL` est fournie par Docker Compose mais n'est pas encore lue par le code. Pour la production, faites lire `import.meta.env.VITE_BACKEND_URL` par `axios.ts` et par le WebSocket.
+| Variable | Défaut | Description |
+|---|---|---|
+| `VITE_API_URL` | `http://localhost:8000/api/` | URL de l'API Django **vue par le navigateur** |
+| `VITE_WS_URL` | déduite de `VITE_API_URL` | URL du WebSocket (`ws://` ou `wss://…/ws/chat/`) |
 
 ## Clés partagées : récapitulatif
 

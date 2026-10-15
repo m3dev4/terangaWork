@@ -1,6 +1,8 @@
 import axios from "axios";
 
-const BASE_URL = "http://localhost:8000/api/";
+// URL de l'API : VITE_API_URL au build (Docker, production), sinon le backend local.
+const BASE_URL: string =
+  import.meta.env.VITE_API_URL || "http://localhost:8000/api/";
 
 export const instance = axios.create({
   baseURL: BASE_URL,

@@ -91,7 +91,7 @@ frontend/src/
   - `["propositions-workspace"]` pour l'espace projet ;
   - `["currentUser"]` pour l'utilisateur.
 
-> L'URL du backend est écrite en dur dans `axios.ts`. En production, remplacez-la par une variable `VITE_API_URL`.
+> L'URL de l'API vient de `VITE_API_URL` (par défaut `http://localhost:8000/api/`) ; celle du WebSocket, de `VITE_WS_URL` ou, à défaut, de `VITE_API_URL`. Voir [CONFIGURATION.md](CONFIGURATION.md#frontend-frontendenv).
 
 ## Temps réel
 
