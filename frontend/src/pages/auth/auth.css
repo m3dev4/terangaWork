@@ -312,3 +312,32 @@
     font-size: 22px;
   }
 }
+
+/* Les pages d'authentification restent claires, même si l'app est en thème sombre :
+   on remet les variables du thème clair et on neutralise l'autoremplissage sombre du navigateur. */
+.auth-layout {
+  color-scheme: light;
+  --background: #faf8f4;
+  --foreground: #094145;
+  --card: #fff;
+  --card-foreground: #094145;
+  --muted: #e9dece;
+  --muted-foreground: #536c6b;
+  --border: #e9dece;
+  --input: #c5c9bf;
+  --ring: #22177d;
+  --destructive: oklch(0.577 0.245 27.325);
+}
+.auth-card .auth-input:-webkit-autofill,
+.auth-card .auth-input:-webkit-autofill:hover,
+.auth-card .auth-input:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--color-brand-ink);
+  caret-color: var(--color-brand-ink);
+  -webkit-box-shadow: 0 0 0 1000px var(--color-brand-canvas) inset;
+  box-shadow: 0 0 0 1000px var(--color-brand-canvas) inset;
+  transition: background-color 9999s ease-out 0s;
+}
+.auth-card .auth-input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px #fff inset;
+  box-shadow: 0 0 0 1000px #fff inset;
+}

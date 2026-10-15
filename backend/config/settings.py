@@ -227,9 +227,16 @@ SIMPLE_JWT = {
 }
 
 # CORS - Frontend React (Vite)
-CORS_ALLOWED_ORIGINS = config(
-    "CORS_ALLOWED_ORIGINS", default="http://localhost:5173,http://127.0.0.1:5173"
-).split(",")
+# Origines autorisées (dev + frontend de production sur Vercel)
+CORS_ALLOWED_ORIGINS = [
+    origin.strip().rstrip("/")
+    for origin in config(
+        "CORS_ALLOWED_ORIGINS",
+        default="http://localhost:5173,http://127.0.0.1:5173,https://teranga-work.vercel.app",
+    ).split(",")
+    if origin.strip()
+]
+CSRF_TRUSTED_ORIGINS = [o for o in CORS_ALLOWED_ORIGINS if o.startswith("https://")]
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_HEADERS = [
     "accept",

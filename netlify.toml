@@ -1,0 +1,14 @@
+# Déploiement Netlify du frontend (Vite + React)
+[build]
+  base = "frontend"
+  command = "pnpm build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# SPA : toutes les routes renvoient vers index.html (React Router)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
