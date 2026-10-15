@@ -310,3 +310,6 @@ LOGGING = {
         "daphne": {"handlers": ["console"], "level": LOG_LEVEL, "propagate": False},
     },
 }
+
+# Derrière Caddy (HTTPS) : les URLs absolues (médias, liens) sont générées en https://
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")

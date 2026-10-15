@@ -1,0 +1,7 @@
+# Reverse proxy HTTPS devant Django (Daphne).
+# Caddy obtient et renouvelle seul le certificat Let's Encrypt.
+# WebSocket (/ws/...) pris en charge automatiquement.
+{$API_DOMAIN:16-16-210-226.sslip.io} {
+	encode gzip
+	reverse_proxy web:8000
+}

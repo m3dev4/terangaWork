@@ -51,6 +51,23 @@ services:
       - mysql_data:/var/lib/mysql
     restart: unless-stopped
 
+  # HTTPS en production : docker compose --profile prod up -d
+  caddy:
+    image: caddy:2-alpine
+    profiles: ["prod"]
+    environment:
+      API_DOMAIN: ${API_DOMAIN:-16-16-210-226.sslip.io}
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - web
+    restart: unless-stopped
+
   frontend:
     build:
       context: ../frontend
@@ -66,4 +83,6 @@ services:
     
 volumes:
   mysql_data:
+  caddy_data:
+  caddy_config:
 

@@ -11,7 +11,7 @@ RUN pnpm install --frozen-lockfile
 COPY . .
 
 # URL de l'API et du WebSocket vues par le NAVIGATEUR (injectées au build par Vite)
-ARG VITE_API_URL=http://16.16.210.226:8000/api/
+ARG VITE_API_URL=https://16-16-210-226.sslip.io/api/
 ARG VITE_WS_URL=
 ENV VITE_API_URL=$VITE_API_URL \
     VITE_WS_URL=$VITE_WS_URL
