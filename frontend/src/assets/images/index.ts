@@ -14,7 +14,7 @@ import omIcon from "./om.png";
 import freelnaceIllust from "./freelanceIllust.jpg";
 import terangaWorkCon from "./terangaWorkCon.jpg";
 import collab from "./collab.jpg";
-import con from "./con.jpg";
+import con from "./connexion.jpg";
 import free from "./free.jpg";
 import relation from "./relation.jpg";
 import malaw from "./malaw.jpg";
