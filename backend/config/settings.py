@@ -291,3 +291,22 @@ FASTAPI_INTERNAL_API_KEY = config(
     "FASTAPI_INTERNAL_API_KEY", default="dev-secret-internal-key"
 )
 
+# Logs : tout part sur la sortie standard -> visible avec `docker compose logs`
+LOG_LEVEL = config("LOG_LEVEL", default="INFO")
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "simple": {"format": "[{asctime}] {levelname} {name} : {message}", "style": "{"},
+    },
+    "handlers": {
+        "console": {"class": "logging.StreamHandler", "formatter": "simple"},
+    },
+    "root": {"handlers": ["console"], "level": LOG_LEVEL},
+    "loggers": {
+        # Erreurs 500 (avec traceback) et requêtes en erreur
+        "django.request": {"handlers": ["console"], "level": "WARNING", "propagate": False},
+        "django.security": {"handlers": ["console"], "level": "WARNING", "propagate": False},
+        "daphne": {"handlers": ["console"], "level": LOG_LEVEL, "propagate": False},
+    },
+}
