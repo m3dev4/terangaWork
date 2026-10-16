@@ -21,6 +21,8 @@ import {
 } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import getCurrentUser from "../utils/getUser";
+import { getConversation } from "../api/message";
+import { getPropositions } from "../api/propositionsApi";
 
 export interface SidebarItemConfig {
   id: string;
@@ -58,7 +60,6 @@ export const FREELANCE_SIDEBAR_SECTIONS: SidebarSectionConfig[] = [
         label: "Mes candidatures",
         url: "/espace/candidatures",
         icon: ListChecks,
-        badge: 12,
         badgeVariant: "gray",
       },
     ],
@@ -71,7 +72,6 @@ export const FREELANCE_SIDEBAR_SECTIONS: SidebarSectionConfig[] = [
         label: "Messagerie",
         url: "/espace/messages",
         icon: MessageSquare,
-        badge: 3,
         badgeVariant: "orange",
       },
       {
@@ -135,7 +135,6 @@ export const ANNONCEUR_SIDEBAR_SECTIONS: SidebarSectionConfig[] = [
         label: "Candidatures reçues",
         url: "/espace/candidatures-recues",
         icon: Laptop,
-        badge: 5,
         badgeVariant: "orange",
       },
     ],
@@ -148,7 +147,6 @@ export const ANNONCEUR_SIDEBAR_SECTIONS: SidebarSectionConfig[] = [
         label: "Messagerie",
         url: "/espace/messages",
         icon: MessageSquare,
-        badge: 3,
         badgeVariant: "orange",
       },
       {
@@ -263,6 +261,44 @@ export const Sidebar: React.FC<SidebarProps> = ({
     retry: false,
   });
 
+  const estUtilisateur =
+    user?.role === "freelance" || user?.role === "annonceur";
+
+  // Compteurs dynamiques (rafraîchis par le WebSocket ou le polling)
+  const { data: conversations } = useQuery({
+    queryKey: ["conversations"],
+    queryFn: getConversation,
+    enabled: estUtilisateur,
+    refetchInterval: 30_000,
+  });
+  const { data: propositions } = useQuery({
+    queryKey: ["propositions"],
+    queryFn: () => getPropositions(),
+    enabled: estUtilisateur,
+    refetchInterval: 30_000,
+  });
+
+  const compteurs: Record<string, number> = React.useMemo(() => {
+    const messagesNonLus = (conversations || []).reduce(
+      (total, c) => total + (c.nb_non_lus || 0),
+      0
+    );
+    const enAttente = (propositions || []).filter(
+      (p) => p.proposition_status === "PENDING"
+    ).length;
+    return {
+      messages: messagesNonLus,
+      candidatures: enAttente, // freelance : candidatures en attente de réponse
+      "candidatures-recues": enAttente, // annonceur : candidatures à traiter
+    };
+  }, [conversations, propositions]);
+
+  const badgeDe = (item: SidebarItemConfig) => {
+    const n = compteurs[item.id] ?? item.badge;
+    if (n === undefined || n === 0) return undefined;
+    return typeof n === "number" && n > 99 ? "99+" : n;
+  };
+
   const sections = React.useMemo(() => {
     if (user?.role === "annonceur") {
       return ANNONCEUR_SIDEBAR_SECTIONS;
@@ -321,6 +357,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
               {section.items.map((item) => {
                 const Icon = item.icon;
+                const badge = badgeDe(item);
                 const isExactDashboard =
                   item.url === "/espace" || item.url === "/espace/admin";
                 const isActive = isExactDashboard
@@ -346,7 +383,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                         strokeWidth={isActive ? 2 : 1.6}
                       />
                       {/* Orange notification dot */}
-                      {!isActive && item.badge !== undefined && (
+                      {!isActive && badge !== undefined && (
                         <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-brand-green" />
                       )}
                     </NavLink>
@@ -382,7 +419,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                       {item.label}
                     </span>
 
-                    {item.badge !== undefined && (
+                    {badge !== undefined && (
                       <span
                         className={`text-[8.5px] px-1.5 py-0.2 rounded-full font-bold leading-none ${
                           item.badgeVariant === "orange"
@@ -390,7 +427,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                             : "bg-sidebar-accent text-muted-foreground"
                         }`}
                       >
-                        {item.badge}
+                        {badge}
                       </span>
                     )}
                   </NavLink>

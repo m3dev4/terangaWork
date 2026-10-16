@@ -16,7 +16,8 @@ router.register(r"profile", ProfileViewSet, basename="profile")
 router.register(r"signalements", SignalementViewSet, basename="signalement")
 
 
-urlpatterns = router.urls + [
+# Routes explicites AVANT le router : sinon "profile/<pk>/" capture "profile/photo/"
+urlpatterns = [
     path("profile/photo/", UserProfileView.as_view(), name="profile-photo"),
     path("me/", MeViewSet.as_view(), name="me"),
     path("admin/dashboard/stats/", AdminDashboardStatsView.as_view(), name="admin-dashboard-stats"),
@@ -42,4 +43,4 @@ urlpatterns = router.urls + [
         OnboardingStepView.as_view(),
         name="onboarding-step",
     ),
-]
+] + router.urls

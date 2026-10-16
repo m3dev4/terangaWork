@@ -1,4 +1,4 @@
-import React, { useDeferredValue, useState } from "react";
+import React, { useDeferredValue, useMemo, useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import {
   ArrowRight,
@@ -9,6 +9,7 @@ import {
   AlertCircle,
   RefreshCw,
   Loader2,
+  X,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { getMissions } from "../../api/missionsApi";
@@ -56,10 +57,22 @@ const MissionCardSkeleton = () => (
   </div>
 );
 
+type DelaiFiltre = "tous" | "7" | "30" | "flexible";
+type TriMissions = "pertinence" | "recent" | "budget_desc" | "budget_asc";
+
+const JOUR_MS = 24 * 60 * 60 * 1000;
+
 const FreelanceMissionsPage: React.FC = () => {
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
   const deferredSearch = useDeferredValue(search);
+  const [serviceId, setServiceId] = useState<number | null>(null);
+  const [showFilters, setShowFilters] = useState(false);
+  const [budgetMin, setBudgetMin] = useState("");
+  const [budgetMax, setBudgetMax] = useState("");
+  const [delai, setDelai] = useState<DelaiFiltre>("tous");
+  const [compatiblesSeules, setCompatiblesSeules] = useState(false);
+  const [tri, setTri] = useState<TriMissions>("pertinence");
 
   const missionsQuery = useQuery({
     queryKey: ["available-missions"],
@@ -93,13 +106,65 @@ const FreelanceMissionsPage: React.FC = () => {
     matchingData && matchingData.resultats.length > 0
   );
 
-  const regularMissions = (missionsQuery.data || []).filter(
-    (mission) =>
-      (!mission.status || mission.status === "OPEN") &&
-      `${mission.title} ${mission.description}`
-        .toLowerCase()
-        .includes(deferredSearch.toLowerCase())
+  const openMissions = (missionsQuery.data || []).filter(
+    (mission) => !mission.status || mission.status === "OPEN"
   );
+
+  // Services présents dans les missions ouvertes (pastilles dynamiques)
+  const services = useMemo(() => {
+    const map = new Map<number, string>();
+    for (const m of openMissions) {
+      if (m.service_detail) map.set(m.service_detail.id, m.service_detail.name);
+    }
+    return [...map.entries()].sort((a, b) => a[1].localeCompare(b[1]));
+  }, [openMissions]);
+
+  const terme = deferredSearch.trim().toLowerCase();
+  const min = budgetMin ? Number(budgetMin) : null;
+  const max = budgetMax ? Number(budgetMax) : null;
+  const maintenant = Date.now();
+
+  const regularMissions = openMissions.filter((mission) => {
+    if (terme) {
+      const texte = [
+        mission.title,
+        mission.description,
+        mission.service_detail?.name,
+        ...(mission.technologies_detail || []).map((t) => t.name),
+      ]
+        .join(" ")
+        .toLowerCase();
+      if (!texte.includes(terme)) return false;
+    }
+    if (serviceId !== null && mission.service !== serviceId) return false;
+    if (min !== null && mission.budget < min) return false;
+    if (max !== null && mission.budget > max) return false;
+    if (delai === "flexible" && mission.date_deadline) return false;
+    if (delai === "7" || delai === "30") {
+      if (!mission.date_deadline) return false;
+      const ecart = new Date(`${mission.date_deadline}T00:00:00`).getTime() - maintenant;
+      if (ecart > Number(delai) * JOUR_MS) return false;
+    }
+    if (compatiblesSeules && !compatibilityMap.get(mission.id)?.compatible) return false;
+    return true;
+  });
+
+  const nbFiltresActifs =
+    Number(Boolean(budgetMin)) +
+    Number(Boolean(budgetMax)) +
+    Number(delai !== "tous") +
+    Number(compatiblesSeules) +
+    Number(tri !== "pertinence");
+
+  const reinitialiserFiltres = () => {
+    setSearch("");
+    setServiceId(null);
+    setBudgetMin("");
+    setBudgetMax("");
+    setDelai("tous");
+    setCompatiblesSeules(false);
+    setTri("pertinence");
+  };
 
   const matchingResultsMap = new Map(
     (matchingData?.resultats || []).map((r) => [r.mission_id, r])
@@ -107,6 +172,10 @@ const FreelanceMissionsPage: React.FC = () => {
 
   // La compatibilité est indépendante de la sélection limitée du LLM.
   const displayedMissions = [...regularMissions].sort((a, b) => {
+    if (tri === "budget_desc") return b.budget - a.budget;
+    if (tri === "budget_asc") return a.budget - b.budget;
+    if (tri === "recent")
+      return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
     const scoreA = compatibilityMap.get(a.id);
     const scoreB = compatibilityMap.get(b.id);
     return (
@@ -254,25 +323,114 @@ const FreelanceMissionsPage: React.FC = () => {
         </label>
         <button
           type="button"
-          className="inline-flex items-center justify-center gap-2 rounded-2xl border border-brand-ink/12 dark:border-border bg-white dark:bg-card px-4 py-2.5 text-[11px] font-semibold text-muted-foreground hover:border-brand-ink/25 dark:hover:border-border"
+          onClick={() => setShowFilters((v) => !v)}
+          aria-expanded={showFilters}
+          className={`inline-flex items-center justify-center gap-2 rounded-2xl border px-4 py-2.5 text-[11px] font-semibold transition cursor-pointer ${
+            showFilters || nbFiltresActifs > 0
+              ? "border-brand-ink bg-brand-ink text-white"
+              : "border-brand-ink/12 dark:border-border bg-white dark:bg-card text-muted-foreground hover:border-brand-ink/25"
+          }`}
         >
           <SlidersHorizontal className="h-3.5 w-3.5" /> Filtres
+          {nbFiltresActifs > 0 && (
+            <span className="rounded-full bg-brand-green px-1.5 text-[9px] font-bold text-brand-ink">
+              {nbFiltresActifs}
+            </span>
+          )}
         </button>
       </div>
 
+      {showFilters && (
+        <div className="mb-4 grid gap-3 rounded-2xl border border-brand-ink/8 dark:border-border bg-white dark:bg-card p-4 sm:grid-cols-2 lg:grid-cols-4">
+          <label className="text-[10px] font-semibold text-muted-foreground">
+            Budget min (FCFA)
+            <input
+              type="number"
+              min={0}
+              inputMode="numeric"
+              value={budgetMin}
+              onChange={(e) => setBudgetMin(e.target.value)}
+              placeholder="0"
+              className={`mt-1 w-full rounded-xl border border-brand-ink/12 dark:border-border bg-white dark:bg-card px-3 py-2 text-[11px] outline-none focus:border-brand-green`}
+            />
+          </label>
+          <label className="text-[10px] font-semibold text-muted-foreground">
+            Budget max (FCFA)
+            <input
+              type="number"
+              min={0}
+              inputMode="numeric"
+              value={budgetMax}
+              onChange={(e) => setBudgetMax(e.target.value)}
+              placeholder="Illimité"
+              className={`mt-1 w-full rounded-xl border border-brand-ink/12 dark:border-border bg-white dark:bg-card px-3 py-2 text-[11px] outline-none focus:border-brand-green`}
+            />
+          </label>
+          <label className="text-[10px] font-semibold text-muted-foreground">
+            Échéance
+            <select
+              value={delai}
+              onChange={(e) => setDelai(e.target.value as DelaiFiltre)}
+              className={`mt-1 w-full rounded-xl border border-brand-ink/12 dark:border-border bg-white dark:bg-card px-3 py-2 text-[11px] outline-none focus:border-brand-green`}
+            >
+              <option value="tous">Toutes</option>
+              <option value="7">Dans les 7 jours</option>
+              <option value="30">Dans les 30 jours</option>
+              <option value="flexible">Flexible (sans date)</option>
+            </select>
+          </label>
+          <label className="text-[10px] font-semibold text-muted-foreground">
+            Trier par
+            <select
+              value={tri}
+              onChange={(e) => setTri(e.target.value as TriMissions)}
+              className={`mt-1 w-full rounded-xl border border-brand-ink/12 dark:border-border bg-white dark:bg-card px-3 py-2 text-[11px] outline-none focus:border-brand-green`}
+            >
+              <option value="pertinence">Pertinence</option>
+              <option value="recent">Plus récentes</option>
+              <option value="budget_desc">Budget décroissant</option>
+              <option value="budget_asc">Budget croissant</option>
+            </select>
+          </label>
+          <div className="flex items-center justify-between gap-3 sm:col-span-2 lg:col-span-4">
+            <label className="inline-flex cursor-pointer items-center gap-2 text-[11px] text-brand-ink dark:text-foreground">
+              <input
+                type="checkbox"
+                checked={compatiblesSeules}
+                onChange={(e) => setCompatiblesSeules(e.target.checked)}
+                className="h-3.5 w-3.5 accent-brand-green"
+              />
+              Missions compatibles avec mon profil uniquement
+            </label>
+            <button
+              type="button"
+              onClick={reinitialiserFiltres}
+              className="inline-flex items-center gap-1 text-[10px] font-semibold text-muted-foreground hover:text-brand-ink dark:hover:text-foreground cursor-pointer"
+            >
+              <X className="h-3 w-3" /> Réinitialiser
+            </button>
+          </div>
+        </div>
+      )}
+
       <div className="mb-5 flex flex-wrap gap-2">
-        <span className="rounded-full bg-brand-ink px-3 py-1.5 text-[10px] font-medium text-white">
+        <button
+          type="button"
+          onClick={() => setServiceId(null)}
+          className={`rounded-full px-3 py-1.5 text-[10px] font-medium transition cursor-pointer ${serviceId === null ? "bg-brand-ink text-white" : "border border-brand-ink/12 dark:border-border bg-white dark:bg-card text-muted-foreground hover:border-brand-ink/25"}`}
+        >
           Toutes les missions
-        </span>
-        <span className="rounded-full border border-brand-ink/12 dark:border-border bg-white dark:bg-card px-3 py-1.5 text-[10px] text-muted-foreground">
-          Développement
-        </span>
-        <span className="rounded-full border border-brand-ink/12 dark:border-border bg-white dark:bg-card px-3 py-1.5 text-[10px] text-muted-foreground">
-          Design
-        </span>
-        <span className="rounded-full border border-brand-ink/12 dark:border-border bg-white dark:bg-card px-3 py-1.5 text-[10px] text-muted-foreground">
-          Marketing
-        </span>
+        </button>
+        {services.map(([id, name]) => (
+          <button
+            key={id}
+            type="button"
+            onClick={() => setServiceId(serviceId === id ? null : id)}
+            className={`rounded-full px-3 py-1.5 text-[10px] font-medium transition cursor-pointer ${serviceId === id ? "bg-brand-ink text-white" : "border border-brand-ink/12 dark:border-border bg-white dark:bg-card text-muted-foreground hover:border-brand-ink/25"}`}
+          >
+            {name}
+          </button>
+        ))}
       </div>
 
       {/* ── Squelettes de chargement ── */}
@@ -300,7 +458,15 @@ const FreelanceMissionsPage: React.FC = () => {
               Aucune mission trouvée
             </p>
             <p className="mt-1 text-[11px] text-muted-foreground">
-              Essayez un autre terme de recherche.
+              Essayez un autre terme ou{" "}
+              <button
+                type="button"
+                onClick={reinitialiserFiltres}
+                className="font-semibold underline cursor-pointer"
+              >
+                réinitialisez les filtres
+              </button>
+              .
             </p>
           </div>
         )}
