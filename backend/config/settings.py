@@ -162,6 +162,12 @@ else:
             "PASSWORD": config("MYSQL_DATABASE_PASSWORD"),
             "HOST": config("DB_HOST"),
             "PORT": config("MYSQL_DATABASE_PORT", default="3306"),
+            # Mode strict : une valeur trop longue lève une erreur au lieu
+            # d'être tronquée en silence (cf. mots de passe / URLs Cloudinary)
+            "OPTIONS": {
+                "charset": "utf8mb4",
+                "init_command": "SET sql_mode='STRICT_TRANS_TABLES'",
+            },
         }
     }
 
