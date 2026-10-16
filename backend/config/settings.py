@@ -313,3 +313,9 @@ LOGGING = {
 
 # Derrière Caddy (HTTPS) : les URLs absolues (médias, liens) sont générées en https://
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
+# Stockage : les URLs Cloudinary stockées dans les ImageField sont renvoyées telles quelles
+STORAGES = {
+    "default": {"BACKEND": "User.storage.CloudinaryAwareStorage"},
+    "staticfiles": {"BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage"},
+}
