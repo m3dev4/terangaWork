@@ -34,6 +34,7 @@ import AdminTechnologiesPage from "./pages/espace/admin/AdminTechnologiesPage.ts
 import AdminSignalementsPage from "./pages/espace/admin/AdminSignalementsPage.tsx";
 import AssistantPage from "./pages/espace/AssistantPage.tsx";
 import { ThemeProvider } from "./components/theme-provider.tsx";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 
 const router = createBrowserRouter([
   {
@@ -169,6 +170,7 @@ createRoot(document.getElementById("root")!).render(
         </ThemeProvider>
         <ReactQueryDevtools initialIsOpen={false} />
       </Toaster>
+      <SpeedInsights />
     </QueryClientProvider>
   </StrictMode>
 );
