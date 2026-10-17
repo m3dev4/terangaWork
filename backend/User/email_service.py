@@ -21,7 +21,10 @@ from decouple import config
 resend.api_key = config("RESEND_API_KEY", default="")
 
 # Adresse d'expéditeur configurable avec nom d'affichage
-DEFAULT_FROM_EMAIL = config("DEFAULT_FROM_EMAIL", default="Teranga Work <no-reply@jefly.app>")
+DEFAULT_FROM_EMAIL = config(
+    "DEFAULT_FROM_EMAIL", default="TerangaWork <no-reply@notifications.senfish.net>"
+)
+
 
 # Durée de validité du code OTP (en minutes) - doit correspondre au serializer
 OTP_VALIDITY_MINUTES = 10
@@ -145,13 +148,14 @@ def send_otp_email(email: str, otp_code: str) -> Dict[str, object]:
         # Envoi via Resend
         response = resend.Emails.send(
             {
-                "from": DEFAULT_FROM_EMAIL,
+                "from": "TerangaWork <contact@notifications.senfish.net>",
                 "to": [email],
                 "subject": subject,
                 "html": html_content,
                 "text": text_content,
             }
         )
+        print("Response from Resend:", response)  # Debugging line
 
         email_id = response.get("id") if isinstance(response, dict) else None
         logger.info("Email OTP envoyé avec succès à %s (id: %s)", email, email_id)
