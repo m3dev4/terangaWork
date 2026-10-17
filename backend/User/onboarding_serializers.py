@@ -36,7 +36,13 @@ class IdentiteSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             "first_name": {"required": True, "allow_blank": False},
             "last_name": {"required": True, "allow_blank": False},
-            "number_phone": {"required": True, "allow_blank": False},
+            # validators=[] : l'unicité est vérifiée après normalisation
+            "number_phone": {
+                "required": True,
+                "allow_blank": False,
+                "validators": [],
+                "max_length": 25,  # saisie avec espaces ; stocké normalisé (≤ 15)
+            },
         }
 
     def validate_number_phone(self, value: str) -> str:
@@ -49,6 +55,16 @@ class IdentiteSerializer(serializers.ModelSerializer):
         if not re.match(r"^[\d\s\+\-\.\(\)]+$", value):
             raise serializers.ValidationError(
                 "Le numéro de téléphone contient des caractères invalides."
+            )
+        from User.utils import normalize_phone, phone_already_used
+
+        value = normalize_phone(value)
+        if len(value) > 15:
+            raise serializers.ValidationError("Le numéro de téléphone est trop long.")
+        user = self.context["request"].user
+        if phone_already_used(value, exclude_user_id=user.pk):
+            raise serializers.ValidationError(
+                "Ce numéro de téléphone est déjà utilisé par un autre compte."
             )
         return value
 

@@ -36,7 +36,9 @@ class User(AbstractUser):
     email = models.EmailField(unique=True, blank=False, null=False)
     # 128 = taille standard Django (un hash pbkdf2 fait ~90 caractères)
     password = models.CharField(max_length=128, blank=False, null=False)
-    number_phone = models.CharField(max_length=15, blank=False, null=False)
+    # Unique : deux comptes ne peuvent pas partager le même numéro.
+    # NULL tant que l'onboarding n'est pas fait (plusieurs NULL autorisés).
+    number_phone = models.CharField(max_length=15, unique=True, null=True, blank=True)
     # Contient l'URL Cloudinary complète : 100 caractères (défaut) ne suffisent pas
     profile_picture = models.ImageField(
         upload_to="profile_pictures/", max_length=500, blank=True, null=True

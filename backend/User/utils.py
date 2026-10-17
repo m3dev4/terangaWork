@@ -172,3 +172,33 @@ def extract_public_id_from_url(url: str) -> Optional[str]:
     except Exception:
         logger.exception("Impossible d'extraire public_id depuis l'URL : %s", url)
         return None
+
+
+
+# =============================================================================
+# TÉLÉPHONE
+# =============================================================================
+
+def normalize_phone(value):
+    """Normalise un numéro : retire espaces, points, tirets et parenthèses.
+
+    "+221 77 123 45 67" -> "+221771234567". Renvoie None si vide.
+    """
+    import re
+
+    if value is None:
+        return None
+    value = re.sub(r"[\s\.\-\(\)]", "", str(value))
+    return value or None
+
+
+def phone_already_used(phone, exclude_user_id=None):
+    """Indique si le numéro (normalisé) appartient déjà à un autre compte."""
+    from User.models import User
+
+    if not phone:
+        return False
+    qs = User.objects.filter(number_phone=phone)
+    if exclude_user_id is not None:
+        qs = qs.exclude(pk=exclude_user_id)
+    return qs.exists()

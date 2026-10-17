@@ -201,7 +201,7 @@ class RegisterSerializer(serializers.Serializer):
         validated_data.pop("confirmPassword")
         validated_data.setdefault("first_name", "")
         validated_data.setdefault("last_name", "")
-        validated_data.setdefault("number_phone", "")
+        validated_data.setdefault("number_phone", None)
         return User.objects.create_user(**validated_data)
 
 
@@ -669,7 +669,7 @@ class UpdateProfileSerializer(serializers.ModelSerializer):
         },
     )
     number_phone = serializers.CharField(
-        max_length=15,
+        max_length=25,
         required=False,
         allow_blank=True,
         error_messages={
@@ -729,6 +729,16 @@ class UpdateProfileSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError(
                     "Le numéro de téléphone ne peut contenir que des chiffres, "
                     "des espaces, +, - ou ."
+                )
+            from User.utils import normalize_phone, phone_already_used
+
+            value = normalize_phone(value)
+            if value and len(value) > 15:
+                raise serializers.ValidationError("Le numéro de téléphone est trop long.")
+            exclude = self.instance.pk if self.instance is not None else None
+            if phone_already_used(value, exclude_user_id=exclude):
+                raise serializers.ValidationError(
+                    "Ce numéro de téléphone est déjà utilisé par un autre compte."
                 )
         return value
 
