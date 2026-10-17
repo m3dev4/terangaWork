@@ -4,7 +4,7 @@ from rest_framework import serializers
 
 from User.models import UserRole
 
-from .models import Announcer
+from .models import Announcer, TypeAnnouncer
 
 
 class AnnouncerSerializer(serializers.ModelSerializer):
@@ -26,6 +26,28 @@ class AnnouncerSerializer(serializers.ModelSerializer):
             "updated_at",
         ]
         read_only_fields = ["id", "created_at", "updated_at"]
+
+    def validate_typeAnnonceur(self, value: str) -> str:
+        """Le type "Entreprise / Agence" est désactivé pour le moment.
+
+        Un profil déjà en "Entreprise" peut conserver sa valeur, mais on ne
+        peut plus passer à "Entreprise".
+        """
+        from User.onboarding_serializers import AnnouncerTypeSerializer
+
+        deja_entreprise = (
+            self.instance is not None
+            and self.instance.typeAnnonceur == TypeAnnouncer.ENTREPRISE
+        )
+        if (
+            value == TypeAnnouncer.ENTREPRISE
+            and not AnnouncerTypeSerializer.ENTREPRISE_DISPONIBLE
+            and not deja_entreprise
+        ):
+            raise serializers.ValidationError(
+                "Le type « Entreprise / Agence » n'est pas encore disponible."
+            )
+        return value
 
     def validate_company_name(self, value: str) -> str:
         return self._required_text(value, "Le nom de l'entreprise est obligatoire.")

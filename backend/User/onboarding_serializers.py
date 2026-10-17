@@ -396,6 +396,18 @@ class AnnouncerTypeSerializer(serializers.Serializer):
         },
     )
 
+    # Le type "Entreprise / Agence" est désactivé pour le moment.
+    # Passer à True pour le réactiver (et côté frontend : ENTREPRISE_DISPONIBLE).
+    ENTREPRISE_DISPONIBLE = False
+
+    def validate_typeAnnonceur(self, value: str) -> str:
+        if value == TypeAnnouncer.ENTREPRISE and not self.ENTREPRISE_DISPONIBLE:
+            raise serializers.ValidationError(
+                "Le type « Entreprise / Agence » n'est pas encore disponible. "
+                "Choisissez « Particulier »."
+            )
+        return value
+
 
 class AnnouncerInfosEntrepriseSerializer(serializers.ModelSerializer):
     """Étape 4 Annonceur : Infos entreprise (sauté si Particulier)."""

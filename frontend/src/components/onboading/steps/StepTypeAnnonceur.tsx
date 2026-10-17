@@ -24,15 +24,23 @@ export const StepTypeAnnonceur: React.FC<StepTypeAnnonceurProps> = ({
   onSubmit,
   isLoading = false,
 }) => {
+  // Le type "Entreprise / Agence" est désactivé pour le moment :
+  // seul "Particulier" peut être choisi.
+  const ENTREPRISE_DISPONIBLE = false;
+
   const [selectedType, setSelectedType] = useState<
     "Entreprise" | "Particulier"
-  >((initialType as "Entreprise" | "Particulier") || "Entreprise");
+  >(
+    ENTREPRISE_DISPONIBLE && initialType === "Entreprise"
+      ? "Entreprise"
+      : "Particulier",
+  );
 
   React.useEffect(() => {
-    if (initialType === "Entreprise" || initialType === "Particulier") {
-      setSelectedType(initialType);
-    }
-  }, [initialType]);
+    if (initialType === "Particulier") setSelectedType("Particulier");
+    if (initialType === "Entreprise" && ENTREPRISE_DISPONIBLE)
+      setSelectedType("Entreprise");
+  }, [initialType, ENTREPRISE_DISPONIBLE]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -58,11 +66,14 @@ export const StepTypeAnnonceur: React.FC<StepTypeAnnonceurProps> = ({
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Entreprise */}
         <div
-          onClick={() => setSelectedType("Entreprise")}
-          className={`w-full p-5 rounded-2xl cursor-pointer flex items-center justify-between transition-all duration-200 ${
-            selectedType === "Entreprise"
-              ? "border-2 border-brand-violet bg-brand-canvas shadow-xs"
-              : "border border-border bg-white hover:border-neutral-300"
+          onClick={() => ENTREPRISE_DISPONIBLE && setSelectedType("Entreprise")}
+          aria-disabled={!ENTREPRISE_DISPONIBLE}
+          className={`w-full p-5 rounded-2xl flex items-center justify-between transition-all duration-200 ${
+            !ENTREPRISE_DISPONIBLE
+              ? "border border-border bg-neutral-50 opacity-60 cursor-not-allowed"
+              : selectedType === "Entreprise"
+                ? "border-2 border-brand-violet bg-brand-canvas shadow-xs cursor-pointer"
+                : "border border-border bg-white hover:border-neutral-300 cursor-pointer"
           }`}
         >
           <div className="flex items-center gap-4">
@@ -76,8 +87,13 @@ export const StepTypeAnnonceur: React.FC<StepTypeAnnonceurProps> = ({
               <Building2 className="w-6 h-6" />
             </div>
             <div>
-              <h3 className="font-bold text-brand-ink text-base mb-0.5">
+              <h3 className="font-bold text-brand-ink text-base mb-0.5 flex items-center gap-2">
                 Entreprise / Agence
+                {!ENTREPRISE_DISPONIBLE && (
+                  <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wider bg-neutral-200 text-muted-foreground">
+                    Bientôt disponible
+                  </span>
+                )}
               </h3>
               <p className="text-xs sm:text-sm text-muted-foreground">
                 PME, startup, grande entreprise ou agence.
