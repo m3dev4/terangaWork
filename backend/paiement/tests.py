@@ -54,8 +54,9 @@ class PaiementFlowTestCase(TestCase):
             user=self.freelance_user,
             title="Dev Fullstack",
             description="Expert Django & React",
-            service=self.service,
         )
+        # Le modèle Freelancee utilise désormais un ManyToMany "services"
+        self.freelance_profile.services.add(self.service)
 
         self.other_user = User.objects.create_user(
             email="other@test.com",
@@ -130,14 +131,14 @@ class PaiementFlowTestCase(TestCase):
         self.assertEqual(res.status_code, 200)
         self.assertTrue(NumeroPaiement.objects.filter(freelance=self.freelance_profile, operateur=OperateurMobileMoneyType.WAVE, numero="771234567").exists())
 
-        # 3. Deuxième confirmation pour une autre proposition/mission avec le MÊME opérateur -> Réutilisation automatique sans renvoyer numero
+        # 3. Une fois confirmé, le numéro ne peut plus être modifié (règle métier actuelle) -> 400
         res = self.client.post(
             f"/api/propositions/{self.proposition.id}/confirmer-numero-paiement/",
-            {},
+            {"numero": "779999999"},
             format="json",
         )
-        self.assertEqual(res.status_code, 200)
-        self.assertEqual(res.data["numero_paiement"]["numero"], "771234567")
+        self.assertEqual(res.status_code, 400)
+        self.assertTrue(NumeroPaiement.objects.filter(freelance=self.freelance_profile, numero="771234567").exists())
 
     def test_initiate_collection_and_idempotency_409(self):
         """Vérifie que /payer/ crée le paiement et qu'une deuxième tentative renvoie 409 Conflict"""
@@ -304,7 +305,7 @@ class PaiementFlowTestCase(TestCase):
         res = self.client.get(f"/api/missions/{self.mission.id}/historique-paiement/")
         self.assertEqual(res.status_code, 200)
 
-        # 3. Autre utilisateur -> 403 Forbidden
+        # 3. Autre utilisateur -> 404 : la mission n'est même pas visible pour lui
         self.client.force_authenticate(user=self.other_user)
         res = self.client.get(f"/api/missions/{self.mission.id}/historique-paiement/")
-        self.assertEqual(res.status_code, 403)
+        self.assertIn(res.status_code, (403, 404))

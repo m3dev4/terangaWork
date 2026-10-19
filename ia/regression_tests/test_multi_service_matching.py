@@ -79,7 +79,8 @@ def test_service_normalization(candidate, target, expected):
 
 
 @pytest.mark.parametrize("type_matching", ["missions", "candidatures", "proactif"])
-def test_matching_api_accepts_multiple_services(type_matching):
+def test_matching_api_accepts_multiple_services(type_matching, monkeypatch):
+    monkeypatch.setattr(settings, "INTERNAL_API_KEY", "cle-de-test-suffisamment-longue-0123456789")
     freelance = {"services": ["Développement Web", "Développement Frontend"]}
     mission = {"service": "Développement Frontend"}
     target, candidate = (freelance, mission) if type_matching == "missions" else (mission, freelance)

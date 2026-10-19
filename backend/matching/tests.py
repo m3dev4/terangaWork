@@ -396,7 +396,12 @@ class MatchingTests(TestCase):
         self.mission.save()
 
         url = f"/api/missions/{self.mission.id}/moderation/"
-        res = self.client.patch(url, {"decision": "approuver"}, format="json")
+        # La modération externe exige désormais le secret partagé avec n8n
+        with self.settings(N8N_MODERATION_SECRET="secret-de-test"):
+            res = self.client.patch(
+                url, {"decision": "approuver"}, format="json",
+                HTTP_X_N8N_SECRET="secret-de-test",
+            )
 
         assert res.status_code == status.HTTP_200_OK
         self.mission.refresh_from_db()

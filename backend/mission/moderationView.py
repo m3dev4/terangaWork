@@ -36,10 +36,11 @@ class MissionModerationView(APIView):
             return True
         secret = getattr(settings, "N8N_MODERATION_SECRET", "")
         if not secret:
+            # Fail-closed : sans secret configuré, seul un admin peut modérer.
             logger.warning(
-                "N8N_MODERATION_SECRET non configuré : appel de modération non authentifié accepté."
+                "N8N_MODERATION_SECRET non configuré : appel de modération externe refusé."
             )
-            return True
+            return False
         return hmac.compare_digest(request.headers.get("X-N8N-Secret", ""), secret)
 
     def _process_moderation(self, request, mission_id: int):

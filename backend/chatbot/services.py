@@ -20,7 +20,7 @@ def call_fastapi_chat(payload: dict[str, Any]) -> dict[str, Any]:
     La base URL est FASTAPI_MATCHING_URL (même microservice dans ce projet).
     """
     base_url = getattr(settings, "FASTAPI_MATCHING_URL", "http://localhost:8000").rstrip("/")
-    api_key = getattr(settings, "FASTAPI_INTERNAL_API_KEY", "dev-secret-internal-key")
+    api_key = getattr(settings, "FASTAPI_INTERNAL_API_KEY", "")
     endpoint = f"{base_url}/chat/ask"
 
     headers = {

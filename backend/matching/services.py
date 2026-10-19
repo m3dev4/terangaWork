@@ -48,7 +48,7 @@ def call_fastapi_matching(payload: dict) -> dict:
     Effectue l'appel synchrone HTTP vers le microservice FastAPI.
     """
     base_url = getattr(settings, "FASTAPI_MATCHING_URL", "http://localhost:8000").rstrip("/")
-    api_key = getattr(settings, "FASTAPI_INTERNAL_API_KEY", "dev-secret-internal-key")
+    api_key = getattr(settings, "FASTAPI_INTERNAL_API_KEY", "")
     endpoint = f"{base_url}/matching/score"
 
     headers = {

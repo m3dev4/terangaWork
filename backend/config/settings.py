@@ -40,13 +40,15 @@ sentry_sdk.init(
 SECRET_KEY = config("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config("DEBUG", default=True, cast=bool)
+# Désactivé par défaut : il faut l'activer explicitement en local (DEBUG=True dans .env).
+DEBUG = config("DEBUG", default=False, cast=bool)
 
 ALLOWED_HOSTS = [
     host.strip()
     for host in config(
         "ALLOWED_HOSTS",
-        default="localhost,127.0.0.1,testserver,.ngrok-free.app,.ngrok.io,*",
+        # Pas de joker "*" : en prod, lister le domaine de l'API dans ALLOWED_HOSTS.
+        default="localhost,127.0.0.1",
     ).split(",")
     if host.strip()
 ]
@@ -92,12 +94,20 @@ PAYDUNYA_MODE = config("PAYDUNYA_MODE", default="test")
 PAYDUNYA_COMMISSION_RATE = config("PAYDUNYA_COMMISSION_RATE", default=0.10, cast=float)
 PAYDUNYA_CALLBACK_BASE_URL = config("PAYDUNYA_CALLBACK_BASE_URL", default="https://822e-196-207-231-9.ngrok-free.app/api/webhooks/paydunya/")
 PAYDUNYA_RETURN_BASE_URL = config("PAYDUNYA_RETURN_BASE_URL", default="http://localhost:5173/espace/projets")
-PAYDUNYA_SIMULATE_DISBURSEMENT = config("PAYDUNYA_SIMULATE_DISBURSEMENT", default=True, cast=bool)
+# Simulation du décaissement (mode test uniquement) : désactivée par défaut et
+# toujours forcée à False en mode "live", pour ne jamais annoncer un paiement
+# réussi alors qu'aucun argent n'a été envoyé.
+PAYDUNYA_SIMULATE_DISBURSEMENT = (
+    config("PAYDUNYA_SIMULATE_DISBURSEMENT", default=False, cast=bool)
+    and PAYDUNYA_MODE != "live"
+)
 
 
-N8N_DESCRIPTION_WEBHOOK_URL="https://m3dev4.app.n8n.cloud/webhook-test/generate-description"
+# Webhooks n8n : URLs de PRODUCTION (/webhook/...) à définir dans .env.
+# Les URLs /webhook-test/ ne répondent que lorsque l'éditeur n8n est ouvert.
+N8N_DESCRIPTION_WEBHOOK_URL = config("N8N_DESCRIPTION_WEBHOOK_URL", default="")
 N8N_MODERATION_SECRET = config("N8N_MODERATION_SECRET", default="")
-N8N_MODERATION_WEBHOOK_URL="https://m3dev4.app.n8n.cloud/webhook-test/terangawork/moderation"
+N8N_MODERATION_WEBHOOK_URL = config("N8N_MODERATION_WEBHOOK_URL", default="")
 
 
 MIDDLEWARE = [
@@ -293,9 +303,10 @@ CLOUDINARY_API_SECRET = config(
 
 # Microservice FastAPI Matching Intelligent
 FASTAPI_MATCHING_URL = config("FASTAPI_MATCHING_URL", default="http://localhost:8001")
-FASTAPI_INTERNAL_API_KEY = config(
-    "FASTAPI_INTERNAL_API_KEY", default="dev-secret-internal-key"
-)
+# Clé partagée Django <-> FastAPI. Aucune valeur par défaut : l'ancienne valeur
+# "dev-secret-internal-key" est publique (dépôt GitHub) et refusée.
+FASTAPI_INTERNAL_API_KEY = config("FASTAPI_INTERNAL_API_KEY", default="")
+CLES_INTERNES_INTERDITES = {"dev-secret-internal-key", "your-secret-internal-api-key"}
 
 # Logs : tout part sur la sortie standard -> visible avec `docker compose logs`
 LOG_LEVEL = config("LOG_LEVEL", default="INFO")
@@ -325,3 +336,23 @@ STORAGES = {
     "default": {"BACKEND": "User.storage.CloudinaryAwareStorage"},
     "staticfiles": {"BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage"},
 }
+
+
+# ---------------------------------------------------------------------------
+# Garde-fous de production : le serveur refuse de démarrer avec une
+# configuration dangereuse (DEBUG=False => on considère qu'on est en prod).
+# ---------------------------------------------------------------------------
+if not DEBUG:
+    from django.core.exceptions import ImproperlyConfigured
+
+    _problemes = []
+    if "*" in ALLOWED_HOSTS:
+        _problemes.append("ALLOWED_HOSTS ne doit pas contenir '*'")
+    if len(FASTAPI_INTERNAL_API_KEY) < 32 or FASTAPI_INTERNAL_API_KEY in CLES_INTERNES_INTERDITES:
+        _problemes.append("FASTAPI_INTERNAL_API_KEY absente, trop courte (< 32) ou publique")
+    if not N8N_MODERATION_SECRET:
+        _problemes.append("N8N_MODERATION_SECRET doit être défini")
+    if _problemes:
+        raise ImproperlyConfigured(
+            "Configuration de production refusée : " + " ; ".join(_problemes)
+        )

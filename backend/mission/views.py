@@ -31,12 +31,14 @@ def send_n8n_moderation_webhook(mission: Mission):
     """
     Envoie les informations de la mission créée au Webhook n8n Cloud pour modération.
     """
-    webhook_url = getattr(
-        settings,
-        "N8N_MODERATION_WEBHOOK_URL",
-        "https://m3dev4.app.n8n.cloud/webhook-test/terangawork/moderation",
-    )
+    webhook_url = getattr(settings, "N8N_MODERATION_WEBHOOK_URL", "")
     if not webhook_url:
+        # Pas de workflow n8n configuré : la mission reste en attente et
+        # l'administrateur la modère depuis son espace.
+        logger.warning(
+            "N8N_MODERATION_WEBHOOK_URL non configurée : mission #%s à modérer manuellement.",
+            mission.id,
+        )
         return
 
     payload = {

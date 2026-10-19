@@ -1,3 +1,4 @@
+import hmac
 from django.conf import settings
 from rest_framework.permissions import BasePermission
 
@@ -14,7 +15,9 @@ class IsInternalService(BasePermission):
 
     def has_permission(self, request, view) -> bool:
         incoming = request.headers.get("X-Internal-API-Key")
-        expected = getattr(settings, "FASTAPI_INTERNAL_API_KEY", None)
-        if not expected or not incoming:
+        expected = getattr(settings, "FASTAPI_INTERNAL_API_KEY", "")
+        interdites = getattr(settings, "CLES_INTERNES_INTERDITES", set())
+        if not expected or not incoming or expected in interdites:
             return False
-        return incoming == expected
+        # Comparaison à temps constant (pas de fuite par mesure du temps de réponse)
+        return hmac.compare_digest(incoming.encode(), expected.encode())
