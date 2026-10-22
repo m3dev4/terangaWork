@@ -105,13 +105,16 @@ export const soumettreLivrable = async (
   return data;
 };
 
-const decisionFormData = ({ texte, fichierVocal }: DecisionPayload) => {
+// Multipart uniquement quand il y a un fichier vocal : un multipart vide
+// (validation sans commentaire) est rejeté en 400 par Daphne avant Django,
+// sans en-têtes CORS. Sans vocal, on envoie du JSON.
+const decisionBody = ({ texte, fichierVocal }: DecisionPayload) => {
+  const texteNettoye = texte?.trim() ?? "";
+  if (!fichierVocal) return texteNettoye ? { texte: texteNettoye } : {};
   const form = new FormData();
-  if (texte?.trim()) form.append("texte", texte.trim());
-  if (fichierVocal) {
-    const ext = fichierVocal.type.includes("ogg") ? "ogg" : "webm";
-    form.append("fichier_vocal", fichierVocal, `commentaire.${ext}`);
-  }
+  if (texteNettoye) form.append("texte", texteNettoye);
+  const ext = fichierVocal.type.includes("ogg") ? "ogg" : "webm";
+  form.append("fichier_vocal", fichierVocal, `commentaire.${ext}`);
   return form;
 };
 
@@ -122,8 +125,7 @@ const envoyerDecision = async (
 ): Promise<Livrable> => {
   const { data } = await instance.post<Livrable>(
     `suivi/livrables/${livrableId}/${action}/`,
-    decisionFormData(payload),
-    { headers: { "Content-Type": "multipart/form-data" } }
+    decisionBody(payload)
   );
   return data;
 };
