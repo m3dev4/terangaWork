@@ -77,3 +77,11 @@ class ContexteAssistantTests(TestCase):
         self.assertEqual(ctx["depenses"]["total_depense"], 100000.0)
         self.assertEqual(ctx["missions"][0]["freelance_retenu"], "Moussa Fall")
         self.assertNotIn("gains", ctx)
+
+    def test_accessible_depuis_le_conteneur_ia(self):
+        """Le service IA appelle Django avec Host: web:8000 (réseau Docker)."""
+        resp = self.client.get(
+            reverse("chatbot:chat-data-contexte"), {"user_id": self.fr_user.id},
+            HTTP_X_INTERNAL_API_KEY=CLE, HTTP_HOST="web:8000",
+        )
+        self.assertEqual(resp.status_code, 200)

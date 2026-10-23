@@ -281,6 +281,17 @@ async def orchestrate_chat(req: ChatAskRequest) -> ChatAskResponse:
     # 2. Fetch données autorisées
     data = await _fetch_role_data(req)
     donnees_utilisees = bool(data.get("profil"))
+    if not data:
+        # Django injoignable ou accès refusé : on ne laisse pas le LLM répondre
+        # « vous n'avez rien » alors qu'on n'a simplement pas pu lire les données.
+        logger.error(f"Contexte vide pour user_id={req.user_id} : vérifier DJANGO_BASE_URL, ALLOWED_HOSTS et la clé interne.")
+        return ChatAskResponse(
+            erreur="donnees_indisponibles",
+            message_user_fr=(
+                "Je n'arrive pas à accéder à vos données pour le moment. "
+                "Réessayez dans quelques instants."
+            ),
+        )
 
     # 3. Classifier intention
     intention = _classer_intention(req.question, req.user_role)

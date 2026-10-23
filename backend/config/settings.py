@@ -52,6 +52,10 @@ ALLOWED_HOSTS = [
     ).split(",")
     if host.strip()
 ]
+# Nom du service Docker : le microservice IA appelle Django sur http://web:8000.
+# Sans lui, Django répond 400 (DisallowedHost) et l'assistant ne voit aucune donnée.
+if "web" not in ALLOWED_HOSTS:
+    ALLOWED_HOSTS.append("web")
 
 
 # Application definition
