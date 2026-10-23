@@ -11,6 +11,7 @@ from .data_views import (
     AnnonceurMissionsDataView,
     AnnonceurMissionCandidaturesDataView,
     AnnonceurMissionRecommandationsDataView,
+    ContexteUtilisateurDataView,
 )
 
 app_name = "chatbot"
@@ -42,6 +43,11 @@ frontend_urlpatterns = [
 # Endpoints internes appelés par le microservice FastAPI (clé API partagée)
 # Montés sous /api/chat/data/...
 data_urlpatterns = [
+    path(
+        "data/contexte/",
+        ContexteUtilisateurDataView.as_view(),
+        name="chat-data-contexte",
+    ),
     path(
         "data/freelance/propositions/",
         FreelancePropositionsDataView.as_view(),

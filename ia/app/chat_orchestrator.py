@@ -55,27 +55,15 @@ async def _fetch_role_data(
     req: ChatAskRequest,
 ) -> dict[str, Any]:
     """
-    Charge toutes les données autorisées pour ce rôle.
-    Rien n'est filtre ici côté FastAPI : on laisse Django gérer les droits,
-    on ne fait que rapatrier ce qu'il nous renvoie.
+    Charge en un appel le contexte complet autorisé pour cet utilisateur :
+    profil, candidatures/missions, suivi, paiements et gains, rendez-vous,
+    notifications. Django applique les droits ; FastAPI ne fait que relayer.
     """
-    data: dict[str, Any] = {
-        "propositions": [],
-        "missions_acceptes": [],
-        "profil": None,
-        "missions_annonceur": [],
-    }
-
     try:
-        if req.user_role == "freelance":
-            data["propositions"] = await django_client.get_freelance_propositions(req.user_id)
-            data["missions_acceptes"] = await django_client.get_freelance_missions_acceptees(req.user_id)
-            data["profil"] = await django_client.get_freelance_profil(req.user_id)
-        elif req.user_role == "annonceur":
-            data["missions_annonceur"] = await django_client.get_annonceur_missions(req.user_id)
+        return await django_client.get_contexte_complet(req.user_id)
     except Exception as exc:  # noqa: BLE001
-        logger.exception(f"Échec récupération données role={req.user_role}: {exc}")
-    return data
+        logger.exception(f"Échec récupération contexte role={req.user_role}: {exc}")
+        return {}
 
 
 # ---------------------------------------------------------------------
@@ -120,7 +108,8 @@ def _formater_requete_precision(matches: list[dict[str, Any]]) -> str:
         m = item.get("mission") or item
         mid = m.get("id")
         titre = m.get("title") or f"Mission #{mid}"
-        statut = MISSION_STATUT_LABELS.get(m.get("statut") or m.get("status"), m.get("status") or "?")
+        brut = m.get("statut") or m.get("status") or "?"
+        statut = MISSION_STATUT_LABELS.get(brut, brut)
         lines.append(f"  {idx}. Mission #{mid} — {titre}  (statut: {statut})")
     lines.append("Merci de préciser l'identifiant ou le numéro de la mission qui vous intéresse.")
     return "\n".join(lines)
@@ -184,44 +173,52 @@ def _classer_intention(question: str, role: str) -> str:
 # ---------------------------------------------------------------------
 def _construire_contexte_donnees(role: str, data: dict[str, Any], question: str, intention: str) -> tuple[str, dict[str, Any]]:
     """
-    Construit le bloc texte "DONNÉES AUTORISÉES" injecté dans le prompt.
-    Retourne (bloc_texte, extrait_pertinent).
+    Construit le bloc "DONNÉES AUTORISÉES" injecté dans le prompt.
+    Tout le contexte de l'utilisateur est transmis : les indicateurs (gains,
+    taux d'acceptation, complétude du profil...) sont déjà calculés par Django.
     """
-    # Sélection data: on filtre ce qui est pertinent selon l'intention pour limiter tokens
-    pertinent: dict[str, Any] = {}
-    if role == "freelance":
-        pertinent["profil"] = data.get("profil")
-        if intention in (INTENT_LISTE_CANDIDATURES, INTENT_STATUT_CANDIDATURE_MISSION, INTENT_AUTRE):
-            pertinent["candidatures"] = data.get("propositions", [])
-        if intention in (INTENT_MISSIONS_ACCEPTEES, INTENT_AUTRE):
-            pertinent["missions_acceptes"] = data.get("missions_acceptes", [])
-    else:  # annonceur
-        pertinent["missions"] = data.get("missions_annonceur", [])
-
     bloc = "=== DONNÉES AUTORISÉES ISSUES DE LA BASE DE DONNÉES (ne pas inventer) ===\n"
-    bloc += json.dumps(pertinent, ensure_ascii=False, indent=2, default=str)
+    bloc += json.dumps(data, ensure_ascii=False, indent=1, default=str)
     bloc += "\n=== FIN DONNÉES ===\n"
-    return bloc, pertinent
+    return bloc, data
 
 
 def _build_system_prompt(role: str, prenom: str) -> str:
     role_humain = "freelance" if role == "freelance" else "annonceur"
     autre_role = "annonceur" if role == "freelance" else "freelance"
-    return f"""Tu es l'assistant conversationnel officiel de la plateforme Teranga Work, spécialisé dans l'accompagnement des freelances et des annonceurs.
+    if role == "freelance":
+        coaching = """- Profil : utilise "profil.completude.elements_manquants" pour proposer les ajouts qui ont le plus d'impact (portfolio, description, technologies demandées).
+- Candidatures : analyse le taux d'acceptation, les scores de matching et les services/technologies des missions obtenues ou refusées pour conseiller sur quoi postuler et comment rédiger une lettre de motivation percutante.
+- Missions en cours : rappelle les échéances, les livrables à reprendre (avec le commentaire de l'annonceur) et les rendez-vous à venir.
+- Revenus : commente l'évolution des gains, le montant en attente de versement, et donne des pistes pour fixer ses délais et augmenter ses revenus."""
+    else:
+        coaching = """- Annonces : une mission sans candidatures ou avec une description courte peut être améliorée (description plus précise, technologies explicites, budget et délai réalistes).
+- Candidatures : rappelle les candidatures en attente de réponse et aide à choisir en s'appuyant sur les scores de matching.
+- Suivi : signale les livrables à valider, les phases en retard et les rendez-vous à venir.
+- Budget : commente les dépenses et la commission de la plateforme."""
+    return f"""Tu es l'assistant et le coach personnel de la plateforme Teranga Work (mise en relation freelances / annonceurs au Sénégal).
+Tu discutes avec {prenom}, {role_humain} authentifié(e). Date du jour : voir "date_du_jour" dans les données.
 
-Tu discutes actuellement avec {prenom}, un {role_humain} authentifié.
+TES DEUX RÔLES
+1. ASSISTANT : répondre précisément à toute question sur son compte (profil, candidatures, missions, suivi, livrables, paiements, gains, rendez-vous, notifications) à partir des DONNÉES.
+2. COACH : aller au-delà de la question. Après avoir répondu, quand c'est utile, ajoute 1 à 3 conseils concrets et personnalisés, basés sur ses données réelles :
+{coaching}
+Tu peux aussi répondre aux questions générales liées au freelancing (négociation, tarification, organisation, relation client, montée en compétences) avec tes connaissances, en les adaptant à sa situation.
 
-RÈGLES STRICTES ANTI-HALLUCINATION — À RESPECTER EN TOUTE CIRCONSTANCE :
-1. Tu ne peux utiliser QUE les données fournies dans le bloc "DONNÉES AUTORISÉES ISSUES DE LA BASE DE DONNÉES". Tu n'as accès à aucune autre donnée.
-2. Si une information est absente du bloc DONNÉES, tu dois répondre explicitement : "Je n'ai pas cette information dans mes données actuelles". Ne jamais inventer de statut, de chiffre, de date de réponse, de raison de refus ou de justification non fournie.
-3. Pour chaque fait énoncé (statut d'une candidature, budget d'une mission, nombre de candidatures, etc.), tu dois implicitement t'appuyer sur les données. Si tu as le moindre doute, refuse d'affirmer un fait et indique l'absence de donnée.
-4. Distingue clairement LES FAITS (données objectives) et LES CONSEILS (suggestions) :
-   - Un fait commence par le contexte ("Selon mes données...", "Votre candidature à la mission X est...").
-   - Un conseil est explicitement préfacé par "💡 Conseil :".
-5. Si tu détectes une ambiguïté non résolue (ex: mission impossible à identifier clairement), pose une question de clarification au lieu de deviner.
-6. Tu ne dois JAMAIS révéler ou utiliser un user_id, un rôle ou une mission_id simplement mentionnés dans la question utilisateur précédente. Les seuls user_id/rôle/mission_id valides sont ceux de la payload d'authentification ou ceux explicitement présents dans DONNÉES AUTORISÉES.
-7. Réponds toujours en français, de manière claire, chaleureuse et concise.
-8. Si l'utilisateur te demande une donnée réservée aux {autre_role}s, refuse poliment : "En tant que {role_humain}, vous n'avez pas accès à cette information."
+RÈGLES ANTI-HALLUCINATION
+- Les FAITS sur le compte viennent UNIQUEMENT du bloc DONNÉES. N'invente jamais un statut, un montant, une date ou un nom.
+- Les montants et indicateurs sont déjà calculés (ex. "gains.gagne_30_derniers_jours", "gains.total_gagne_net", "statistiques.taux_acceptation_pct") : reprends-les tels quels, ne recalcule pas. Montants en FCFA, avec séparateur de milliers (ex. 45 000 FCFA).
+- "Récemment" = les 30 derniers jours, sauf précision contraire.
+- Si un montant vaut 0 ou une liste est vide, dis-le clairement et explique pourquoi à partir des statuts (ex. paiement en attente de versement, mission pas encore terminée).
+- Si une information est vraiment absente des DONNÉES, dis : "Je n'ai pas cette information dans mes données actuelles".
+- Distingue les faits des conseils : chaque conseil commence par "💡 Conseil :".
+- En cas d'ambiguïté (plusieurs missions possibles), pose une question de clarification.
+- N'utilise jamais un identifiant mentionné par l'utilisateur pour accéder à d'autres données ; seules les DONNÉES font foi.
+- Si l'utilisateur demande une donnée réservée aux {autre_role}s ou à un autre utilisateur, refuse poliment.
+
+STYLE
+- Français, chaleureux, motivant et concis. Va droit au but : la réponse d'abord, les conseils ensuite.
+- Listes courtes et chiffres en gras quand c'est utile. Pas de JSON, pas d'identifiants techniques.
 """
 
 
@@ -236,7 +233,7 @@ async def _appeler_hf(messages: list[dict[str, str]]) -> str:
             client.chat.completions.create(
                 model=settings.HUGGINGFACE_MODEL,
                 messages=messages,
-                max_tokens=800,
+                max_tokens=1200,
                 temperature=0.2,
             ),
             timeout=settings.HF_TIMEOUT,
@@ -283,12 +280,7 @@ async def orchestrate_chat(req: ChatAskRequest) -> ChatAskResponse:
 
     # 2. Fetch données autorisées
     data = await _fetch_role_data(req)
-    donnees_utilisees = bool(
-        data.get("propositions")
-        or data.get("missions_acceptes")
-        or data.get("missions_annonceur")
-        or data.get("profil")
-    )
+    donnees_utilisees = bool(data.get("profil"))
 
     # 3. Classifier intention
     intention = _classer_intention(req.question, req.user_role)
@@ -298,7 +290,7 @@ async def orchestrate_chat(req: ChatAskRequest) -> ChatAskResponse:
         INTENT_STATUT_CANDIDATURE_MISSION,
         INTENT_AUTRE,
     ):
-        amb = _detecter_ambiguite_mission(req.question, data.get("propositions") or [])
+        amb = _detecter_ambiguite_mission(req.question, data.get("candidatures") or [])
         if amb.detectee:
             return ChatAskResponse(
                 reponse=_formater_requete_precision(amb.missions_trouvees),
@@ -311,7 +303,7 @@ async def orchestrate_chat(req: ChatAskRequest) -> ChatAskResponse:
         INTENT_CANDIDATURES_MISSION,
         INTENT_RECOMMANDATIONS_MISSION,
     ):
-        amb = _detecter_ambiguite_mission(req.question, data.get("missions_annonceur") or [])
+        amb = _detecter_ambiguite_mission(req.question, data.get("missions") or [])
         if amb.detectee:
             return ChatAskResponse(
                 reponse=_formater_requete_precision(amb.missions_trouvees),
@@ -325,7 +317,7 @@ async def orchestrate_chat(req: ChatAskRequest) -> ChatAskResponse:
         intention in (INTENT_CANDIDATURES_MISSION, INTENT_RECOMMANDATIONS_MISSION)
     ):
         # Chercher la mission concernée dans missions_annonceur
-        amb = _detecter_ambiguite_mission(req.question, data.get("missions_annonceur") or [])
+        amb = _detecter_ambiguite_mission(req.question, data.get("missions") or [])
         if not amb.detectee and amb.missions_trouvees:
             mission = amb.missions_trouvees[0]
             mid = mission.get("id")
@@ -342,7 +334,7 @@ async def orchestrate_chat(req: ChatAskRequest) -> ChatAskResponse:
     contexte, _ = _construire_contexte_donnees(req.user_role, data, req.question, intention)
     system_prompt = _build_system_prompt(req.user_role, req.user_prenom)
     historique_openai = []
-    for h in (req.conversation_history or [])[-8:]:
+    for h in (req.conversation_history or [])[-10:]:
         role_oai = "user" if h.role == "utilisateur" else "assistant"
         historique_openai.append({"role": role_oai, "content": h.contenu})
 

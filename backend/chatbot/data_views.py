@@ -17,6 +17,7 @@ from matching.services import (
     MatchingServiceUnavailableError,
 )
 
+from .contexte import contexte_annonceur, contexte_freelance
 from .permissions import IsInternalService
 from .data_serializers import (
     PropositionFreelanceSerializer,
@@ -264,3 +265,28 @@ class AnnonceurMissionRecommandationsDataView(APIView):
                 status=status.HTTP_503_SERVICE_UNAVAILABLE,
             )
         return Response(result)
+
+
+class ContexteUtilisateurDataView(APIView):
+    """
+    GET /api/chat/data/contexte/?user_id=<int>
+
+    Contexte complet de l'utilisateur (profil, missions, suivi, paiements, gains,
+    rendez-vous, notifications) selon son rôle, en un seul appel.
+    """
+
+    authentication_classes = []  # Pas d'auth JWT, uniquement clé API interne
+    permission_classes = [IsInternalService]
+
+    def get(self, request) -> Response:
+        user, err = _extract_user(request)
+        if err is not None:
+            return err
+        if user.role == UserRole.FREELANCE:
+            return Response({"role": "freelance", "contexte": contexte_freelance(user)})
+        if user.role == UserRole.ANNONCEUR:
+            return Response({"role": "annonceur", "contexte": contexte_annonceur(user)})
+        return Response(
+            {"detail": "Rôle non pris en charge par l'assistant.", "access_denied_role": True},
+            status=status.HTTP_403_FORBIDDEN,
+        )

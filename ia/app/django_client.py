@@ -70,3 +70,9 @@ async def get_annonceur_mission_recommandations(
         params={"user_id": user_id},
     )
     return data or {"resultats": [], "etage_2_reussi": False}
+
+
+async def get_contexte_complet(user_id: int) -> dict[str, Any]:
+    """Contexte complet (profil, missions, suivi, paiements, gains...) selon le rôle."""
+    data = await _get("/chat/data/contexte/", params={"user_id": user_id})
+    return data.get("contexte") or {}
